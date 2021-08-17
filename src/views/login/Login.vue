@@ -27,7 +27,7 @@
           password: this.password,
         })
           .then(res => {
-            console.log('登入成功')
+            console.log('登入成功' ,res)
           })
           .catch(error => {
             console.error(error)

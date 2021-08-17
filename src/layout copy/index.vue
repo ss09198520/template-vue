@@ -1,25 +1,23 @@
 <template>
   <div>
     <sidemenu :menu-links="menuLinks" />
-    <content>
-      <footer />
-    </content>
+    <footer />
   </div>
 </template>
 
 <script>
   import Footer from '@/components/core/Footer'
-  import Sidemenu from '@/views/layout/Sidemenu'
-  import Topnav from '@/views/layout/Topnav'
-  import Content from '@/views/layout/Content'
+  import Sidemenu from '@/layout/Sidemenu'
+  import Topnav from '@/layout/Topnav'
+  import Content from '@/layout/Content'
 
   // Data
   import { menuLinks } from '@/data/sideMenu'
 
   export default {
     components: {
-      Footer,
       Sidemenu,
+      Footer,
       Topnav,
       Content,
     },

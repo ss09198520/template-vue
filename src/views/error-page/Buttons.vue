@@ -1,513 +1,388 @@
 <template>
   <v-container fluid>
-    <h3>按鈕樣式示範</h3>
+    <h3>載入與進度條</h3>
     <v-row>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="實心按鈕，無陰影"
-          text=""
-        >
-          <v-btn
-            class="ma-1"
-            depressed
-            color="primary"
-          >
-            Primary
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            color="secondary"
-          >
-            Secondary
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            color="accent"
-          >
-            Accent
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            color="error"
-          >
-            Error
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            color="info"
-          >
-            Info
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            color="success"
-          >
-            Success
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            color="warning"
-          >
-            Warning
-          </v-btn>
-        </fet-card>
-      </v-col>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="框線按鈕，無陰影"
-          text=""
-        >
-          <v-btn
-            class="ma-1"
-            outlined
-            color="primary"
-          >
-            Primary
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            outlined
-            color="secondary"
-          >
-            Secondary
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            outlined
-            color="accent"
-          >
-            Accent
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            outlined
-            color="error"
-          >
-            Error
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            outlined
-            color="info"
-          >
-            Info
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            outlined
-            color="success"
-          >
-            Success
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            outlined
-            color="warning"
-          >
-            Warning
-          </v-btn>
-        </fet-card>
-      </v-col>
+      <v-col>
+        <v-card width="100%">
+          <v-tabs>
+            <v-tab>載入或執行中示意</v-tab>
+            <v-tab>進度條</v-tab>
 
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="尺寸"
-          text=""
-        >
-          <v-btn
-            class="ma-1"
-            depressed
-            x-small
-            color="primary"
-          >
-            x-small
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            small
-            color="secondary"
-          >
-            small
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            color="info"
-          >
-            normal
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            large
-            color="accent"
-          >
-            large
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            x-large
-            color="error"
-          >
-            x-large
-          </v-btn>
-        </fet-card>
-      </v-col>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="icon，實心，尺寸"
-          text=""
-        >
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            x-small
-            color="primary"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            small
-            color="secondary"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            color="info"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            large
-            color="accent"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            x-large
-            color="error"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-        </fet-card>
-      </v-col>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="icon，框線，尺寸"
-          text=""
-        >
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            outlined
-            x-small
-            color="primary"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            outlined
-            small
-            color="secondary"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            outlined
-            color="info"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            outlined
-            large
-            color="accent"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            depressed
-            fab
-            outlined
-            x-large
-            color="error"
-          >
-            <v-icon>mdi-pencil</v-icon>
-          </v-btn>
-        </fet-card>
-      </v-col>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="滿格"
-          text=""
-        >
-          <v-btn
-            block
-            color="primary"
-          >
-            Block
-          </v-btn>
-        </fet-card>
-      </v-col>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="失效"
-          text=""
-        >
-          <v-btn
-            disabled
-            class="ma-1"
-            color="primary"
-          >
-            disabled
-          </v-btn>
-          <v-btn
-            block
-            disabled
-            class="ma-1"
-            color="primary"
-          >
-            disabled
-          </v-btn>
-        </fet-card>
-      </v-col>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="帶 icon"
-          text=""
-        >
-          <v-btn
-            class="ma-1"
-            color="primary"
-          >
-            <v-icon left>
-              mdi-pencil
-            </v-icon>
-            Edit
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            outlined=""
-            color="primary"
-          >
-            <v-icon left>
-              mdi-pencil
-            </v-icon>
-            Edit
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            color="primary"
-          >
-            Edit
-            <v-icon right>
-              mdi-pencil
-            </v-icon>
-          </v-btn>
-          <v-btn
-            class="ma-1"
-            outlined
-            color="primary"
-          >
-            Edit
-            <v-icon right>
-              mdi-pencil
-            </v-icon>
-          </v-btn>
-        </fet-card>
-      </v-col>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="按鈕群組"
-          text=""
-        >
-          <v-row>
-            <v-col>
-              <p>Exclusive</p>
-              <v-btn-toggle v-model="toggle_exclusive">
-                <v-btn>
-                  <v-icon>mdi-format-align-left</v-icon>
-                </v-btn>
-
-                <v-btn>
-                  <v-icon>mdi-format-align-center</v-icon>
-                </v-btn>
-
-                <v-btn>
-                  <v-icon>mdi-format-align-right</v-icon>
-                </v-btn>
-
-                <v-btn>
-                  <v-icon>mdi-format-align-justify</v-icon>
-                </v-btn>
-              </v-btn-toggle>
-            </v-col>
-
-            <v-col>
-              <p>Text &amp; Icon Options</p>
-              <v-btn-toggle
-                v-model="icon"
-                borderless
-              >
-                <v-btn value="left">
-                  <v-icon left>
-                    mdi-format-align-left
-                  </v-icon>
-                  <span class="hidden-sm-and-down">Left</span>
-                </v-btn>
-
-                <v-btn value="center">
-                  <v-icon left>
-                    mdi-format-align-center
-                  </v-icon>
-                  <span class="hidden-sm-and-down">Center</span>
-                </v-btn>
-
-                <v-btn value="right">
-                  <v-icon left>
-                    mdi-format-align-right
-                  </v-icon>
-                  <span class="hidden-sm-and-down">Right</span>
-                </v-btn>
-
-                <v-btn value="justify">
-                  <v-icon left>
-                    mdi-format-align-justify
-                  </v-icon>
-                  <span class="hidden-sm-and-down">Justify</span>
-                </v-btn>
-              </v-btn-toggle>
-            </v-col>
-          </v-row>
-        </fet-card>
-      </v-col>
-    </v-row>
-
-    <h3>分頁按鈕示範</h3>
-    <v-row>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="基本"
-          text=""
-        >
-          <v-row>
-            <v-col>
-              <p>預設</p>
-              <v-pagination
-                v-model="page"
-                :length="6"
-              />
-            </v-col>
-            <v-col>
-              <p>圓形</p>
-              <v-pagination
-                v-model="page"
-                :length="6"
-                circle
-              />
-            </v-col>
-            <v-col>
-              <p>禁用 (disabled)</p>
-              <v-pagination
-                v-model="page"
-                :length="6"
-                disabled
-              />
-            </v-col>
-          </v-row>
-        </fet-card>
-      </v-col>
-      <v-col md="6">
-        <fet-card
-          flat
-          full-width
-          title="顯示"
-          text=""
-        >
-          <v-row>
-            <v-col>
-              <p>長度 15 頁</p>
-              <v-pagination
-                v-model="page"
-                :length="15"
-              />
-            </v-col>
-            <v-col>
-              <p>限制顯示 7 個按鈕</p>
-              <v-pagination
-                v-model="page"
-                :length="15"
-                :total-visible="7"
-                circle
-              />
-            </v-col>
-          </v-row>
-        </fet-card>
-      </v-col>
-      <v-col md="6">
-          <v-row>
-            <v-col>
-              <p>客製化 icon</p>
-              <v-pagination
-                v-model="page"
-                :length="6"
-                prev-icon="mdi-menu-left"
-                next-icon="mdi-menu-right"
-              />
-            </v-col>
-          </v-row>
+            <v-tab-item>
+              <v-container>
+                <v-row>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="一般（載入比例）"
+                      text=""
+                    >
+                      <v-row>
+                        <v-col class="text-center">
+                          <v-progress-circular />
+                          <v-progress-circular :value="size" />
+                          <v-progress-circular :value="size * 2" />
+                          <v-progress-circular :value="size * 3" />
+                          <v-progress-circular :value="size * 4" />
+                          <v-progress-circular :value="size * 5" />
+                        </v-col>
+                      </v-row>
+                    </fet-card>
+                  </v-col>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="客製化顏色"
+                      text=""
+                    >
+                      <v-row>
+                        <v-col class="text-center">
+                          <v-progress-circular
+                            :value="size"
+                            color="blue-grey"
+                          />
+                          <v-progress-circular
+                            :value="size * 2"
+                            color="orange"
+                          />
+                          <v-progress-circular
+                            :value="size * 3"
+                            color="yellow"
+                          />
+                          <v-progress-circular
+                            :value="size * 4"
+                            color="indigo"
+                          />
+                          <v-progress-circular
+                            :value="size * 5"
+                            color="primary"
+                          />
+                        </v-col>
+                      </v-row>
+                    </fet-card>
+                  </v-col>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="載入或執行中動畫"
+                      text=""
+                    >
+                      <v-row>
+                        <v-col class="text-center">
+                          <v-progress-circular
+                            :value="size"
+                            color="primary"
+                            indeterminate
+                          />
+                          <v-progress-circular
+                            :value="size * 2"
+                            color="secondary"
+                            indeterminate
+                          />
+                          <v-progress-circular
+                            :value="size * 3"
+                            color="accent"
+                            indeterminate
+                          />
+                          <v-progress-circular
+                            :value="size * 4"
+                            color="info"
+                            indeterminate
+                          />
+                          <v-progress-circular
+                            :value="size * 5"
+                            color="success"
+                            indeterminate
+                          />
+                        </v-col>
+                      </v-row>
+                    </fet-card>
+                  </v-col>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="尺寸與寬度（Size and Width）"
+                      text=""
+                    >
+                      <v-row>
+                        <v-col class="text-center">
+                          <v-progress-circular
+                            :value="size"
+                            color="primary"
+                            indeterminate
+                            size="50"
+                          />
+                          <v-progress-circular
+                            :value="size * 2"
+                            color="secondary"
+                            indeterminate
+                            width="3"
+                          />
+                          <v-progress-circular
+                            :value="size * 3"
+                            color="accent"
+                            indeterminate
+                            size="70"
+                            width="7"
+                          />
+                          <v-progress-circular
+                            :value="size * 4"
+                            color="info"
+                            indeterminate
+                            width="3"
+                          />
+                          <v-progress-circular
+                            :value="size * 5"
+                            color="success"
+                            indeterminate
+                            size="50"
+                          />
+                        </v-col>
+                      </v-row>
+                    </fet-card>
+                  </v-col>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="旋轉的原始位置（Rotate）"
+                      text=""
+                    >
+                      <v-row>
+                        <v-col
+                          md="12"
+                          class="text-center"
+                        >
+                          <p>顯示比例</p>
+                          <v-progress-circular
+                            color="primary"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            {{ value }}
+                          </v-progress-circular>
+                          <v-progress-circular
+                            color="secondary"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            {{ value }}
+                          </v-progress-circular>
+                          <v-progress-circular
+                            color="accent"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            {{ value }}
+                          </v-progress-circular>
+                          <v-progress-circular
+                            color="info"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            {{ value }}
+                          </v-progress-circular>
+                          <v-progress-circular
+                            color="success"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            {{ value }}
+                          </v-progress-circular>
+                        </v-col>
+                        <v-col
+                          md="12"
+                          class="text-center"
+                        >
+                          <p>旋轉起始位置</p>
+                          <v-progress-circular
+                            :rotate="0"
+                            color="primary"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            0度
+                          </v-progress-circular>
+                          <v-progress-circular
+                            :rotate="90"
+                            color="secondary"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            90度
+                          </v-progress-circular>
+                          <v-progress-circular
+                            :rotate="180"
+                            color="accent"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            180度
+                          </v-progress-circular>
+                          <v-progress-circular
+                            :rotate="270"
+                            color="info"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            270度
+                          </v-progress-circular>
+                          <v-progress-circular
+                            :rotate="-45"
+                            color="success"
+                            :value="value"
+                            size="70"
+                            width="10"
+                          >
+                            -45度
+                          </v-progress-circular>
+                        </v-col>
+                      </v-row>
+                    </fet-card>
+                  </v-col>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="搭配蓋版 (Overlay)"
+                      text=""
+                    >
+                      <v-row>
+                        <v-col>
+                          <v-btn
+                            color="accent"
+                            @click="overlay = !overlay"
+                          >
+                            Open Overlay
+                          </v-btn>
+                          <v-overlay :value="overlay">
+                            <v-progress-circular
+                              size="80"
+                              width="8"
+                              indeterminate
+                            />
+                          </v-overlay>
+                        </v-col>
+                      </v-row>
+                    </fet-card>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-tab-item>
+            <v-tab-item>
+              <v-container>
+                <v-row>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="一般"
+                      text=""
+                    >
+                      <v-progress-linear value="30" />
+                    </fet-card>
+                  </v-col>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="客製化顏色"
+                      text=""
+                    >
+                      <v-progress-linear
+                        value="30"
+                        color="info"
+                      />
+                      <v-progress-linear
+                        value="30"
+                        color="warning"
+                      />
+                      <v-progress-linear
+                        value="30"
+                        color="success"
+                      />
+                      <v-progress-linear
+                        value="30"
+                        background-color="accent"
+                        color="primary"
+                      />
+                    </fet-card>
+                  </v-col>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="動畫"
+                      text=""
+                    >
+                      <v-progress-linear indeterminate />
+                    </fet-card>
+                  </v-col>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="調整線條高度與條紋背景"
+                      text=""
+                    >
+                      <v-progress-linear
+                        value="30"
+                        color="info"
+                        height="10"
+                        striped
+                      />
+                      <v-progress-linear
+                        value="30"
+                        color="warning"
+                        height="10"
+                        striped
+                      />
+                      <v-progress-linear
+                        value="30"
+                        color="success"
+                        height="10"
+                        striped
+                      />
+                    </fet-card>
+                  </v-col>
+                  <v-col md="6">
+                    <fet-card
+                      flat
+                      full-width
+                      title="進度顯示"
+                      text=""
+                    >
+                      <v-progress-linear
+                        v-model="skills.power"
+                        color="info"
+                        height="25"
+                      />
+                      <v-progress-linear
+                        v-model="skills.healthy"
+                        height="25"
+                      >
+                        {{ Math.ceil(skills.healthy) }}%
+                      </v-progress-linear>
+                    </fet-card>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-tab-item>
+          </v-tabs>
+        </v-card>
       </v-col>
     </v-row>
   </v-container>
@@ -515,12 +390,42 @@
 
 <script>
   export default {
-    data: () => ({
-      icon: 'justify',
-      toggle_exclusive: 2,
-      page: 1,
-    }),
+    data() {
+      return {
+        size: 20,
+        overlay: false,
+        value: 0,
+        skills: {
+          power: 15,
+          healthy: 50,
+        },
+      }
+    },
+    watch: {
+      overlay(val) {
+        val &&
+          setTimeout(() => {
+            this.overlay = false
+          }, 3000)
+      },
+    },
+    beforeDestroy() {
+      clearInterval(this.interval)
+    },
+    mounted() {
+      this.interval = setInterval(() => {
+        if (this.value === 100) return (this.value = 0)
+        this.value += 10
+      }, 1000)
+    },
   }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.v-progress-circular {
+  margin: 1rem;
+}
+.v-progress-linear {
+  margin-bottom: 1rem;
+}
+</style>

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- <sidemenu :menu-links="menuLinks" /> -->
-    <core-topnav />
-    <core-content>
-      <core-footer />
-    </core-content>
+      <!-- <sidemenu :menu-links="menuLinks" /> -->
+      <core-topnav />
+      <core-content>
+        <core-footer />
+      </core-content>
   </div>
 </template>
 

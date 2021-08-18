@@ -17,3 +17,4 @@ export default {
 .v-datatable thead th.column.sortable i {
   vertical-align: unset;
 }
+</style>

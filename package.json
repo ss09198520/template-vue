@@ -1,9 +1,10 @@
 {
-  "name": "hello-world",
+  "name": "taipower",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
+    "dev": "npm run serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
@@ -13,13 +14,15 @@
     "vue": "^2.6.11",
     "vue-router": "^3.5.2",
     "vuetify": "^2.4.0",
-    "vuex": "^3.6.2"
+    "vuex": "3.1.0",
+    "js-cookie": "2.2.0",
+    "nprogress": "0.2.0"
   },
   "devDependencies": {
     "@mdi/font": "^5.8.55",
-    "@vue/cli-plugin-babel": "~4.5.0",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
+    "@vue/cli-plugin-babel": "4.4.4",
+    "@vue/cli-plugin-eslint": "4.4.4",
+    "@vue/cli-service": "4.4.4",
     "material-design-icons-iconfont": "3.0.3",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",

@@ -2,6 +2,7 @@
   <v-app-bar
     id="core-toolbar"
     app
+    dark
     min-height="auto"
     height="60"
   >
@@ -18,7 +19,7 @@
         <v-btn
           icon
           color="accent"
-          @click="toogleMiniSidebar()"
+          @click="toggleMiniSidebar()"
         >
           <v-icon v-if="miniSidebar">
             mdi-view-quilt
@@ -33,8 +34,7 @@
 </template>
 
 <script>
-  import { mapState, mapMutations } from 'vuex'
-
+  import { mapGetters } from 'vuex'
   export default {
     data() {
       return {
@@ -42,7 +42,9 @@
       }
     },
     computed: {
-      ...mapState('app', ['miniSidebar']),
+      ...mapGetters([
+        'miniSidebar',
+      ]),
     },
     mounted() {
       this.onResponsiveInverted()
@@ -52,14 +54,16 @@
       window.removeEventListener('resize', this.onResponsiveInverted)
     },
     methods: {
-      ...mapMutations('app', ['setDrawer', 'toogleMiniSidebar']),
       onClickBtn() {
-        this.setDrawer(!this.$store.state.app.drawer)
+        this.$store.dispatch('app/toggleDrawer')
+      },
+      toggleMiniSidebar() {
+        this.$store.dispatch('app/toggleSideBar')
       },
       onResponsiveInverted() {
         if (window.innerWidth < 991) {
           this.responsive = true
-          if (this.miniSidebar) this.toogleMiniSidebar()
+          if (this.miniSidebar) this.toggleMiniSidebar()
         } else {
           this.responsive = false
         }

@@ -9,7 +9,8 @@
 </template>
 
 <script>
-   import coreFooter from '@/layout/components/Footer'
+  import { mapGetters } from 'vuex'
+  import coreFooter from '@/layout/components/Footer'
   // import Sidemenu from '@/layout/Sidemenu'
   import coreTopnav from '@/layout/Topnav'
   import coreContent from '@/layout/Content'
@@ -23,6 +24,11 @@
       coreTopnav,
       coreFooter,
       coreContent,
+    },
+    computed: {
+      ...mapGetters([
+          'miniSidebar',
+      ]),
     },
     data() {
       return {

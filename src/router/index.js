@@ -80,6 +80,19 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/form',
+    component: Layout,
+    redirect: '/form/formValidation',
+    children: [
+      {
+        path: 'formValidation',
+        component: () => import('@/views/form/FormValidation'),
+        name: 'FormValidation',
+        meta: { title: 'formValidation', icon: 'formValidation', affix: true }
+      }
+    ]
+  },
+  {
     path: '/guide',
     redirect: '/guide/index',
     component: Layout,

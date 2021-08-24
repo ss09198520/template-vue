@@ -1,6 +1,6 @@
 <template>
   <div>
-      <!-- <sidemenu :menu-links="menuLinks" /> -->
+      <sidemenu :menu-links="menuLinks" />
       <core-topnav />
       <core-content>
         <core-footer />
@@ -11,7 +11,7 @@
 <script>
   import { mapGetters } from 'vuex'
   import coreFooter from '@/layout/components/Footer'
-  // import Sidemenu from '@/layout/Sidemenu'
+  import Sidemenu from '@/layout/Sidemenu'
   import coreTopnav from '@/layout/Topnav'
   import coreContent from '@/layout/Content'
 
@@ -20,7 +20,7 @@
 
   export default {
     components: {
-      // Sidemenu,
+      Sidemenu,
       coreTopnav,
       coreFooter,
       coreContent,
@@ -28,11 +28,12 @@
     computed: {
       ...mapGetters([
           'miniSidebar',
+          'permission_routes',
       ]),
     },
     data() {
       return {
-        menuLinks: 'menuLinks',
+        menuLinks: this.permission_routes,
       }
     },
   }

@@ -2,7 +2,6 @@
   <v-app-bar
     id="core-toolbar"
     app
-    dark
     min-height="auto"
     height="60"
   >
@@ -44,6 +43,7 @@
     computed: {
       ...mapGetters([
         'miniSidebar',
+        'permission_routes',
       ]),
     },
     mounted() {

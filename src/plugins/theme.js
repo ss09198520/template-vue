@@ -1,5 +1,5 @@
 export default {
-  dark: true,
+  dark: false,
   themes: {
     light: {
       primary: '#C32A22',

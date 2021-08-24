@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
-// import Vuetify from 'vuetify'
-// import 'vuetify/dist/vuetify.min.css'
+import '@/scss/overrides.scss'
 import '@mdi/font/css/materialdesignicons.css'
 import zhHant from 'vuetify/es5/locale/zh-Hant'
 import theme from './theme'

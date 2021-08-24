@@ -8,8 +8,9 @@ import router from '@/router'
 // Material icon imports
 // import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
+// Components
+import './components'
 import './permission' // permission control
-
 Vue.config.productionTip = false
 
 new Vue({

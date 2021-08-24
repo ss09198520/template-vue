@@ -68,16 +68,16 @@ export const constantRoutes = [
   // },
   {
     path: '/',
-    component: () => import('@/components/core/HelloWorld'),
-    // redirect: '/dashboard',
-    // children: [
-    //   {
-    //     path: 'dashboard',
-    //     component: () => import('@/comments/core/HelloWorld'),
-    //     name: 'Dashboard',
-    //     meta: { title: 'dashboard', icon: 'dashboard', affix: true }
-    //   }
-    // ]
+    component: Layout,
+    redirect: '/dashboard',
+    children: [
+      {
+        path: 'dashboard',
+        component: () => import('@/views/error-page/Buttons'),
+        name: 'Buttons',
+        meta: { title: 'dashboard', icon: 'dashboard', affix: true }
+      }
+    ]
   },
   {
     path: '/guide',
@@ -87,7 +87,7 @@ export const constantRoutes = [
       {
         component: () => import('@/components/core/HelloWorld3'),
         path: 'index',
-        name: 'Dashboard',
+        name: 'HelloWorld3',
         meta: { title: 'dashboard', icon: 'dashboard', affix: true }
       }
     ]

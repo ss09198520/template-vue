@@ -17,7 +17,7 @@
       dense
     >
       <v-list-item
-        class="fet-logo mb-2 justify-center"
+        class="custom-logo mb-2 justify-center"
         to="/"
       >
         <v-sheet>
@@ -75,7 +75,7 @@
 
 <script>
 // Utilities
-  import { mapMutations, mapState } from 'vuex'
+  import { mapState } from 'vuex'
 
   export default {
     props: {
@@ -89,7 +89,7 @@
       },
     },
     data: () => ({
-      logo: require('@/assets/images/fet_logo_sm.jpg'),
+      logo: require('@/assets/images/taipw_sm.jpg'),
     }),
     computed: {
       ...mapState('app', ['image', 'color', 'miniSidebar', 'showImage']),
@@ -98,7 +98,7 @@
           return this.$store.state.app.drawer
         },
         set(val) {
-          this.setDrawer(val)
+          this.$store.dispatch('app/setDrawer', val)
         },
       },
       items() {
@@ -106,7 +106,6 @@
       },
     },
     methods: {
-      ...mapMutations('app', ['setDrawer', 'toggleDrawer']),
       settingMenu() {
         this.menuLinks.forEach(item => {
           if (item.active) {
@@ -128,7 +127,7 @@
   .v-list-item::before {
     max-height: 48px;
   }
-  .v-list-item.fet-logo {
+  .v-list-item.custom-logo {
     background-color: #fff;
     padding: 0;
     margin: 0;

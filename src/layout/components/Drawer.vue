@@ -31,42 +31,41 @@
 
       <template v-for="(item, idx) in menuLinks">
         <v-list-group
-          v-if="!!item.menuLinks.length"
+          v-if=" !item.hidden && !!item.children && !!item.children.length"
           :key="idx"
-          v-model="item.active"
         >
           <template v-slot:activator>
             <v-list-item-action>
-              <v-icon>{{ item.icon }}</v-icon>
+              <v-icon>mdi-chart-bubble</v-icon>
             </v-list-item-action>
-            <v-list-item-title v-text="item.text" />
+            <v-list-item-title v-text="item.name" />
           </template>
           <v-list-item
-            v-for="(subItem, index) in item.menuLinks"
+            v-for="(subItem, index) in item.children"
             :key="index"
-            :to="subItem.to"
+            :to="subItem.path"
             :active-class="color"
             class="v-list-item"
           >
             <v-list-item-action>
-              <v-icon>{{ subItem.icon }}</v-icon>
+              <v-icon>mdi-chart-bubble</v-icon>
             </v-list-item-action>
-            <v-list-item-title v-text="subItem.text" />
+            <v-list-item-title v-text="subItem.name" />
           </v-list-item>
         </v-list-group>
 
         <v-list-item
           v-else
           :key="idx"
-          :to="item.to"
+          :to="item.path"
           :active-class="color"
           class="v-list-item"
           @click="settingMenu()"
         >
           <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>mdi-chart-bubble</v-icon>
           </v-list-item-action>
-          <v-list-item-title v-text="item.text" />
+          <v-list-item-title v-text="test3" />
         </v-list-item>
       </template>
     </v-list>
@@ -75,7 +74,9 @@
 
 <script>
 // Utilities
+  import path from 'path'
   import { mapState } from 'vuex'
+  import { isExternal } from '@/utils/validate'
 
   export default {
     props: {
@@ -90,6 +91,9 @@
     },
     data: () => ({
       logo: require('@/assets/images/taipw_sm.jpg'),
+      test: 'aaa',
+      test2: 'bbb',
+      test3: 'ccc',
     }),
     computed: {
       ...mapState('app', ['image', 'color', 'miniSidebar', 'showImage']),
@@ -105,15 +109,31 @@
         return this.$t('Layout.View.items')
       },
     },
+    mounted() {
+      console.log(this.menuLinks)
+      this.menuLinks.forEach(item => {
+        console.log(item)
+        console.log(!!item.children)
+      })
+    },
     methods: {
       settingMenu() {
-        this.menuLinks.forEach(item => {
-          if (item.active) {
-            item.active = false
-            return false
-          }
-        })
+        // this.menuLinks.forEach(item => {
+        //   if (item.meta.active) {
+        //     item.meta.active = false
+        //     return false
+        //   }
+        // })
       },
+      resolvePath(routePath) {
+      if (isExternal(routePath)) {
+        return routePath
+      }
+      if (isExternal(this.basePath)) {
+        return this.basePath
+      }
+      return path.resolve(this.basePath, routePath)
+    },
     },
   }
 </script>

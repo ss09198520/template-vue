@@ -28,6 +28,7 @@
           </v-icon>
         </v-btn>
       </template>
+      {{ title }}
     </v-toolbar-title>
   </v-app-bar>
 </template>
@@ -37,6 +38,7 @@
   export default {
     data() {
       return {
+        title: null,
         responsive: false,
       }
     },
@@ -45,6 +47,11 @@
         'miniSidebar',
         'permission_routes',
       ]),
+    },
+    watch: {
+      $route(val) {
+        this.title = val.name
+      },
     },
     mounted() {
       this.onResponsiveInverted()

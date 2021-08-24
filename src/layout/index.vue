@@ -1,10 +1,10 @@
 <template>
   <div>
-      <sidemenu :menu-links="menuLinks" />
+      <sidemenu :menu-links="permission_routes" />
       <core-topnav />
       <core-content>
-        <core-footer />
       </core-content>
+      <core-footer />
   </div>
 </template>
 

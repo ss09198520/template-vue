@@ -17,12 +17,12 @@
     },
     methods: {
       settingMenu() {
-        this.menuLinks.forEach(item => {
-          if (item.active) {
-            item.active = false
-            return false
-          }
-        })
+        // this.menuLinks.forEach(route => {
+        //   if (route.active) {
+        //     route.active = false
+        //     return false
+        //   }
+        // })
       },
     },
   }

@@ -13,6 +13,12 @@
                     sm="10"
                     md="8"
                   >
+                    <fet-card
+                      flat
+                      full-width
+                      title="單欄排版"
+                      text
+                    >
                       <v-form>
                         <v-row
                           :dense="dense"
@@ -193,6 +199,7 @@
                           </v-col>
                         </v-row>
                       </v-form>
+                    </fet-card>
                   </v-col>
                 </v-row>
               </v-container>

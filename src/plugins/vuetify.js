@@ -1,9 +1,8 @@
 import Vue from 'vue';
 import Vuetify from 'vuetify/lib/framework';
-import '@/scss/overrides.scss'
-import '@mdi/font/css/materialdesignicons.css'
-import zhHant from 'vuetify/es5/locale/zh-Hant'
 import theme from './theme'
+import zhHant from 'vuetify/es5/locale/zh-Hant'
+import '@mdi/font/css/materialdesignicons.css'
 
 Vue.use(Vuetify);
 

@@ -5,30 +5,17 @@
     :mini-variant="miniSidebar"
     :expand-on-hover="miniSidebar"
     app
-    dark
+    :dark="barColor !== 'rgba(228, 226, 226, 1), rgba(255, 255, 255, 0.7)'"
     floating
     persistent
     mobile-break-point="991"
     width="220"
   >
-    <v-img :src="showImage ? image : ''" />
+    <logo /> <!-- Logo -->
+      
     <v-list
-      class="fill-height"
       dense
     >
-      <v-list-item
-        class="custom-logo mb-2 justify-center"
-        to="/"
-      >
-        <v-sheet>
-          <img
-            :src="logo"
-            :style="miniSidebar ? 'max-width: 100%' : ''"
-            alt="logo"
-          >
-        </v-sheet>
-      </v-list-item>
-
       <template v-for="(item, idx) in menuLinks">
         <v-list-group
           v-if=" !item.hidden && !!item.children && !!item.children.length"
@@ -75,10 +62,12 @@
 <script>
 // Utilities
   import path from 'path'
+  import Logo from './Logo'
   import { mapState } from 'vuex'
   import { isExternal } from '@/utils/validate'
 
   export default {
+    components: { Logo },
     props: {
       opened: {
         type: Boolean,
@@ -90,13 +79,12 @@
       },
     },
     data: () => ({
-      logo: require('@/assets/images/taipw_sm.jpg'),
       test: 'aaa',
       test2: 'bbb',
       test3: 'ccc',
     }),
     computed: {
-      ...mapState('app', ['image', 'color', 'miniSidebar', 'showImage']),
+      ...mapState('app', ['color', 'miniSidebar',]),
       inputValue: {
         get() {
           return this.$store.state.app.drawer

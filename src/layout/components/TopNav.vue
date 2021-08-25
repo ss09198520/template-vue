@@ -45,7 +45,6 @@
     computed: {
       ...mapGetters([
         'miniSidebar',
-        'permission_routes',
       ]),
     },
     watch: {

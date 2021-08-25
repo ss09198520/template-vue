@@ -1,19 +1,19 @@
 <template>
   <div>
-    <core-drawer :menu-links="menuLinks" />
+    <core-drawer :menu-links="permission_routes" />
   </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+  import CoreDrawer from './Drawer'
+
   export default {
-    components: {
-      CoreDrawer: () => import('@/layout/components/Drawer'),
-    },
-    props: {
-      menuLinks: {
-        type: Array,
-        default: () => [],
-      },
+    components: { CoreDrawer },
+    computed: {
+      ...mapGetters([
+          'permission_routes',
+      ]),
     },
     methods: {
       settingMenu() {

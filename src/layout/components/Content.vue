@@ -1,15 +1,18 @@
 <template>
   <div>
-    <v-main>
+    <v-content>
       <div id="core-view">
-        <v-container fluid>
+        <v-container
+          fluid
+          style="height: 100%"
+        >
           <v-fade-transition mode="out-in">
             <router-view />
           </v-fade-transition>
         </v-container>
       </div>
       <slot />
-    </v-main>
+    </v-content>
   </div>
 </template>
 

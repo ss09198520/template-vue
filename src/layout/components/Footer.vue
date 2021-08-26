@@ -1,11 +1,11 @@
 <template>
   <v-footer
     id="core-footer"
+    height="52"
     absolute
-    height="82"
   >
-    <v-spacer />
-    <span class="body-2 font-weight-light">
+    <v-spacer class="hidden-sm-and-down" />
+    <span class="text-body-2 font-weight-light pt-6 pt-md-0 text-center">
       Copyright &copy;
       {{ new Date().getFullYear() }}
       Far Eastone Telecommunications Co., Ltd. All Rights Reserved. 遠傳電信版權所有

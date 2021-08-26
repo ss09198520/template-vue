@@ -49,7 +49,7 @@
     },
     watch: {
       $route(val) {
-        this.title = val.name
+        this.title = val.meta.title||val.name
       },
     },
     mounted() {

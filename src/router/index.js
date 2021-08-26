@@ -36,47 +36,35 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
-  // {
-  //   path: '/redirect',
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: '/redirect/:path(.*)',
-  //       component: () => import('@/views/redirect/index')
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/login',
-  //   component: () => import('@/views/login/index'),
-  //   hidden: true
-  // },
-  // {
-  //   path: '/auth-redirect',
-  //   component: () => import('@/views/login/auth-redirect'),
-  //   hidden: true
-  // },
-  // {
-  //   path: '/404',
-  //   component: () => import('@/views/error-page/404'),
-  //   hidden: true
-  // },
-  // {
-  //   path: '/401',
-  //   component: () => import('@/views/error-page/401'),
-  //   hidden: true
-  // },
+  {
+    path: '/401',
+    component: () => import('@/views/error-page/401'),
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/error-page/404'),
+    hidden: true
+  },
   {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    name: 'dashboard',
+    name: 'home',
+    meta: { title: '素材管理', icon: 'mdi-tooltip-image-outline' },
     children: [
       {
         path: 'dashboard',
-        component: () => import('@/views/error-page/Buttons'),
-        name: 'Buttons',
-        meta: { title: 'dashboard', icon: 'mdi-chart-bubble', affix: true, active: false, }
+        name: 'dashboard',
+        meta: { title: '素材上傳', icon: 'mdi-cloud-upload', },
+        children: [
+          {
+            path: 'index',
+            component: () => import('@/views/error-page/Buttons'),
+            name: 'dashboard2',
+            meta: { title: '素材上傳2', icon: 'mdi-cloud-upload', }
+          }
+        ]
       }
     ]
   },
@@ -84,18 +72,19 @@ export const constantRoutes = [
     path: '/form',
     component: Layout,
     name: 'FormPages',
+    meta: { title: '表單', icon: 'mdi-clipboard-play-multiple' },
     children: [
       {
         path: 'formValidation',
         component: () => import('@/views/form/FormValidation'),
         name: 'FormValidation',
-        meta: { title: 'formValidation', icon: 'mdi-chart-bubble', affix: true, active: false, }
+        meta: { title: '表單驗證', icon: 'mdi-clipboard-play-multiple' }
       },
       {
         path: 'formLayouts',
         component: () => import('@/views/form/FormLayouts'),
-        name: 'formLayouts',
-        meta: { title: 'formLayouts', icon: 'mdi-chart-bubble', affix: true, active: false, }
+        name: 'FormLayouts',
+        meta: { title: '表單樣式', icon: 'mdi-clipboard-play-multiple' }
       }
     ]
   },
@@ -104,30 +93,35 @@ export const constantRoutes = [
     redirect: '/guide/index',
     component: Layout,
     name: 'guide',
+    meta: { title: '跑馬燈', icon: 'mdi-clipboard-play-multiple' },
     children: [
       {
         component: () => import('@/components/core/HelloWorld3'),
         path: 'index',
         name: 'HelloWorld3',
-        meta: { title: 'dashboard', icon: 'mdi-chart-bubble', affix: true, active: false, }
+        meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
       }
     ]
   },
   {
-    path: '/guide2',
-    redirect: '/guide2/index',
+    path: '/program',
+    redirect: '/program/programkake',
     component: Layout,
-    name: 'guide2',
+    name: 'Program',
+    meta: { title: '節目管理', icon: 'mdi-video-box' },
     children: [
       {
         component: () => import('@/views/error-page/Buttons'),
-        path: 'index',
-        name: 'HelloWorld1213',
-        meta: { title: 'dashboard', icon: 'mdi-chart-bubble', affix: true, active: false, }
+        path: 'programkake',
+        name: 'programList',
+        meta: { title: '節目單製作', icon: 'mdi-movie-edit' }
       }
     ]
   },
 ]
+    // Program: '節目管理',
+    // ProgramList: '節目列表',
+    // ProgramMake: '節目製作',
 
 /**
  * asyncRoutes
@@ -169,8 +163,13 @@ export const asyncRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   // base: process.env.BASE_URL,
-  scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: constantRoutes,
+  scrollBehavior: (to, from, savedPosition) => {
+    if (savedPosition) { return savedPosition }
+    if (to.hash) { return { selector: to.hash } }
+    return { x: 0, y: 0 }
+  }
+  // scrollBehavior: () => ({ y: 0 }),
 })
 
 const router = createRouter()

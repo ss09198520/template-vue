@@ -1,0 +1,147 @@
+<template>
+  <v-list-group v-if="!item.hidden">
+    <template v-slot:activator>
+      <v-list-item-action>
+        <v-icon v-text="item.meta.icon" />
+      </v-list-item-action>
+      <v-list-item-title v-text="item.meta.title" />
+    </template>
+
+    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)">
+      <!-- <v-list-item v-for="child in item.children"
+        :key="resolvePath(child.path)"
+        :to="resolvePath(child.path)"
+        :active-class="color"
+        class="v-list-item"
+      >
+        <v-list-item-action>
+          <v-icon v-text="onlyOneChild.meta.icon" />
+        </v-list-item-action>
+        <v-list-item-content>
+          <v-list-item-title v-text="onlyOneChild.meta.title" />
+        </v-list-item-content>
+      </v-list-item> -->
+      <item 
+        v-for="child in item.children"
+        :item="child" 
+        :key="resolvePath(child.path)" 
+        :to="resolvePath(child.path)"
+        :color="color">
+      </item>
+    </template>
+    <template v-else>
+      <!-- <item-group v-for="route in menuLinks" :key="route.path" :item="route" :base-path="route.path" :color="color" /> -->
+    </template>
+  </v-list-group>
+</template>
+
+<script>
+  // Utilities
+  import path from 'path'
+  import { isExternal } from '@/utils/validate'
+  import Item from './Item.vue'
+  
+  export default {
+  components: { Item },
+    name: 'ItemGroup',
+
+    inheritAttrs: false,
+    props: {
+      item: {
+        type: Object,
+        required: true
+      },
+      basePath: {
+        type: String,
+        default: ''
+      },
+      color: {
+        type: String,
+        default: ''
+      },
+    },
+    mounted() {
+      // console.log('mounted-group', this.item);
+      // console.log('!!item.children', !this.item.hidden && !!this.item.children && !!this.item.children.length);
+    },
+    data() {
+      // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
+      // TODO: refactor with render function
+      this.onlyOneChild = null
+      return {}
+    },
+
+    methods: {
+      hasOneShowingChild(children = [], parent) {
+        console.log('hasOneShowingChild', children , parent)
+        const showingChildren = children.filter(item => {
+          if (item.hidden) {
+            console.log('item.hidden')
+            return false
+          } else {
+            // Temp set(will be used if only has one showing child)
+            this.onlyOneChild = item
+            console.log('this.onlyOneChild', this.onlyOneChild)
+            return true
+          }
+        })
+
+        // When there is only one child router, the child router is displayed by default
+        if (showingChildren.length >= 1) {
+          return true
+        }
+
+        // Show parent if there are no child router to display
+        if (showingChildren.length === 0) {
+          this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+          console.log('showingChildren.length === 0', this.onlyOneChild)
+          return true
+        }
+        return false
+      },
+      
+      onlyOneChild() {
+        if (!this.item.children) {
+          return this.item
+        }
+        let oneChild
+        const showingChildren = this.item.children.filter(item => {
+          if (!item.hidden) {
+            oneChild = item
+          }
+          return !item.hidden
+        })
+
+        // 可见的元素超过一个
+        if (showingChildren.length > 1) return false
+
+        // When there is only one child router, the child router is displayed by default
+        if (showingChildren.length === 1) {
+          return oneChild
+        }
+
+        if (showingChildren.length === 0) {
+          return { ... parent, path: '', noShowingChildren: true }
+        }
+
+        return oneChild
+      },
+
+      resolvePath(routePath) {
+        if (isExternal(routePath)) {
+          return routePath
+        }
+        if (isExternal(this.basePath)) {
+          return this.basePath
+        }
+        return path.resolve(this.basePath, routePath)
+      },
+    },
+  }
+</script>
+
+<style>
+.v-list-group__activator p {
+  margin-bottom: 0;
+}
+</style>

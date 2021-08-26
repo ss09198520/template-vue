@@ -38,6 +38,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.v-list-item.custom-logo {
+  background-color: #fff;
+  padding: 0;
+  margin: 0;
+  border-radius: 0;
+  min-height: 60px;
+
+  div {
+    display: flex;
+    justify-items: center;
+    align-items: center;
+    margin: 0 auto;
+    img {
+      max-height: 60px;
+    }
+  }
+}
 .sidebarLogoFade-enter-active {
   transition: opacity 1.5s;
 }

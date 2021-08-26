@@ -5,7 +5,7 @@ import store from '@/store'
 import vuetify from '@/plugins/vuetify'
 import router from '@/router'
 
-// Material icon imports
+// Material icon imports use css loader
 // import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 // Components

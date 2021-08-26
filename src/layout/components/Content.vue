@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <v-content>
+    <v-main>
       <div id="core-view">
         <v-container
           fluid
@@ -11,13 +10,16 @@
           </v-fade-transition>
         </v-container>
       </div>
-      <slot />
-    </v-content>
-  </div>
+    </v-main>
 </template>
 
 <script>
   export default {}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  #core-view {
+    padding-bottom: 100px;
+    height: 100%;
+  }
+</style>

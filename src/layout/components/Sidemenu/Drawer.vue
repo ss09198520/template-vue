@@ -5,69 +5,30 @@
     :mini-variant="miniSidebar"
     :expand-on-hover="miniSidebar"
     app
-    :dark="barColor !== 'rgba(228, 226, 226, 1), rgba(255, 255, 255, 0.7)'"
+    dark
     floating
     persistent
-    mobile-break-point="991"
+    mobile-breakpoint="991"
     width="220"
   >
     <logo /> <!-- Logo -->
       
-    <v-list
-      dense
-    >
-      <template v-for="(item, idx) in menuLinks">
-        <v-list-group
-          v-if=" !item.hidden && !!item.children && !!item.children.length"
-          :key="idx"
-        >
-          <template v-slot:activator>
-            <v-list-item-action>
-              <v-icon>mdi-chart-bubble</v-icon>
-            </v-list-item-action>
-            <v-list-item-title v-text="item.name" />
-          </template>
-          <v-list-item
-            v-for="(subItem, index) in item.children"
-            :key="index"
-            :to="subItem.path"
-            :active-class="color"
-            class="v-list-item"
-          >
-            <v-list-item-action>
-              <v-icon>mdi-chart-bubble</v-icon>
-            </v-list-item-action>
-            <v-list-item-title v-text="subItem.name" />
-          </v-list-item>
-        </v-list-group>
-
-        <v-list-item
-          v-else
-          :key="idx"
-          :to="item.path"
-          :active-class="color"
-          class="v-list-item"
-          @click="settingMenu()"
-        >
-          <v-list-item-action>
-            <v-icon>mdi-chart-bubble</v-icon>
-          </v-list-item-action>
-          <v-list-item-title v-text="test3" />
-        </v-list-item>
+    <v-list dense>
+      <template>
+        <item-group v-for="route in menuLinks" :key="route.path" :item="route" :base-path="route.path" :color="color" />
       </template>
     </v-list>
   </v-navigation-drawer>
 </template>
 
 <script>
-// Utilities
-  import path from 'path'
+  // Utilities
   import Logo from './Logo'
+  import ItemGroup from './ItemGroup.vue'
   import { mapState } from 'vuex'
-  import { isExternal } from '@/utils/validate'
 
   export default {
-    components: { Logo },
+    components: { Logo , ItemGroup},
     props: {
       opened: {
         type: Boolean,
@@ -99,10 +60,10 @@
     },
     mounted() {
       console.log(this.menuLinks)
-      this.menuLinks.forEach(item => {
-        console.log(item)
-        console.log(!!item.children)
-      })
+        // this.menuLinks.forEach(item => {
+        //   // console.log(item)
+        //   // console.log(!!item.children)
+        // })
     },
     methods: {
       settingMenu() {
@@ -113,15 +74,6 @@
         //   }
         // })
       },
-      resolvePath(routePath) {
-      if (isExternal(routePath)) {
-        return routePath
-      }
-      if (isExternal(this.basePath)) {
-        return this.basePath
-      }
-      return path.resolve(this.basePath, routePath)
-    },
     },
   }
 </script>
@@ -134,23 +86,6 @@
   .v-list-item,
   .v-list-item::before {
     max-height: 48px;
-  }
-  .v-list-item.custom-logo {
-    background-color: #fff;
-    padding: 0;
-    margin: 0;
-    border-radius: 0;
-    min-height: 60px;
-
-    div {
-      display: flex;
-      justify-items: center;
-      align-items: center;
-      margin: 0 auto;
-      img {
-        max-height: 60px;
-      }
-    }
   }
   .v-list-item.secondary {
     background-color: #2196f3;

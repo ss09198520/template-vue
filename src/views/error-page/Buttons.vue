@@ -5,7 +5,6 @@
         <v-card width="100%">
           <v-tabs>
             <v-tab>素 材 上 傳</v-tab>
-
             <v-tab-item>
               <v-container>
                 <v-row class="d-flex justify-center">
@@ -16,7 +15,8 @@
                     <fet-card
                       flat
                       full-width
-                      title="單欄排版"
+                      outlined
+                      title="素材上傳"
                       text
                     >
                       <v-form>

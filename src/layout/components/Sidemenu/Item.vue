@@ -17,10 +17,7 @@
       <v-icon v-text="item.meta.icon" />
     </v-list-item-icon>
 
-    <v-list-item-content v-if="item.meta.title || item.subtitle">
-      <v-list-item-title v-text="item.meta.title" />
-      <v-list-item-subtitle v-text="item.subtitle" />
-    </v-list-item-content>
+    <v-list-item-title v-text="item.meta.title" />
   </v-list-item>
 </template>
 

@@ -7,31 +7,19 @@
       <v-list-item-title v-text="item.meta.title" />
     </template>
 
-    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)">
-      <!-- <v-list-item v-for="child in item.children"
-        :key="resolvePath(child.path)"
-        :to="resolvePath(child.path)"
-        :active-class="color"
-        class="v-list-item"
-      >
-        <v-list-item-action>
-          <v-icon v-text="onlyOneChild.meta.icon" />
-        </v-list-item-action>
-        <v-list-item-content>
-          <v-list-item-title v-text="onlyOneChild.meta.title" />
-        </v-list-item-content>
-      </v-list-item> -->
+    <template v-for="child in item.children">
       <item 
-        v-for="child in item.children"
+        v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)"
         :item="child" 
         :key="resolvePath(child.path)" 
         :to="resolvePath(child.path)"
         :color="color">
       </item>
+      
+      <item-group v-else :key="child.path" :item="child" :base-path="child.path" :color="color" />
     </template>
-    <template v-else>
-      <!-- <item-group v-for="route in menuLinks" :key="route.path" :item="route" :base-path="route.path" :color="color" /> -->
-    </template>
+    <!-- <template v-else> -->
+    <!-- </template> -->
   </v-list-group>
 </template>
 
@@ -99,7 +87,7 @@
         }
         return false
       },
-      
+
       onlyOneChild() {
         if (!this.item.children) {
           return this.item

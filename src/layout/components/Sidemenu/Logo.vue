@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-card>
     <v-img :src="showImage ? image : ''" />
     <v-list
       dense
@@ -18,7 +18,7 @@
         </v-sheet>
       </v-list-item>
     </v-list>
-  </div>
+  </v-card>
 </template>
 
 <script>

@@ -8,18 +8,16 @@
     </template>
 
     <template v-for="child in item.children">
-      <item 
+      <fet-item 
         v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)"
         :item="child" 
         :key="resolvePath(child.path)" 
         :to="resolvePath(child.path)"
         :color="color">
-      </item>
+      </fet-item>
       
-      <item-group v-else :key="child.path" :item="child" :base-path="child.path" :color="color" />
+      <fet-item-sub-group v-else :key="child.path" :item="child" :base-path="child.path" :color="color"/>
     </template>
-    <!-- <template v-else> -->
-    <!-- </template> -->
   </v-list-group>
 </template>
 
@@ -27,11 +25,8 @@
   // Utilities
   import path from 'path'
   import { isExternal } from '@/utils/validate'
-  import Item from './Item.vue'
   
   export default {
-  components: { Item },
-    name: 'ItemGroup',
 
     inheritAttrs: false,
     props: {
@@ -49,7 +44,7 @@
       },
     },
     mounted() {
-      // console.log('mounted-group', this.item);
+      console.log('mounted-group',  this.item);
       // console.log('!!item.children', !this.item.hidden && !!this.item.children && !!this.item.children.length);
     },
     data() {
@@ -62,27 +57,29 @@
     methods: {
       hasOneShowingChild(children = [], parent) {
         console.log('hasOneShowingChild', children , parent)
+        console.log('basePath', this.basePath)
         const showingChildren = children.filter(item => {
           if (item.hidden) {
-            console.log('item.hidden')
             return false
           } else {
             // Temp set(will be used if only has one showing child)
             this.onlyOneChild = item
-            console.log('this.onlyOneChild', this.onlyOneChild)
+            // console.log('this.onlyOneChild', this.onlyOneChild)
             return true
           }
         })
-
+        console.log('showingChildren.length', showingChildren.length ,this.onlyOneChild)
+        console.log('onlyOneChild.children', this.onlyOneChild.children)
         // When there is only one child router, the child router is displayed by default
         if (showingChildren.length >= 1) {
+          // console.log('showingChildren.length >= 1', parent.path)
           return true
         }
 
         // Show parent if there are no child router to display
         if (showingChildren.length === 0) {
           this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
-          console.log('showingChildren.length === 0', this.onlyOneChild)
+          // console.log('showingChildren.length === 0', this.onlyOneChild)
           return true
         }
         return false

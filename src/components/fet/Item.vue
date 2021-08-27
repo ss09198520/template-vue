@@ -7,11 +7,6 @@
     :active-class="color"
     class="v-list-item"
   >
-    <!-- <v-list-item-icon
-      v-if="text"
-      class="v-list-item__icon--text"
-      v-text="computedText"
-    /> -->
 
     <v-list-item-icon v-if="item.meta.icon">
       <v-icon v-text="item.meta.icon" />
@@ -25,7 +20,6 @@
   import Themeable from 'vuetify/lib/mixins/themeable'
 
   export default {
-    name: 'Item',
 
     mixins: [Themeable],
 
@@ -43,7 +37,10 @@
         default: ''
       },
     },
-
+    mounted(){
+      console.log('item', this.item)
+      console.log('item.to',this.to)
+    },
     computed: {
       href () {
         return this.item.href || (!this.item.to ? '#' : undefined)

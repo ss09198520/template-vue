@@ -56,7 +56,7 @@ export const constantRoutes = [
       {
         path: 'dashboard',
         name: 'dashboard',
-        meta: { title: '素材上傳', icon: 'mdi-cloud-upload', },
+        meta: { title: '素材上傳1', icon: 'mdi-cloud-upload', },
         children: [
           {
             path: 'index',

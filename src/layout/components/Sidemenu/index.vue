@@ -59,6 +59,7 @@
   }
 </script>
 
+
 <style lang="scss">
 #app-drawer {
   .v-list.layout {
@@ -66,7 +67,7 @@
   }
   .v-list-item,
   .v-list-item::before {
-    max-height: 48px;
+    min-height: 48px;
   }
   .v-list-item.secondary {
     background-color: #2196f3;

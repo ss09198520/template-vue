@@ -1,13 +1,20 @@
 <template>
-  <v-list-group v-if="!item.hidden">
+  <v-list-group 
+    v-if="!item.hidden"
+    :sub-group="subGroup"
+    append-icon="mdi-chevron-down"
+    prepend-icon=""
+    color="primary"
+    >
+
     <template v-slot:activator>
-      <v-list-item-action>
+      <v-list-item-action v-if="item.meta.icon">
         <v-icon v-text="item.meta.icon" />
       </v-list-item-action>
       <v-list-item-title v-text="item.meta.title" />
     </template>
 
-    <template v-for="child in item.children">
+    <template v-for="child in item.children" >
       <fet-item 
         v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)"
         :item="child" 
@@ -16,7 +23,7 @@
         :color="color">
       </fet-item>
       
-      <fet-item-sub-group v-else :key="child.path" :item="child" :base-path="child.path" :color="color"/>
+      <fet-item-sub-group v-else :key="resolvePath(child.path)"  :item="child" :base-path="resolvePath(child.path)" :color="color"/>
     </template>
   </v-list-group>
 </template>
@@ -42,9 +49,14 @@
         type: String,
         default: ''
       },
+      subGroup: {
+        type: Boolean,
+        default: false,
+      },
     },
     mounted() {
-      console.log('mounted-group',  this.item);
+      // console.log('mounted-group',  this.item);
+      console.log('subGroup', this.subGroup)
       // console.log('!!item.children', !this.item.hidden && !!this.item.children && !!this.item.children.length);
     },
     data() {
@@ -56,8 +68,8 @@
 
     methods: {
       hasOneShowingChild(children = [], parent) {
-        console.log('hasOneShowingChild', children , parent)
-        console.log('basePath', this.basePath)
+        // console.log('hasOneShowingChild', children , parent)
+        // console.log('basePath', this.basePath)
         const showingChildren = children.filter(item => {
           if (item.hidden) {
             return false
@@ -68,8 +80,8 @@
             return true
           }
         })
-        console.log('showingChildren.length', showingChildren.length ,this.onlyOneChild)
-        console.log('onlyOneChild.children', this.onlyOneChild.children)
+        // console.log('showingChildren.length', showingChildren.length ,this.onlyOneChild)
+        // console.log('onlyOneChild.children', this.onlyOneChild.children)
         // When there is only one child router, the child router is displayed by default
         if (showingChildren.length >= 1) {
           // console.log('showingChildren.length >= 1', parent.path)
@@ -128,5 +140,8 @@
 <style>
 .v-list-group__activator p {
   margin-bottom: 0;
+}
+.v-list-item__action {
+    margin-right: 32px !important;
 }
 </style>

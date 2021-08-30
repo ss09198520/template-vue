@@ -19,6 +19,10 @@
         type: String,
         default: ''
       },
+      subGroup: {
+        type: Boolean,
+        default: false,
+      },
     },
     mounted() {
       console.log('sub-group', this.item)

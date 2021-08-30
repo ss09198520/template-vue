@@ -6,6 +6,7 @@
     :to="to"
     :active-class="color"
     class="v-list-item"
+    :style="`min-height : 44px`"
   >
 
     <v-list-item-icon v-if="item.meta.icon">
@@ -37,10 +38,6 @@
         default: ''
       },
     },
-    mounted(){
-      console.log('item', this.item)
-      console.log('item.to',this.to)
-    },
     computed: {
       href () {
         return this.item.href || (!this.item.to ? '#' : undefined)
@@ -49,8 +46,12 @@
   }
 </script>
 
-<style>
+<style lang="scss">
 .v-list-group__items .v-list-item__icon {
   margin-left: 15px;
+}
+.v-list-item--dense .v-list-item__icon {
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
 }
 </style>

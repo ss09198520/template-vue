@@ -6,6 +6,10 @@ Vue.use(Router)
 /* Layout */
 import Layout from '@/layout'
 
+/*empty page for children router*/
+// import tmp from '@/components/core/tmp'
+
+
 /* Router Modules */
 // import nestedRouter from './modules/nested'
 
@@ -36,6 +40,22 @@ import Layout from '@/layout'
  * all roles can be accessed
  */
 export const constantRoutes = [
+  // {
+  //   path: '/redirect',
+  //   component: Layout,
+  //   hidden: true,
+  //   children: [
+  //     {
+  //       path: '/redirect/:path(.*)',
+  //       component: () => import('@/views/redirect/index')
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/login',
+  //   component: () => import('@/views/login/index'),
+  //   hidden: true
+  // },
   {
     path: '/401',
     component: () => import('@/views/error-page/401'),
@@ -48,23 +68,22 @@ export const constantRoutes = [
   },
   {
     path: '/',
+    hidden: true,
     component: Layout,
-    redirect: '/dashboard',
-    name: 'home',
+    name: 'homepage',
+  },
+  {
+    path: '/material',
+    component: Layout,
+    redirect: '/upload',
+    name: 'material',
     meta: { title: '素材管理', icon: 'mdi-tooltip-image-outline' },
     children: [
       {
-        path: 'dashboard',
-        name: 'dashboard',
-        meta: { title: '素材上傳1', icon: 'mdi-cloud-upload', },
-        children: [
-          {
-            path: 'index',
-            component: () => import('@/views/error-page/Buttons'),
-            name: 'dashboard2',
-            meta: { title: '素材上傳2', icon: 'mdi-cloud-upload', }
-          }
-        ]
+        path: 'upload',
+        name: 'material-upload',
+        component: () => import('@/views/material/upload'),
+        meta: { title: '素材上傳', icon: 'mdi-cloud-upload', },
       }
     ]
   },
@@ -111,7 +130,7 @@ export const constantRoutes = [
     meta: { title: '節目管理', icon: 'mdi-video-box' },
     children: [
       {
-        component: () => import('@/views/error-page/Buttons'),
+        component: () => import('@/views/material/upload'),
         path: 'programkake',
         name: 'programList',
         meta: { title: '節目單製作', icon: 'mdi-movie-edit' }

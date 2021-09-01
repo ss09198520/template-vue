@@ -16,7 +16,7 @@
                       flat
                       full-width
                       outlined
-                      title="素 材 上 傳"
+                      title="跑 馬 燈 製 作"
                       text
                     >
                       <v-form v-model="valid" ref="form" lazy-validation>
@@ -29,7 +29,7 @@
                             md="3"
                           >
                             <v-subheader class="justify-center">
-                              素 材 名 稱
+                              跑 馬 燈 名 稱
                               <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
@@ -38,12 +38,12 @@
                             md="6"
                           >
                             <v-text-field
-                              v-model="filename"
+                              v-model="marqueeText"
                               :rules="rules.requiredRule.concat(rules.lengthRules)"
                               :hide-details="hideDatails"
                               color="accent"
-                              label="素 材 名 稱"
-                              placeholder="請輸入素材名稱"
+                              label="跑 馬 燈 名 稱"
+                              placeholder="請輸入跑馬燈名稱"
                               :counter="maxCharacter"
                               outlined
                               required
@@ -60,7 +60,7 @@
                             md="3"
                           >
                             <v-subheader class="justify-center">
-                              檔 案 描 述
+                              描 述 註 記
                             </v-subheader>
                           </v-col>
                           <v-col
@@ -68,12 +68,12 @@
                             md="6"
                           >
                             <v-text-field
-                              v-model="fileDesc"
+                              v-model="marqueeDesc"
                               :rules="rules.lengthRules"
                               :hide-details="hideDatails"
                               color="accent"
-                              label="檔 案 描 述"
-                              placeholder="請輸入檔案描述"
+                              label="描 述 註 記"
+                              placeholder="請輸入描述註記"
                               :counter="maxCharacter"
                               outlined
                               dense
@@ -90,36 +90,87 @@
                             md="3"
                           >
                             <v-subheader class="justify-center">
-                              上 傳 格 式
+                               外 觀 樣 式
+                            </v-subheader>
+                          </v-col>
+                          <v-col
+                            cols="3"
+                            md="3"
+                          >
+                            <v-switch
+                              v-model="fontBold" 
+                              label="粗體字"
+                              inset
+                            />
+                          </v-col>
+                          <v-col
+                            cols="3"
+                            md="3"
+                          >
+                            <v-switch
+                              v-model="fontItalic" 
+                              label="斜體字"
+                              inset
+                            />
+                          </v-col>
+                        </v-row>
+                        <v-row
+                          :dense="dense"
+                          :no-gutters="noGutters"
+                        >
+                          <v-col
+                            cols="4"
+                            md="3"
+                          >
+                            <v-subheader class="justify-center">
+                              顏 色 配 置
                               <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
                           <v-col
-                            cols="7"
-                            md="6"
+                            cols="3"
+                            md="3"
                           >
-                            <v-radio-group
-                              v-model="uploadType"
-                              class="mt-2"
-                              dense
-                              row
-                              :rules="[v => !!v || '必須選擇一種上傳格式']"
-                            >
-                              <v-radio
-                                label="純圖檔"
-                                value="1"
-                                color="red"
-                              />
-                              <v-radio
-                                label="影片檔(mp4)"
-                                value="2"
-                                color="red"
-                              />
-                              <!-- <v-radio
-                                label="圖檔+影片檔(mp4)"
-                                value="3"
-                              /> -->
-                            </v-radio-group>
+                            <v-text-field v-model="fontColor" 
+                                          v-mask="mask"
+                                          readonly
+                                          color="accent"
+                                          label="文字顏色"
+                                          persistent-hint>
+                              <template v-slot:append>
+                                <v-menu v-model="menu" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                  <template v-slot:activator="{ on }">
+                                    <div :style="fontStyle" v-on="on" />
+                                  </template>
+                                  <v-card>
+                                    <v-color-picker v-model="fontColor" hide-inputs flat />
+                                  </v-card>
+                                </v-menu>
+                              </template>
+                            </v-text-field>
+                          </v-col>
+                          <v-col
+                            cols="3"
+                            md="3"
+                            class="mt-4 "
+                          >
+                            <v-text-field v-model="backgroundColor" 
+                                          v-mask="mask"
+                                          readonly
+                                          color="accent"
+                                          label="背景顏色"
+                                          dense>
+                              <template v-slot:append>
+                                <v-menu v-model="menu1" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                  <template v-slot:activator="{ on }">
+                                    <div :style="backgroundStyle" v-on="on" />
+                                  </template>
+                                  <v-card>
+                                    <v-color-picker v-model="backgroundColor" hide-inputs flat />
+                                  </v-card>
+                                </v-menu>
+                              </template>
+                            </v-text-field>
                           </v-col>
                         </v-row>
                         <v-row
@@ -131,29 +182,29 @@
                             md="3"
                           >
                             <v-subheader class="justify-center">
-                              上 傳 檔 案
-                              <span class="red--text">*</span>
+                               撥 放 速 度
                             </v-subheader>
                           </v-col>
                           <v-col
                             cols="7"
                             md="6"
                           >
-                            <v-file-input
-                              :hide-details="hideDatails"
-                              label="上傳圖片或影片"
-                              color="accent"
-                              outlined
+                            <v-slider
+                              v-model="duration"
+                              :min="min"
+                              :max="max"
                               dense
-                              accept="image/jpg"
-                              hint="(.jpg、.png，最多不超過 50MB)"
-                              persistent-hint
-                              prepend-inner-icon="mdi-cloud-upload"
-                              prepend-icon
+                              color="accent"
+                              thumb-color="accent"
+                              track-color="accent lighten-3"
+                              prepend-icon="mdi-minus"
+                              append-icon="mdi-plus"
+                              @click:prepend="decrementDuration('minus')"
+                              @click:append="incrementDuration('plus')"
                             />
                           </v-col>
                         </v-row>
-                        <!-- <v-row
+                        <v-row
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
@@ -162,21 +213,26 @@
                             md="3"
                           >
                             <v-subheader class="justify-center">
-                              多行欄位
+                              樣 式 預 覽 {{animationDuration}}
+                              <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
                           <v-col
-                            cols="9"
-                            md="8"
+                            cols="7"
+                            md="6"
                           >
-                            <v-textarea
-                              color="accent"
-                              outlined
-                              placeholder="請輸入文字"
-                              counter="50"
-                            />
+                          <!-- <v-color-picker v-model="color" /> -->
+                          <marquee-text
+                            :duration="animationDuration"
+                            :backgroundColor="backgroundColor"
+                            :fontColor="fontColor"
+                            :repeat="1"
+                          >
+                            {{marqueeText}}
+                          </marquee-text>
                           </v-col>
-                        </v-row> -->
+                        </v-row>
+
                         <v-row
                           :dense="dense"
                           :no-gutters="noGutters"
@@ -215,31 +271,35 @@
 </template>
 
 <script>
+  
   export default {
     data() {
       return {
         valid: false,
         maxCharacter: 40,
-        filename: '',
-        fileDesc: '',
+        duration: 80,
+        min: 60,
+        max: 600,
+        marqueeText: '台灣電力公司跑馬燈輪播測試!!! :   今日預告台北將不會停電!!!!',
+        marqueeDesc: '',
         uploadType: '',
-        uploadData: '',
-        formData: {
-          filename: '',
-          fileDesc: '',
-          uploadType: '',
-          uploadData: '',
-        },
-        dropzoneOptions: {
-          url: 'https://httpbin.org/post',
-          thumbnailWidth: 150,
-          maxFilesize: 0.5,
-          headers: { "My-Awesome-Header": "header value" }
-        },
+        fontColor: '#000000FF',
+        backgroundColor: '#1976D2FF',
+        mask: '!#XXXXXXXX',
+        fontBold: false,
+        fontItalic: false,
+        menu: false,
+        menu1: false,
         dense: false,
         noGutters: false,
         hideDatails: false,
         snackbar: false,
+        basicStyle : {
+          cursor: 'pointer',
+          height: '20px',
+          width: '20px',
+          transition: 'border-radius 200ms ease-in-out'
+        },
         rules: {
           requiredRule: [v => !!v || '此欄位為必填欄位'],
           lengthRules: [v => (v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
@@ -247,6 +307,25 @@
           iamgeSizeRules: [v => !!v || v.size < 10000000 || 'Avatar size should be less than 10 MB!',],
         },
       }
+    },
+    computed: {
+      animationDuration() {
+        return 600 / this.duration
+      },
+      backgroundStyle() {
+        const { backgroundColor, menu1 } = this
+        return Object.assign({
+          backgroundColor: backgroundColor,
+          borderRadius: menu1 ? '4px' : '50%',
+        }, this.basicStyle)
+      },
+      fontStyle() {
+        const { fontColor, menu } = this
+        return Object.assign({
+          backgroundColor: fontColor,
+          borderRadius: menu ? '50%' : '4px',
+        }, this.basicStyle)
+      },
     },
     methods: {
       getParentRouteName() {
@@ -268,12 +347,11 @@
       resetValidation() {
         this.$refs.form.resetValidation()
       },
-      dropzoneS(file) {
-        console.log('this.$message', this.$message)
-        console.log(file)
+      decrementDuration() { //減慢撥放
+        this.duration = this.duration - 6 || 0
       },
-      dropzoneR(file) {
-        console.log(file)
+      incrementDuration() { //加快撥放
+        this.duration = this.duration + 6 || 0
       },
     }
   }

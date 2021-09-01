@@ -68,15 +68,15 @@ export const constantRoutes = [
   },
   {
     path: '/',
-    hidden: true,
+    name: 'HomePage',
     component: Layout,
-    name: 'homepage',
+    hidden: true,
   },
   {
     path: '/material',
+    name: 'MaterialPages',
     component: Layout,
-    redirect: '/upload',
-    name: 'material',
+    redirect: '/material/upload',
     meta: { title: '素材管理', icon: 'mdi-tooltip-image-outline' },
     children: [
       {
@@ -95,45 +95,57 @@ export const constantRoutes = [
     children: [
       {
         path: 'formValidation',
-        component: () => import('@/views/form/FormValidation'),
         name: 'FormValidation',
+        component: () => import('@/views/form/FormValidation'),
         meta: { title: '表單驗證', icon: 'mdi-clipboard-play-multiple' }
       },
       {
         path: 'formLayouts',
-        component: () => import('@/views/form/FormLayouts'),
         name: 'FormLayouts',
+        component: () => import('@/views/form/FormLayouts'),
         meta: { title: '表單樣式', icon: 'mdi-clipboard-play-multiple' }
       }
     ]
   },
   {
-    path: '/guide',
-    redirect: '/guide/index',
+    path: '/marquee',
+    redirect: '/marquee/create',
     component: Layout,
-    name: 'guide',
-    meta: { title: '跑馬燈', icon: 'mdi-clipboard-play-multiple' },
+    name: 'MarqueePages',
+    meta: { title: '跑馬燈管理', icon: 'mdi-clipboard-play-multiple' },
     children: [
       {
-        component: () => import('@/components/core/HelloWorld3'),
-        path: 'index',
-        name: 'HelloWorld3',
+        path: 'create',
+        name: 'Marquee-Edit',
+        component: () => import('@/views/marquee/create'),
         meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
+      },
+      {
+        path: 'list',
+        name: 'Marquee-List',
+        component: () => import('@/views/marquee/list'),
+        meta: { title: '跑馬燈查詢', icon: 'mdi-pencil-box-multiple-outline' }
       }
     ]
   },
   {
     path: '/program',
-    redirect: '/program/programkake',
+    redirect: '/program/create',
     component: Layout,
-    name: 'Program',
+    name: 'ProgramPages',
     meta: { title: '節目管理', icon: 'mdi-video-box' },
     children: [
       {
+        path: 'create',
+        name: 'Program-Create',
         component: () => import('@/views/material/upload'),
-        path: 'programkake',
-        name: 'programList',
-        meta: { title: '節目單製作', icon: 'mdi-movie-edit' }
+        meta: { title: '節目表製作', icon: 'mdi-movie-edit' }
+      },
+      {
+        path: 'list',
+        name: 'Program-List',
+        component: () => import('@/views/material/upload'),
+        meta: { title: '節目表查詢', icon: 'mdi-movie-edit' }
       }
     ]
   },

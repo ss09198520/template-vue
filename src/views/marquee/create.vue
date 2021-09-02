@@ -152,7 +152,7 @@
                           <v-col
                             cols="3"
                             md="3"
-                            class="mt-4 "
+                            class="mt-4"
                           >
                             <v-text-field v-model="backgroundColor" 
                                           v-mask="mask"

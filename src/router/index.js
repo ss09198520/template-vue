@@ -149,6 +149,33 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: "/hy",
+    redirect: "/hy/stylePromo",
+    component: Layout,
+    name: "HY Pages",
+    meta: { title: 'HY Prototype', icon: 'mdi-account-multiple' },
+    children: [
+      {
+        path: 'stylePromo',
+        name: 'StylePromo',
+        component: () => import('@/pages/stylePromoPage'),
+        meta: { title: 'style demo', icon: 'mdi-draw' }
+      },
+      {
+        path: '/timer',
+        name: 'Timer',
+        component: () => import('@/pages/timerPage'),
+        meta: { title: 'timer', icon: 'mdi-clock-outline' }
+      },
+      {
+        path: '/imageEditor',
+        name: 'ImageEditor',
+        component: () => import('@/pages/imageEditorPage.vue'),
+        meta: { title: 'imageEditor', icon: 'mdi-image' }
+      }
+    ]
+  }
 ]
     // Program: '節目管理',
     // ProgramList: '節目列表',

@@ -18,5 +18,18 @@ module.exports = {
   },
   transpileDependencies: [
     'vuetify'
-  ]
+  ],
+  devServer: {
+    open: true,
+    port: 9001,
+    host: '127.0.0.1',
+    proxy: {
+        '/*': {
+            target: 'http://localhost:8080',
+            ws: true,
+            changeOrigin: true
+        }
+    }
+  },
+  publicPath : "/"
 }

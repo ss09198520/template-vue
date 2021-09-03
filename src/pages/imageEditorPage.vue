@@ -2,12 +2,32 @@
     <v-app>
         <v-container>
             <v-row justify="center">
-                <tui-image-editor ref="tuiImageEditor" :include-ui="useDefaultUI" :options="options"></tui-image-editor>
+                <tui-image-editor ref="tuiImageEditor" :include-ui="true" :options="options"></tui-image-editor>
             </v-row>
             <hr style="margin-top: 30px;margin-bottom: 30px;">
             <v-row justify="center">
-                <v-btn style="width:200px;" @click="downloadFile()" depressed color="primary">DOWNLOAD</v-btn>
+                <v-btn style="width:200px; margin: 5px;" @click="downloadFile()" depressed color="primary">DOWNLOAD</v-btn>
             </v-row>
+            <hr style="margin-top: 30px;margin-bottom: 30px;">
+            <!-- 以下 button 可觸發 imageEditor menu 各功能，可支援自定義 button 樣式，目前不會用到 -->
+            <!-- <v-row justify="center">
+                <v-btn style="width:200px; margin: 5px;" @click="deleteSelectObject()" depressed color="primary">DELETE</v-btn>
+                <v-btn style="width:200px; margin: 5px;" @click="clearAllObject()" depressed color="primary">DELETE ALL</v-btn>
+            </v-row>
+            <hr style="margin-top: 30px;margin-bottom: 30px;">
+            <v-row justify="center">
+                <v-btn style="width:200px; margin: 5px;" @click="undo()" depressed color="primary">UNDO</v-btn>
+                <v-btn style="width:200px; margin: 5px;" @click="redo()" depressed color="primary">REDO</v-btn>
+            </v-row>
+            <hr style="margin-top: 30px;margin-bottom: 30px;">
+            <v-row justify="center">
+                <v-btn style="width:200px; margin: 5px;" v-if="!draggable" @click="changeDragStatus()" depressed color="primary">DRAG</v-btn>
+                <v-btn style="width:200px; margin: 5px;" v-if="draggable" @click="changeDragStatus()" depressed color="primary">UNDRAG</v-btn>
+                <v-btn style="width:200px; margin: 5px;" @click="zoomIn()" depressed color="primary">ZOOM IN</v-btn>
+                <v-btn style="width:200px; margin: 5px;" @click="zoomOut()" depressed color="primary">ZOOM OUT</v-btn>
+                <v-btn style="width:200px; margin: 5px;" @click="resetZoom()" depressed color="primary">RESET</v-btn>
+            </v-row>
+            <hr style="margin-top: 30px;margin-bottom: 30px;"> -->
         </v-container>
     </v-app>
 </template>
@@ -27,7 +47,10 @@ export default {
         'tui-image-editor': ImageEditor
     },
     mounted() {
-        document.getElementsByClassName("tui-image-editor-header-buttons")[0].display = 'none';
+        // 套件自帶的 click function 在讀取後端傳的 outputStream 的情況下會出錯，這邊自己綁一個 function 實現 reset 功能
+        document.getElementsByClassName("tie-btn-reset")[0].addEventListener('click', () => {
+            this.resetZoom();
+        });
         AjaxService.post("/imageEditor/init", {}, (response) => {
             let binaryString = window.atob(response.restData.bytes);
           
@@ -39,34 +62,33 @@ export default {
 
             let blob = new Blob([bytes], { type: 'image/jpeg' });
             this.$refs.tuiImageEditor.invoke('loadImageFromFile', blob, 'test.jpg').then((res) => {
+                // 啟動 menu 功能，如果不呼叫此 function ，會無法做編輯
                 this.$refs.tuiImageEditor.editorInstance.ui.activeMenuEvent();
-
-                let newSize = {
-                    newWidth: (res.newWidth + 100) + "",
-                    newHeight: (res.newHeight + 100) + ""
-                }
-                this.$refs.tuiImageEditor.editorInstance.ui.resize(newSize);
+                // 套件把"讀取圖片"也算是一個動作，把 undo stack 清掉避免 user 誤觸 undo 導致圖片消失
+                this.$refs.tuiImageEditor.editorInstance.clearUndoStack();
             });
         });
     },
     data() {
         return {
-            useDefaultUI: true,
             options: {
-                // for tui-image-editor component's "options" prop
-                cssMaxWidth: 700,
+                cssMaxWidth: 2000,
                 cssMaxHeight: 2000,
                 includeUI: {
                     uiSize: {
-                        width: "1000px",
-                        height: "700px"
+                        width: "1500px",
+                        height: "800px"
                     },
                     menu: ['draw', 'text', 'shape'],
                     theme: {
                         "header.display": "none"
                     }
-                }
-            }
+                },
+                usageStatistics: false
+            },
+            // 用來配合觸發 ImageEditor menu botton 功能，目前用不到
+            zoom: 1.0,
+            draggable: false
         }
     },
     methods: {
@@ -78,7 +100,58 @@ export default {
             AjaxService.post("/imageEditor/downloadImage", param, (response) => {
                 console.log(response);
             });
-        }
+        },
+        resetZoom() {
+            console.log("reset");
+            this.$refs.tuiImageEditor.editorInstance.resetZoom();
+            this.zoom = 1.0;
+        },
+        // 以下 method 可觸發 imageEditor menu button 功能 (目前不會用到)
+        // undo() {
+        //     this.$refs.tuiImageEditor.editorInstance.undo();
+        // },
+        // redo() {
+        //     this.$refs.tuiImageEditor.editorInstance.redo();
+        // },
+        // zoomIn() {
+        //     if(this.zoom < 5.0) {
+        //         this.zoom += 0.5;
+        //         this.$refs.tuiImageEditor.editorInstance.zoom({
+        //             x: 100,
+        //             y: 100,
+        //             zoomLevel: this.zoom
+        //         })
+        //     }
+        // },
+        // zoomOut() {
+        //     if(this.zoom > 1.0) {
+        //         this.zoom -= 0.5;
+        //         this.$refs.tuiImageEditor.editorInstance.zoom({
+        //             x: 100,
+        //             y: 100,
+        //             zoomLevel: this.zoom
+        //         })
+        //     }
+        // }, 
+        // changeDragStatus() {
+        //     if(!this.draggable) {
+        //         // 先清除原本的 mode
+        //         this.$refs.tuiImageEditor.editorInstance.stopDrawingMode();
+        //         this.$refs.tuiImageEditor.editorInstance._graphics.startHandMode();
+        //         this.$refs.tuiImageEditor.editorInstance._graphics._drawingMode = "ZOOM";
+        //         this.draggable = true;
+        //     } else {
+        //         this.$refs.tuiImageEditor.editorInstance._graphics.endHandMode();
+        //         this.$refs.tuiImageEditor.editorInstance.stopDrawingMode();
+        //         this.draggable = false;
+        //     }
+        // },
+        // deleteSelectObject() {
+        //     this.$refs.tuiImageEditor.editorInstance.removeActiveObject();
+        // },
+        // clearAllObject() {
+        //     this.$refs.tuiImageEditor.editorInstance.clearObjects();
+        // }
     }
 }
 </script>
@@ -86,5 +159,9 @@ export default {
 <style scoped>
     .marginLeft {
         margin-left: 100px !important;
+    }
+
+    .tui-image-editor-help-menu {
+        display: none !important;
     }
 </style>

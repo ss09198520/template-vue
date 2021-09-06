@@ -4,7 +4,7 @@
       <v-col>
         <v-card width="100%">
           <v-tabs>
-            <v-tab>{{getParentRouteName()}}</v-tab>
+            <v-tab>{{ getParentRouteName() }}</v-tab>
             <v-tab-item>
               <v-container>
                 <v-row class="d-flex justify-center">
@@ -19,7 +19,7 @@
                       title="素 材 上 傳"
                       text
                     >
-                      <v-form v-model="valid" ref="form" lazy-validation>
+                      <v-form ref="form" v-model="valid" lazy-validation>
                         <v-row
                           :dense="dense"
                           :no-gutters="noGutters"
@@ -186,8 +186,8 @@
                               class="ma-1"
                               depressed
                               color="accent"
-                              @click="submit"
                               :disabled="!valid"
+                              @click="submit"
                             >
                               送出
                             </v-btn>

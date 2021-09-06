@@ -1,5 +1,8 @@
 module.exports = {
   root: true,
+  parserOptions: {
+    parser: 'babel-eslint',
+  },
   env: {
     browser: true,
     node: true,
@@ -10,19 +13,17 @@ module.exports = {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'space-before-function-paren': 'off',
-    'eol-last': ['error', 'never'],
-    "vue/max-attributes-per-line": [2, {
-      "singleline": 10,
+    // "eol-last": 2,
+    "vue/max-attributes-per-line": ["error", {
+      "singleline": 5,
       "multiline": {
         "max": 1,
         "allowFirstLine": false
       }
     }],
+    'vue/no-v-html': 'off',
     "vue/singleline-html-element-content-newline": "off",
     "vue/multiline-html-element-content-newline":"off",
     "vue/name-property-casing": ["error", "PascalCase"],
-  },
-  parserOptions: {
-    parser: 'babel-eslint',
   },
 }

@@ -181,7 +181,27 @@ export const constantRoutes = [
         meta: { title: 'TPES Form', icon: 'mdi-file-document' }
       },
     ]
-  }
+  },
+  {
+    path: '/privilege',
+    component: Layout,
+    name: 'PrivilegePages',
+    meta: { title: '權限管理', icon: 'mdi-account-multiple' },
+    children: [
+      {
+        path: 'characterPrivilege',
+        name: 'CharacterPrivilege',
+        component: () => import('@/pages/CharacterPrivilegePage'),
+        meta: { title: '角色設定', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'privilegeSetting',
+        name: 'PrivilegeSetting',
+        component: () => import('@/pages/PrivilegeSettingPage'),
+        meta: { title: '權限設定', icon: 'mdi-account-multiple' }
+      }
+    ]
+  },
 ]
     // Program: '節目管理',
     // ProgramList: '節目列表',

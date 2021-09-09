@@ -1,214 +1,89 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col>
-        <v-card width="100%">
-          <v-tabs>
-            <v-tab>{{ getParentRouteName() }}</v-tab>
-            <v-tab-item>
-              <v-container>
-                <v-row class="d-flex justify-center">
-                  <v-col
-                    sm="10"
-                    md="8"
-                  >
-                    <fet-card
-                      flat
-                      full-width
-                      outlined
-                      title="素 材 上 傳"
-                      text
+    <v-row v-show="isShow">
+      <v-col md="12">
+        <fet-card
+          full-width
+          title="搜尋結果"
+          text=""
+        >
+          <v-data-table
+            :headers="headerCRUD"
+            :items="itemsCRUD"
+            item-key="id"
+            :items-per-page="itemsPerPage"
+            :hide-default-footer="false"
+            :footer-props="{
+              showFirstLastPage: true,
+            }"
+          >
+            <template v-slot:top>
+              <v-dialog
+                v-model="dialog"
+                max-width="500"
+              />
+              <v-dialog
+                v-model="alertDialog"
+                :max-width="250"
+              >
+                <v-card>
+                  <v-card-title>Are you sure?</v-card-title>
+                  <v-card-text />
+                  <v-card-actions class="justify-center">
+                    <v-btn
+                      color="error"
+                      depressed
+                      @click="remove"
                     >
-                      <v-form ref="form" v-model="valid" lazy-validation>
-                        <v-row
-                          :dense="dense"
-                          :no-gutters="noGutters"
-                        >
-                          <v-col
-                            cols="4"
-                            md="3"
-                          >
-                            <v-subheader class="justify-center">
-                              素 材 名 稱
-                              <span class="red--text">*</span>
-                            </v-subheader>
-                          </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
-                            <v-text-field
-                              v-model="filename"
-                              :rules="rules.requiredRule.concat(rules.lengthRules)"
-                              :hide-details="hideDatails"
-                              color="accent"
-                              label="素 材 名 稱"
-                              placeholder="請輸入素材名稱"
-                              :counter="maxCharacter"
-                              outlined
-                              required
-                              dense
-                            />
-                          </v-col>
-                        </v-row>
-                        <v-row
-                          :dense="dense"
-                          :no-gutters="noGutters"
-                        >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
-                            <v-subheader class="justify-center">
-                              檔 案 描 述
-                            </v-subheader>
-                          </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
-                            <v-text-field
-                              v-model="fileDesc"
-                              :rules="rules.lengthRules"
-                              :hide-details="hideDatails"
-                              color="accent"
-                              label="檔 案 描 述"
-                              placeholder="請輸入檔案描述"
-                              :counter="maxCharacter"
-                              outlined
-                              dense
-                              persistent-hint
-                            />
-                          </v-col>
-                        </v-row>
-                        <v-row
-                          :dense="dense"
-                          :no-gutters="noGutters"
-                        >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
-                            <v-subheader class="justify-center">
-                              上 傳 格 式
-                              <span class="red--text">*</span>
-                            </v-subheader>
-                          </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
-                            <v-radio-group
-                              v-model="uploadType"
-                              class="mt-2"
-                              dense
-                              row
-                              :rules="[v => !!v || '必須選擇一種上傳格式']"
-                            >
-                              <v-radio
-                                label="純圖檔"
-                                value="1"
-                                color="red"
-                              />
-                              <v-radio
-                                label="影片檔(mp4)"
-                                value="2"
-                                color="red"
-                              />
-                              <!-- <v-radio
-                                label="圖檔+影片檔(mp4)"
-                                value="3"
-                              /> -->
-                            </v-radio-group>
-                          </v-col>
-                        </v-row>
-                        <v-row
-                          :dense="dense"
-                          :no-gutters="noGutters"
-                        >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
-                            <v-subheader class="justify-center">
-                              上 傳 檔 案
-                              <span class="red--text">*</span>
-                            </v-subheader>
-                          </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
-                            <v-file-input
-                              :hide-details="hideDatails"
-                              label="上傳圖片或影片"
-                              color="accent"
-                              outlined
-                              dense
-                              accept="image/jpg"
-                              hint="(.jpg、.png，最多不超過 50MB)"
-                              persistent-hint
-                              prepend-inner-icon="mdi-cloud-upload"
-                              prepend-icon
-                            />
-                          </v-col>
-                        </v-row>
-                        <!-- <v-row
-                          :dense="dense"
-                          :no-gutters="noGutters"
-                        >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
-                            <v-subheader class="justify-center">
-                              多行欄位
-                            </v-subheader>
-                          </v-col>
-                          <v-col
-                            cols="9"
-                            md="8"
-                          >
-                            <v-textarea
-                              color="accent"
-                              outlined
-                              placeholder="請輸入文字"
-                              counter="50"
-                            />
-                          </v-col>
-                        </v-row> -->
-                        <v-row
-                          :dense="dense"
-                          :no-gutters="noGutters"
-                        >
-                          <v-col class="d-flex justify-end">
-                            <v-btn
-                              class="ma-1"
-                              depressed
-                              color="accent"
-                              :disabled="!valid"
-                              @click="submit"
-                            >
-                              送出
-                            </v-btn>
-
-                            <v-btn
-                              class="ma-1"
-                              outlined
-                              color="accent"
-                            >
-                              取消
-                            </v-btn>
-                          </v-col>
-                        </v-row>
-                      </v-form>
-                    </fet-card>
-                  </v-col>
-                </v-row>
-              </v-container>
-            </v-tab-item>
-          </v-tabs>
-        </v-card>
+                      Yes
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </template>
+            <template v-slot:item.action="{ item }">
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                    v-on="on"
+                  >
+                    mdi-pencil
+                  </v-icon>
+                </template>
+                <span>編輯</span>
+              </v-tooltip>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    @click="deleteItem(item)"
+                    v-on="on"
+                  >
+                    mdi-delete
+                  </v-icon>
+                </template>
+                <span>刪除</span>
+              </v-tooltip>
+            </template>
+            <template v-slot:item.material_path="{ item }">
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    class="mr-2 d-flex justify-center"
+                    v-on="on"
+                  >
+                    mdi-file
+                  </v-icon>
+                </template>
+                <span>{{ item.material_path }}</span>
+              </v-tooltip>
+            </template>
+          </v-data-table>
+        </fet-card>
       </v-col>
     </v-row>
   </v-container>
@@ -218,33 +93,110 @@
   export default {
     data() {
       return {
-        valid: false,
-        maxCharacter: 40,
-        filename: '',
-        fileDesc: '',
-        uploadType: '',
-        uploadData: '',
-        formData: {
-          filename: '',
-          fileDesc: '',
-          uploadType: '',
-          uploadData: '',
+        isShow: true,
+        menu: false,
+        date: new Date().toISOString().substr(0, 10),
+        itemsPerPage: 5,
+        headerCRUD: [
+          {
+            text: '操作',
+            value: 'action',
+            sortable: false,
+            width: '8%',
+          },
+          {
+            text: '名稱',
+            value: 'name',
+            width: '26%',
+          },
+          {
+            text: '版位ID(SCP)',
+            value: 'scp_id',
+            width: '20%',
+          },
+          {
+            text: '素材CF',
+            value: 'material_path',
+            width: '12%',
+          },
+          {
+            text: '上架日期',
+            value: 'ondate',
+            width: '17%',
+          },
+          {
+            text: '下架日期',
+            value: 'offdate',
+            width: '17%',
+          },
+        ],
+        itemsCRUD: [
+          {
+            name: 'menu_小網_全站主選單_1221_1231',
+            id: 1,
+            scp_id: 'mobile_menu_750540',
+            material_path: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
+            ondate: '2020-12-21T00:00:00',
+            offdate: '2020-12-31T23:59:00',
+          },
+          {
+            name: 'footer_資費_預付卡全站下方橫幅_1221_1231',
+            id: 2,
+            scp_id: 'rateplan_prepaid_halban_1920156_750540',
+            material_path: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/footer',
+            ondate: '2020-12-21T00:00:00',
+            offdate: '2020-12-31T23:59:00',
+          },
+          {
+            name: 'menu_遠傳生活圈_全站主選單_1221_1231',
+            id: 3,
+            scp_id: 'lifecircle_menu_240700_750540',
+            material_path: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
+            ondate: '2020-12-21T00:00:00',
+            offdate: '2020-12-31T23:59:00',
+          },
+          {
+            name: 'footer_資費_語音上網方案全站下方橫幅_1221_1231',
+            id: 4,
+            scp_id: 'rateplan_postpaid_halban_1920156_750540',
+            material_path: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
+            ondate: '2020-12-21T00:00:00',
+            offdate: '2020-12-31T23:59:00',
+          },
+          {
+            name: 'menu_遠傳生活圈_全站主選單_1221_1231',
+            id: 5,
+            scp_id: 'lifecircle_menu_240700_750540',
+            material_path: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
+            ondate: '2020-12-21T00:00:00',
+            offdate: '2020-12-31T23:59:00',
+          },
+          {
+            name: 'footer_資費_語音上網方案全站下方橫幅_1221_1231',
+            id: 6,
+            scp_id: 'rateplan_postpaid_halban_1920156_750540',
+            material_path: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
+            ondate: '2020-12-21T00:00:00',
+            offdate: '2020-12-31T23:59:00',
+          },
+        ],
+        defaultItem: {
+          name: '',
+          scp_id: '',
+          material_path: '',
+          ondate: 0,
+          pages: 0,
         },
-        dropzoneOptions: {
-          url: 'https://httpbin.org/post',
-          thumbnailWidth: 150,
-          maxFilesize: 0.5,
-          headers: { "My-Awesome-Header": "header value" }
-        },
-        dense: false,
-        noGutters: false,
-        hideDatails: false,
-        snackbar: false,
-        rules: {
-          requiredRule: [v => !!v || '此欄位為必填欄位'],
-          lengthRules: [v => (v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
-          videoSizeRules: [v => !!v || v.size < 50000000 || 'Avatar size should be less than 50 MB!',],
-          iamgeSizeRules: [v => !!v || v.size < 10000000 || 'Avatar size should be less than 10 MB!',],
+        // CRUD
+        dialog: false,
+        alertDialog: false,
+        editedIndex: -1,
+        editedItem: {
+          name: '',
+          scp_id: '',
+          material_path: '',
+          ondate: 0,
+          pages: 0,
         },
       }
     },
@@ -268,12 +220,32 @@
       resetValidation() {
         this.$refs.form.resetValidation()
       },
-      dropzoneS(file) {
-        console.log('this.$message', this.$message)
-        console.log(file)
+      close() {
+        this.dialog = false
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+        this.alertDialog = false
       },
-      dropzoneR(file) {
-        console.log(file)
+      save() {
+        if (this.editedIndex > -1) {
+          Object.assign(this.itemsCRUD[this.editedIndex], this.editedItem)
+        } else {
+          this.itemsCRUD.push(this.editedItem)
+        }
+        this.close()
+      },
+      editItem(item) {
+        this.editedIndex = this.itemsCRUD.indexOf(item)
+        this.editedItem = Object.assign({}, item)
+        this.dialog = true
+      },
+      deleteItem(item) {
+        this.alertDialog = true
+        this.editedIndex = this.itemsCRUD.indexOf(item)
+      },
+      remove() {
+        this.itemsCRUD.splice(this.editedIndex, 1)
+        this.close()
       },
     }
   }

@@ -189,7 +189,7 @@ export const constantRoutes = [
       {
         path: 'privilegeSetting',
         name: 'PrivilegeSetting',
-        component: () => import('@/pages/PrivilegeSettingPage.vue'),
+        component: () => import('@/pages/privilegeSetting/privilegeSettingPage.vue'),
         meta: { title: '權限設定', icon: 'mdi-account-multiple' }
       }
     ]

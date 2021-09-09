@@ -14,6 +14,7 @@
       item: {
         type: Object,
         require: true,
+        default: null,
       },
       basePath: {
         type: String,
@@ -23,10 +24,6 @@
         type: Boolean,
         default: false,
       },
-    },
-    mounted() {
-      console.log('sub-group', this.item)
-      console.log('sub-group', this.basePath)
     },
   }
 </script>

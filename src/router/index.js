@@ -194,7 +194,26 @@ export const constantRoutes = [
       }
     ]
   },
-  
+  {
+    path: '/report',
+    component: Layout,
+    name: "報表",
+    meta: { title: '報表', icon: 'mdi-text-box' },
+    children: [
+    {
+      path: '/returnReport',
+      name: 'ReturnReport',
+      component: () => import('@/pages/report/returnReportPage.vue'),
+      meta: { title: '退件報表', icon: 'mdi-alert' }
+    },
+      {
+        path: '/readReport',
+        name: 'ReadReport',
+        component: () => import('@/pages/report/readReportPage.vue'),
+        meta: { title: '調閱清單', icon: 'mdi-eye' }
+      }
+    ]
+  }
 ]
     // Program: '節目管理',
     // ProgramList: '節目列表',

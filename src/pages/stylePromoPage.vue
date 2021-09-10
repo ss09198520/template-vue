@@ -253,6 +253,15 @@
         </v-card>
       </v-row>
       <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <h1>Pagination</h1>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row justify="center">
+        <v-pagination
+          v-model="page"
+          :length="6"
+        />
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
     </v-container>
   </v-app>
 </template>
@@ -401,7 +410,8 @@ export default {
               }
             ],
             searchText: '',
-            selectedTab: null
+            selectedTab: null,
+            page: 1
         }
     },
     mounted() {

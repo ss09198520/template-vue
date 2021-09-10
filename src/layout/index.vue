@@ -1,9 +1,9 @@
 <template>
   <div>
-      <sidemenu />
-      <core-topnav />
-      <core-content />
-      <core-footer />
+    <sidemenu />
+    <core-topnav />
+    <core-content />
+    <core-footer />
   </div>
 </template>
 

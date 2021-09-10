@@ -8,10 +8,7 @@
             <v-tab-item>
               <v-container>
                 <v-row class="d-flex justify-center">
-                  <v-col
-                    sm="10"
-                    md="8"
-                  >
+                  <v-col sm="10" md="8">
                     <fet-card
                       flat
                       full-width
@@ -24,19 +21,13 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="4"
-                            md="3"
-                          >
+                          <v-col cols="4" md="3">
                             <v-subheader class="justify-center">
                               跑 馬 燈 名 稱
                               <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
+                          <v-col cols="7" md="6">
                             <v-text-field
                               v-model="marqueeText"
                               :rules="rules.requiredRule.concat(rules.lengthRules)"
@@ -55,18 +46,12 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
                               描 述 註 記
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
+                          <v-col cols="7" md="6">
                             <v-text-field
                               v-model="marqueeDesc"
                               :rules="rules.lengthRules"
@@ -85,52 +70,29 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
                               外 觀 樣 式
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
-                            <v-switch
-                              v-model="fontBold" 
-                              label="粗體字"
-                              inset
-                            />
+                          <v-col cols="3" md="3">
+                            <v-switch v-model="fontBold" label="粗體字" inset />
                           </v-col>
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
-                            <v-switch
-                              v-model="fontItalic" 
-                              label="斜體字"
-                              inset
-                            />
+                          <v-col cols="3" md="3">
+                            <v-switch v-model="fontItalic" label="斜體字" inset />
                           </v-col>
                         </v-row>
                         <v-row
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
                               顏 色 配 置
                               <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-text-field 
                               v-model="fontColor" 
                               readonly
@@ -150,10 +112,7 @@
                               </template>
                             </v-text-field>
                           </v-col>
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-text-field 
                               v-model="backgroundColor" 
                               readonly
@@ -178,18 +137,12 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
                               撥 放 速 度
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
+                          <v-col cols="7" md="6">
                             <v-slider
                               v-model="duration"
                               :min="min"
@@ -209,19 +162,13 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
                               樣 式 預 覽 {{ animationDuration }}<!-- TODO remove debug -->
                               <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
+                          <v-col cols="7" md="6">
                             <!-- <v-color-picker v-model="color" /> -->
                             <marquee-text
                               :duration="animationDuration"

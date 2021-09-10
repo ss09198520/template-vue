@@ -5,7 +5,7 @@
     append-icon="mdi-chevron-down"
     prepend-icon=""
     color="primary"
-    >
+  >
 
     <template v-slot:activator>
       <v-list-item-action v-if="item.meta.icon">
@@ -14,16 +14,16 @@
       <v-list-item-title v-text="item.meta.title" />
     </template>
 
-    <template v-for="child in item.children" >
+    <template v-for="child in item.children">
       <fet-item 
-        v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)"
-        :item="child" 
+        v-if="!child.hidden && hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)"
         :key="resolvePath(child.path)" 
+        :item="child" 
         :to="resolvePath(child.path)"
-        :color="color">
-      </fet-item>
+        :color="color"
+      />
       
-      <fet-item-sub-group v-else :key="resolvePath(child.path)"  :item="child" :base-path="resolvePath(child.path)" :color="color"/>
+      <fet-item-sub-group v-else :key="resolvePath(child.path)" :item="child" :base-path="resolvePath(child.path)" :color="color" />
     </template>
   </v-list-group>
 </template>
@@ -54,44 +54,31 @@
         default: false,
       },
     },
-    mounted() {
-      // console.log('mounted-group',  this.item);
-      console.log('subGroup', this.subGroup)
-      // console.log('!!item.children', !this.item.hidden && !!this.item.children && !!this.item.children.length);
-    },
     data() {
       // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
       // TODO: refactor with render function
       this.onlyOneChild = null
       return {}
     },
-
     methods: {
       hasOneShowingChild(children = [], parent) {
-        // console.log('hasOneShowingChild', children , parent)
-        // console.log('basePath', this.basePath)
         const showingChildren = children.filter(item => {
           if (item.hidden) {
             return false
           } else {
             // Temp set(will be used if only has one showing child)
             this.onlyOneChild = item
-            // console.log('this.onlyOneChild', this.onlyOneChild)
             return true
           }
         })
-        // console.log('showingChildren.length', showingChildren.length ,this.onlyOneChild)
-        // console.log('onlyOneChild.children', this.onlyOneChild.children)
         // When there is only one child router, the child router is displayed by default
         if (showingChildren.length >= 1) {
-          // console.log('showingChildren.length >= 1', parent.path)
           return true
         }
 
         // Show parent if there are no child router to display
         if (showingChildren.length === 0) {
           this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
-          // console.log('showingChildren.length === 0', this.onlyOneChild)
           return true
         }
         return false
@@ -109,7 +96,6 @@
           return !item.hidden
         })
 
-        // 可见的元素超过一个
         if (showingChildren.length > 1) return false
 
         // When there is only one child router, the child router is displayed by default

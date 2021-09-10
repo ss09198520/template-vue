@@ -125,6 +125,13 @@ export const constantRoutes = [
         name: 'Marquee-List',
         component: () => import('@/views/marquee/list'),
         meta: { title: '跑馬燈查詢', icon: 'mdi-pencil-box-multiple-outline' }
+      },
+      {
+        path: 'calendarList',
+        name: 'Marquee-List-Calendar',
+        component: () => import('@/views/marquee/calendar'),
+        hidden: true,
+        meta: { title: '跑馬燈行事曆清單', icon: 'mdi-pencil-box-multiple-outline' },
       }
     ]
   },
@@ -149,10 +156,72 @@ export const constantRoutes = [
       }
     ]
   },
+  {
+    path: "/hy",
+    redirect: "/hy/stylePromo",
+    component: Layout,
+    name: "HY Pages",
+    meta: { title: 'HY Prototype', icon: 'mdi-account-multiple' },
+    children: [
+      {
+        path: 'stylePromo',
+        name: 'StylePromo',
+        component: () => import('@/pages/stylePromoPage'),
+        meta: { title: 'style demo', icon: 'mdi-draw' }
+      },
+      {
+        path: '/timer',
+        name: 'Timer',
+        component: () => import('@/pages/timerPage'),
+        meta: { title: 'timer', icon: 'mdi-clock-outline' }
+      },
+      {
+        path: '/imageEditor',
+        name: 'ImageEditor',
+        component: () => import('@/pages/imageEditorPage.vue'),
+        meta: { title: 'imageEditor', icon: 'mdi-image' }
+      },
+      {
+        path: '/tpesForm',
+        name: 'TpesForm',
+        component: () => import('@/pages/FormPage/FormPage.vue'),
+        meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+      },
+      {
+        path: 'characterPrivilege',
+        name: 'CharacterPrivilege',
+        component: () => import('@/pages/CharacterPrivilegePage.vue'),
+        meta: { title: '角色設定', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'privilegeSetting',
+        name: 'PrivilegeSetting',
+        component: () => import('@/pages/privilegeSetting/privilegeSettingPage.vue'),
+        meta: { title: '權限設定', icon: 'mdi-account-multiple' }
+      }
+    ]
+  },
+  {
+    path: '/report',
+    component: Layout,
+    name: "報表",
+    meta: { title: '報表', icon: 'mdi-text-box' },
+    children: [
+    {
+      path: 'returnReport',
+      name: 'ReturnReport',
+      component: () => import('@/pages/report/returnReportPage.vue'),
+      meta: { title: '退件報表', icon: 'mdi-alert' }
+    },
+      {
+        path: 'readReport',
+        name: 'ReadReport',
+        component: () => import('@/pages/report/readReportPage.vue'),
+        meta: { title: '調閱清單', icon: 'mdi-eye' }
+      }
+    ]
+  }
 ]
-    // Program: '節目管理',
-    // ProgramList: '節目列表',
-    // ProgramMake: '節目製作',
 
 /**
  * asyncRoutes

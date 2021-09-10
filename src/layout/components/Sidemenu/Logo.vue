@@ -26,14 +26,14 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'SidebarLogo',
-  computed: {
-    ...mapState('app', ['image', 'miniSidebar', 'showImage']),
-  },
   data() {
     return {
       logo: require('@/assets/images/taipw_sm.jpg'),
     }
-  }
+  },
+  computed: {
+    ...mapState('app', ['image', 'miniSidebar', 'showImage']),
+  },
 }
 </script>
 

@@ -4,14 +4,11 @@
       <v-col>
         <v-card width="100%">
           <v-tabs>
-            <v-tab>{{getParentRouteName()}}</v-tab>
+            <v-tab>{{ getParentRouteName() }}</v-tab>
             <v-tab-item>
               <v-container>
                 <v-row class="d-flex justify-center">
-                  <v-col
-                    sm="10"
-                    md="8"
-                  >
+                  <v-col sm="10" md="8">
                     <fet-card
                       flat
                       full-width
@@ -19,24 +16,18 @@
                       title="跑 馬 燈 製 作"
                       text
                     >
-                      <v-form v-model="valid" ref="form" lazy-validation>
+                      <v-form ref="form" v-model="valid" lazy-validation>
                         <v-row
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="4"
-                            md="3"
-                          >
+                          <v-col cols="4" md="3">
                             <v-subheader class="justify-center">
                               跑 馬 燈 名 稱
                               <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
+                          <v-col cols="7" md="6">
                             <v-text-field
                               v-model="marqueeText"
                               :rules="rules.requiredRule.concat(rules.lengthRules)"
@@ -55,18 +46,12 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
                               描 述 註 記
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
+                          <v-col cols="7" md="6">
                             <v-text-field
                               v-model="marqueeDesc"
                               :rules="rules.lengthRules"
@@ -85,60 +70,38 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
-                               外 觀 樣 式
+                              外 觀 樣 式
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
-                            <v-switch
-                              v-model="fontBold" 
-                              label="粗體字"
-                              inset
-                            />
+                          <v-col cols="3" md="3">
+                            <v-switch v-model="fontBold" label="粗體字" inset />
                           </v-col>
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
-                            <v-switch
-                              v-model="fontItalic" 
-                              label="斜體字"
-                              inset
-                            />
+                          <v-col cols="3" md="3">
+                            <v-switch v-model="fontItalic" label="斜體字" inset />
                           </v-col>
                         </v-row>
                         <v-row
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="4"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
                               顏 色 配 置
                               <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
-                            <v-text-field v-model="fontColor" 
-                                          v-mask="mask"
-                                          readonly
-                                          color="accent"
-                                          label="文字顏色"
-                                          persistent-hint>
+                          <v-col cols="3" md="3">
+                            <v-text-field 
+                              v-model="fontColor" 
+                              readonly
+                              color="accent"
+                              label="文字顏色"
+                              dense
+                            >
                               <template v-slot:append>
-                                <v-menu v-model="menu" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
+                                <v-menu v-model="menu" top nudge-bottom="33" nudge-left="13" :close-on-content-click="false">
                                   <template v-slot:activator="{ on }">
                                     <div :style="fontStyle" v-on="on" />
                                   </template>
@@ -149,17 +112,14 @@
                               </template>
                             </v-text-field>
                           </v-col>
-                          <v-col
-                            cols="3"
-                            md="3"
-                            class="mt-4"
-                          >
-                            <v-text-field v-model="backgroundColor" 
-                                          v-mask="mask"
-                                          readonly
-                                          color="accent"
-                                          label="背景顏色"
-                                          dense>
+                          <v-col cols="3" md="3">
+                            <v-text-field 
+                              v-model="backgroundColor" 
+                              readonly
+                              color="accent"
+                              label="背景顏色"
+                              dense
+                            >
                               <template v-slot:append>
                                 <v-menu v-model="menu1" top nudge-bottom="105" nudge-left="16" :close-on-content-click="false">
                                   <template v-slot:activator="{ on }">
@@ -177,18 +137,12 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
-                               撥 放 速 度
+                              撥 放 速 度
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
+                          <v-col cols="7" md="6">
                             <v-slider
                               v-model="duration"
                               :min="min"
@@ -208,28 +162,22 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
-                          <v-col
-                            cols="3"
-                            md="3"
-                          >
+                          <v-col cols="3" md="3">
                             <v-subheader class="justify-center">
-                              樣 式 預 覽 {{animationDuration}}
+                              樣 式 預 覽 {{ animationDuration }}<!-- TODO remove debug -->
                               <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
-                          <v-col
-                            cols="7"
-                            md="6"
-                          >
-                          <!-- <v-color-picker v-model="color" /> -->
-                          <marquee-text
-                            :duration="animationDuration"
-                            :backgroundColor="backgroundColor"
-                            :fontColor="fontColor"
-                            :repeat="1"
-                          >
-                            {{marqueeText}}
-                          </marquee-text>
+                          <v-col cols="7" md="6">
+                            <!-- <v-color-picker v-model="color" /> -->
+                            <marquee-text
+                              :duration="animationDuration"
+                              :background-color="backgroundColor"
+                              :font-color="fontColor"
+                              :repeat="1"
+                            >
+                              {{ marqueeText }}
+                            </marquee-text>
                           </v-col>
                         </v-row>
 
@@ -241,9 +189,9 @@
                             <v-btn
                               class="ma-1"
                               depressed
-                              color="accent"
-                              @click="submit"
+                              color="primary"
                               :disabled="!valid"
+                              @click="submit"
                             >
                               送出
                             </v-btn>
@@ -285,7 +233,6 @@
         uploadType: '',
         fontColor: '#000000FF',
         backgroundColor: '#1976D2FF',
-        mask: '!#XXXXXXXX',
         fontBold: false,
         fontItalic: false,
         menu: false,

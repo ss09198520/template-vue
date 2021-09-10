@@ -2,7 +2,7 @@ export default {
   dark: false,
   themes: {
     light: {
-      primary: '#C32A22',
+      // primary: '#C32A22',
       secondary: '#193C7C',
       accent: '#37474f',
       error: '#DB6154',
@@ -11,7 +11,7 @@ export default {
       warning: '#EECF74',
     },
     dark: {
-      primary: '#E8383B',
+      // primary: '#E8383B',
       secondary: '#E57373',
       accent: '#757575',
       error: '#FF5252',

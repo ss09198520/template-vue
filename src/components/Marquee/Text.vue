@@ -34,8 +34,8 @@
     },
     render(h, { $style, props: { duration, repeat, paused, reverse , fontColor , backgroundColor }, children, data: { staticClass, key, on } }) {
       // console.log('$style', $style)
-      console.log('children', children[0].text)
-      '台灣電力公司跑馬燈輪播測試!!! :   今日預告台北將不會停電!!!!'
+      // console.log('children', children[0].text)
+      // '台灣電力公司跑馬燈輪播測試!!! :   今日預告台北將不會停電!!!!'
       const text = h('div', {
         class: $style.text,
         style: {

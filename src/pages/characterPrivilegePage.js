@@ -2,6 +2,8 @@
   export default {
     data() {
       return {
+        //控制彈出視窗
+        editPopOut: false,
         //控制選擇角色時最多顯示數量
         maxDisplay: 1,
         //控制是否打開修改角色                
@@ -69,20 +71,20 @@
         //角色別
         character: [],
         characterOption: [
-            { text: '主辦業務計畫員', value: '主辦業務計畫員'},
-            { text: '受理部門', value: '受理部門'},
-            { text: '服務中心主辦', value: '服務中心主辦'},
-            { text: '受理部門主管', value: '受理部門主管'},
-            { text: '業務經理', value: '業務經理'},
-            { text: '調閱管理員', value: '調閱管理員'},
-            { text: '核算課長', value: '核算課長'},
-            { text: '電費經理', value: '電費經理'},
-            { text: '服務中心主任', value: '服務中心主任'},
-            { text: '行銷主管-銷售作業', value: '行銷主管-銷售作業'},
-            { text: '行銷組組長', value: '行銷組組長'},
-            { text: '多媒體設定-業務處', value: '多媒體設定-業務處'},
-            { text: '多媒體設定-區處', value: '多媒體設定-區處'},
-            { text: '核算員', value: '核算員'},
+            { text: '主辦業務計畫員', value: 'AUTH01'},
+            { text: '受理部門', value: 'AUTH02'},
+            { text: '服務中心主辦', value: 'AUTH03'},
+            { text: '受理部門主管', value: 'AUTH04'},
+            { text: '業務經理', value: 'AUTH05'},
+            { text: '調閱管理員', value: 'AUTH06'},
+            { text: '核算課長', value: 'AUTH07'},
+            { text: '電費經理', value: 'AUTH08'},
+            { text: '服務中心主任', value: 'AUTH09'},
+            { text: '行銷主管-銷售作業', value: 'AUTH10'},
+            { text: '行銷組組長', value: 'AUTH11'},
+            { text: '多媒體設定-業務處', value: 'AUTH12'},
+            { text: '多媒體設定-區處', value: 'AUTH13'},
+            { text: '核算員', value: 'AUTH15'},
         ],
         //員工清單項目名稱
         empListHeaders: [
@@ -134,7 +136,33 @@
         ],
         //控制上一筆點選修改是否編輯中
         selectEmp:null,
-
+        //mock的角色清單
+        mockChar:[
+            { empId: '1050330-001', empName: '', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門主管',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
+            { empId: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
+            { empId: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
+            { empId: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門主管',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
+            { empId: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
+            { empId: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
+            
+            { empId: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門主管,服務中心主辦',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
+            { empId: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
+        ],
+        //比對mock的角色清單
+        oriMockChar:[
+            { empId: '1050330-001', empName: '', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門主管',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
+            { empId: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
+            { empId: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
+            { empId: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門主管',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
+            { empId: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
+            { empId: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
+            
+            { empId: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門主管,服務中心主辦',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
+            { empId: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
+        ],
+        modCharacterTitle:[],
+        //批次選擇的角色
+        setCharacter: '',
       }
     },
     beforeMount(){
@@ -281,30 +309,118 @@
             let tempCharacter = item.character.split(",");                        
             for(let i = 0; i < this.characterOption.length; i++){
                 for(let j = 0; j < tempCharacter.length; j++){
-                    if(this.characterOption[i].value == tempCharacter[j]){
-                        this.character.push(this.characterOption[i].value);
+                    if(this.characterOption[i].text == tempCharacter[j]){
+                        this.character.push(this.characterOption[i]);                        
                     }
                 }                               
-            } 
-            console.log(this.character); 
+            }                    
             this.selectEmp = item;       
         },
-        submit(item){   
+        submit(item){                       
             item.character = "";              
-            let num = 0;
-            for(let j = 0; j < this.character.length; j++){                                                                        
-                if(num > 0){
-                    item.character += ',' + this.character[j];
-                }else{
-                    item.character += this.character[j];
-                }                                    
-                num++;
-            }                                                   
+            let num = 0;            
+            console.log(this.character);
+            for(let i = 0; i < this.characterOption.length; i++){
+                for(let j = 0; j < this.character.length; j++){  
+                    if(this.characterOption[i].value == this.character[j].value){
+                        if(num > 0){
+                            item.character += ',' + this.characterOption[i].text;
+                        }else{
+                            item.character += this.characterOption[i].text;
+                        }                                    
+                        num++;
+                    }                                                                                          
+                }  
+            }                                                                         
             this.character = [];
             this.openSelectBox = '';
             item.edit = false;
             
         },
-
+        //彈出角色設定視窗
+        popOut(editPopOut){
+            this.editPopOut = !editPopOut;
+        },
+        //選擇新增角色
+        toSelected(item){
+            //build a copy item and compare to the original one                                    
+            item.isSelected = true;                              
+            for(let i = 0; i < this.mockChar.length; i++){
+                if(this.mockChar[i].empId == item.empId && this.mockChar[i].isSelected != this.oriMockChar[i].isSelected){                                                                  
+                    let checkTitleExist = false; 
+                    for(let j = 0; j < this.modCharacterTitle.length; j++){
+                        if(this.modCharacterTitle[j] == this.setCharacter.text){
+                            checkTitleExist = true;
+                        }
+                    }
+                    if(!checkTitleExist){
+                        this.modCharacterTitle.push(this.setCharacter.text);
+                    }                
+                }                
+            }
+        },
+        cancelMod(title){
+            console.log(title);
+            for(let i = 0; i < this.modCharacterTitle.length; i++){
+                if(this.modCharacterTitle[i] == title){
+                    this.modCharacterTitle.splice(i, 1);                                           
+                }
+            }
+            for(let j = 0; j < this.mockChar.length; j++){
+                for(let k = 0; k < this.oriMockChar.length; k++){
+                    if(this.oriMockChar[k].empId == this.mockChar[j].empId && this.oriMockChar[k].isSelected != this.mockChar[j].isSelected){
+                        let select = this.mockChar[j].isSelected;
+                        this.mockChar[j].isSelected = !select;
+                    }
+                }
+            }
+            return false;
+        },
+        //選擇刪除角色
+        toNotSelected(item){
+            item.isSelected = false;
+            for(let i = 0; i < this.mockChar.length; i++){
+                if(this.mockChar[i].empId == item.empId && this.mockChar[i].isSelected != this.oriMockChar[i].isSelected){                                                                    
+                    let checkTitleExist = false;
+                    for(let j = 0; j < this.modCharacterTitle.length; j++){
+                        if(this.modCharacterTitle[j] == this.setCharacter.text){
+                            checkTitleExist = true;
+                        }
+                    }
+                    if(!checkTitleExist){
+                        this.modCharacterTitle.push(this.setCharacter.text);
+                    }                       
+                }                
+            }
+        },
+        selectAll(selectType){
+            if(selectType == 'add'){
+                for(let item of this.mockChar){
+                    item.isSelected = true;
+                }
+                let checkTitleExist = false;
+                for(let j = 0; j < this.modCharacterTitle.length; j++){
+                    if(this.modCharacterTitle[j] == this.setCharacter.text){
+                        checkTitleExist = true;
+                    }
+                }
+                if(!checkTitleExist){
+                    this.modCharacterTitle.push(this.setCharacter.text);
+                }
+            } else{
+                for(let item of this.mockChar){
+                    item.isSelected = false;
+                }
+                let checkTitleExist = false;
+                for(let j = 0; j < this.modCharacterTitle.length; j++){
+                    if(this.modCharacterTitle[j] == this.setCharacter.text){
+                        checkTitleExist = true;
+                    }
+                }
+                if(!checkTitleExist){
+                    this.modCharacterTitle.push(this.setCharacter.text);
+                }
+            }
+        },
     },
   }

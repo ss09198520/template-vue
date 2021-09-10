@@ -159,7 +159,7 @@ export const constantRoutes = [
   {
     path: "/hy",
     redirect: "/hy/stylePromo",
-    component: Layout,
+    component: Layout,  
     name: "HY Pages",
     meta: { title: 'HY Prototype', icon: 'mdi-account-multiple' },
     children: [
@@ -198,6 +198,30 @@ export const constantRoutes = [
         name: 'PrivilegeSetting',
         component: () => import('@/pages/privilegeSetting/privilegeSettingPage.vue'),
         meta: { title: '權限設定', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'leaveAgentPage',
+        name: 'LeaveAgentPage',
+        component: () => import('@/pages/leaveAgentPage.vue'),
+        meta: { title: '請假代理人設定', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'leaveAgentSearchPage',
+        name: 'LeaveAgentSearchPage',
+        component: () => import('@/pages/leaveAgentSearchPage.vue'),
+        meta: { title: '請假查詢', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'myFormPage',
+        name: 'MyFormPage',
+        component: () => import('@/pages/myFormPage.vue'),
+        meta: { title: '我的表單', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'inquireReadPage',
+        name: 'InquireReadPage',
+        component: () => import('@/pages/inquireReadPage.vue'),
+        meta: { title: '申請調閱', icon: 'mdi-account-multiple' }
       }
     ]
   },

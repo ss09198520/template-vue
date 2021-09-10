@@ -220,8 +220,6 @@
       editItem(item) {
         this.editedIndex = this.itemsCRUD.indexOf(item)
         this.editedItem = Object.assign({}, item)
-        console.log(this.$router)
-        // this.$router.push({ path: '/' })
         this.$router.push({path:'/marquee/create'})
         
         this.dialog = true

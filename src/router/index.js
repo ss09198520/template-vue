@@ -190,7 +190,7 @@ export const constantRoutes = [
       {
         path: 'characterPrivilege',
         name: 'CharacterPrivilege',
-        component: () => import('@/pages/characterPrivilegePage.vue'),
+        component: () => import('@/pages/CharacterPrivilegePage.vue'),
         meta: { title: '角色設定', icon: 'mdi-account-multiple' }
       },
       {
@@ -208,13 +208,13 @@ export const constantRoutes = [
     meta: { title: '報表', icon: 'mdi-text-box' },
     children: [
     {
-      path: '/returnReport',
+      path: 'returnReport',
       name: 'ReturnReport',
       component: () => import('@/pages/report/returnReportPage.vue'),
       meta: { title: '退件報表', icon: 'mdi-alert' }
     },
       {
-        path: '/readReport',
+        path: 'readReport',
         name: 'ReadReport',
         component: () => import('@/pages/report/readReportPage.vue'),
         meta: { title: '調閱清單', icon: 'mdi-eye' }
@@ -222,9 +222,6 @@ export const constantRoutes = [
     ]
   }
 ]
-    // Program: '節目管理',
-    // ProgramList: '節目列表',
-    // ProgramMake: '節目製作',
 
 /**
  * asyncRoutes

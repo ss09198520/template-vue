@@ -125,6 +125,13 @@ export const constantRoutes = [
         name: 'Marquee-List',
         component: () => import('@/views/marquee/list'),
         meta: { title: '跑馬燈查詢', icon: 'mdi-pencil-box-multiple-outline' }
+      },
+      {
+        path: 'calendarList',
+        name: 'Marquee-List-Calendar',
+        component: () => import('@/views/marquee/calendar'),
+        hidden: true,
+        meta: { title: '跑馬燈行事曆清單', icon: 'mdi-pencil-box-multiple-outline' },
       }
     ]
   },

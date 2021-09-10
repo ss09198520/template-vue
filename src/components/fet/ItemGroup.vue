@@ -16,14 +16,14 @@
 
     <template v-for="child in item.children">
       <fet-item 
-        v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)"
+        v-if="!child.hidden && hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)"
         :key="resolvePath(child.path)" 
         :item="child" 
         :to="resolvePath(child.path)"
         :color="color"
       />
       
-      <fet-item-sub-group v-else :key="resolvePath(child.path)"  :item="child" :base-path="resolvePath(child.path)" :color="color"/>
+      <fet-item-sub-group v-else :key="resolvePath(child.path)" :item="child" :base-path="resolvePath(child.path)" :color="color" />
     </template>
   </v-list-group>
 </template>
@@ -60,10 +60,6 @@
       this.onlyOneChild = null
       return {}
     },
-    mounted() {
-      console.log('subGroup', this.subGroup)
-    },
-
     methods: {
       hasOneShowingChild(children = [], parent) {
         const showingChildren = children.filter(item => {

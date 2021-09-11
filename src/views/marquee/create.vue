@@ -22,14 +22,14 @@
                           :no-gutters="noGutters"
                         >
                           <v-col cols="4" md="3">
-                            <v-subheader class="justify-center">
+                            <v-subheader class="justify-center text-md-body-1 font-weight-bold">
                               跑 馬 燈 名 稱
-                              <span class="red--text">*</span>
+                              <span class="red--text ml-2">*</span>
                             </v-subheader>
                           </v-col>
                           <v-col cols="7" md="6">
                             <v-text-field
-                              v-model="marqueeText"
+                              v-model="marqueeName"
                               :rules="rules.requiredRule.concat(rules.lengthRules)"
                               :hide-details="hideDatails"
                               color="accent"
@@ -47,7 +47,7 @@
                           :no-gutters="noGutters"
                         >
                           <v-col cols="3" md="3">
-                            <v-subheader class="justify-center">
+                            <v-subheader class="justify-center text-md-body-1 font-weight-bold">
                               描 述 註 記
                             </v-subheader>
                           </v-col>
@@ -70,8 +70,35 @@
                           :dense="dense"
                           :no-gutters="noGutters"
                         >
+                          <v-col
+                            cols="3"
+                            md="3"
+                          >
+                            <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                              跑 馬 燈 內 容
+                              <span class="red--text ml-2">*</span>
+                            </v-subheader>
+                          </v-col>
+                          <v-col
+                            cols="9"
+                            md="8"
+                          >
+                            <v-textarea
+                              v-model="marqueeText"
+                              :rules="rules.requiredRule.concat(rules.lengthRules)"
+                              color="accent"
+                              outlined
+                              placeholder="請輸入文字"
+                              counter="100"
+                            />
+                          </v-col>
+                        </v-row>
+                        <v-row
+                          :dense="dense"
+                          :no-gutters="noGutters"
+                        >
                           <v-col cols="3" md="3">
-                            <v-subheader class="justify-center">
+                            <v-subheader class="justify-center text-md-body-1 font-weight-bold">
                               外 觀 樣 式
                             </v-subheader>
                           </v-col>
@@ -87,9 +114,9 @@
                           :no-gutters="noGutters"
                         >
                           <v-col cols="3" md="3">
-                            <v-subheader class="justify-center">
+                            <v-subheader class="justify-center text-md-body-1 font-weight-bold">
                               顏 色 配 置
-                              <span class="red--text">*</span>
+                              <span class="red--text ml-2">*</span>
                             </v-subheader>
                           </v-col>
                           <v-col cols="3" md="3">
@@ -138,7 +165,7 @@
                           :no-gutters="noGutters"
                         >
                           <v-col cols="3" md="3">
-                            <v-subheader class="justify-center">
+                            <v-subheader class="justify-center text-md-body-1 font-weight-bold">
                               撥 放 速 度
                             </v-subheader>
                           </v-col>
@@ -163,9 +190,9 @@
                           :no-gutters="noGutters"
                         >
                           <v-col cols="3" md="3">
-                            <v-subheader class="justify-center">
+                            <v-subheader class="justify-center text-md-body-1 font-weight-bold">
                               樣 式 預 覽 {{ animationDuration }}<!-- TODO remove debug -->
-                              <span class="red--text">*</span>
+                              <span class="red--text ml-2">*</span>
                             </v-subheader>
                           </v-col>
                           <v-col cols="7" md="6">
@@ -224,15 +251,16 @@
     data() {
       return {
         valid: false,
-        maxCharacter: 40,
-        duration: 80,
+        maxCharacter: 30,
+        duration: 20,
         min: 60,
         max: 600,
-        marqueeText: '台灣電力公司跑馬燈輪播測試!!! :   今日預告台北將不會停電!!!!',
+        marqueeName: '跑馬燈輪播測試',
+        marqueeText: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
         marqueeDesc: '',
         uploadType: '',
         fontColor: '#000000FF',
-        backgroundColor: '#1976D2FF',
+        backgroundColor: '#38CEA3FF',
         fontBold: false,
         fontItalic: false,
         menu: false,

@@ -131,7 +131,7 @@ export const constantRoutes = [
         name: 'Marquee-List-Calendar',
         component: () => import('@/views/marquee/calendar'),
         hidden: true,
-        meta: { title: '跑馬燈行事曆清單', icon: 'mdi-pencil-box-multiple-outline' },
+        meta: { title: '跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
       }
     ]
   },
@@ -145,14 +145,21 @@ export const constantRoutes = [
       {
         path: 'create',
         name: 'Program-Create',
-        component: () => import('@/views/material/upload'),
+        component: () => import('@/views/program/create'),
         meta: { title: '節目表製作', icon: 'mdi-movie-edit' }
       },
       {
         path: 'list',
         name: 'Program-List',
-        component: () => import('@/views/material/upload'),
+        component: () => import('@/views/program/list'),
         meta: { title: '節目表查詢', icon: 'mdi-movie-edit' }
+      },
+      {
+        path: 'calendarList',
+        name: 'Program-List-Calendar',
+        component: () => import('@/views/program/calendar'),
+        hidden: true,
+        meta: { title: '節目表行事曆', icon: 'mdi-pencil-box-multiple-outline' },
       }
     ]
   },

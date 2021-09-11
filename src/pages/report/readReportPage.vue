@@ -44,11 +44,12 @@
           <v-data-table
             :headers="headers"
             :items="itemList"
+            :disable-sort="true"
             :items-per-page="10"
             no-data-text="查無資料"
           >
             <template v-slot:item.signOff="{ item }">
-              <v-btn color="primary" v-if="item.signOff">簽核</v-btn>
+              <v-btn v-if="item.signOff" color="primary">簽核</v-btn>
               <span v-else style="color: gray;">已簽核</span>
             </template>
             <template v-slot:item.signOffDate1="{ item }">

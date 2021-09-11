@@ -251,6 +251,26 @@ export const constantRoutes = [
         meta: { title: '調閱清單', icon: 'mdi-eye' }
       }
     ]
+  },
+  {
+    path: '/my',
+    component: Layout,
+    name: "我的",
+    meta: { title: '我的', icon: 'mdi-account' },
+    children: [
+    {
+      path: 'myReturn',
+      name: 'MyReturn',
+      component: () => import('@/pages/my/myReturnPage.vue'),
+      meta: { title: '我的退件區', icon: 'mdi-alert' }
+    },
+      {
+        path: 'myWaiting',
+        name: 'MyWaiting',
+        component: () => import('@/pages/my/myWaitingPage.vue'),
+        meta: { title: '我的待核算', icon: 'mdi-checkbox-blank-outline' }
+      }
+    ]
   }
 ]
 

@@ -68,6 +68,7 @@
           <v-data-table
             :headers="headers"
             :items="itemList"
+            :disable-sort="true"
             :items-per-page="10"
             no-data-text="查無資料"
           >

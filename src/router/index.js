@@ -88,22 +88,28 @@ export const constantRoutes = [
     ]
   },
   {
-    path: '/form',
+    path: '/satisfaction',
     component: Layout,
-    name: 'FormPages',
-    meta: { title: '表單', icon: 'mdi-clipboard-play-multiple' },
+    name: 'SatisfactionPages',
+    meta: { title: '滿意度調查', icon: 'mdi-clipboard-play-multiple' },
     children: [
       {
-        path: 'formValidation',
-        name: 'FormValidation',
-        component: () => import('@/views/form/FormValidation'),
-        meta: { title: '表單驗證', icon: 'mdi-clipboard-play-multiple' }
+        path: 'create',
+        name: 'Satisfaction-create',
+        component: () => import('@/views/satisfaction/create'),
+        meta: { title: '問卷製作', icon: 'mdi-clipboard-play-multiple' }
       },
       {
-        path: 'formLayouts',
-        name: 'FormLayouts',
+        path: 'list',
+        name: 'Satisfaction-list',
+        component: () => import('@/views/satisfaction/list'),
+        meta: { title: '問卷查詢', icon: 'mdi-clipboard-play-multiple' }
+      },
+      {
+        path: 'result',
+        name: 'Satisfaction-result',
         component: () => import('@/views/form/FormLayouts'),
-        meta: { title: '表單樣式', icon: 'mdi-clipboard-play-multiple' }
+        meta: { title: '滿意度調查資料查詢', icon: 'mdi-clipboard-play-multiple' }
       }
     ]
   },

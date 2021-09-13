@@ -144,12 +144,19 @@
             </v-col>
             <v-col
               cols="3"
-            >
-              <v-text-field                           
+            >             
+              <v-select
+                v-model="leaveWay"
+                :items="leaveWayOption"
+                item-text="text"
+                :return-object="true"
                 outlined
                 hide-details
+                single-line
                 dense
-                placeholder=""
+                placeholder="請選擇請假方式"
+                class="my-auto"
+                color="#ADADAD"
               />
             </v-col>
           </v-row>

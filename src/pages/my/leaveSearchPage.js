@@ -23,6 +23,11 @@ export default{
                 { mani:'123', empId: '1050331-002', empName: '張芊芊', empLeave:'2021/09/06 08:00-2021/09/08 17:00', agentId:'1050331-003', agentName:'江舒語', leaveStyle:'公假',leaveDataFrom:'系統輸入'},
                 { mani:'123', empId: '1050331-003', empName: '江舒語', empLeave:'2021/09/01 08:00-2021/09/04 17:00', agentId:'1050331-002', agentName:'張芊芊', leaveStyle:'喪假',leaveDataFrom:'系統輸入'},
             ],
+            leaveWay:null,
+            leaveWayOption:[
+                { text: 'HR帶入', value: '1' },
+                { text: '系統輸入', value: '2' },
+            ],
             menu1: false,
             date1: '',
             menu2: false,

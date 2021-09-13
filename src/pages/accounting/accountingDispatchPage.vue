@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <h2>核算派工</h2>
+      <h2>核算派工設定</h2>
       <v-row>
         <v-col cols="10" />
         <v-col>

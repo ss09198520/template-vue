@@ -5,6 +5,7 @@ import store from '@/store'
 import vuetify from '@/plugins/vuetify'
 import router from '@/router'
 import VueMask from 'v-mask'
+import base from './css/base.css';
 
 
 // Material icon imports use css loader
@@ -23,5 +24,6 @@ new Vue({
   router,
   store,
   vuetify,
+  base,
   render: h => h(App)
 }).$mount('#app')

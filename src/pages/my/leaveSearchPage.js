@@ -27,6 +27,9 @@ export default{
             date1: '',
             menu2: false,
             date2: '',
+            empListPageCount:0,
+            empListPage:1,
+           
         }
     },    
     test(item){

@@ -1,6 +1,6 @@
 <template>
   <v-container fluid>
-    <p class="text-xl-h4 font-weight-bold">跑馬燈查詢</p>
+    <p class="text-xl-h4 font-weight-bold">節目單查詢</p>
     <p class="text-xl-h5 font-weight-bold">查詢條件</p>
     <v-row>
       <v-col

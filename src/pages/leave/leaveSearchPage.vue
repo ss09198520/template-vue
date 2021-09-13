@@ -181,4 +181,4 @@
     </div>  
   </v-container>
 </template>
-<script src="./leaveAgentSearchPage.js"></script>
+<script src="./leaveSearchPage.js"></script>

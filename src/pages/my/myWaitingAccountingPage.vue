@@ -36,7 +36,7 @@
 <script>
 
 export default {
-    name: 'MyWaiting',
+    name: 'MyWaitingAccounting',
     props: {
     
     },

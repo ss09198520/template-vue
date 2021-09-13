@@ -207,18 +207,6 @@ export const constantRoutes = [
         meta: { title: '權限設定', icon: 'mdi-account-multiple' }
       },
       {
-        path: 'leaveAgentPage',
-        name: 'LeaveAgentPage',
-        component: () => import('@/pages/leaveAgentPage.vue'),
-        meta: { title: '請假代理人設定', icon: 'mdi-account-multiple' }
-      },
-      {
-        path: 'leaveAgentSearchPage',
-        name: 'LeaveAgentSearchPage',
-        component: () => import('@/pages/leaveAgentSearchPage.vue'),
-        meta: { title: '請假查詢', icon: 'mdi-account-multiple' }
-      },
-      {
         path: 'myFormPage',
         name: 'MyFormPage',
         component: () => import('@/pages/myFormPage.vue'),
@@ -229,6 +217,12 @@ export const constantRoutes = [
         name: 'InquireReadPage',
         component: () => import('@/pages/inquireReadPage.vue'),
         meta: { title: '申請調閱', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'accountingDispatchPage',
+        name: 'AccountingDispatchPage',
+        component: () => import('@/pages/accountingDispatchPage.vue'),
+        meta: { title: '核算派工', icon: 'mdi-account-multiple' }
       }
     ]
   },
@@ -258,17 +252,49 @@ export const constantRoutes = [
     name: "我的",
     meta: { title: '我的', icon: 'mdi-account' },
     children: [
-    {
-      path: 'myReturn',
-      name: 'MyReturn',
-      component: () => import('@/pages/my/myReturnPage.vue'),
-      meta: { title: '我的退件區', icon: 'mdi-alert' }
-    },
       {
-        path: 'myWaiting',
-        name: 'MyWaiting',
-        component: () => import('@/pages/my/myWaitingPage.vue'),
+        path: 'myReturn',
+        name: 'MyReturn',
+        component: () => import('@/pages/my/myReturnPage.vue'),
+        meta: { title: '我的退件區', icon: 'mdi-alert' }
+      },
+      {
+        path: 'myWaitingAccounting',
+        name: 'MyWaitingAccounting',
+        component: () => import('@/pages/my/myWaitingAccountingPage.vue'),
         meta: { title: '我的待核算', icon: 'mdi-checkbox-blank-outline' }
+      },
+      {
+        path: 'myWaitingArchieve',
+        name: 'MyWaitingArchieve',
+        component: () => import('@/pages/my/myWaitingArchievePage.vue'),
+        meta: { title: '我的待歸檔', icon: 'mdi-checkbox-blank-outline' }
+      }
+    ]
+  },
+  {
+    path: '/leave',
+    component: Layout,
+    name: "請假",
+    meta: { title: '請假', icon: 'mdi-account' },
+    children: [
+      {
+        path: 'leaveSearch',
+        name: 'LeaveSearch',
+        component: () => import('@/pages/leave/leaveSearchPage.vue'),
+        meta: { title: '請假查詢', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'leaveDetail',
+        name: 'LeaveDetail',
+        component: () => import('@/pages/leave/leaveDetailPage.vue'),
+        meta: { title: '詳細請假資訊', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'leaveAgent',
+        name: 'LeaveAgent',
+        component: () => import('@/pages/leave/leaveAgentPage.vue'),
+        meta: { title: '請假代理人設定', icon: 'mdi-account-multiple' }
       }
     ]
   }

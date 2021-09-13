@@ -217,17 +217,17 @@ export const constantRoutes = [
       {
         path: 'readSignOff',
         name: 'ReadSignOff',
-        compoenet: () => import('@/pages/signOff/readSignOffPage.vue'),
+        component: () => import('@/pages/signOff/readSignOffPage.vue'),
         meta: { title: '調閱簽核', icon: 'mdi-pencil' }
-      },
+      },      
       {
         path: 'sealSignOff',
         name: 'SealSignOff',
-        compoenet: () => import('@/pages/signOff/sealSignOffPage.vue'),
+        component: () => import('@/pages/signOff/sealSignOffPage.vue'),
         meta: { title: '專用章簽核', icon: 'mdi-pencil' }
       }
     ]
-  },
+  },  
   {
     path: "/accounting",
     component: Layout,

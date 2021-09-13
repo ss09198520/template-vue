@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <h2>設定角色</h2>
+    <h2 class="font-bold">設定角色</h2>
     <div>
-      <v-row>
-        <div style="margin: auto 1px;font-weight: bold;">單位</div>
+      <v-row class="ml-5">
+        <div style="margin: auto 1px; color:black;">單位</div>
         <v-col
           lg="3"
           xl="4"
@@ -21,7 +21,7 @@
             @change="chooseDivision()"
           />
         </v-col>
-        <div style="margin: auto 1px;font-weight: bold;">組別</div>
+        <div style="margin: auto 1px;color:black;">組別</div>
         <v-col
           lg="3"
           xl="4"
@@ -40,8 +40,8 @@
           />
         </v-col>
       </v-row>
-      <v-row style="margin-bottom:10px;">
-        <div style="margin: auto 1px;font-weight: bold;">課別</div>
+      <v-row class="ml-5 mb-5">
+        <div style="margin: auto 1px;color:black;">課別</div>
         <v-col
           lg="3"
           xl="4"
@@ -58,7 +58,7 @@
             placeholder="請選擇課別"
           />
         </v-col>
-        <div style="margin: auto 1px;font-weight: bold;">角色</div>
+        <div style="margin: auto 1px;color:black;">角色</div>
         <v-col
           lg="3"
           xl="4"
@@ -76,7 +76,7 @@
           />
         </v-col>
         <v-btn style="margin: auto 2px;" color="primary" @click="search()">查詢</v-btn>
-        <v-btn style="margin: auto 0 auto 23%;" @click="popOut(editPopOut)">
+        <v-btn style="margin: auto 0 auto 23%;" color="primary" @click="popOut(editPopOut)">
           <v-icon dark>
             mdi-account
           </v-icon>
@@ -84,15 +84,19 @@
         </v-btn>
       </v-row>         
     </div>    
-    <hr>
-    <v-row>
+    <hr class="ma-4">
+    <v-row class="ma-2">
       <v-col cols="12">    
         <v-data-table
           :headers="empListHeaders"
           :items="empList"
           :items-per-page="10"
-          no-data-text="查無資料"
-          style="font-weight: bold;"
+          no-data-text="查無資料"          
+          disable-sort
+          hide-default-footer
+          class="elevation-1"
+          :page.sync="empListPage"
+          @page-count="empListPageCount = $event"
         >
           <template v-slot:item.character="{ item }">
             <!--TODO: 如何隱藏被選擇的欄位 -->
@@ -117,7 +121,7 @@
                 :items="characterOption"
                 item-text="text"
                 item-value="value"
-                return-object                                
+                return-object                   
               >
                 <template v-slot:selection="{ item, index }">
                   <span v-if="index < maxDisplay">{{ item.text }} &nbsp;</span>
@@ -133,6 +137,14 @@
         </v-data-table>
       </v-col>
     </v-row>
+    <!-- 選頁 -->
+    <div class="mt-2">
+      <v-pagination
+        v-model="empListPage"
+        color="#2F59C4"
+        :length="empListPageCount"
+      />
+    </div>    
     <v-dialog
       v-model="editPopOut"
       max-width="800"

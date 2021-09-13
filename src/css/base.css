@@ -1,3 +1,7 @@
+
+.theme--light.v-card > .v-card__text, .theme--light.v-card > .v-card__subtitle {
+    color:black;
+}
   /* font size */
 .font-12px {
     font-size: 12px !important;
@@ -90,22 +94,20 @@ body {
     padding: 0;
     margin: 0;
 }
-.content-table-blue table thead {
-    background-color: #1765bc;
-}
+/* .content-table-blue table thead {
+    background-color: #1976D2;
+} */
 .content-table-blue table thead tr th {
-    color: white !important;
+    color: black !important;
 }
 
 .content-table-blue table thead tr th i {
-    color: white !important;
+    color: black !important;
 }
 
 .content-table-blue table tbody tr td {
     font-weight: 400;
-}
-.content-table-blue table thead {
-    background-color: #1765bc;
+    color: black !important;
 }
 
 /*權限設定頁用*/
@@ -122,3 +124,32 @@ body {
     font-weight:bold;
     font-size:20px !important;
   }
+
+  /*核算區會用到*/
+  .block {
+    height: 250px;
+    padding: 18px;
+    position: relative;
+}
+
+.block .block-content {
+    font-size: 24px;
+    font-weight: 700;
+    height: 100px;
+    white-space: pre-wrap;
+}
+
+.block .block-title {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.block .block-number {
+    font-weight: bold;
+    font-size: 96px;
+    margin-right: 20px;
+}
+
+.table-header {
+    background-color: #003D79;
+}

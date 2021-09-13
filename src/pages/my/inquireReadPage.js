@@ -1,12 +1,19 @@
 export default{
     data(){
         return{
+            //預設當前頁數
+            applyListPage: 1,
+            //預設總頁數
+            applyListPageCount: 0,
+            //操作者角色
+            User: 'TPESUser',
             //視窗彈出與否
             popOut: false,
             //選擇的調閱對象
             setMember: '',
             //調閱對象清單
             memberOption:[
+                { empId: '', empName: '自己', empDivision:'', empGroup:'',empSection:'',character:'',settingStyle:'',memo:'',edit:false, isSelected:false},
                 { empId: '1050330-001', empName: '梁朝偉', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門主管',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
                 { empId: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
                 { empId: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},

@@ -21,6 +21,7 @@
                 placeholder="請輸入員工編號"
               />
             </v-col>
+            <v-col cols="1" />
             <v-col cols="1">
               員工姓名
             </v-col>
@@ -49,6 +50,7 @@
                 placeholder="請輸入員工編號"
               />
             </v-col>
+            <v-col cols="1" />
             <v-col cols="1">
               代理人編號
             </v-col>
@@ -78,6 +80,7 @@
                 placeholder="請輸入代理人姓名"
               />
             </v-col>
+            <v-col cols="1" />
             <v-col cols="1">
               日期區間
             </v-col>
@@ -193,7 +196,7 @@
             <div class="mt-2">
               <v-pagination
                 v-model="empListPage"
-                color="#2F59C4"
+                color="#1976D2"
                 :length="empListPageCount"
               />
             </div>

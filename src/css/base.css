@@ -107,3 +107,18 @@ body {
 .content-table-blue table thead {
     background-color: #1765bc;
 }
+
+/*權限設定頁用*/
+.headerLine{
+    border-bottom:black 1px solid;
+    padding: 8px 0px;
+    margin: 10px 0px;
+    min-height: 0;
+    font-size:40px;
+    font-weight: bold
+  }
+  .my-textarea textarea { 
+    color: black !important;
+    font-weight:bold;
+    font-size:20px !important;
+  }

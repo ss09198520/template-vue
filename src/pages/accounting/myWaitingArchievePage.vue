@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-container>
-      <h2>我的待歸檔</h2>
       <div class="d-flex w-100" style="margin-top: 20px;">
         <div class="block mr-5 w-100">
           <div>
@@ -13,8 +12,8 @@
         </div>
       </div>
       <div style="margin-bottom: 10px;">
-        <v-btn :disabled="disableMyArchieve" class="primary" style="margin-right: 10px;" @click="showArchieve('my')">只顯示我的待歸檔</v-btn>
-        <v-btn :disabled="disableAllArchieve" class="primary" @click="showArchieve('all')">顯示全部</v-btn>
+        <v-btn :class="showAllArchieve? 'primary' : ''" @click="showArchieve('all')">顯示全部</v-btn>
+        <v-btn :class="showMyArchieve? 'primary' : ''" style="margin-left: 10px;" @click="showArchieve('my')">只顯示我的待歸檔</v-btn>
       </div>
       <hr>
       <v-row>
@@ -22,10 +21,22 @@
           <v-data-table
             :headers="headers"
             :items="itemList"
-            :disable-sort="true"
+            :page.sync="dataListPage"
             :items-per-page="10"
+            hide-default-footer
             no-data-text="查無資料"
+            class="elevation-1"
+            disable-sort
+            @page-count="dataListPageCount = $event"
           />
+          <!-- 選頁 -->
+          <div class="mt-2">
+            <v-pagination
+              v-model="dataListPage"
+              color="#2F59C4"
+              :length="dataListPageCount"
+            />
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -44,30 +55,31 @@ export default {
             waitingCount: 5,
             headers: [
                 { text: '受理編號', value: 'acceptNumber', align: 'center' },
-                { text: '歸檔日期', value: 'archieveDate', align: 'center' },
-                { text: '訂單狀態', value: 'orderStatus', align: 'center' },
+                { text: '待歸檔日期', value: 'archieveDate', align: 'center' },
                 { text: '登記單種類', value: 'category', align: 'center' },  
                 { text: '受理項目', value: 'acceptItem', align: 'center' }
             ],
             itemList: [
-                {acceptNumber: 'A00024', archieveDate: '20210910 10:00', orderStatus: '受理中', category: 'APR0370', acceptItem: 'QA210  軍眷用電申請優待'},
-                {acceptNumber: 'A00615', archieveDate: '20210909 11:21', orderStatus: '核算中', category: 'APR0200', acceptItem: 'I0510  故障換表'},
-                {acceptNumber: 'A00040', archieveDate: '20210907 15:36', orderStatus: '核算中', category: 'APR0200', acceptItem: 'I0520  增加電表'},
-                {acceptNumber: 'A00605', archieveDate: '20210910 09:45', orderStatus: '受理中', category: 'APR0160', acceptItem: 'F3030  表燈非時間電價停用廢止'},
-                {acceptNumber: 'A00619', archieveDate: '20210910 13:44', orderStatus: '核算中', category: 'APR0200', acceptItem: 'I0510  故障換表'}
+                {acceptNumber: 'A00024', archieveDate: '20210910 10:00', category: 'APR0370', acceptItem: 'QA210  軍眷用電申請優待'},
+                {acceptNumber: 'A00615', archieveDate: '20210909 11:21', category: 'APR0200', acceptItem: 'I0510  故障換表'},
+                {acceptNumber: 'A00040', archieveDate: '20210907 15:36', category: 'APR0200', acceptItem: 'I0520  增加電表'},
+                {acceptNumber: 'A00605', archieveDate: '20210910 09:45', category: 'APR0160', acceptItem: 'F3030  表燈非時間電價停用廢止'},
+                {acceptNumber: 'A00619', archieveDate: '20210910 13:44', category: 'APR0200', acceptItem: 'I0510  故障換表'}
             ],
-            disableMyArchieve: true,
-            disableAllArchieve: false
+            showMyArchieve: false,
+            showAllArchieve: true,
+            dataListPage: 1,
+            dataListPageCount: 1
         }
     },
     methods: {
         showArchieve(mode){
             if(mode === 'my'){
-                this.disableMyArchieve = true;
-                this.disableAllArchieve = false;
+                this.showMyArchieve = true;
+                this.showAllArchieve = false;
             }else{
-                this.disableMyArchieve = false;
-                this.disableAllArchieve = true;
+                this.showMyArchieve = false;
+                this.showAllArchieve = true;
             }
         }
     }
@@ -97,9 +109,5 @@ export default {
         font-weight: bold;
         font-size: 96px;
         margin-right: 20px;
-    }
-
-    .table-header {
-        background-color: #003D79;
     }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <h2>調閱簽核</h2>
+      <h2 class="font-bold">調閱簽核</h2>
     </v-container>
   </v-app>
 </template>

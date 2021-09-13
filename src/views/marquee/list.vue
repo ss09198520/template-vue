@@ -195,6 +195,19 @@
               <span>{{ item.marquee_content }}</span>
             </v-tooltip>
           </template>
+          <template v-slot:[`item.state`]="{ item }">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="d-flex justify-center"
+                  :color="item.active?'green darken-2':''"
+                  v-on="on"
+                >
+                  {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
+                </v-icon>
+              </template>
+            </v-tooltip>
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -213,24 +226,31 @@
           {
             text: '跑馬燈名稱',
             value: 'name',
-            width: '26%',
+            width: '24%',
           },
           {
             text: '描述',
             value: 'scp_id',
-            width: '20%',
+            width: '18%',
           },
           {
             text: '撥放內容',
             value: 'marquee_content',
             align: 'center',
-            width: '12%',
+            width: '10%',
           },
           {
             text: '單位',
             value: 'division',
             align: 'center',
+            width: '8%',
+          },
+          {
+            text: '啟用',
+            value: 'state',
+            sortable: false,
             width: '10%',
+            align: 'center',
           },
           {
             text: '上架日期',
@@ -246,7 +266,7 @@
             text: '操作',
             value: 'action',
             sortable: false,
-            width: '10%',
+            width: '15%',
           },
         ],
         itemsCRUD: [
@@ -256,6 +276,7 @@
             scp_id: '電廠緊急護公告',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
             division:'台中區處',
+            active: true,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
           },
@@ -265,6 +286,7 @@
             scp_id: '秋季節約用電宣導',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/footer',
             division:'台中區處',
+            active: true,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
           },
@@ -274,6 +296,7 @@
             scp_id: '颱風登陸緊急通報',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
             division:'台中區處',
+            active: true,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
           },
@@ -283,6 +306,7 @@
             scp_id: '電費減免措施',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
             division:'台中區處',
+            active: true,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
           },
@@ -292,6 +316,7 @@
             scp_id: '台電連4年獲亞洲企業社會責任獎',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
             division:'台中區處',
+            active: true,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
           },
@@ -301,6 +326,7 @@
             scp_id: '台電首度攜手紙風車劇團，到彰化員林打造露天舞台劇',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
             division:'業務處',
+            active: true,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
           },

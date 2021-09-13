@@ -58,7 +58,7 @@ const AjaxService = {
           }
           // LoadingConfig.$debug.error(error);
         }).then((final) => {
-          Object.assign({}, final) //fix eslint no-unused-vars
+          Object.assign({}, final) //TODO fix eslint no-unused-vars
           LoadingConfig.blockCount--;
           if(LoadingConfig.blockCount <= 0){
           // 3 關掉loading 小圈圈

@@ -99,14 +99,65 @@
                         >
                           <v-col cols="3" md="3">
                             <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                              輪 播 時 間
+                            </v-subheader>
+                          </v-col>
+                          <v-col
+                            cols="12"
+                            sm="6"
+                            md="4"
+                          >
+                            <v-menu
+                              ref="dateMenu"
+                              v-model="dateMenu"
+                              :close-on-content-click="false"
+                              :return-value="dates"
+                              transition="scale-transition"
+                              offset-y
+                              min-width="auto"
+                            >
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field
+                                  v-model="dateRangeText"
+                                  label="請 選 擇 時 間 區 間"
+                                  prepend-icon="mdi-calendar"
+                                  readonly
+                                  v-bind="attrs"
+                                  v-on="on"
+                                />
+                              </template>
+                              <v-date-picker
+                                v-model="dates"
+                                no-title
+                                range
+                                @input="dateMenu = dates.length < 2 ? true :false"
+                              >
+                                <v-spacer />
+                              </v-date-picker>
+                            </v-menu>
+                          </v-col>
+                        </v-row>
+                        <v-row>
+                          <v-col cols="3" md="3">
+                            <v-subheader class="justify-center text-md-body-1 font-weight-bold">
                               外 觀 樣 式
                             </v-subheader>
                           </v-col>
                           <v-col cols="3" md="3">
-                            <v-switch v-model="fontBold" label="粗體字" inset />
+                            <v-switch 
+                              v-model="fontBold" 
+                              class="mt-1"
+                              :label="`粗體字`" 
+                              inset 
+                            />
                           </v-col>
                           <v-col cols="3" md="3">
-                            <v-switch v-model="fontItalic" label="斜體字" inset />
+                            <v-switch 
+                              v-model="fontItalic"
+                              class="mt-1"
+                              :label="`斜體字`"
+                              inset
+                            />
                           </v-col>
                         </v-row>
                         <v-row
@@ -201,6 +252,8 @@
                               :duration="animationDuration"
                               :background-color="backgroundColor"
                               :font-color="fontColor"
+                              :font-weight=" !!fontBold ? 'bold':''"
+                              :font-italic=" !!fontItalic ? 'italic':'normal'"
                               :repeat="1"
                             >
                               {{ marqueeText }}
@@ -259,12 +312,14 @@
         marqueeText: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
         marqueeDesc: '',
         uploadType: '',
+        dates: [],
         fontColor: '#000000FF',
         backgroundColor: '#38CEA3FF',
         fontBold: false,
         fontItalic: false,
         menu: false,
         menu1: false,
+        dateMenu: false,
         dense: false,
         noGutters: false,
         hideDatails: false,
@@ -298,8 +353,12 @@
         const { fontColor, menu } = this
         return Object.assign({
           backgroundColor: fontColor,
+          
           borderRadius: menu ? '50%' : '4px',
         }, this.basicStyle)
+      },
+      dateRangeText () {
+        return this.dates.join(' ~ ')
       },
     },
     methods: {

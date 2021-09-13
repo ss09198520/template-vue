@@ -31,8 +31,16 @@
         type: String,
         default: '#b4b4b4'
       },
+      fontWeight: {
+        type: String,
+        default: 'bold'
+      },
+      fontItalic: {
+        type: String,
+        default: 'normal'
+      },
     },
-    render(h, { $style, props: { duration, repeat, paused, reverse , fontColor , backgroundColor }, children, data: { staticClass, key, on } }) {
+    render(h, { $style, props: { duration, repeat, paused, reverse , fontColor , backgroundColor , fontWeight ,fontItalic }, children, data: { staticClass, key, on } }) {
       // console.log('$style', $style)
       // console.log('children', children[0].text)
       // '台灣電力公司跑馬燈輪播測試!!! :   今日預告台北將不會停電!!!!'
@@ -42,6 +50,8 @@
           animationDuration: `${duration}s`,
           color: fontColor,
           backgroundColor: backgroundColor,
+          fontWeight: fontWeight,
+          fontStyle: fontItalic,
           animationDirection: reverse ? 'reverse' : undefined
         }
       }, children)

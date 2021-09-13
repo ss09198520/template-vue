@@ -2,6 +2,10 @@
   export default {
     data() {
       return {
+        //預設當前頁數
+        empListPage: 1,
+        //預設總頁數
+        empListPageCount: 0,
         //控制彈出視窗
         editPopOut: false,
         //控制選擇角色時最多顯示數量

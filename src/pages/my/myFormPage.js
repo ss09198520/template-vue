@@ -3,6 +3,12 @@
 export default{
     data(){
         return{
+            //預設受理類型按鈕
+            displayAll: false,
+            //預設當前頁數
+            orderListPage: 1,
+            //預設總頁數
+            orderListPageCount: 0,
             empListHeaders: [
                 { text: '狀態操作', value: 'mani', align: 'center' },
                 { text: '受理編號', value: 'orderId', align: 'center' },
@@ -21,5 +27,8 @@ export default{
                 { mani: false, orderId: 'A00619', orderDate: '20210910 13:44', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0510故障換表', proxyEvent:'',eventAgent:''},
             ],
         }
-    }
+    },
+    methods: {
+        
+    },
 }

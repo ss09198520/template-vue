@@ -2,7 +2,7 @@
 export default {
     name: 'Form',
     props: {
-    
+        districtMode: String
     },
     mounted() {
         this.init();
@@ -49,6 +49,10 @@ export default {
     methods: {
         init(){
             this.addAttachment();
+            if(this.districtMode){
+                this.mode = this.districtMode;
+                this.showModeSelect = false;
+            }
         },
         cleanCertificateImg(certificate) {
             certificate.imgSrc = null;

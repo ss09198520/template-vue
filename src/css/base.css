@@ -1,0 +1,199 @@
+
+.theme--light.v-card > .v-card__text, .theme--light.v-card > .v-card__subtitle {
+    color:black;
+}
+  /* font size */
+.font-12px {
+    font-size: 12px !important;
+}
+
+.font-16px {
+    font-size: 16px !important;
+}
+
+.font-18px {
+    font-size: 18px !important;
+}
+
+.font-20px {
+    font-size: 20px !important;
+}
+
+.font-22px {
+    font-size: 22px !important;
+}
+
+.font-24px {
+    font-size: 24px !important;
+}
+
+.font-28px {
+    font-size: 28px !important;
+}
+
+.font-32px {
+    font-size: 32px !important;
+}
+
+.font-48px {
+    font-size: 48px !important;
+}
+
+.font-56px {
+    font-size: 56px !important;
+}
+
+.font-72px {
+    font-size: 72px !important;
+}
+
+/*粗體*/
+.font-bold{
+    font-weight:bold !important
+}
+
+/*文字位置*/
+.t-left {
+    text-align: left;
+}
+
+.t-center {
+    text-align: center;
+}
+
+.t-right {
+    text-align: right;
+}
+
+/*位置*/
+.d-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.d-end {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.d-justify-between {
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+}
+
+/*table格式*/
+.v-data-table td
+body {
+    font-family: 'Roboto', "微軟正黑體修正", "微軟正黑體", sans-serif !important;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 16px;
+    color: rgb(17, 17, 17);
+    padding: 0;
+    margin: 0;
+}
+/* .content-table table thead {
+    background-color: #1976D2;
+} */
+.v-data-table table thead tr th {
+    color: black !important;
+}
+
+.v-data-table table thead tr th i {
+    color: black !important;
+}
+
+.v-data-table table tbody tr td {
+    font-weight: 500;
+    color: black !important;
+}
+
+/*權限設定頁用*/
+.headerLine{
+    border-bottom:black 1px solid;
+    padding: 8px 0px;
+    margin: 10px 0px;
+    min-height: 0;
+    font-size:40px;
+    font-weight: bold
+  }
+  .my-textarea textarea { 
+    color: black !important;
+    font-weight:bold;
+    font-size:20px !important;
+  }
+
+  /*核算區會用到*/
+  .block {
+    height: 250px;
+    padding: 18px;
+    position: relative;
+}
+
+.block .block-content {
+    font-size: 24px;
+    font-weight: 700;
+    height: 100px;
+    white-space: pre-wrap;
+}
+
+.block .block-title {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.block .block-number {
+    font-weight: bold;
+    font-size: 96px;
+    margin-right: 20px;
+}
+
+.table-header {
+    background-color: #003D79;
+}
+
+/* 提示訊息樣式 start*/
+.vue-notification {
+    padding: 10px;
+    margin: 0 5px 5px;
+
+    font-size: 12px;
+
+    color: #ffffff;
+    background: #44A4FC;
+    border-left: 5px solid #187FE7;
+
+}
+
+.vue-notification.noti-info {
+    background: #3d3d3d;
+    border-left-color: #202020;
+    /* opacity: 0.9; */
+}
+
+.vue-notification.noti-error {
+    background: #E54D42;
+    border-left-color: #B82E24;
+    /* opacity: 0.9; */
+}
+
+.vue-notification.noti-success {
+    background: #68CD86;
+    border-left-color: #42A85F;
+    /* opacity: 0.9; */
+}
+.v-fade-right-enter-active,
+.v-fade-right-leave-active,
+.v-fade-right-move {
+    transition: all .5s;
+}
+
+.v-fade-right-enter,
+.v-fade-right-leave-to {
+    opacity: 0;
+    transform: translateX(500px) scale(0.2);
+}
+
+/* 提示訊息樣式 end*/

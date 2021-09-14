@@ -73,6 +73,123 @@ export const constantRoutes = [
     hidden: true,
   },
   {
+    path: "/myWorkSpace",
+    redirect: "/myWorkSpace/myForm",
+    component: Layout,
+    name: "My WorkSpace",
+    meta: { title: '我的工作區', icon: 'mdi-account' },
+    children: [
+      {
+        path: 'myFormPage',
+        name: 'MyFormPage',
+        component: () => import('@/pages/my/myFormPage.vue'),
+        meta: { title: '我的表單', icon: 'mdi-file-document-outline' }
+      },
+      {
+        path: 'myReturn',
+        name: 'MyReturn',
+        component: () => import('@/pages/my/myReturnPage.vue'),
+        meta: { title: '我的退件區', icon: 'mdi-alert' }
+      },
+      {
+        path: 'inquireReadPage',
+        name: 'InquireReadPage',
+        component: () => import('@/pages/my/inquireReadPage.vue'),
+        meta: { title: '調閱申請', icon: 'mdi-book-arrow-left' }
+      },
+      {
+        path: 'myRead',
+        name: 'MyRead',
+        component: () => import('@/pages/my/myReadPage.vue'),
+        meta: { title: '我的調閱區', icon: 'mdi-book-arrow-down' }
+      },
+      {
+        path: 'leaveSearch',
+        name: 'LeaveSearch',
+        component: () => import('@/pages/my/leaveSearchPage.vue'),
+        meta: { title: '請假清單', icon: 'mdi-account-arrow-right-outline' }
+      },
+      {
+        path: 'inquireLeave',
+        name: 'InquireLeave',
+        component: () => import('@/pages/my/inquireLeavePage.vue'),
+        meta: { title: '請假申請', icon: 'mdi-account-box-outline' }
+      },
+    ]
+  },
+  {
+    path: "/signOff",
+    component: Layout,
+    name: "Sign off",
+    meta: { title: '簽核區', icon: 'mdi-pencil' },
+    children: [
+      {
+        path: 'readSignOff',
+        name: 'ReadSignOff',
+        component: () => import('@/pages/signOff/readSignOffPage.vue'),
+        meta: { title: '調閱簽核', icon: 'mdi-pencil' }
+      },      
+      {
+        path: 'sealSignOff',
+        name: 'SealSignOff',
+        component: () => import('@/pages/signOff/sealSignOffPage.vue'),
+        meta: { title: '專用章簽核', icon: 'mdi-pencil' }
+      }
+    ]
+  },  
+  {
+    path: "/accounting",
+    component: Layout,
+    name: "Accounting",
+    meta: { title: '核算區', icon: 'mdi-account-multiple' },
+    children: [
+      {
+        path: 'accountingDispatchPage',
+        name: 'AccountingDispatchPage',
+        component: () => import('@/pages/accounting/accountingDispatchPage.vue'),
+        meta: { title: '核算派工設定', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'myWaitingAccounting',
+        name: 'MyWaitingAccounting',
+        component: () => import('@/pages/accounting/myWaitingAccountingPage.vue'),
+        meta: { title: '待核算', icon: 'mdi-checkbox-blank-outline' }
+      },
+      {
+        path: 'myWaitingArchieve',
+        name: 'MyWaitingArchieve',
+        component: () => import('@/pages/accounting/myWaitingArchievePage.vue'),
+        meta: { title: '待歸檔', icon: 'mdi-checkbox-blank-outline' }
+      },
+      {
+        path: 'unDispatch',
+        name: 'UnDispatch',
+        component: () => import('@/pages/accounting/unDispatchPage.vue'),
+        meta: { title: '未分派區', icon: 'mdi-checkbox-blank-outline' }
+      }
+    ]
+  },
+  {
+    path: '/report',
+    component: Layout,
+    name: "報表區",
+    meta: { title: '報表區', icon: 'mdi-text-box' },
+    children: [
+      {
+        path: 'returnReport',
+        name: 'ReturnReport',
+        component: () => import('@/pages/report/returnReportPage.vue'),
+        meta: { title: '退件報表', icon: 'mdi-alert' }
+      },
+      {
+        path: 'readReport',
+        name: 'ReadReport',
+        component: () => import('@/pages/report/readReportPage.vue'),
+        meta: { title: '調閱清單', icon: 'mdi-clipboard-search' }
+      }
+    ]
+  },
+  {
     path: '/material',
     name: 'MaterialPages',
     component: Layout,
@@ -84,26 +201,37 @@ export const constantRoutes = [
         name: 'material-upload',
         component: () => import('@/views/material/upload'),
         meta: { title: '素材上傳', icon: 'mdi-cloud-upload', },
+      },{
+        path: 'list',
+        name: 'material-list',
+        component: () => import('@/views/material/list'),
+        meta: { title: '素材總覽', icon: 'mdi-magnify', },
       }
     ]
   },
   {
-    path: '/form',
+    path: '/satisfaction',
     component: Layout,
-    name: 'FormPages',
-    meta: { title: '表單', icon: 'mdi-clipboard-play-multiple' },
+    name: 'SatisfactionPages',
+    meta: { title: '滿意度調查', icon: 'mdi-clipboard-text-multiple' },
     children: [
       {
-        path: 'formValidation',
-        name: 'FormValidation',
-        component: () => import('@/views/form/FormValidation'),
-        meta: { title: '表單驗證', icon: 'mdi-clipboard-play-multiple' }
+        path: 'create',
+        name: 'Satisfaction-create',
+        component: () => import('@/views/satisfaction/create'),
+        meta: { title: '問卷製作', icon: 'mdi-clipboard-text-multiple' }
       },
       {
-        path: 'formLayouts',
-        name: 'FormLayouts',
+        path: 'list',
+        name: 'Satisfaction-list',
+        component: () => import('@/views/satisfaction/list'),
+        meta: { title: '問卷查詢', icon: 'mdi-clipboard-text-search' }
+      },
+      {
+        path: 'result',
+        name: 'Satisfaction-result',
         component: () => import('@/views/form/FormLayouts'),
-        meta: { title: '表單樣式', icon: 'mdi-clipboard-play-multiple' }
+        meta: { title: '滿意度調查資料查詢', icon: 'mdi-magnify' }
       }
     ]
   },
@@ -124,14 +252,14 @@ export const constantRoutes = [
         path: 'list',
         name: 'Marquee-List',
         component: () => import('@/views/marquee/list'),
-        meta: { title: '跑馬燈查詢', icon: 'mdi-pencil-box-multiple-outline' }
+        meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },
       {
         path: 'calendarList',
         name: 'Marquee-List-Calendar',
         component: () => import('@/views/marquee/calendar'),
         hidden: true,
-        meta: { title: '跑馬燈行事曆清單', icon: 'mdi-pencil-box-multiple-outline' },
+        meta: { title: '跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
       }
     ]
   },
@@ -145,21 +273,54 @@ export const constantRoutes = [
       {
         path: 'create',
         name: 'Program-Create',
-        component: () => import('@/views/material/upload'),
+        component: () => import('@/views/program/create'),
         meta: { title: '節目表製作', icon: 'mdi-movie-edit' }
       },
       {
         path: 'list',
         name: 'Program-List',
-        component: () => import('@/views/material/upload'),
-        meta: { title: '節目表查詢', icon: 'mdi-movie-edit' }
+        component: () => import('@/views/program/list'),
+        meta: { title: '節目表查詢', icon: 'mdi-magnify' }
+      },
+      {
+        path: 'calendarList',
+        name: 'Program-List-Calendar',
+        component: () => import('@/views/program/calendar'),
+        hidden: true,
+        meta: { title: '節目表行事曆', icon: 'mdi-pencil-box-multiple-outline' },
+      }
+    ]
+  },
+  {
+    path: '/backStage',
+    component: Layout,
+    name: '後台管理',
+    meta : { title: '後台管理', icon: 'mdi-cog-outline' },
+    children: [
+      {
+        path: 'privilegeSetting',
+        name: 'PrivilegeSetting',
+        component: () => import('@/pages/backStage/privilegeSettingPage.vue'),
+        meta: { title: '權限設定', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'characterPrivilege',
+        name: 'CharacterPrivilege',
+        component: () => import('@/pages/backStage/CharacterPrivilegePage.vue'),
+        meta: { title: '角色設定', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'setting',
+        name: 'Setting',
+        component: () => import('@/pages/backStage/backStageSettingPage.vue'),
+        meta: { title: '後台資訊設定區', icon: 'mdi-cog-outline' }
       }
     ]
   },
   {
     path: "/hy",
     redirect: "/hy/stylePromo",
-    component: Layout,
+    component: Layout,  
     name: "HY Pages",
     meta: { title: 'HY Prototype', icon: 'mdi-account-multiple' },
     children: [
@@ -186,38 +347,6 @@ export const constantRoutes = [
         name: 'TpesForm',
         component: () => import('@/pages/FormPage/FormPage.vue'),
         meta: { title: 'TPES Form', icon: 'mdi-file-document' }
-      },
-      {
-        path: 'characterPrivilege',
-        name: 'CharacterPrivilege',
-        component: () => import('@/pages/CharacterPrivilegePage.vue'),
-        meta: { title: '角色設定', icon: 'mdi-account-multiple' }
-      },
-      {
-        path: 'privilegeSetting',
-        name: 'PrivilegeSetting',
-        component: () => import('@/pages/privilegeSetting/privilegeSettingPage.vue'),
-        meta: { title: '權限設定', icon: 'mdi-account-multiple' }
-      }
-    ]
-  },
-  {
-    path: '/report',
-    component: Layout,
-    name: "報表",
-    meta: { title: '報表', icon: 'mdi-text-box' },
-    children: [
-    {
-      path: 'returnReport',
-      name: 'ReturnReport',
-      component: () => import('@/pages/report/returnReportPage.vue'),
-      meta: { title: '退件報表', icon: 'mdi-alert' }
-    },
-      {
-        path: 'readReport',
-        name: 'ReadReport',
-        component: () => import('@/pages/report/readReportPage.vue'),
-        meta: { title: '調閱清單', icon: 'mdi-eye' }
       }
     ]
   }

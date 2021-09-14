@@ -1,13 +1,12 @@
 <template>
   <v-container>
-    <h2 class="font-bold">設定角色</h2>
-    <div>
-      <v-row class="ml-5" align="center">
+    <h2 class="font-bold">角色設定</h2>
+    <div class="ml-4 v-card__text">
+      <v-row align="center">
         <v-col cols="1">單位 :</v-col>
-        <v-col
-          lg="3"
-          xl="4"
-          class="d-flex font-bold"          
+        <v-col          
+          cols="3"
+          class="font-bold"          
         >                
           <v-select   
             v-model="division"
@@ -20,11 +19,10 @@
             @change="chooseDivision()"
           />
         </v-col>
-        <div style="margin: auto 1px;color:black;">組別</div>
+        <v-col cols="1">組別 :</v-col>
         <v-col
-          lg="3"
-          xl="4"
-          class="d-flex font-bold"          
+          cols="3"
+          class="font-bold"          
         >                
           <v-select
             v-model="group"
@@ -38,12 +36,11 @@
           />
         </v-col>
       </v-row>
-      <v-row class="ml-5 mb-5">
-        <div style="margin: auto 1px;color:black;">課別</div>
+      <v-row>
+        <v-col cols="1">課別 :</v-col>
         <v-col
-          lg="3"
-          xl="4"
-          class="d-flex font-bold"          
+          cols="3"
+          class="font-bold"          
         >            
           <v-select
             v-model="section"
@@ -55,11 +52,10 @@
             placeholder="請選擇課別"
           />
         </v-col>
-        <div style="margin: auto 1px;color:black;">角色</div>
+        <v-col cols="1">角色 :</v-col>
         <v-col
-          lg="3"
-          xl="4"
-          class="d-flex font-bold"          
+          cols="3"         
+          class="font-bold"          
         >                
           <v-select  
             v-model="character"
@@ -71,8 +67,10 @@
             placeholder="請選擇角色"
           />
         </v-col>
-        <v-btn style="margin: auto 2px;" color="primary" @click="search()">查詢</v-btn>
-        <v-btn style="margin: auto 0 auto 23%;" color="primary" @click="popOut(editPopOut)">
+      </v-row>
+      <v-row>
+        <v-btn class="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>        
+        <v-btn class="primary ml-3" @click="popOut(editPopOut)">
           <v-icon dark>
             mdi-account
           </v-icon>
@@ -80,8 +78,8 @@
         </v-btn>
       </v-row>         
     </div>    
-    <hr class="ma-4">
-    <v-row class="ma-2">
+    <hr class="mt-6 mb-5 ml-8">
+    <v-row class="ml-5">
       <v-col cols="12">    
         <v-data-table
           :headers="empListHeaders"
@@ -95,7 +93,7 @@
           @page-count="empListPageCount = $event"
         >
           <template v-slot:item.character="{ item }">
-            <!--TODO: 如何隱藏被選擇的欄位 -->
+            <!--隱藏被選擇的欄位 -->
             <div v-if="!item.edit" class="d-flex">
               <div style="width:250px; margin: auto; text-overflow: ellipsis; overflow: hidden; white-space:nowrap;">{{ item.character }}</div>              
               <v-btn

@@ -72,7 +72,7 @@ export default {
         // 判斷點擊哪個按鈕
         action(actionType){
             if(actionType == 'takeAway'){
-                MessageService.showSuccess("案件認領成功");
+                MessageService.showSuccess("案件認領成功✓");
             } else{
                 this.classType = null;
                 this.selectEmp = null;
@@ -81,7 +81,7 @@ export default {
         },
        
         submit(){
-            MessageService.showSuccess("案件分派成功");
+            MessageService.showSuccess("案件分派成功✓");
             this.dispatchModel = false;
         },
 

@@ -14,7 +14,7 @@
         </v-col>
         <v-col
           lg="8"
-          xl="4"
+          xl="3"
           class="d-flex"
         >                
           <v-select   
@@ -31,7 +31,7 @@
           
         </v-col>
       </v-row>
-      <v-row>
+      <v-row v-if="role != null">
         <v-col cols="1">
           <div>
             <span class="font-bold font-18px">說明</span>
@@ -54,7 +54,7 @@
           />
         </v-col>
       </v-row>
-      <v-row>
+      <v-row v-if="role != null">
         <v-col cols="1">
           <div>
             <span class="font-bold font-18px">權限</span>
@@ -102,12 +102,13 @@
 
         </v-col>
       </v-row> 
-      <v-row>
-        <v-col
-          class="d-end"
-        >
-          <v-btn depressed color="primary" @click="saveAuth()">&emsp;儲存&emsp;</v-btn>
-        </v-col></v-row>
+      <v-row v-if="role != null">
+        <v-col cols="9" />
+        <v-col cols="">
+          <v-btn depressed color="success" @click="saveAuth()">&emsp;儲存&emsp;</v-btn>
+        </v-col>
+        <v-col cols="1" />
+      </v-row>
     </div>
   </v-container>
 </template>

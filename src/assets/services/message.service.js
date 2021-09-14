@@ -6,17 +6,17 @@ MessageService
 */
 const MessageService = {
     async showError(message,title){
-        // var defaultTitle = "系統錯誤";
+        var defaultTitle = "";
 
         // // this.notify 噴錯
         // // this.$notify 噴錯
         // //window.vm.$notify 沒噴錯但沒訊息
-        // Vue.notify({
-        //     group : 'topRight',
-        //     title : (title || defaultTitle),
-        //     text : message,
-        //     type: 'noti-error'
-        // });
+        Vue.notify({
+            group : 'topRight',
+            title : (title || defaultTitle),
+            text : message,
+            type: 'noti-error'
+        });
         console.log(title);
         console.log(message);
     },

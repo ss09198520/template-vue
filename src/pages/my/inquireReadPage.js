@@ -1,12 +1,14 @@
 export default{
     data(){
         return{
+            //點選查詢才顯示下方清單
+            display: false,
             //預設當前頁數
             applyListPage: 1,
             //預設總頁數
             applyListPageCount: 0,
             //操作者角色
-            User: 'TPESUser',
+            User: 'TPESUsers',
             //視窗彈出與否
             popOut: false,
             //選擇的調閱對象

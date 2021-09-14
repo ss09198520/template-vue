@@ -2,13 +2,12 @@
   <v-container>
     <h2 class="font-bold">設定角色</h2>
     <div>
-      <v-row class="ml-5">
-        <div style="margin: auto 1px; color:black;">單位</div>
+      <v-row class="ml-5" align="center">
+        <v-col cols="1">單位 :</v-col>
         <v-col
           lg="3"
           xl="4"
-          class="d-flex"
-          style="font-weight:bold;"
+          class="d-flex font-bold"          
         >                
           <v-select   
             v-model="division"
@@ -25,8 +24,7 @@
         <v-col
           lg="3"
           xl="4"
-          class="d-flex"
-          style="font-weight:bold;"
+          class="d-flex font-bold"          
         >                
           <v-select
             v-model="group"
@@ -45,8 +43,7 @@
         <v-col
           lg="3"
           xl="4"
-          class="d-flex"
-          style="font-weight:bold;"
+          class="d-flex font-bold"          
         >            
           <v-select
             v-model="section"
@@ -62,8 +59,7 @@
         <v-col
           lg="3"
           xl="4"
-          class="d-flex"
-          style="font-weight:bold;"
+          class="d-flex font-bold"          
         >                
           <v-select  
             v-model="character"
@@ -232,14 +228,13 @@
                   placeholder="請選擇課別"
                 />
               </v-col>            
-            </v-row>
-            <v-row>
-              <v-col cols="5">
-                <v-btn color="primary">查詢</v-btn>
-              </v-col>
-            </v-row>            
+            </v-row>                     
           </div>
-        
+          <v-row>
+            <v-col cols="5">
+              <v-btn color="primary">查詢</v-btn>
+            </v-col>
+          </v-row>   
 
           <hr>
           <v-chip

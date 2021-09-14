@@ -31,7 +31,7 @@
                   color="success"
                   @click="sign()"
                 >
-                  簽核
+                  &emsp;簽核&emsp;
                 </v-btn>                 
               </div>                                                                               
             </template>           
@@ -51,7 +51,8 @@
         width="600"
       >        
         <v-card>
-          <v-card-title class="text-h5 lighten-2" style="background-color:#363636;">
+          <v-card-title class="text-h5 lighten-2" style="background-color:#363636;color:white;">
+            審核調閱資訊
             <v-spacer />
             <v-btn
               color="white"
@@ -139,18 +140,17 @@
               color="error"              
               @click="popOut = false"
             >
-              退件
+              &emsp;退件&emsp;
             </v-btn>
             <v-btn
               color="success"              
               @click="popOut = false"
             >
-              簽核
+              &emsp;簽核&emsp;
             </v-btn>
           </v-card-actions>
         </v-card>
-      </v-dialog>
-      >>>>>>> Stashed changes
+      </v-dialog>      
     </v-container>
   </v-app>
 </template>

@@ -336,12 +336,6 @@ export const constantRoutes = [
         name: 'TpesForm',
         component: () => import('@/pages/FormPage/FormPage.vue'),
         meta: { title: 'TPES Form', icon: 'mdi-file-document' }
-      },
-      {
-        path: 'leaveAgent',
-        name: 'LeaveAgent',
-        component: () => import('@/pages/leave/leaveAgentPage.vue'),
-        meta: { title: '請假代理人設定', icon: 'mdi-account-multiple' }
       }
     ]
   }

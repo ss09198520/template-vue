@@ -84,6 +84,11 @@ export const constantRoutes = [
         name: 'material-upload',
         component: () => import('@/views/material/upload'),
         meta: { title: '素材上傳', icon: 'mdi-cloud-upload', },
+      },{
+        path: 'list',
+        name: 'material-list',
+        component: () => import('@/views/material/list'),
+        meta: { title: '素材總覽', icon: 'mdi-magnify', },
       }
     ]
   },
@@ -91,25 +96,25 @@ export const constantRoutes = [
     path: '/satisfaction',
     component: Layout,
     name: 'SatisfactionPages',
-    meta: { title: '滿意度調查', icon: 'mdi-clipboard-play-multiple' },
+    meta: { title: '滿意度調查', icon: 'mdi-clipboard-text-multiple' },
     children: [
       {
         path: 'create',
         name: 'Satisfaction-create',
         component: () => import('@/views/satisfaction/create'),
-        meta: { title: '問卷製作', icon: 'mdi-clipboard-play-multiple' }
+        meta: { title: '問卷製作', icon: 'mdi-clipboard-text-multiple' }
       },
       {
         path: 'list',
         name: 'Satisfaction-list',
         component: () => import('@/views/satisfaction/list'),
-        meta: { title: '問卷查詢', icon: 'mdi-clipboard-play-multiple' }
+        meta: { title: '問卷查詢', icon: 'mdi-clipboard-text-search' }
       },
       {
         path: 'result',
         name: 'Satisfaction-result',
         component: () => import('@/views/form/FormLayouts'),
-        meta: { title: '滿意度調查資料查詢', icon: 'mdi-clipboard-play-multiple' }
+        meta: { title: '滿意度調查資料查詢', icon: 'mdi-magnify' }
       }
     ]
   },
@@ -130,7 +135,7 @@ export const constantRoutes = [
         path: 'list',
         name: 'Marquee-List',
         component: () => import('@/views/marquee/list'),
-        meta: { title: '跑馬燈查詢', icon: 'mdi-pencil-box-multiple-outline' }
+        meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },
       {
         path: 'calendarList',
@@ -158,7 +163,7 @@ export const constantRoutes = [
         path: 'list',
         name: 'Program-List',
         component: () => import('@/views/program/list'),
-        meta: { title: '節目表查詢', icon: 'mdi-movie-edit' }
+        meta: { title: '節目表查詢', icon: 'mdi-magnify' }
       },
       {
         path: 'calendarList',

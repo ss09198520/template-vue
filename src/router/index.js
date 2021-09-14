@@ -73,108 +73,6 @@ export const constantRoutes = [
     hidden: true,
   },
   {
-    path: '/material',
-    name: 'MaterialPages',
-    component: Layout,
-    redirect: '/material/upload',
-    meta: { title: '素材管理', icon: 'mdi-tooltip-image-outline' },
-    children: [
-      {
-        path: 'upload',
-        name: 'material-upload',
-        component: () => import('@/views/material/upload'),
-        meta: { title: '素材上傳', icon: 'mdi-cloud-upload', },
-      },{
-        path: 'list',
-        name: 'material-list',
-        component: () => import('@/views/material/list'),
-        meta: { title: '素材總覽', icon: 'mdi-magnify', },
-      }
-    ]
-  },
-  {
-    path: '/satisfaction',
-    component: Layout,
-    name: 'SatisfactionPages',
-    meta: { title: '滿意度調查', icon: 'mdi-clipboard-text-multiple' },
-    children: [
-      {
-        path: 'create',
-        name: 'Satisfaction-create',
-        component: () => import('@/views/satisfaction/create'),
-        meta: { title: '問卷製作', icon: 'mdi-clipboard-text-multiple' }
-      },
-      {
-        path: 'list',
-        name: 'Satisfaction-list',
-        component: () => import('@/views/satisfaction/list'),
-        meta: { title: '問卷查詢', icon: 'mdi-clipboard-text-search' }
-      },
-      {
-        path: 'result',
-        name: 'Satisfaction-result',
-        component: () => import('@/views/form/FormLayouts'),
-        meta: { title: '滿意度調查資料查詢', icon: 'mdi-magnify' }
-      }
-    ]
-  },
-  {
-    path: '/marquee',
-    redirect: '/marquee/create',
-    component: Layout,
-    name: 'MarqueePages',
-    meta: { title: '跑馬燈管理', icon: 'mdi-clipboard-play-multiple' },
-    children: [
-      {
-        path: 'create',
-        name: 'Marquee-Edit',
-        component: () => import('@/views/marquee/create'),
-        meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
-      },
-      {
-        path: 'list',
-        name: 'Marquee-List',
-        component: () => import('@/views/marquee/list'),
-        meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
-      },
-      {
-        path: 'calendarList',
-        name: 'Marquee-List-Calendar',
-        component: () => import('@/views/marquee/calendar'),
-        hidden: true,
-        meta: { title: '跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
-      }
-    ]
-  },
-  {
-    path: '/program',
-    redirect: '/program/create',
-    component: Layout,
-    name: 'ProgramPages',
-    meta: { title: '節目管理', icon: 'mdi-video-box' },
-    children: [
-      {
-        path: 'create',
-        name: 'Program-Create',
-        component: () => import('@/views/program/create'),
-        meta: { title: '節目表製作', icon: 'mdi-movie-edit' }
-      },
-      {
-        path: 'list',
-        name: 'Program-List',
-        component: () => import('@/views/program/list'),
-        meta: { title: '節目表查詢', icon: 'mdi-magnify' }
-      },
-      {
-        path: 'calendarList',
-        name: 'Program-List-Calendar',
-        component: () => import('@/views/program/calendar'),
-        hidden: true,
-        meta: { title: '節目表行事曆', icon: 'mdi-pencil-box-multiple-outline' },
-      }
-    ]
-  },
-  {
     path: "/myWorkSpace",
     redirect: "/myWorkSpace/myForm",
     component: Layout,
@@ -292,6 +190,108 @@ export const constantRoutes = [
     ]
   },
   {
+    path: '/material',
+    name: 'MaterialPages',
+    component: Layout,
+    redirect: '/material/upload',
+    meta: { title: '素材管理', icon: 'mdi-tooltip-image-outline' },
+    children: [
+      {
+        path: 'upload',
+        name: 'material-upload',
+        component: () => import('@/views/material/upload'),
+        meta: { title: '素材上傳', icon: 'mdi-cloud-upload', },
+      },{
+        path: 'list',
+        name: 'material-list',
+        component: () => import('@/views/material/list'),
+        meta: { title: '素材總覽', icon: 'mdi-magnify', },
+      }
+    ]
+  },
+  {
+    path: '/satisfaction',
+    component: Layout,
+    name: 'SatisfactionPages',
+    meta: { title: '滿意度調查', icon: 'mdi-clipboard-text-multiple' },
+    children: [
+      {
+        path: 'create',
+        name: 'Satisfaction-create',
+        component: () => import('@/views/satisfaction/create'),
+        meta: { title: '問卷製作', icon: 'mdi-clipboard-text-multiple' }
+      },
+      {
+        path: 'list',
+        name: 'Satisfaction-list',
+        component: () => import('@/views/satisfaction/list'),
+        meta: { title: '問卷查詢', icon: 'mdi-clipboard-text-search' }
+      },
+      {
+        path: 'result',
+        name: 'Satisfaction-result',
+        component: () => import('@/views/form/FormLayouts'),
+        meta: { title: '滿意度調查資料查詢', icon: 'mdi-magnify' }
+      }
+    ]
+  },
+  {
+    path: '/marquee',
+    redirect: '/marquee/create',
+    component: Layout,
+    name: 'MarqueePages',
+    meta: { title: '跑馬燈管理', icon: 'mdi-clipboard-play-multiple' },
+    children: [
+      {
+        path: 'create',
+        name: 'Marquee-Edit',
+        component: () => import('@/views/marquee/create'),
+        meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
+      },
+      {
+        path: 'list',
+        name: 'Marquee-List',
+        component: () => import('@/views/marquee/list'),
+        meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
+      },
+      {
+        path: 'calendarList',
+        name: 'Marquee-List-Calendar',
+        component: () => import('@/views/marquee/calendar'),
+        hidden: true,
+        meta: { title: '跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
+      }
+    ]
+  },
+  {
+    path: '/program',
+    redirect: '/program/create',
+    component: Layout,
+    name: 'ProgramPages',
+    meta: { title: '節目管理', icon: 'mdi-video-box' },
+    children: [
+      {
+        path: 'create',
+        name: 'Program-Create',
+        component: () => import('@/views/program/create'),
+        meta: { title: '節目表製作', icon: 'mdi-movie-edit' }
+      },
+      {
+        path: 'list',
+        name: 'Program-List',
+        component: () => import('@/views/program/list'),
+        meta: { title: '節目表查詢', icon: 'mdi-magnify' }
+      },
+      {
+        path: 'calendarList',
+        name: 'Program-List-Calendar',
+        component: () => import('@/views/program/calendar'),
+        hidden: true,
+        meta: { title: '節目表行事曆', icon: 'mdi-pencil-box-multiple-outline' },
+      }
+    ]
+  },
+  {
     path: '/backStage',
     component: Layout,
     name: '後台管理',
@@ -306,7 +306,7 @@ export const constantRoutes = [
       {
         path: 'characterPrivilege',
         name: 'CharacterPrivilege',
-        component: () => import('@/pages/backStage/characterPrivilegePage.vue'),
+        component: () => import('@/pages/backStage/CharacterPrivilegePage.vue'),
         meta: { title: '角色設定', icon: 'mdi-account-multiple' }
       },
       {

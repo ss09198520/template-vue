@@ -4,9 +4,9 @@
     <!-- 通知設定 -->
     <notifications
       group="topRight"
-      position="top right"
+      position="top center"
       :duration="5000"
-      :max="5"
+      :max="10"
       animation-name="v-fade-right"
     />
   </v-app>

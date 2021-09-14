@@ -71,6 +71,14 @@ export const constantRoutes = [
     name: 'HomePage',
     component: Layout,
     hidden: true,
+    meta: { title: '首頁', icon: 'mdi-cloud-upload' },    
+    children: [
+      {
+      path: '',      
+      component: () => import('@/pages/homePage.vue'),
+      meta: { title: '首頁', icon: 'mdi-cloud-upload', },
+      }
+    ]
   },
   {
     path: "/myWorkSpace",
@@ -79,6 +87,12 @@ export const constantRoutes = [
     name: "My WorkSpace",
     meta: { title: '我的工作區', icon: 'mdi-account' },
     children: [
+      {
+        path: '/homePage',
+        redirect: "/",                
+        component: () => import('@/pages/homePage.vue'),
+        meta: { title: '首頁', icon: 'mdi-account' }
+      },
       {
         path: 'myFormPage',
         name: 'MyFormPage',
@@ -323,7 +337,7 @@ export const constantRoutes = [
       {
         path: 'characterPrivilege',
         name: 'CharacterPrivilege',
-        component: () => import('@/pages/backStage/CharacterPrivilegePage.vue'),
+        component: () => import('@/pages/backStage/characterPrivilegePage.vue'),
         meta: { title: '角色設定', icon: 'mdi-account-multiple' }
       },
       {

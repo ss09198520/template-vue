@@ -128,7 +128,7 @@
               color="normal"            
               @click="dispatchModel = false"
             >
-              取消
+              &emsp;取消&emsp;
             </v-btn>
             <v-btn              
               color="primary"            

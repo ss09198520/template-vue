@@ -31,11 +31,12 @@
                       <v-icon dark size="7vh">
                         mdi-file-document-outline
                       </v-icon><br>
-                      <div class="big-btn-text mt-2">開啟表單</div>
+                      <div v-if="mode==='audit'" class="big-btn-text mt-2">檢視表單</div>
+                      <div v-else class="big-btn-text mt-2">開啟表單</div>
                     </span>
                   </v-btn>
                 </v-col>
-                <v-col cols="6">
+                <v-col v-if="mode!=='audit'" cols="6">
                   <div class="sign-preview-area">
                     <span>簽名預覽</span>
                     <img v-if="signPreviewImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + signPreviewImgSrc">

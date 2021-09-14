@@ -1,3 +1,5 @@
+import MessageService from "@/assets/services/message.service";
+
 
 export default {
     components: {
@@ -62,22 +64,23 @@ export default {
 
       chooseDivision(){
         this.authorityList=[
-          { text: '工作區',
+          { text: '我的工作區',
             hasAuth:false,            
             subAuthList:[ 
                 { text: '我的表單',value:'1',hasAuth:true},
-                { text: '請假',value:'1',hasAuth:true}, 
-                { text: '退件區',value:'2',hasAuth:false}, 
-                { text: '申請調閱區',value:'3',hasAuth:false},
+                { text: '我的退件區',value:'2',hasAuth:false}, 
+                { text: '調閱申請',value:'3',hasAuth:false},
+                { text: '我的調閱區',value:'4',hasAuth:false},
+                { text: '請假清單',value:'5',hasAuth:true}, 
+                { text: '請假申請',value:'6',hasAuth:true}, 
             ]
           },
 
-          { text: '待簽核區',
+          { text: '簽核區',
             hasAuth:false,            
             subAuthList:[ 
-                  { text: '調閱',value:'12',hasAuth:false,type:1},  
-                  { text: '報表',value:'13',hasAuth:true,type:1}, 
-                  { text: '專用章',value:'14',hasAuth:false,type:1},
+                  { text: '調閱簽核',value:'12',hasAuth:false,type:1},
+                  { text: '專用章簽核',value:'14',hasAuth:false,type:1},
                   { text: '多媒體-跑馬燈',value:'14',hasAuth:false,type:2},
                   { text: '多媒體-節目單',value:'14',hasAuth:false,type:2},
                   { text: '多媒體-滿意度問卷',value:'14',hasAuth:false,type:2}, 
@@ -98,17 +101,18 @@ export default {
             { text: '報表區',
             hasAuth:false,            
             subAuthList:[ 
-                  { text: '退件',value:'18',hasAuth:true},  
-                  { text: '調閱',value:'19',hasAuth:true}, 
+                  { text: '退件報表',value:'18',hasAuth:true},  
+                  { text: '調閱清單',value:'19',hasAuth:true}, 
                   { text: '滿意度調查-raw data下查詢條件',value:'',hasAuth:true}, 
                   { text: '滿意度調查-摘要區處報表(月)',value:'',hasAuth:true}, 
                   { text: '滿意度調查-摘要個人報表(週)',value:'',hasAuth:true}, 
             ]},
-            { text: '後台區',
+            { text: '後台管理',
             hasAuth:false,
             subAuthList:[ 
-                  { text: '權限設定',value:'18',hasAuth:true,},  
-                  { text: '後台管理',value:'19',hasAuth:true},                  
+                  { text: '權限設定',value:'1',hasAuth:true,},
+                  { text: '角色設定',value:'2',hasAuth:true,},  
+                  { text: '後台管理',value:'3',hasAuth:true},                  
             ]},
         ];
 
@@ -171,7 +175,7 @@ export default {
 
       // 儲存權限設定Action
       saveAuth(){
-
+        MessageService.showSuccess("儲存成功✓");
       },
 
       /**Ajax end */

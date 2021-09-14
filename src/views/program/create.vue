@@ -57,7 +57,7 @@
                         md="3"
                       >
                         <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          檔 案 描 述
+                          節 目 描 述
                         </v-subheader>
                       </v-col>
                       <v-col
@@ -82,12 +82,56 @@
                       :dense="dense"
                       :no-gutters="noGutters"
                     >
+                      <v-col cols="3" md="3">
+                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                          輪 播 時 間
+                        </v-subheader>
+                      </v-col>
+                      <v-col
+                        cols="12"
+                        sm="6"
+                        md="4"
+                      >
+                        <v-menu
+                          ref="dateMenu"
+                          v-model="dateMenu"
+                          :close-on-content-click="false"
+                          :return-value="dates"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="auto"
+                        >
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-text-field
+                              v-model="dateRangeText"
+                              label="請 選 擇 時 間 區 間"
+                              prepend-icon="mdi-calendar"
+                              readonly
+                              v-bind="attrs"
+                              v-on="on"
+                            />
+                          </template>
+                          <v-date-picker
+                            v-model="dates"
+                            no-title
+                            range
+                            @input="dateMenu = dates.length < 2 ? true :false"
+                          >
+                            <v-spacer />
+                          </v-date-picker>
+                        </v-menu>
+                      </v-col>
+                    </v-row>
+                    <v-row
+                      :dense="dense"
+                      :no-gutters="noGutters"
+                    >
                       <v-col
                         cols="3"
                         md="3"
                       >
                         <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          上 傳 格 式
+                          選 擇 素 材
                           <span class="red--text">*</span>
                         </v-subheader>
                       </v-col>
@@ -95,28 +139,7 @@
                         cols="7"
                         md="6"
                       >
-                        <v-radio-group
-                          v-model="uploadType"
-                          class="mt-2"
-                          dense
-                          row
-                          :rules="[v => !!v || '必須選擇一種上傳格式']"
-                        >
-                          <v-radio
-                            label="純圖檔"
-                            value="1"
-                            color="red"
-                          />
-                          <v-radio
-                            label="影片檔(mp4)"
-                            value="2"
-                            color="red"
-                          />
-                          <!-- <v-radio
-                            label="圖檔+影片檔(mp4)"
-                            value="3"
-                          /> -->
-                        </v-radio-group>
+                        <v-btn class="primary" style="margin:10px;" @click="dialog=true"><v-icon style="margin-right: 3px;">mdi-plus</v-icon>新增</v-btn>
                       </v-col>
                     </v-row>
                     <v-row
@@ -172,6 +195,43 @@
         </v-card>
       </v-col>
     </v-row>
+    <v-dialog
+      v-model="dialog"
+      max-width="800px"
+      transition="dialog-bottom-transition"
+      scrollable
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;"> 選 擇 素 材 </v-card-title>
+        <v-card-text>
+          <hr>
+          <div class="imgList">
+            <ul class="resourceList">
+              <li
+                v-for="(resource,id) in resources"
+                :id="resource.id"
+                :key="id"
+                :url="resource.url" 
+                @click="selected($event)" 
+              >
+                <label class="el-upload-list__item-status-label">
+                  <v-icon v-text="mdi-check" />
+                </label>
+                <div class="imgBox">
+                  <img :src="require(`@/resource/${resource.thumbnail}`)">
+                </div>
+                <p>{{ resource.name }}</p>
+              </li>
+            </ul>
+          </div>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn style="margin: 0 10px 10px 0;" @click="dialog = false">關閉</v-btn>
+          <v-btn color="primary" style="margin-bottom: 10px;" @click="saveNewClass()">新增</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -180,11 +240,14 @@
     data() {
       return {
         valid: false,
+        dialog: false,
         maxCharacter: 40,
         filename: '',
         fileDesc: '',
         uploadType: '',
         uploadData: '',
+        dates: [],
+        dateMenu: false,
         formData: {
           filename: '',
           fileDesc: '',
@@ -197,6 +260,92 @@
           maxFilesize: 0.5,
           headers: { "My-Awesome-Header": "header value" }
         },
+        resources: [
+          {
+            "id": 1,
+            "url": "image/bg1.jpg",
+            "thumbnail": "image/bg1_tn.jpg",
+            "name": "bg1.jpg",
+            "type": "image"
+          },
+          {
+            "id": 2,
+            "url": "image/bg2.png",
+            "thumbnail": "image/bg2_tn.jpg",
+            "name": "bg2.jpg",
+            "type": "image"
+          },
+          {
+            "id": 3,
+            "url": "image/p1.jpg",
+            "thumbnail": "image/p1_tn.jpg",
+            "name": "p1.jpg",
+            "type": "image"
+          },
+          {
+            "id": 4,
+            "url": "image/p2.jpg",
+            "thumbnail": "image/p2_tn.jpg",
+            "name": "p2.jpg",
+            "type": "image"
+          },
+          {
+            "id": 5,
+            "url": "image/p3.jpg",
+            "thumbnail": "image/p3_tn.jpg",
+            "name": "p3.jpg",
+            "type": "image"
+          },
+          {
+            "id": 6,
+            "url": "image/p4.jpg",
+            "thumbnail": "image/p4_tn.jpg",
+            "name": "p4.jpg",
+            "type": "image"
+          },
+          {
+            "id": 7,
+            "url": "image/p5.jpg",
+            "thumbnail": "image/p5_tn.jpg",
+            "name": "p5.jpg",
+            "type": "image"
+          },
+          {
+            "id": 8,
+            "url": "image/p6.jpg",
+            "thumbnail": "image/p6_tn.jpg",
+            "name": "p6.jpg",
+            "type": "image"
+          },
+          {
+            "id": 9,
+            "url": "image/p7.jpg",
+            "thumbnail": "image/p7_tn.jpg",
+            "name": "p7.jpg",
+            "type": "image"
+          },
+          {
+            "id": 10,
+            "url": "image/p8.jpg",
+            "thumbnail": "image/p8_tn.jpg",
+            "name": "p8.jpg",
+            "type": "image"
+          },
+          {
+            "id": 11,
+            "url": "image/p9.jpg",
+            "thumbnail": "image/p9_tn.jpg",
+            "name": "p9.jpg",
+            "type": "image"
+          },
+          {
+            "id": 12,
+            "url": "image/p10.jpg",
+            "thumbnail": "image/p10_tn.jpg",
+            "name": "p10.jpg",
+            "type": "image"
+          }
+        ],
         dense: false,
         noGutters: false,
         hideDatails: false,
@@ -229,15 +378,187 @@
       resetValidation() {
         this.$refs.form.resetValidation()
       },
-      dropzoneS(file) {
-        console.log('this.$message', this.$message)
-        console.log(file)
-      },
-      dropzoneR(file) {
-        console.log(file)
+      selected(e) {
+        let dom = e.currentTarget.id;
+        let target = e.currentTarget;
+        /*if (e.target.tagName == 'DIV' || e.target.tagName == 'IMG' || e.target.tagName == 'P') {          //如果点击的是LI下面的子元素，就将子元素的父元素提取出来（即LI）。
+          dom = e.target.offsetParent.id
+          target = e.target.offsetParent
+        } else {
+          dom = e.target
+          target = e.target
+        }*/     //currentTarget与target的区别
+        let children = target.children[0];
+        if (children.style.display != 'block') {
+          children.style.display = 'block';
+          target.style.backgroundColor = "#ebebeb";
+
+          this.downloadUrl = this.baseURL + document.getElementById(target.id).getAttribute("url")
+          this.downloadName = target.children[2].innerText;
+          this.ids.push(dom)
+        } else {
+          children.style.display = 'none';
+          target.style.backgroundColor = "white";
+          this.downloadUrl = '';
+          this.downloadName = '';
+          for (let i = 0; i < this.ids.length; i++) {
+            if (this.ids[i] == dom) this.ids.splice(i, 1)
+          }    //取消则从ids删除该元素
+        }
       },
     }
   }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#resource {
+    width: 100%;
+    height: 100%;
+    background-color: #eeeeee;
+  }
+
+  #resourceTree {
+    border: 1px solid #c1c1c1;
+    height: 98%;
+    width: 12%;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .title {
+    height: 40px;
+    background-color: #d33a31;
+    line-height: 40px;
+    padding-left: 10px;
+    font-size: 1.4rem;
+    color: white;
+    letter-spacing: 3px;
+  }
+
+  .controlTree {
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
+    padding-right: 10px;
+    border-bottom: 1px solid #dedede;
+  }
+
+  .controlTree > a {
+    margin-left: 15px;
+  }
+
+  .controlTree > a > i {
+    margin-right: 3px;
+  }
+
+  .controlTree > a:hover {
+    color: #d33a31;
+  }
+
+  #resourceList {
+    border: 1px solid #c1c1c1;
+    height: 98%;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 87%;
+  }
+
+  .controlBox {
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
+    padding: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .control a {
+    margin-left: 10px;
+    font-size: 1.4rem;
+    border-right: 1px solid #cfcfcf;
+    padding-right: 10px;
+  }
+
+  .control > a > i {
+    margin-right: 5px;
+  }
+
+  .search {
+    display: flex;
+  }
+
+  .search > div {
+    margin-right: 10px;
+  }
+
+  .imgList, .tableList {
+    padding: 20px;
+    height: 580px;
+  }
+
+  .resourceList {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .resourceList li {
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 0 30px 40px;
+    cursor: pointer;
+    padding: 10px 5px;
+    border-radius: 5px;
+    position: relative;
+  }
+
+  .imgBox {
+    width: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #e7e7e7;
+  }
+
+  .resourceList li img {
+    max-width: 120px;
+    max-height: 120px;
+  }
+
+  .resourceList li:hover {
+    background-color: #ebebeb !important;
+  }
+
+  .resourceList p {
+    min-width: 20px;
+  }
+
+  .el-upload-list__item-status-label {
+    position: absolute;
+    right: -15px;
+    top: -7px;
+    width: 46px;
+    height: 26px;
+    background: #13ce66;
+    text-align: center;
+    transform: rotate(45deg);
+    box-shadow: 0 1px 1px #ccc;
+  }
+
+  .el-upload-list__item-status-label i {
+    font-size: 12px;
+    margin-top: 12px;
+    transform: rotate(-45deg);
+    color: white;
+  }
+
+  .page {
+    text-align: right;
+    padding-right: 20px;
+  }
+</style>

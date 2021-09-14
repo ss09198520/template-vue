@@ -211,7 +211,7 @@
         itemsPerPage: 10,
         headerCRUD: [
           {
-            text: '跑馬燈名稱',
+            text: '節目名稱',
             value: 'name',
             width: '26%',
           },

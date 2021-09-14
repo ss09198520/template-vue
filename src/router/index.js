@@ -186,7 +186,7 @@ export const constantRoutes = [
         path: 'inquireReadPage',
         name: 'InquireReadPage',
         component: () => import('@/pages/my/inquireReadPage.vue'),
-        meta: { title: '申請調閱', icon: 'mdi-book-arrow-left' }
+        meta: { title: '調閱申請', icon: 'mdi-book-arrow-left' }
       },
       {
         path: 'myRead',
@@ -198,13 +198,13 @@ export const constantRoutes = [
         path: 'leaveSearch',
         name: 'LeaveSearch',
         component: () => import('@/pages/my/leaveSearchPage.vue'),
-        meta: { title: '請假查詢', icon: 'mdi-account-multiple' }
+        meta: { title: '請假清單', icon: 'mdi-account-arrow-right-outline' }
       },
       {
-        path: 'leaveDetail',
-        name: 'LeaveDetail',
-        component: () => import('@/pages/my/leaveDetailPage.vue'),
-        meta: { title: '詳細請假資訊', icon: 'mdi-account-multiple' }
+        path: 'inquireLeave',
+        name: 'InquireLeave',
+        component: () => import('@/pages/my/inquireLeavePage.vue'),
+        meta: { title: '請假申請', icon: 'mdi-account-box-outline' }
       },
     ]
   },
@@ -276,7 +276,7 @@ export const constantRoutes = [
         path: 'readReport',
         name: 'ReadReport',
         component: () => import('@/pages/report/readReportPage.vue'),
-        meta: { title: '調閱清單', icon: 'mdi-eye' }
+        meta: { title: '調閱清單', icon: 'mdi-clipboard-search' }
       }
     ]
   },
@@ -291,6 +291,12 @@ export const constantRoutes = [
         name: 'PrivilegeSetting',
         component: () => import('@/pages/backStage/privilegeSettingPage.vue'),
         meta: { title: '權限設定', icon: 'mdi-account-multiple' }
+      },
+      {
+        path: 'characterPrivilege',
+        name: 'CharacterPrivilege',
+        component: () => import('@/pages/backStage/CharacterPrivilegePage.vue'),
+        meta: { title: '角色設定', icon: 'mdi-account-multiple' }
       },
       {
         path: 'setting',
@@ -330,12 +336,6 @@ export const constantRoutes = [
         name: 'TpesForm',
         component: () => import('@/pages/FormPage/FormPage.vue'),
         meta: { title: 'TPES Form', icon: 'mdi-file-document' }
-      },
-      {
-        path: 'characterPrivilege',
-        name: 'CharacterPrivilege',
-        component: () => import('@/pages/CharacterPrivilegePage.vue'),
-        meta: { title: '角色設定', icon: 'mdi-account-multiple' }
       },
       {
         path: 'leaveAgent',

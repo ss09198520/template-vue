@@ -5,7 +5,7 @@
     <notifications
       group="topRight"
       position="top center"
-      :duration="100000"
+      :duration="5000"
       :max="10"
       animation-name="v-fade-right"
     />

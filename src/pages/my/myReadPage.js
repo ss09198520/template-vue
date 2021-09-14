@@ -3,6 +3,8 @@
 export default{
     data(){
         return{
+            //是否顯示下方清單
+            displayList: false,
             //預設受理類型按鈕
             displayAll: false,
             //預設當前頁數

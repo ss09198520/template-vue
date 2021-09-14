@@ -7,10 +7,10 @@
       <v-row class="ml-5">
         <h3 class="font-bold">查詢條件</h3>
       </v-row>
-      <div class="ml-10">        
+      <div class="ml-10 font-18px font-bold">        
         <v-row align="center">
           <v-col cols="1">
-            受理編號 :          
+            受理編號          
           </v-col>          
           <v-col
             cols="3"
@@ -25,7 +25,7 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
-            電號 :
+            電號
           </v-col>
           <v-col
             cols="3"
@@ -40,7 +40,7 @@
         </v-row>
         <v-row>
           <v-col cols="1">
-            登記單種類 :
+            登記單種類
           </v-col>
           <v-col
             cols="3"
@@ -55,7 +55,7 @@
         </v-row>
         <v-row>
           <v-col cols="1">
-            員工編號 :
+            員工編號
           </v-col>
           <v-col
             cols="3"
@@ -70,25 +70,28 @@
         </v-row>
         <v-row>
           <v-col cols="1">
-            受理日期區間 :
+            受理日期區間
           </v-col>
           <v-col            
-            cols="4"
+            cols="3"   
+            class="d-flex"         
           >
             <v-menu
               v-model="menu1"
-              :close-on-content-click="false"
-              :nudge-right="40"
+              :close-on-content-click="false"              
               transition="scale-transition"
-              offset-y
+              offset-y              
               min-width="auto"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   v-model="date1"                  
-                  prepend-icon="mdi-calendar"
+                  append-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
+                  outlined
+                  dense
+                  hide-details                  
                   v-on="on"
                 />
               </template>
@@ -96,16 +99,11 @@
                 v-model="date1"
                 @input="menu1 = false"
               />
-            </v-menu>
-          </v-col>
-          <div style="margin:auto 0;">~</div>
-          <v-col            
-            cols="4"
-          >
+            </v-menu>          
+            <div style="margin:auto 0;">~</div>          
             <v-menu
               v-model="menu2"
-              :close-on-content-click="false"
-              :nudge-right="40"
+              :close-on-content-click="false"              
               transition="scale-transition"
               offset-y
               min-width="auto"
@@ -113,9 +111,12 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   v-model="date2"                  
-                  prepend-icon="mdi-calendar"
+                  append-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
+                  outlined
+                  dense
+                  hide-details
                   v-on="on"
                 />
               </template>
@@ -128,15 +129,15 @@
         </v-row>
         <v-row>
           <v-col cols="1">
-            歸檔日期區間 :
+            歸檔日期區間
           </v-col>
           <v-col            
-            cols="4"
+            cols="3"
+            class="d-flex"
           >
             <v-menu
               v-model="menu3"
-              :close-on-content-click="false"
-              :nudge-right="40"
+              :close-on-content-click="false"              
               transition="scale-transition"
               offset-y
               min-width="auto"
@@ -144,8 +145,11 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   v-model="date3"                  
-                  prepend-icon="mdi-calendar"
+                  append-icon="mdi-calendar"
                   readonly
+                  dense
+                  outlined
+                  hide-details
                   v-bind="attrs"
                   v-on="on"
                 />
@@ -154,16 +158,11 @@
                 v-model="date3"
                 @input="menu3 = false"
               />
-            </v-menu>
-          </v-col>
-          <div style="margin:auto 0;">~</div>
-          <v-col            
-            cols="4"
-          >
+            </v-menu>          
+            <div style="margin:auto 0;">~</div>          
             <v-menu
               v-model="menu4"
-              :close-on-content-click="false"
-              :nudge-right="40"
+              :close-on-content-click="false"              
               transition="scale-transition"
               offset-y
               min-width="auto"
@@ -171,8 +170,11 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
                   v-model="date4"                  
-                  prepend-icon="mdi-calendar"
+                  append-icon="mdi-calendar"
                   readonly
+                  outlined
+                  dense
+                  hide-details
                   v-bind="attrs"
                   v-on="on"
                 />
@@ -263,7 +265,7 @@
 
           <v-card-text>
             <v-row class="mt-3" align="center">
-              <v-col cols="2">調閱對象 :</v-col>
+              <v-col cols="2">調閱對象</v-col>
               <v-col cols="5">
                 <v-select
                   v-model="setMember"                
@@ -278,7 +280,7 @@
               </v-col>
             </v-row>
             <v-row align="center">
-              <v-col cols="2">調閱原因 :</v-col>
+              <v-col cols="2">調閱原因</v-col>
               <v-col cols="5">
                 <v-select
                   v-model="setReason"                
@@ -292,7 +294,7 @@
               </v-col>
             </v-row>
             <v-row align="center">
-              <v-col cols="2">其他原因 :</v-col>
+              <v-col cols="2">其他原因</v-col>
               <v-col>
                 <v-textarea
                   outlined                  
@@ -332,7 +334,7 @@
       <div class="ml-10">            
         <v-row align="center">          
           <v-col cols="1">
-            受理編號 :          
+            受理編號         
           </v-col>
           <v-col
             cols="3"
@@ -347,7 +349,7 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
-            電號 :
+            電號
           </v-col>
           <v-col
             cols="3"
@@ -362,7 +364,7 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
-            整理號碼 :
+            整理號碼
           </v-col>
           <v-col
             cols="3"
@@ -452,31 +454,31 @@
 
           <v-card-text>
             <v-row class="mt-3">
-              <v-col cols="2">調閱日期 :</v-col>
+              <v-col cols="2">調閱日期</v-col>
               <v-col cols="3">
                 20210910 13:45
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="2">調閱編號 :</v-col>
+              <v-col cols="2">調閱編號</v-col>
               <v-col cols="3">
                 7110000001
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="2">受理編號 :</v-col>
+              <v-col cols="2">受理編號</v-col>
               <v-col cols="3">
                 A00040
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="2">電號 :</v-col>
+              <v-col cols="2">電號</v-col>
               <v-col cols="3">
                 7140000123
               </v-col>
             </v-row>
             <v-row class="mb-5">
-              <v-col cols="2">調閱事由 :</v-col>
+              <v-col cols="2">調閱事由</v-col>
               <v-textarea
                 outlined
                 class="ml-3"
@@ -486,7 +488,7 @@
               />
             </v-row>
             <v-row>
-              <v-col cols="2">備註 :</v-col>
+              <v-col cols="2">備註</v-col>
               <v-textarea
                 outlined
                 class="ml-3"

@@ -1,9 +1,9 @@
 <template>
   <v-container>
     <h2 class="font-bold">角色設定</h2>
-    <div class="ml-4 v-card__text">
+    <div class="ml-10 font-18px font-bold">
       <v-row align="center">
-        <v-col cols="1">單位 :</v-col>
+        <v-col cols="1">單位</v-col>
         <v-col          
           cols="3"
           class="font-bold"          
@@ -19,7 +19,8 @@
             @change="chooseDivision()"
           />
         </v-col>
-        <v-col cols="1">組別 :</v-col>
+        <v-col cols="1" />
+        <v-col cols="1">組別</v-col>
         <v-col
           cols="3"
           class="font-bold"          
@@ -37,7 +38,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="1">課別 :</v-col>
+        <v-col cols="1">課別</v-col>
         <v-col
           cols="3"
           class="font-bold"          
@@ -52,7 +53,8 @@
             placeholder="請選擇課別"
           />
         </v-col>
-        <v-col cols="1">角色 :</v-col>
+        <v-col cols="1" />
+        <v-col cols="1">角色</v-col>
         <v-col
           cols="3"         
           class="font-bold"          
@@ -229,12 +231,12 @@
             </v-row>                     
           </div>
           <v-row>
-            <v-col cols="5">
-              <v-btn color="primary">查詢</v-btn>
+            <v-col>
+              <v-btn class="primary ml-3">查詢</v-btn>
             </v-col>
           </v-row>   
 
-          <hr>
+          <hr class="mt-5 ml-3">
           <v-chip
             v-for="(title, index) in modCharacterTitle"
             :key="index"

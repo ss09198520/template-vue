@@ -1,4 +1,9 @@
+import MessageService from "@/assets/services/message.service";
+
 export default{
+    beforeMount() {
+        this.init();
+      },
     data(){
         return{
             empListHeaders: [
@@ -34,10 +39,21 @@ export default{
             date2: '',
             empListPageCount:0,
             empListPage:1,
+            deleteLeaveModel:false, // 控制刪除請假視窗的開關
            
         }
-    },    
-    test(item){
-        console.log("測試"+item);
-    }
+    },
+    methods:{
+        init(){
+            
+        },
+        deleteLeave(item){
+            this.deleteLeaveModel = true;
+            console.log(item);
+        },
+        submit(){
+            MessageService.showSuccess("刪除成功");
+            this.deleteLeaveModel = false;
+        }
+    }  
 }

@@ -132,7 +132,7 @@
             </v-btn>
             <v-btn              
               color="primary"            
-              @click="submit('dispatch')"
+              @click="submit()"
             >
               確認分派
             </v-btn>

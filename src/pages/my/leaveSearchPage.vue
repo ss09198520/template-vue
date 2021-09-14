@@ -183,7 +183,7 @@
                   class="ma-2"
                   color="error"
                   depressed
-                  @click="test(item)"
+                  @click="deleteLeave(item)"
                 >
                   刪除請假
                 </v-btn>                         
@@ -198,9 +198,48 @@
               />
             </div>
           </div>
-        </div>
-      
+        </div>      
       </div>
-    </div></v-container>
+    </div>
+    <v-dialog
+      v-model="deleteLeaveModel"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          刪除請假
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="deleteLeaveModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            請確認是否刪除該筆請假紀錄?
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="normal"            
+            @click="deleteLeaveModel = false"
+          >
+            取消
+          </v-btn>
+          <v-btn              
+            color="primary"            
+            @click="submit()"
+          >
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 <script src="./leaveSearchPage.js"></script>

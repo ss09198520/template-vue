@@ -1,11 +1,11 @@
 <template>
   <v-container>
     <div>
-<<<<<<< Updated upstream
+      <<<<<<< Updated upstream
       <h2 class="font-bold">請假清單</h2>
-=======
+      =======
       <h2 class="font-bold">請假清單</h2>      
->>>>>>> Stashed changes
+      >>>>>>> Stashed changes
       <div class="ml-10">
         <div class="font-18px font-bold">
           <v-row align="center">   
@@ -106,6 +106,7 @@
                     hide-details
                     v-bind="attrs"
                     style="width:100%"
+                    :clearable="true"
                     v-on="on"
                   />
                 </template>
@@ -132,6 +133,7 @@
                     hide-details
                     v-bind="attrs"
                     style="width:100%"
+                    :clearable="true"
                     v-on="on"
                   />
                 </template>
@@ -158,6 +160,7 @@
                 hide-details
                 single-line
                 dense
+                :clearable="true"
                 placeholder="請選擇請假方式"
                 class="my-auto"
                 color="#ADADAD"
@@ -165,12 +168,12 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-btn color="primary ml-3">&emsp;查詢&emsp;</v-btn>
+            <v-btn color="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>
           </v-row>
         
           
           <hr class="mt-6 mb-5">
-          <div>
+          <div v-if="empMockList != null">
             <v-data-table
               :headers="empListHeaders"
               :items="empMockList"

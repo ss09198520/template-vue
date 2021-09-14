@@ -88,8 +88,8 @@ export const constantRoutes = [
     meta: { title: '我的工作區', icon: 'mdi-account' },
     children: [
       {
-        path: '',
-        redirect: "/",        
+        path: '/homePage',
+        redirect: "/",                
         component: () => import('@/pages/homePage.vue'),
         meta: { title: '首頁', icon: 'mdi-account' }
       },

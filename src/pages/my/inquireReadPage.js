@@ -8,7 +8,7 @@ export default{
             //預設總頁數
             applyListPageCount: 0,
             //操作者角色
-            User: 'TPESUsers',
+            User: 'guest',
             //視窗彈出與否
             popOut: false,
             //選擇的調閱對象

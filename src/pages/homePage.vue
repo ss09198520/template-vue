@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-btn class="primary ma-2" @click="general = true">角色：受理人員</v-btn>
-    <v-btn class="primary ma-2" @click="general = false">角色：核算員</v-btn>
+    <v-btn class="ma-2" :class="{'primary': general}" @click="general = true">角色：受理人員</v-btn>
+    <v-btn class="ma-2" :class="{'primary': !general}" @click="general = false">角色：核算員</v-btn>
     <!-- 角色:受理人員 -->
     <div v-if="general == true" class="ml-10">
       <h1 class="font-bold">

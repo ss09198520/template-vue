@@ -72,10 +72,7 @@
       </v-row>
       <v-row>
         <v-btn class="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>        
-        <v-btn class="primary ml-3" @click="popOut(editPopOut)">
-          <v-icon dark>
-            mdi-account
-          </v-icon>
+        <v-btn class="primary ml-3" @click="popOut(editPopOut)">          
           依角色設定          
         </v-btn>
       </v-row>         

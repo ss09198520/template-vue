@@ -1,12 +1,9 @@
 <template>
   <v-container>
-    <v-btn class="primary ma-2" @click="User = 'guest'">角色：核算課長/調閱管理員</v-btn>
-    <v-btn class="primary ma-2" @click="User = 'TPESUser'">角色：TPES使用者</v-btn>
+    <v-btn class="ma-2" :class="{'primary': User == 'guest'}" @click="User = 'guest'">角色：核算課長/調閱管理員</v-btn>
+    <v-btn class="ma-2" :class="{'primary': User == 'TPESUser'}" @click="User = 'TPESUser'">角色：TPES使用者</v-btn>
     <div v-if="User != 'TPESUser'">
-      <h2 class="font-bold">調閱查詢</h2>
-      <v-row class="ml-5">
-        <h3 class="font-bold">查詢條件</h3>
-      </v-row>
+      <h2 class="font-bold">調閱查詢</h2>      
       <div class="ml-10 font-18px font-bold">        
         <v-row align="center">
           <v-col cols="1">
@@ -331,7 +328,7 @@
       <v-row class="ml-5">
         <h3 class="font-bold">查詢條件</h3>
       </v-row>
-      <div class="ml-10">            
+      <div class="ml-10 font-18px font-bold">            
         <v-row align="center">          
           <v-col cols="1">
             受理編號         

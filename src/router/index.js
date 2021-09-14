@@ -303,12 +303,12 @@ export const constantRoutes = [
         component: () => import('@/pages/backStage/privilegeSettingPage.vue'),
         meta: { title: '權限設定', icon: 'mdi-account-multiple' }
       },
-      {
-        path: 'characterPrivilege',
-        name: 'CharacterPrivilege',
-        component: () => import('@/pages/backStage/CharacterPrivilegePage.vue'),
-        meta: { title: '角色設定', icon: 'mdi-account-multiple' }
-      },
+      // {
+      //   path: 'characterPrivilege',
+      //   name: 'CharacterPrivilege',
+      //   component: () => import('@/pages/backStage/CharacterPrivilegePage.vue'),
+      //   meta: { title: '角色設定', icon: 'mdi-account-multiple' }
+      // },
       {
         path: 'setting',
         name: 'Setting',

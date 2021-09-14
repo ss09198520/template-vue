@@ -30,7 +30,7 @@
           <template v-slot:item.action="{ item }">                                            
             <v-btn
               class="ma-2"
-              color="primary"
+              color="success"
               depressed
               @click="action('dispatch',item)"
             >
@@ -38,7 +38,8 @@
             </v-btn>       
             <v-btn
               class="ma-2"
-              color="success"
+              style="color:white"
+              color="#E98B2A"
               depressed
               @click="action('takeAway',item)"
             >

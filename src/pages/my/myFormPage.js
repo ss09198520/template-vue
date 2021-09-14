@@ -4,7 +4,7 @@ export default{
     data(){
         return{
             //預設受理類型按鈕
-            displayAll: false,
+            displayAll: true,
             //預設當前頁數
             orderListPage: 1,
             //預設總頁數

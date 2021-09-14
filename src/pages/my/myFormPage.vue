@@ -15,12 +15,12 @@
       </div>      
     </div>
     <div>
-      <v-btn class="ma-3" :class="{'primary': !displayAll}" @click="displayAll = false">
-        只顯示受理件
-      </v-btn>
       <v-btn class="ma-3" :class="{'primary': displayAll}" @click="displayAll = true">
         顯示全部
       </v-btn>
+      <v-btn class="ma-3" :class="{'primary': !displayAll}" @click="displayAll = false">
+        只顯示受理件
+      </v-btn>      
     </div>
     <hr class="mt-6 mb-5 ml-3">
     <v-row class="ma-3">      

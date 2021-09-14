@@ -357,7 +357,7 @@
             />
           </v-col>
         </v-row>
-        <v-row>
+        <v-row align="center">
           <v-col cols="1">
             整理號碼 :
           </v-col>

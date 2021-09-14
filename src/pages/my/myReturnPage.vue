@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <h2>我的退件區</h2>
+      <h2 class="font-bold">我的退件區</h2>
       <div class="d-flex w-100" style="margin-top: 20px;">
         <span class="annotation">受理部門</span>
         <div class="block mr-5 w-100">
@@ -26,37 +26,60 @@
       <v-row>
         <v-col cols="12">    
           <v-data-table
-            id="caseTable"
             :headers="caseHeaders"
             :items="caseList"
-            :disable-sort="true"
-            :items-per-page="10"
+            :page.sync="caseListPage"
+            :items-per-page="5"
+            hide-default-footer
             no-data-text="查無資料"
+            class="elevation-1"
+            disable-sort
+            @page-count="caseListPageCount = $event"
           >
             <template v-slot:item.action="{ item }">
-              <v-btn v-if="item.remain" color="primary">補證操作</v-btn>
+              <v-btn v-if="item.remain" color="success">補證操作</v-btn>
               <v-btn v-if="item.view" color="primary" style="margin: 3px;">瀏覽案件</v-btn>
               <v-btn v-if="item.cancel" color="error">取消案件</v-btn>
             </template>
           </v-data-table>
+          <!-- 選頁 -->
+          <div class="mt-2">
+            <v-pagination
+              v-model="caseListPage"
+              color="#2F59C4"
+              :length="caseListPageCount"
+            />
+          </div>
         </v-col>
       </v-row>
-      <hr>
+      <hr class="mt-10">
       <span class="annotation">多媒體退件區同權限者皆可看到，請選擇相關操作即可</span>
       <v-row>
         <v-col cols="12">    
           <v-data-table
-            id="caseTable"
             :headers="multiMediaHeaders"
             :items="multiMediaList"
-            :disable-sort="true"
-            :items-per-page="10"
+            :page.sync="multiMediaListPage"
+            :items-per-page="5"
+            hide-default-footer
             no-data-text="查無資料"
+            class="elevation-1"
+            disable-sort
+            @page-count="multiMediaListPageCount = $event"
           >
             <template v-slot:item.action="{ item }">
-              <v-btn v-if="item.action">進行核算</v-btn>
+              <v-btn v-if="item.edit" color="success" style="margin: 3px;">重新編輯</v-btn>
+              <v-btn v-if="item.cancel" color="error">取消案件</v-btn>
             </template>
           </v-data-table>
+          <!-- 選頁 -->
+          <div class="mt-2">
+            <v-pagination
+              v-model="multiMediaListPage"
+              color="#2F59C4"
+              :length="multiMediaListPageCount"
+            />
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -73,7 +96,7 @@ export default {
     data() {
         return {
             caseReturnCount: 2,
-            multiMediaReturnCount: 2,
+            multiMediaReturnCount: 3,
             caseHeaders: [
                 { text: '狀態操作', value: 'action', align: 'center' },
                 { text: '受理編號', value: 'acceptNumber', align: 'center' },
@@ -90,17 +113,23 @@ export default {
             ],
             multiMediaHeaders: [
                 { text: '狀態操作', value: 'action', align: 'center' },
-                { text: '受理編號', value: 'acceptNumber', align: 'center' },
+                { text: '送件編號', value: 'sendNumber', align: 'center' },
                 { text: '退件日期', value: 'returnDate', align: 'center' },
                 { text: '退件原因', value: 'reason', align: 'center' },
                 { text: '退件說明', value: 'desc', align: 'center' },  
-                { text: '受理項目', value: 'acceptItem', align: 'center' },          
+                { text: '送審項目', value: 'sendItem', align: 'center' },          
                 { text: '原受理人', value: 'acceptUser', align: 'center' },
                 { text: '原受理人姓名', value: 'acceptName', align: 'center' }
             ],
             multiMediaList: [
-
-            ]
+                { action: true, edit: true, cancel: true, sendNumber: 'M00001', returnDate: '20210910 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '跑馬燈', acceptUser: '1050330001', acceptName: '林美美' },
+                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '20210910 15:00', reason: '影片、圖片錯誤', desc: '文字錯誤請重新修改', sendItem: '節目單', acceptUser: '1050330002', acceptName: '王曉花' },
+                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '20210910 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '滿意度調查', acceptUser: '1050330003', acceptName: '李小凡' }
+            ],
+            caseListPage: 1,
+            caseListPageCount: 1,
+            multiMediaListPage: 1,
+            multiMediaListPageCount: 1
         }
     },
     methods: {
@@ -137,9 +166,5 @@ export default {
     .annotation {
         font-weight: bold;
         font-size: 18px;
-    }
-
-    .table-header {
-        background-color: #003D79;
     }
 </style>

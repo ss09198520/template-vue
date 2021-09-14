@@ -180,7 +180,7 @@ export const constantRoutes = [
         path: 'myFormPage',
         name: 'MyFormPage',
         component: () => import('@/pages/my/myFormPage.vue'),
-        meta: { title: '我的表單', icon: 'mdi-account-multiple' }
+        meta: { title: '我的表單', icon: 'mdi-file-document-outline' }
       },
       {
         path: 'myReturn',
@@ -192,13 +192,13 @@ export const constantRoutes = [
         path: 'inquireReadPage',
         name: 'InquireReadPage',
         component: () => import('@/pages/my/inquireReadPage.vue'),
-        meta: { title: '申請調閱', icon: 'mdi-account-multiple' }
+        meta: { title: '申請調閱', icon: 'mdi-book-arrow-left' }
       },
       {
         path: 'myRead',
         name: 'MyRead',
         component: () => import('@/pages/my/myReadPage.vue'),
-        meta: { title: '我的調閱區', icon: 'mdi-account-multiple' }
+        meta: { title: '我的調閱區', icon: 'mdi-book-arrow-down' }
       },
       {
         path: 'leaveSearch',
@@ -216,7 +216,6 @@ export const constantRoutes = [
   },
   {
     path: "/signOff",
-    redirect: "/signOff/readSignOff",
     component: Layout,
     name: "Sign off",
     meta: { title: '簽核區', icon: 'mdi-pencil' },
@@ -224,23 +223,17 @@ export const constantRoutes = [
       {
         path: 'readSignOff',
         name: 'ReadSignOff',
-        compoenet: () => import('@/pages/signOff/readSignOffPage.vue'),
+        component: () => import('@/pages/signOff/readSignOffPage.vue'),
         meta: { title: '調閱簽核', icon: 'mdi-pencil' }
-      },
-      {
-        path: 'reportSignOff',
-        name: 'ReportSignOff',
-        compoenet: () => import('@/pages/signOff/reportSignOffPage.vue'),
-        meta: { title: '報表簽核', icon: 'mdi-pencil' }
-      },
+      },      
       {
         path: 'sealSignOff',
         name: 'SealSignOff',
-        compoenet: () => import('@/pages/signOff/sealSignOffPage.vue'),
+        component: () => import('@/pages/signOff/sealSignOffPage.vue'),
         meta: { title: '專用章簽核', icon: 'mdi-pencil' }
       }
     ]
-  },
+  },  
   {
     path: "/accounting",
     component: Layout,

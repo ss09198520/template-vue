@@ -1,55 +1,64 @@
 <template>
   <v-app>
     <v-container>
-      <h2>調閱清單</h2>
-      <v-row>
-        <v-col cols="2" />
-        <v-col cols="12" sm="6" md="1">
-          <span style="font-size: 25px;">調閱月份</span>
-        </v-col>
-        <v-col cols="12" sm="6" md="2">
-          <v-menu
-            ref="menu"
-            v-model="monthPicker"
-            :close-on-content-click="false"
-            :return-value.sync="date"
-            transition="scale-transition"
-            offset-y
-            max-width="290px"
-            min-width="auto"
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <v-text-field
-                v-model="date"
-                append-icon="mdi-calendar"
-                readonly
-                outlined
-                v-bind="attrs"
-                v-on="on"
-              />
-            </template>
-            <v-date-picker
-              v-model="date"
-              type="month"
-              no-title
-              scrollable
-            />
-          </v-menu>
-        </v-col>
-        <v-btn style="margin: auto 2px; margin-left: 100px" color="primary" @click="search()">查詢</v-btn>
-      </v-row>
-      <hr>
+      <h2 class="font-bold">調閱清單</h2>
+      <div class="ml-10">
+        <div class="font-18px font-bold">
+          <v-row align="center">
+            <v-col cols="1">
+              調閱月份
+            </v-col>
+            <v-col cols="3">
+              <v-menu
+                v-model="monthPicker"
+                :nudge-right="40"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="date"
+                    append-icon="mdi-calendar"
+                    readonly
+                    outlined
+                    dense
+                    hide-details
+                    v-bind="attrs"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="date"
+                  type="month"
+                  no-title
+                  scrollable
+                />
+              </v-menu>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-btn color="primary" class="ml-3" @click="search()"><v-icon style="margin-right: 3px;">mdi-magnify</v-icon>查詢</v-btn>
+          </v-row>
+        </div>
+      </div>
+      <hr class="mt-6 mb-5">
       <v-row>
         <v-col cols="12">    
           <v-data-table
             :headers="headers"
             :items="itemList"
-            :disable-sort="true"
+            :page.sync="dataListPage"
             :items-per-page="10"
+            hide-default-footer
             no-data-text="查無資料"
+            class="elevation-1"
+            disable-sort
+            @page-count="dataListPageCount = $event"
           >
             <template v-slot:item.signOff="{ item }">
-              <v-btn v-if="item.signOff" color="primary">簽核</v-btn>
+              <v-btn v-if="item.signOff" color="success">簽核</v-btn>
               <span v-else style="color: gray;">已簽核</span>
             </template>
             <template v-slot:item.signOffDate1="{ item }">
@@ -69,6 +78,14 @@
               <v-btn v-else style="color:gray" icon disabled><v-icon>mdi-table</v-icon></v-btn>
             </template> 
           </v-data-table>
+          <!-- 選頁 -->
+          <div class="mt-2">
+            <v-pagination
+              v-model="dataListPage"
+              color="#2F59C4"
+              :length="dataListPageCount"
+            />
+          </div>
         </v-col>
       </v-row>
     </v-container>
@@ -98,7 +115,9 @@ export default {
           itemList: [
             {signOff: false, readMonth: '2021/08', region: '台中', signOffDate1: '2021/09/01 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
             {signOff: true, readMonth: '2021/09', region: '台中', signOffDate1: '2021/10/01 14:14:42', signOffDate2: '', signOffDate3: '', download: true}
-          ]
+          ],
+          dataListPage: 1,
+          dataListPageCount: 1
         }
     },
     methods: {

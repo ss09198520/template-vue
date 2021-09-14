@@ -57,8 +57,7 @@ const AjaxService = {
             MessageService.showError('Network Error', '請稍後再試');
           }
           // LoadingConfig.$debug.error(error);
-        }).then((final) => {
-          Object.assign({}, final) //TODO fix eslint no-unused-vars
+        }).then(() => {
           LoadingConfig.blockCount--;
           if(LoadingConfig.blockCount <= 0){
           // 3 關掉loading 小圈圈

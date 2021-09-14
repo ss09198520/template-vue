@@ -6,12 +6,37 @@
         <div class="font-18px font-bold">
           <v-row align="center">
             <v-col cols="1">
-              調閱月份
+              調閱日期
             </v-col>
-            <v-col cols="3">
+            <v-col cols="3" class="d-flex">
               <v-menu
-                v-model="monthPicker"
+                v-model="startDate"
+                :close-on-content-click="false"
                 :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-text-field
+                    v-model="before7"
+                    append-icon="mdi-calendar"
+                    readonly
+                    outlined
+                    dense
+                    hide-details
+                    v-bind="attrs"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="before7"
+                  @input="startDate = false"
+                />
+              </v-menu>
+              <div class="mt-1">~</div>
+              <v-menu
+                v-model="endDate"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -26,14 +51,13 @@
                     dense
                     hide-details
                     v-bind="attrs"
+                    style="padding-top: 0;"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="date"
-                  type="month"
-                  no-title
-                  scrollable
+                  @input="endDate = false"
                 />
               </v-menu>
             </v-col>
@@ -101,7 +125,8 @@ export default {
     },
     data() {
         return {
-          date: new Date().toISOString().substr(0, 7),
+          startDate: false,
+          endDate: false,
           monthPicker: false,
           headers: [
             { text: '簽核', value: 'signOff', align: 'center' },

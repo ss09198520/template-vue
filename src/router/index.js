@@ -295,7 +295,7 @@ export const constantRoutes = [
       {
         path: 'characterPrivilege',
         name: 'CharacterPrivilege',
-        component: () => import('@/pages/backStage/characterPrivilegePage.vue'),
+        component: () => import('@/pages/backStage/CharacterPrivilegePage.vue'),
         meta: { title: '角色設定', icon: 'mdi-account-multiple' }
       },
       {

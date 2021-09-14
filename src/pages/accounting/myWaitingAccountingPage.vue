@@ -46,7 +46,7 @@
       transition="dialog-bottom-transition"
       scrollable
     >
-      <FormPage :districtMode="'audit'" />
+      <FormPage :district-mode="'audit'" />
     </v-dialog>
   </v-app>
 </template>

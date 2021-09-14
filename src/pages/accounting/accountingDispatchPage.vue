@@ -4,7 +4,7 @@
       <h2 class="font-bold">核算派工設定</h2>
       <v-row>
         <v-col>
-          <v-btn class="success" style="margin:10px;" @click="dialog=true;">新增派工</v-btn>
+          <v-btn class="success" style="margin:10px;" @click="newDispatch()">新增派工</v-btn>
         </v-col>
       </v-row>
       <hr>
@@ -55,7 +55,7 @@
                 <v-col cols="2">       
                   班別
                 </v-col>   
-                <v-col cols="3">
+                <v-col cols="6">
                   <v-text-field
                     v-model="dialogContent.class"
                     outlined
@@ -69,7 +69,7 @@
                 <v-col cols="2">       
                   核算員
                 </v-col>         
-                <v-col cols="3">
+                <v-col cols="6">
                   <v-select
                     id="accountingSelect"
                     v-model="dialogContent.accountingName"
@@ -87,31 +87,31 @@
                 </v-col>
               </v-row>
               <v-radio-group v-model="dialogContent.dispatchType">
-                <v-radio label="不論契約種類，皆以電號設定分派班別。" value="electricNum" />
+                <v-radio label="不論契約種類，皆以電號設定分派班別。" />
                 <v-row style="margin: 0 10px 10px 10px;" align="center">
                   <div style="height: 10px; width: 15px;" />
-                  <span style="margin-right: 10px;" :class="dialogContent.dispatchType==='electricNum'? '':'disable-text'">電號 : </span>         
+                  <span style="margin-right: 10px;" :class="dialogContent.dispatchType===0? '':'disable-text'">電號 : </span>         
                   <v-col cols="3">
                     <v-text-field
                       v-model="dialogContent.startElectricNum"
                       outlined
                       hide-details                                         
                       dense
-                      :disabled="dialogContent.dispatchType !== 'electricNum'"
+                      :disabled="dialogContent.dispatchType !== 0"
                     />
                   </v-col>
-                  ~
+                  <span :class="dialogContent.dispatchType!==1? '':'disable-text'">~</span>
                   <v-col cols="3">
                     <v-text-field
                       v-model="dialogContent.endElectricNum"
                       outlined
                       hide-details                                         
                       dense
-                      :disabled="dialogContent.dispatchType !== 'electricNum'"
+                      :disabled="dialogContent.dispatchType !== 0"
                     />
                   </v-col>
                 </v-row>
-                <v-radio label="依契約種類設定分派班別：" value="contractType" />
+                <v-radio label="依契約種類設定分派班別：" />
                 <v-row style="margin: 10px;" align="center">
                   <v-col style="padding-top: 0;">
                     <v-row align="center">            
@@ -120,9 +120,9 @@
                         hide-details
                         class="shrink mt-0"
                         style="margin-top: 0;" 
-                        :disabled="dialogContent.dispatchType!=='contractType'"
+                        :disabled="dialogContent.dispatchType===0"
                       />
-                      <span style="margin: 10px;" :class="dialogContent.usePackage? '':'disable-text'">包制: 電號</span>        
+                      <span style="margin: 10px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">包制: 電號</span>        
                       <v-col cols="3">
                         <v-text-field
                           v-model="dialogContent.startPackageElectricNum"
@@ -132,7 +132,7 @@
                           :disabled="!dialogContent.usePackage"
                         />
                       </v-col>
-                      ~
+                      <span :class="dialogContent.dispatchType!==0 && dialogContent.usePackage? '':'disable-text'">~</span>
                       <v-col cols="3">
                         <v-text-field
                           v-model="dialogContent.endPackageElectricNum"
@@ -149,98 +149,94 @@
                         hide-details
                         class="shrink mt-0" 
                         style="margin-top: 0;"
-                        :disabled="dialogContent.dispatchType!=='contractType'"
+                        :disabled="dialogContent.dispatchType===0"
                       />
-                      <span style="margin: 10px;" :class="dialogContent.useHighVoltage? '':'disable-text'">高壓: 電號</span>        
+                      <span style="margin: 10px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">高壓: 電號</span>        
                       <v-col cols="3">
                         <v-text-field
                           v-model="dialogContent.startHighVoltageElectricNum"
                           outlined
                           hide-details                                         
                           dense
-                          :disabled="!dialogContent.usePackage"
+                          :disabled="!dialogContent.useHighVoltage"
                         />
                       </v-col>
-                      ~
+                      <span :class="dialogContent.dispatchType!==0 && dialogContent.useHighVoltage? '':'disable-text'">~</span>
                       <v-col cols="3">
                         <v-text-field
                           v-model="dialogContent.endHighVoltageElectricNum"
                           outlined
                           hide-details                                         
                           dense
-                          :disabled="!dialogContent.usePackage"
+                          :disabled="!dialogContent.useHighVoltage"
                         />
                       </v-col>
                     </v-row>
-                    <v-row align="center">
-                      <v-checkbox 
-                        v-model="dialogContent.useMeter" 
-                        hide-details
-                        class="shrink mt-0"
-                        style="margin-top: 0;"
-                        :disabled="dialogContent.dispatchType!=='contractType'" 
-                      />
-                      <span style="margin-left: 10px; width: 40px;" :class="dialogContent.useMeter? '':'disable-text'">表制: </span>
-                      <v-radio v-model="dialogContent.meterType" value="useElectricNum" :disabled="!dialogContent.useMeter">
-                        <template v-slot:label>
-                          <v-row align="center">
-                            <span style="margin: 10px;">電號</span>
-                            <v-col cols="5">
-                              <v-text-field
-                                v-model="dialogContent.startMeterElectricNum"
-                                outlined
-                                hide-details                                         
-                                dense
-                                :disabled="!dialogContent.usePackage"
-                              />
-                            </v-col>
-                            ~
-                            <v-col cols="5">
-                              <v-text-field
-                                v-model="dialogContent.endMeterElectricNum"
-                                outlined
-                                hide-details                                         
-                                dense
-                                :disabled="!dialogContent.usePackage"
-                              />
-                            </v-col>
-                          </v-row>
-                        </template>
-                      </v-radio>
-                    </v-row>
-                    <v-row>
-                      <div style="height: 10px;width: 82px;" />
-                      <v-radio v-model="dialogContent.meterType" style="margin-top: 10px;" value="useComputeDate" :disabled="!dialogContent.useMeter">
-                        <template v-slot:label>
-                          <v-row align="center">
-                            <span style="margin: 10px;">計算日:</span>
-                            <v-col>
-                              <v-row>
-                                <v-checkbox v-model="dialogContent.computeDate" label="01" value="01" class="meter-checkbox" />
-                                <v-checkbox v-model="dialogContent.computeDate" label="02" value="02" class="meter-checkbox" />
-                                <v-checkbox v-model="dialogContent.computeDate" label="03" value="03" class="meter-checkbox" />
-                                <v-checkbox v-model="dialogContent.computeDate" label="04" value="04" class="meter-checkbox" />
-                                <v-checkbox v-model="dialogContent.computeDate" label="05" value="05" class="meter-checkbox" />
-                                <v-checkbox v-model="dialogContent.computeDate" label="06" value="06" class="meter-checkbox" />
-                                <v-checkbox v-model="dialogContent.computeDate" label="07" value="07" class="meter-checkbox" />
-                                <v-checkbox v-model="dialogContent.computeDate" label="08" value="08" class="meter-checkbox" />
-                              </v-row>
-                            </v-col>
-                          </v-row>
-                        </template>
-                      </v-radio>
-                    </v-row>
-                    <v-row style="margin-top: 0;">
-                      <div style="height: 10px;width: 174px;" />
-                      <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter" label="09" value="09" class="meter-checkbox" />
-                      <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter" label="10" value="10" class="meter-checkbox" />
-                      <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter" label="11" value="11" class="meter-checkbox" />
-                      <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter" label="12" value="12" class="meter-checkbox" />
-                      <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter" label="13" value="13" class="meter-checkbox" />
-                      <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter" label="14" value="14" class="meter-checkbox" />
-                      <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter" label="15" value="15" class="meter-checkbox" />
-                      <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter" label="16" value="16" class="meter-checkbox" />
-                    </v-row>
+                    <v-radio-group v-model="dialogContent.meterType">
+                      <v-row align="center">
+                        <v-checkbox 
+                          v-model="dialogContent.useMeter" 
+                          hide-details
+                          class="shrink mt-0"
+                          style="margin-top: 0;"
+                          :disabled="dialogContent.dispatchType===0" 
+                        />
+                        <span style="margin-left: 10px; width: 40px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">表制: </span>
+                        <v-radio class="mt-2" :disabled="!dialogContent.useMeter" />
+                        <v-row align="center">
+                          <span style="margin: 10px;" :class="dialogContent.dispatchType===1 && dialogContent.useMeter && dialogContent.meterType===0? '':'disable-text'">電號</span>
+                          <v-col cols="5">
+                            <v-text-field
+                              v-model="dialogContent.startMeterElectricNum"
+                              outlined
+                              hide-details                                         
+                              dense
+                              :disabled="!dialogContent.useMeter || dialogContent.meterType!==0"
+                            />
+                          </v-col>
+                          <span :class="dialogContent.dispatchType===1 && dialogContent.useMeter && dialogContent.meterType===0? '':'disable-text'">~</span>
+                          <v-col cols="5">
+                            <v-text-field
+                              v-model="dialogContent.endMeterElectricNum"
+                              outlined
+                              hide-details                                         
+                              dense
+                              :disabled="!dialogContent.useMeter || dialogContent.meterType!==0"
+                            />
+                          </v-col>
+                        </v-row>
+                      </v-row>
+                      <v-row>
+                        <div style="height: 10px;width: 82px;" />
+                        <v-radio style="margin-top: 10px;" :disabled="!dialogContent.useMeter" />
+                        <v-row align="center">
+                          <span style="margin: 10px;" :class="dialogContent.dispatchType===1 && dialogContent.useMeter && dialogContent.meterType==1? '':'disable-text'">計算日</span>
+                          <v-col>
+                            <v-row>
+                              <v-checkbox v-model="dialogContent.computeDate" :disabled="dialogContent.meterType!==1" label="01" value="01" class="meter-checkbox" />
+                              <v-checkbox v-model="dialogContent.computeDate" :disabled="dialogContent.meterType!==1" label="02" value="02" class="meter-checkbox" />
+                              <v-checkbox v-model="dialogContent.computeDate" :disabled="dialogContent.meterType!==1" label="03" value="03" class="meter-checkbox" />
+                              <v-checkbox v-model="dialogContent.computeDate" :disabled="dialogContent.meterType!==1" label="04" value="04" class="meter-checkbox" />
+                              <v-checkbox v-model="dialogContent.computeDate" :disabled="dialogContent.meterType!==1" label="05" value="05" class="meter-checkbox" />
+                              <v-checkbox v-model="dialogContent.computeDate" :disabled="dialogContent.meterType!==1" label="06" value="06" class="meter-checkbox" />
+                              <v-checkbox v-model="dialogContent.computeDate" :disabled="dialogContent.meterType!==1" label="07" value="07" class="meter-checkbox" />
+                              <v-checkbox v-model="dialogContent.computeDate" :disabled="dialogContent.meterType!==1" label="08" value="08" class="meter-checkbox" />
+                            </v-row>
+                          </v-col>
+                        </v-row>
+                      </v-row>
+                      <v-row style="margin-top: 0;">
+                        <div style="height: 10px;width: 174px;" />
+                        <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="09" value="09" class="meter-checkbox" />
+                        <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="10" value="10" class="meter-checkbox" />
+                        <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="11" value="11" class="meter-checkbox" />
+                        <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="12" value="12" class="meter-checkbox" />
+                        <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="13" value="13" class="meter-checkbox" />
+                        <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="14" value="14" class="meter-checkbox" />
+                        <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="15" value="15" class="meter-checkbox" />
+                        <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="16" value="16" class="meter-checkbox" />
+                      </v-row>
+                    </v-radio-group>
                   </v-col>
                 </v-row>
               </v-radio-group>
@@ -288,28 +284,18 @@ export default {
           edit: true, 
           remove: true,
           dialogContent: {
-            // 派工方式 electricNum: 直接以電號分派 / contractType: 根據契約種類設定
-            dispatchType: 'electricNum',
-            // 包制
+            dispatchType: 0,
             usePackage: false,
-            // 高壓
             useHighVoltage: false,
-            // 表制
             useMeter: false,
-            // 表制分派方式 useElectricNum: 以電號分派 / useComputeDate: 以計算日分派
-            meterType: '',
-            // 選擇的計算日
+            meterType: 0,
             computeDate: [],
-            // 電號區間
             startElectricNum: '07-14-0000-00-0',
             endElectricNum: '07-14-9999-99-9',
-            // 包制電號區間
             startPackageElectricNum: '',
             endPackageElectriNum: '',
-            // 高壓電號區間
             startHighVoltageElectricNum: '',
             endHighVoltageElectricNum: '',
-            // 表制電號區間
             startMeterElectricNum: '',
             endMeterElectricNum: ''
           }
@@ -324,28 +310,18 @@ export default {
           edit: true, 
           remove: true,
           dialogContent: {
-            // 派工方式 electricNum: 直接以電號分派 / contractType: 根據契約種類設定
-            dispatchType: 'contractType',
-            // 包制
+            dispatchType: 1,
             usePackage: false,
-            // 高壓
             useHighVoltage: false,
-            // 表制
             useMeter: true,
-            // 表制分派方式 useElectricNum: 以電號分派 / useComputeDate: 以計算日分派
-            meterType: 'useComputeDate',
-            // 選擇的計算日
+            meterType: 1,
             computeDate: ['01', '03', '05', '07', '09'],
-            // 電號區間
             startElectricNum: '',
             endElectricNum: '',
-            // 包制電號區間
             startPackageElectricNum: '',
             endPackageElectriNum: '',
-            // 高壓電號區間
             startHighVoltageElectricNum: '',
             endHighVoltageElectricNum: '',
-            // 表制電號區間
             startMeterElectricNum: '',
             endMeterElectricNum: ''
           }
@@ -354,25 +330,6 @@ export default {
       dialog: false,
       dialogType: 'add',
       dialogTitle: '新增派工',
-      // 空的 dialog 內容 for 新增派工使用
-      emptyDialog: {
-        class: '',
-        accountingName: '',
-        dispatchType: '',
-        usePackage: false,
-        useHighVoltage: false,
-        useMeter: false,
-        meterType: '',
-        computeDate: [],
-        startElectricNum: '',
-        endElectricNum: '',
-        startPackageElectricNum: '',
-        endPackageElectriNum: '',
-        startHighVoltageElectricNum: '',
-        endHighVoltageElectricNum: '',
-        startMeterElectricNum: '',
-        endMeterElectricNum: ''
-      },
       employeeList: ['1050334016 李小凡', '1050434017 葉星辰', '1050434018 王大明', '1050434019 李阿貴'],
       dataListPage: 1,
       dataListPageCount: 1,
@@ -382,16 +339,16 @@ export default {
         class: '',
         // 核算員
         accountingName: '',
-        // 派工方式 electricNum: 直接以電號分派 / contractType: 根據契約種類設定
-        dispatchType: '',
+        // 派工方式 0: 直接以電號分派 / 1: 依契約種類設定分派
+        // dispatchType: 0,
         // 包制
         usePackage: false,
         // 高壓
         useHighVoltage: false,
         // 表制
         useMeter: false,
-        // 表制分派方式 useElectricNum: 以電號分派 / useComputeDate: 以計算日分派
-        meterType: '',
+        // 表制分派方式 0: 以電號分派 / 1: 以計算日分派
+        // meterType: 0,
         // 選擇的計算日
         computeDate: [],
         // 電號區間
@@ -416,8 +373,27 @@ export default {
     newDispatch(){
       // 切換 dialog 模式
       this.changeDialog('add');
+
       // 清空 dialog 內容
-      this.dialogContent = this.emptyDialog;
+      this.dialogContent = {
+        class: '',
+        accountingName: '',
+        // dispatchType: 0,
+        usePackage: false,
+        useHighVoltage: false,
+        useMeter: false,
+        // meterType: 0,
+        computeDate: [],
+        startElectricNum: '',
+        endElectricNum: '',
+        startPackageElectricNum: '',
+        endPackageElectriNum: '',
+        startHighVoltageElectricNum: '',
+        endHighVoltageElectricNum: '',
+        startMeterElectricNum: '',
+        endMeterElectricNum: ''
+      };
+
       // 打開 dialog
       this.dialog = true;
     },
@@ -441,7 +417,8 @@ export default {
         settingUserName: '李小凡', 
         settingDate: this.getDate(),
         edit: true,
-        remove: true
+        remove: true,
+        dialogContent: this.dialogContent
       }
       this.itemList.push(newItem);
       // 關閉 dialog
@@ -453,13 +430,8 @@ export default {
       this.dialogContent = item.dialogContent;
       this.dialogContent.class = item.class;
       this.dialogContent.accountingName = item.accounting + " " + item.accountingName;
-      // preSelect 核算員
-      setTimeout(() => {
-        document.getElementById("accountingSelect").value = item.accounting + " " + item.accountingName;
-      }, 500);
       // 記下這次修改的 item
       this.editIndex = this.itemList.indexOf(item);
-      console.log(this.editIndex);
       // 切換 dialog 模式
       this.changeDialog('edit');
       // 打開 dialog
@@ -475,7 +447,8 @@ export default {
           settingUserName: '李小凡', 
           settingDate: this.getDate(),
           edit: true,
-          remove: true
+          remove: true,
+          dialogContent: this.dialogContent
         }
         /* 直接更新特定 item 畫面不會刷新
            解法1: 刪除重新加
@@ -487,13 +460,10 @@ export default {
       }
       // 關閉 dialog
       this.dialog = false;
-      console.log(this.itemList);
     },
     // 刪除派工
     remove(item) {
-      console.log(item);
       let index = this.itemList.indexOf(item);
-      console.log(index);
       if (index > -1) {
         this.itemList.splice(index, 1);
       }

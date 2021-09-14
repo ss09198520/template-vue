@@ -63,7 +63,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-btn color="primary" class="ml-3" @click="search()"><v-icon style="margin-right: 3px;">mdi-magnify</v-icon>查詢</v-btn>
+            <v-btn color="primary" class="ml-3" @click="search()">{{ searchText }}</v-btn>
           </v-row>
         </div>
       </div>
@@ -82,7 +82,7 @@
             @page-count="dataListPageCount = $event"
           >
             <template v-slot:item.signOff="{ item }">
-              <v-btn v-if="item.signOff" color="success">簽核</v-btn>
+              <v-btn v-if="item.signOff" color="success">{{ signOffText }}</v-btn>
               <span v-else style="color: gray;">已簽核</span>
             </template>
             <template v-slot:item.signOffDate1="{ item }">
@@ -134,7 +134,9 @@ export default {
             {signOff: true, returnDate: '2021/09/13 ~ 2021/09/19', region: '台中', signOffDate1: '', signOffDate2: '', download: true}
         ],
         dataListPage: 1,
-        dataListPageCount: 1
+        dataListPageCount: 1,
+        searchText: '　查詢　',
+        signOffText: '　簽核　'
     }),
     mounted() {
 

@@ -94,8 +94,7 @@
               <span v-else>{{ item.signOffDate2 }}</span>
             </template>    
             <template v-slot:item.download="{ item }">
-              <v-btn v-if="item.download" icon style="color: #019858;"><v-icon>mdi-table</v-icon></v-btn>
-              <v-btn v-else style="color:gray" icon disabled><v-icon>mdi-table</v-icon></v-btn>
+              <v-btn v-if="item.download" class="primary">下載檔案</v-btn>
             </template> 
           </v-data-table>
           <!-- 選頁 -->
@@ -122,17 +121,13 @@ export default {
     data: () => ({
         startDate: false,
         endDate: false,
-        // startDate 設定為現在時間往前7天
-        before7: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000 + 10080000)).toISOString().substr(0, 10),
-        // endDate 設定為現在時間
-        date: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
         headers: [
+            { text: '下載', value: 'download', align: 'center' },
             { text: '簽核', value: 'signOff', align: 'center' },
             { text: '退件日期', value: 'returnDate', align: 'center' },
             { text: '區處', value: 'region', align: 'center' },
             { text: '主辦業務計劃員簽核時間', value: 'signOffDate1', align: 'center' },
-            { text: '核算課長簽核時間', value: 'signOffDate2', align: 'center' },            
-            { text: '下載', value: 'download', align: 'center' }
+            { text: '核算課長簽核時間', value: 'signOffDate2', align: 'center' }            
         ],
         itemList: [
             {signOff: false, returnDate: '2021/09/06 ~ 2021/09/12', region: '台中', signOffDate1: '2021/09/17 13:00:26', signOffDate2: '2021/09/18 10:36:53', download: true},

@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-container>
-      <h2 class="font-bold">我的待核算</h2>
       <div class="d-flex w-100" style="margin-top: 20px;">
         <div class="block mr-5 w-100">
           <div>
@@ -27,7 +26,7 @@
             @page-count="dataListPageCount = $event"
           >
             <template v-slot:item.action="{ item }">
-              <v-btn v-if="item.action" color="success">進行核算</v-btn>
+              <v-btn v-if="item.action" color="success" @click="accounting(item)">進行核算</v-btn>
             </template>
           </v-data-table>
           <!-- 選頁 -->
@@ -41,13 +40,25 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-dialog
+      v-model="accountingDialog"
+      max-width="1200px"
+      transition="dialog-bottom-transition"
+      scrollable
+    >
+      <FormPage :districtMode="'audit'" />
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
+import FormPage from '@/pages/FormPage/FormPage.vue';
 
 export default {
     name: 'MyWaitingAccounting',
+    components: {
+      FormPage
+    },
     props: {
     
     },
@@ -70,11 +81,15 @@ export default {
                 {action: true, acceptNumber: 'A00619', acceptDate: '20210910 13:44', completeDate: '20210910 15:26', category: 'APR0200', acceptItem: 'I0510  故障換表'}
             ],
             dataListPage: 1,
-            dataListPageCount: 1
+            dataListPageCount: 1,
+            accountingDialog: false
         }
     },
     methods: {
-        
+        accounting(item) {
+          console.log(item);
+          this.accountingDialog = true;
+        }
     }
 }
 </script>

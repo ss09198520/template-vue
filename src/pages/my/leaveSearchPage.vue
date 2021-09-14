@@ -1,10 +1,7 @@
 <template>
   <v-container>
     <div>
-      <h2 class="font-bold">請假查詢</h2>
-      <v-row class="ml-5">
-        <h3 class="font-bold">查詢條件</h3>
-      </v-row>
+      <h2 class="font-bold">請假清單</h2>
       <div class="ml-10">
         <div class="font-18px font-bold">
           <v-row align="center">   
@@ -169,7 +166,7 @@
         
           
           <hr class="mt-6 mb-5">
-          <div class="content-table-blue">
+          <div>
             <v-data-table
               :headers="empListHeaders"
               :items="empMockList"

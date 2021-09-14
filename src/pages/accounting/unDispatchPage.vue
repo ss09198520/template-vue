@@ -14,7 +14,7 @@
       <hr>
      
 
-      <div class="content-table-blue">
+      <div>
         <v-data-table
           :headers="unDispatchHeaders"
           :items="unDispatchList"

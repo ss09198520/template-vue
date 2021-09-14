@@ -94,19 +94,19 @@ body {
     padding: 0;
     margin: 0;
 }
-/* .content-table-blue table thead {
+/* .content-table table thead {
     background-color: #1976D2;
 } */
-.content-table-blue table thead tr th {
+.v-data-table table thead tr th {
     color: black !important;
 }
 
-.content-table-blue table thead tr th i {
+.v-data-table table thead tr th i {
     color: black !important;
 }
 
-.content-table-blue table tbody tr td {
-    font-weight: 400;
+.v-data-table table tbody tr td {
+    font-weight: 500;
     color: black !important;
 }
 

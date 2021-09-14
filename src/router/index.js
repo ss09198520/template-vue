@@ -134,9 +134,14 @@ export const constantRoutes = [
         name: 'SealSignOff',
         component: () => import('@/pages/signOff/sealSignOffPage.vue'),
         meta: { title: '專用章簽核', icon: 'mdi-pencil' }
-      }
+      },{
+        path: 'mediaOffPage',
+        name: 'MediaSignOff',
+        component: () => import('@/pages/signOff/mediaOffPage'),
+        meta: { title: '多媒體簽核', icon: 'mdi-pencil' }
+      },
     ]
-  },  
+  },
   {
     path: "/accounting",
     component: Layout,
@@ -186,6 +191,24 @@ export const constantRoutes = [
         name: 'ReadReport',
         component: () => import('@/pages/report/readReportPage.vue'),
         meta: { title: '調閱清單', icon: 'mdi-clipboard-search' }
+      },
+      {
+        path: 'satisfyReport/search',
+        name: 'Satisfaction-Report-Monthly',
+        component: () => import('@/views/satisfaction/report'),
+        meta: { title: '滿意度調查結果', icon: 'mdi-clipboard-search' }
+      },
+      {
+        path: 'satisfyReport/month',
+        name: 'Satisfaction-Report-Monthly',
+        component: () => import('@/views/satisfaction/reportMonth'),
+        meta: { title: '滿意度區處報表(月)', icon: 'mdi-clipboard-search' }
+      },
+      {
+        path: 'satisfyReport/week',
+        name: 'Satisfaction-Report-Weekly',
+        component: () => import('@/views/satisfaction/reportWeek'),
+        meta: { title: '滿意度個人摘要(周)', icon: 'mdi-clipboard-search  ' }
       }
     ]
   },
@@ -227,12 +250,6 @@ export const constantRoutes = [
         component: () => import('@/views/satisfaction/list'),
         meta: { title: '問卷查詢', icon: 'mdi-clipboard-text-search' }
       },
-      {
-        path: 'result',
-        name: 'Satisfaction-result',
-        component: () => import('@/views/form/FormLayouts'),
-        meta: { title: '滿意度調查資料查詢', icon: 'mdi-magnify' }
-      }
     ]
   },
   {

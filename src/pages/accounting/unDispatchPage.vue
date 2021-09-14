@@ -56,39 +56,6 @@
         </div>
       </div>
       <v-dialog
-        v-model="takeAwayModel"
-        max-width="500"
-      >
-        <v-card>
-          <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
-            認領案件
-            <v-spacer />
-            <v-btn
-              color="white"
-              icon
-              small
-              text
-              @click="takeAwayModel = false"
-            >
-              <v-icon> mdi-close </v-icon>
-            </v-btn>
-          </v-card-title>
-          <v-card-text class="font-28px">
-            <v-row class="mt-6 ml-1 font-bold">
-              案件認領成功
-            </v-row>
-          </v-card-text>
-          <v-card-actions class="d-end">
-            <v-btn              
-              color="primary"            
-              @click="submit('takeAway')"
-            >
-              確定
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-      <v-dialog
         v-model="dispatchModel"
         max-width="600"
       >

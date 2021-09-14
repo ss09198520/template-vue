@@ -1,3 +1,6 @@
+import MessageService from "@/assets/services/message.service";
+
+
 export default {
     name: 'UnDispatch',
     props: {
@@ -29,7 +32,6 @@ export default {
             unDispatchListPageCount:1,
             unDispatchListPage:1,
 
-            takeAwayModel: false,
             dispatchModel: false,
 
             classType:null,
@@ -69,7 +71,7 @@ export default {
         },
         action(actionType){
             if(actionType == 'takeAway'){
-                this.takeAwayModel = true;
+                MessageService.showSuccess("案件認領成功");
             } else{
                 this.classType = null;
                 this.selectEmp = null;
@@ -79,10 +81,9 @@ export default {
        
         submit(type){
             if(type=='dispatch'){
+                MessageService.showSuccess("案件分派成功");
                 this.dispatchModel = false;
-            } else {
-                this.takeAwayModel = false;
-            }
+            } 
         },
 
         change(type){

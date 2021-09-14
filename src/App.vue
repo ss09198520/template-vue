@@ -1,6 +1,14 @@
 <template>
   <v-app> <!-- <div id="app"> -->
-    <router-view/>
+    <router-view />
+    <!-- 通知設定 -->
+    <notifications
+      group="topRight"
+      position="top right"
+      :duration="5000"
+      :max="5"
+      animation-name="v-fade-right"
+    />
   </v-app>
 </template>
 

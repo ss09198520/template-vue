@@ -153,3 +153,47 @@ body {
 .table-header {
     background-color: #003D79;
 }
+
+/* 提示訊息樣式 start*/
+.vue-notification {
+    padding: 10px;
+    margin: 0 5px 5px;
+
+    font-size: 12px;
+
+    color: #ffffff;
+    background: #44A4FC;
+    border-left: 5px solid #187FE7;
+
+}
+
+.vue-notification.noti-info {
+    background: #3d3d3d;
+    border-left-color: #202020;
+    /* opacity: 0.9; */
+}
+
+.vue-notification.noti-error {
+    background: #E54D42;
+    border-left-color: #B82E24;
+    /* opacity: 0.9; */
+}
+
+.vue-notification.noti-success {
+    background: #68CD86;
+    border-left-color: #42A85F;
+    /* opacity: 0.9; */
+}
+.v-fade-right-enter-active,
+.v-fade-right-leave-active,
+.v-fade-right-move {
+    transition: all .5s;
+}
+
+.v-fade-right-enter,
+.v-fade-right-leave-to {
+    opacity: 0;
+    transform: translateX(500px) scale(0.2);
+}
+
+/* 提示訊息樣式 end*/

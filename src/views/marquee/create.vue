@@ -268,20 +268,28 @@
                           <v-col class="d-flex justify-end">
                             <v-btn
                               class="ma-1"
+                              outlined
+                              color="accent"
+                            >
+                              取消
+                            </v-btn>
+                            <v-btn
+                              class="ma-1"
                               depressed
                               color="primary"
                               :disabled="!valid"
                               @click="submit"
                             >
-                              送出
+                              暫存
                             </v-btn>
-
                             <v-btn
                               class="ma-1"
-                              outlined
-                              color="accent"
+                              depressed
+                              color="success"
+                              :disabled="!valid"
+                              @click="submit"
                             >
-                              取消
+                              送出審核
                             </v-btn>
                           </v-col>
                         </v-row>

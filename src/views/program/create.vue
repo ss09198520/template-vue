@@ -26,7 +26,7 @@
                         md="3"
                       >
                         <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          節 目 名 稱
+                          節 目 標 題
                           <span class="red--text">*</span>
                         </v-subheader>
                       </v-col>
@@ -39,8 +39,8 @@
                           :rules="rules.requiredRule.concat(rules.lengthRules)"
                           :hide-details="hideDatails"
                           color="accent"
-                          label=" 節 目 名 稱"
-                          placeholder="請輸入節目名稱"
+                          label=" 節 目 標 題"
+                          placeholder="請輸入節目標題"
                           :counter="maxCharacter"
                           outlined
                           required
@@ -57,7 +57,7 @@
                         md="3"
                       >
                         <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          節 目 描 述
+                          節 目 說 明
                         </v-subheader>
                       </v-col>
                       <v-col

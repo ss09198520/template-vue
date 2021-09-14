@@ -12,79 +12,89 @@
             class="d-flex justify-center"
             dense
           >
-            <v-col cols="4">
+            <v-col>
               <v-text-field
+                class="font-weight-bold"
                 color="accent"
                 dense
-                label="搜尋條件 1"
+                label="節目單標題內容"
                 outlined
                 clearable
                 persistent-hint
               />
             </v-col>
-            <v-col cols="4">
-              <v-text-field
-                color="accent"
-                dense
-                label="搜尋條件 2"
-                outlined
-                clearable
-                persistent-hint
-              />
-            </v-col>
-            <v-col cols="4">
-              <v-text-field
-                color="accent"
-                dense
-                label="搜尋條件 3"
-                outlined
-                clearable
-                persistent-hint
-              />
-            </v-col>
-          </v-row>
-          <v-row
-            class="d-flex justify-center"
-            dense
-          >
-            <v-col cols="4">
-              <v-text-field
-                color="accent"
-                dense
-                label="搜尋條件 4"
-                outlined
-                clearable
-                persistent-hint
-              />
-            </v-col>
-            <v-col cols="4">
+            <v-col>
               <v-select
-                :items="['option1', 'option2', 'option3']"
+                :items="['一般','預設']"
+                class="font-bold"
                 color="accent"
                 item-color="accent"
-                label="下拉選單"
+                label="節目單類型"
                 dense
                 outlined
                 hide-details
               />
             </v-col>
             <v-col cols="4">
+              <v-select
+                :items="['暫存', '退件', '審核中', '審核完成']"
+                class="font-bold"
+                color="accent"
+                item-color="accent"
+                label="狀態"
+                dense
+                outlined
+                hide-details
+              />
+            </v-col>
+          </v-row>
+          <v-row
+            class="d-flex "
+            dense
+          >
+            <v-col cols="4">
               <v-menu
-                v-model="menu"
+                v-model="releaseDateStartMenu"
                 min-width="290px"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="date"
-                    label="日期選擇"
+                    v-model="releaseDateStart"
+                    label="上架時間(起)"
                     color="accent"
                     outlined
                     dense
+                    class="font-weight-bold"
+                    :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
-                  v-model="date"
+                  v-model="releaseDateStart"
+                  no-title
+                  scrollable
+                />
+              </v-menu>
+            </v-col>
+            <v-col cols="4">
+              <v-menu
+                v-model="releaseDateEndMenu"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="releaseDateEnd"
+                    label="上架時間(迄)"
+                    color="accent"
+                    outlined
+                    dense
+                    class="font-weight-bold"
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="releaseDateEnd"
                   no-title
                   scrollable
                 />
@@ -92,7 +102,60 @@
             </v-col>
           </v-row>
           <v-row
-            class="d-flex justify-end"
+            class="d-flex justify-start"
+            dense
+          >
+            <v-col cols="4">
+              <v-menu
+                v-model="sunsetDateStartMenu"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="sunsetDateStart"
+                    label="下架時間(起)"
+                    color="accent"
+                    outlined
+                    dense
+                    class="font-weight-bold"
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="sunsetDateStart"
+                  no-title
+                  scrollable
+                />
+              </v-menu>
+            </v-col>
+            <v-col cols="4">
+              <v-menu
+                v-model="sunsetDateEndMenu"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="sunsetDateEnd"
+                    label="下架時間(迄)"
+                    color="accent"
+                    outlined
+                    dense
+                    class="font-weight-bold"
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="sunsetDateEnd"
+                  no-title
+                  scrollable
+                />
+              </v-menu>
+            </v-col>
+          </v-row>
+          <v-row
+            class="d-flex justify-start"
             dense
           >
             <v-btn
@@ -128,7 +191,8 @@
         </v-form>
       </v-col>
     </v-row>
-    <v-divider />
+    <v-divider class="mt-6 mb-5" />
+    <!-- <hr class="mt-6 mb-5"> -->
     <v-row v-show="isShow">
       <v-col md="12">
         <v-data-table
@@ -139,6 +203,7 @@
           :footer-props="{
             showFirstLastPage: true,
           }"
+          disable-sort
           class="font-weight-bold"
         >
           <template v-slot:top>
@@ -195,6 +260,19 @@
               <span>{{ item.marquee_content }}</span>
             </v-tooltip>
           </template>
+          <template v-slot:[`item.state`]="{ item }">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="d-flex justify-center"
+                  :color="item.active?'green darken-2':''"
+                  v-on="on"
+                >
+                  {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
+                </v-icon>
+              </template>
+            </v-tooltip>
+          </template>
         </v-data-table>
       </v-col>
     </v-row>
@@ -210,99 +288,114 @@
         date: new Date().toISOString().substr(0, 10),
         itemsPerPage: 10,
         headerCRUD: [
+          
+          {
+            text: '操作',
+            value: 'action',
+            sortable: false,
+            align: 'center',
+          },
           {
             text: '節目名稱',
             value: 'name',
-            width: '26%',
           },
           {
-            text: '描述',
+            text: '節目類別',
             value: 'scp_id',
-            width: '20%',
-          },
-          {
-            text: '撥放內容',
-            value: 'marquee_content',
             align: 'center',
-            width: '12%',
           },
           {
             text: '單位',
             value: 'division',
             align: 'center',
-            width: '10%',
           },
           {
             text: '上架日期',
             value: 'ondate',
-            width: '10%',
           },
           {
             text: '下架日期',
             value: 'offdate',
-            width: '10%',
           },
           {
-            text: '操作',
-            value: 'action',
+            text: '啟用',
+            value: 'state',
             sortable: false,
-            width: '10%',
+            align: 'center',
+          },
+          {
+            text: '狀態',
+            value: 'signoff',
+            sortable: false,
+            align: 'center',
           },
         ],
         itemsCRUD: [
           {
             name: '電廠維護公告',
             id: 1,
-            scp_id: '電廠緊急護公告',
+            scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
             division:'台中區處',
             ondate: '2020-12-21',
             offdate: '2021-04-30',
+            active: true,
+            signoff: '簽核完成',
           },
           {
             name: '秋季節約用電宣導',
             id: 2,
-            scp_id: '秋季節約用電宣導',
+            scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/footer',
             division:'台中區處',
             ondate: '2020-12-21',
             offdate: '2021-04-30',
+            active: true,
+            signoff: '簽核完成',
           },
           {
             name: 'New! 9月11日颱風緊急通報',
             id: 3,
-            scp_id: '颱風登陸緊急通報',
+            scp_id: '預設',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
-            division:'台中區處',
+            division:'業務處',
             ondate: '2020-12-21',
             offdate: '2021-04-30',
+            active: true,
+            signoff: '簽核完成',
           },
           {
             name: '台電公司對受疫情影響農業及服務業之電費減免措施',
             id: 4,
-            scp_id: '電費減免措施',
+            scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
             division:'台中區處',
             ondate: '2020-12-21',
             offdate: '2021-04-30',
+            active: true,
+            signoff: '簽核完成',
           },
           {
             name: '台電連4年獲亞洲企業社會責任獎',
             id: 5,
-            scp_id: '台電連4年獲亞洲企業社會責任獎',
+            scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
             division:'台中區處',
             ondate: '2020-12-21',
             offdate: '2021-04-30',
+            active: true,
+            signoff: '簽核完成',
           },
           {
             name: '台電首度攜手紙風車劇團，到彰化員林打造露天舞台劇',
             id: 6,
-            scp_id: '台電首度攜手紙風車劇團，到彰化員林打造露天舞台劇',
+            scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
             division:'業務處',
             ondate: '2020-12-21',
             offdate: '2021-04-30',
+            active: true,
+            signoff: '簽核完成',
           },
         ],
         defaultItem: {

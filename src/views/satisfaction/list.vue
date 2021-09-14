@@ -139,6 +139,7 @@
           :footer-props="{
             showFirstLastPage: true,
           }"
+          disable-sort
           class="font-weight-bold"
         >
           <template v-slot:top>

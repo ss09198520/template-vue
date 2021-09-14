@@ -25,7 +25,7 @@
             :page.sync="inquireListPage"
             @page-count="inquireListPageCount = $event"
           >
-            <template v-slot:item.mani="{ item }">   
+            <template v-slot:item.mani="{ item }">
               <div v-if="item.mani==true">
                 <v-btn
                   color="success"
@@ -192,8 +192,8 @@ export default {
            signListHeaders: [
                 { text: '狀態操作', value: 'mani', align: 'center' },
                 { text: '簽核狀態', value: 'inquireStatus', align: 'center' },
-                { text: '多媒體編號', value: 'orderId', align: 'center' },
-                { text: '項目名稱', value: 'orderItems', align: 'center' },                
+                // { text: '多媒體編號', value: 'orderId', align: 'center' },
+                { text: '內 容 名 稱', value: 'orderItems', align: 'center' },                
                 { text: '類型', value: 'category', align: 'center' },
                 { text: '申請人員', value: 'inquireName', align: 'center' },
                 { text: '申請人員單位', value: 'inquireUnit', align: 'center' },            
@@ -203,8 +203,8 @@ export default {
                 { mani: true, inquireStatus: '申請人主管已簽核', orderId: 'M00024', electNum:'7140000123', inquireUnit:'台中區處', inquireName:'王大明', inquireDate:'2021-09-15 10:00',orderType:'APR0370',orderItems:'夏季輪播跑馬燈', category:'跑馬燈'},
                 { mani: true, inquireStatus: '未簽核', orderId: 'P00615', electNum:'7140000456', inquireUnit:'台中區處', inquireName:'李小凡', inquireDate:'2021-09-15 11:21',orderType:'APR0200',orderItems:'夏季宣導文宣影片', category:'節目單'},
                 { mani: true, inquireStatus: '未簽核', orderId: 'P00040', electNum:'7140000789', inquireUnit:'台中區處', inquireName:'葉星辰', inquireDate:'2021-09-15 15:36',orderType:'APR0200',orderItems:'秋季季宣導文宣', category:'節目單'},
-                { mani: true, inquireStatus: '申請人主管已簽核', orderId: 'S00605', electNum:'7140000888', inquireUnit:'業務處', inquireName:'趙元智', inquireDate:'2021-09-15 09:45',orderType:'APR0160',orderItems:'客戶觀感調查', category:'滿意度調查'},
-                { mani: false, inquireStatus: '簽核完畢', orderId: 'P00619', electNum:'7140000999', inquireUnit:'業務處', inquireName:'陳立元', inquireDate:'2021-09-15 13:44',orderType:'APR0200',orderItems:'櫃台體驗滿意調查', category:'滿意度調查'},
+                { mani: true, inquireStatus: '申請人主管已簽核', orderId: 'S00605', electNum:'7140000888', inquireUnit:'台中區處', inquireName:'趙元智', inquireDate:'2021-09-15 09:45',orderType:'APR0160',orderItems:'客戶觀感調查', category:'滿意度調查'},
+                { mani: false, inquireStatus: '簽核完畢', orderId: 'P00619', electNum:'7140000999', inquireUnit:'台中區處', inquireName:'陳立元', inquireDate:'2021-09-15 13:44',orderType:'APR0200',orderItems:'櫃台體驗滿意調查', category:'滿意度調查'},
             ],
         }
     },

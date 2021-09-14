@@ -161,12 +161,11 @@
                       >
                         <v-file-input
                           :hide-details="hideDatails"
-                          label="上傳圖片或影片"
+                          label="上傳附件"
                           color="accent"
                           outlined
                           dense
                           accept="image/jpg"
-                          hint="(.jpg、.png，最多不超過 50MB)"
                           persistent-hint
                           prepend-inner-icon="mdi-cloud-upload"
                           prepend-icon
@@ -178,12 +177,30 @@
                       :no-gutters="noGutters"
                     >
                       <v-col class="d-flex justify-end">
-                        <v-btn class="ma-1" depressed color="accent" :disabled="!valid" @click="submit">
-                          送出
-                        </v-btn>
-
-                        <v-btn class="ma-1" outlined color="accent">
+                        <v-btn
+                          class="ma-1"
+                          outlined
+                          color="accent"
+                        >
                           取消
+                        </v-btn>
+                        <v-btn
+                          class="ma-1"
+                          depressed
+                          color="primary"
+                          :disabled="!valid"
+                          @click="submit"
+                        >
+                          暫存
+                        </v-btn>
+                        <v-btn
+                          class="ma-1"
+                          depressed
+                          color="success"
+                          :disabled="!valid"
+                          @click="submit"
+                        >
+                          送出審核
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -203,7 +220,36 @@
     >
       <v-card>
         <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;"> 選 擇 素 材 </v-card-title>
+        
         <v-card-text>
+          <v-row
+            class="mt-2 justify-center"
+          >
+            <v-col>
+              <v-text-field
+                class="font-weight-bold"
+                dense
+                placeholder="素材名稱"
+                outlined
+                clearable
+                persistent-hint
+              />
+            </v-col>
+            <v-col>
+              <v-select
+                :items="['圖片','影片']"
+                class="font-bold"
+                item-color="accent"
+                placeholder="素材類型"
+                dense
+                outlined
+                hide-details
+              />
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-btn class="primary mb-1" @click="search()">&emsp;查詢&emsp;</v-btn>        
+          </v-row>  
           <hr>
           <div class="imgList">
             <ul class="resourceList">
@@ -215,7 +261,6 @@
                 @click="selected($event)" 
               >
                 <label class="el-upload-list__item-status-label">
-                  <v-icon v-text="mdi-check" />
                 </label>
                 <div class="imgBox">
                   <img :src="require(`@/resource/${resource.thumbnail}`)">

@@ -242,7 +242,7 @@
                         >
                           <v-col cols="3" md="3">
                             <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                              樣 式 預 覽 {{ animationDuration }}<!-- TODO remove debug -->
+                              樣 式 預 覽
                               <span class="red--text ml-2">*</span>
                             </v-subheader>
                           </v-col>
@@ -260,7 +260,36 @@
                             </marquee-text>
                           </v-col>
                         </v-row>
-
+                        <v-row
+                          :dense="dense"
+                          :no-gutters="noGutters"
+                        >
+                          <v-col
+                            cols="3"
+                            md="3"
+                          >
+                            <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                              上 傳 檔 案
+                              <span class="red--text">*</span>
+                            </v-subheader>
+                          </v-col>
+                          <v-col
+                            cols="7"
+                            md="6"
+                          >
+                            <v-file-input
+                              :hide-details="hideDatails"
+                              label="上傳附件"
+                              color="accent"
+                              outlined
+                              dense
+                              accept="image/jpg"
+                              persistent-hint
+                              prepend-inner-icon="mdi-cloud-upload"
+                              prepend-icon
+                            />
+                          </v-col>
+                        </v-row>
                         <v-row
                           :dense="dense"
                           :no-gutters="noGutters"

@@ -40,7 +40,7 @@
                 class="font-weight-bold"
                 color="accent"
                 item-color="accent"
-                label="狀態"
+                label="素材類型"
                 dense
                 outlined
                 hide-details

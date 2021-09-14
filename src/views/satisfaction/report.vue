@@ -62,7 +62,7 @@
             class="d-flex "
             dense
           >
-            <v-col cols="4">
+            <v-col>
               <v-menu
                 v-model="releaseDateStartMenu"
                 min-width="290px"
@@ -91,68 +91,6 @@
             class="d-flex justify-start"
             dense
           >
-            <v-col cols="4">
-              <v-menu
-                v-model="sunsetDateStartMenu"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="sunsetDateStart"
-                    label="下架時間(起)"
-                    color="accent"
-                    outlined
-                    dense
-                    class="font-weight-bold"
-                    :clearable="true"
-                    v-on="on"
-                  />
-                </template>
-                <v-date-picker
-                  v-model="sunsetDateStart"
-                  no-title
-                  scrollable
-                />
-              </v-menu>
-            </v-col>
-            <v-col cols="4">
-              <v-menu
-                v-model="sunsetDateEndMenu"
-                min-width="290px"
-              >
-                <template v-slot:activator="{ on }">
-                  <v-text-field
-                    v-model="sunsetDateEnd"
-                    label="下架時間(迄)"
-                    color="accent"
-                    outlined
-                    dense
-                    class="font-weight-bold"
-                    :clearable="true"
-                    v-on="on"
-                  />
-                </template>
-                <v-date-picker
-                  v-model="sunsetDateEnd"
-                  no-title
-                  scrollable
-                />
-              </v-menu>
-            </v-col>
-          </v-row>
-          <v-row
-            class="d-flex justify-start"
-            dense
-          >
-            <v-btn
-              class="ma-2 "
-              fab
-              small
-              color="success"
-              @click="viewSchedule"
-            >
-              <v-icon v-text="'mdi-calendar'" />
-            </v-btn>
             <v-btn
               class="ma-2"
               fab

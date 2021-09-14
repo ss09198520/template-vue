@@ -16,14 +16,58 @@
                   class="form-title"
                   color="accent"
                   placeholder="問卷標題"
-                  counter="100"
+                  counter="40"
                 />
                 <v-textarea 
                   v-model="data.name.desc"
                   color="accent"
-                  placeholder="問卷標題"
-                  counter="100"
+                  placeholder="問卷描述"
+                  counter="40"
                 />
+                <v-menu
+                  v-model="releaseDateStartMenu"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="releaseDateStart"
+                      label="上架時間"
+                      color="accent"
+                      outlined
+                      dense
+                      class="font-weight-bold"
+                      :clearable="true"
+                      v-on="on"
+                    />
+                  </template>
+                  <v-date-picker
+                    v-model="releaseDateStart"
+                    no-title
+                    scrollable
+                  />
+                </v-menu>
+                <v-menu
+                  v-model="releaseDateEndMenu"
+                  min-width="290px"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="releaseDateEnd"
+                      label="下架時間"
+                      color="accent"
+                      outlined
+                      dense
+                      class="font-weight-bold"
+                      :clearable="true"
+                      v-on="on"
+                    />
+                  </template>
+                  <v-date-picker
+                    v-model="releaseDateEnd"
+                    no-title
+                    scrollable
+                  />
+                </v-menu>
                 <!-- <textarea v-model="i.desc" placeholder="問卷說明" @focus="$autoText($event)" @input="$autoText($event)" /> -->
                 <div v-if="!data.question.length" class="add-list" color="primary">
                   <v-icon @click="addListFn" v-text="'mdi-plus'" />
@@ -50,13 +94,6 @@
                             :value="item">
                           </el-option>
                         </el-select> -->
-                        <v-menu bottom right>
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-btn outlined v-bind="attrs" v-on="on">
-                              <span>{{ typeToLabel[type] }}</span>
-                            </v-btn>
-                          </template>
-                        </v-menu>
                       </div>
                       <div v-if="data.types === '下拉列表' || data.types === '單選題' || data.types === '多選題' || data.types === '優先級'" class="q-item">
                         <div v-for="item, i in content.answer" :key="i" class="q-radio">
@@ -65,11 +102,11 @@
                           <input v-model="item.description" class="radio-input">
                           <i v-if="focusIndex === index" class="el-icon-close" @click="deleteRadioFn(index, index1, i)" />
                         </div>
-                        <div v-if="focusIndex === index" class="q-radio">
+                        <!-- <div v-if="focusIndex === index" class="q-radio">
                           <div v-if="data.types === '下拉列表' || data.types === '優先級'" class="icon-radio">{{ content.answer.length + 1 }}.</div>
                           <div v-else class="icon-radio" :class="{'icon-cirle': data.types === '單選題', 'icon-square': data.types === '多選題'}" />
                           <input v-model="addRadio" class="radio-add" @focus="addRadioFn(index, index1)">
-                        </div>
+                        </div> -->
                       </div>
                       <div v-if="data.types === '文本題'" class="q-item text-wrap">文本回答</div>
                       <div v-if="focusIndex === index" class="q-item option-wrap">
@@ -81,11 +118,11 @@
                             <v-icon @click="deleteListFn(index)" v-text="'mdi-minus'" />
                           </li>
                           <li class="mt-1">
-                            <v-switch 
+                            <!-- <v-switch 
                               v-model="data.is_required" 
                               color="red"
                               :label="`必填`" 
-                            />
+                            /> -->
                             <!-- <el-switch :width="40" on-color="#4ca2ae" v-model="data.is_required" on-text="" off-text="">
                             </el-switch> -->
                           </li>
@@ -96,10 +133,35 @@
                 </draggable>
               </div>
             </div>
-            <v-btn v-if="data.question.length" class="primary form-sidebar" @click="addListFn">
+            <!-- <v-btn v-if="data.question.length" class="primary form-sidebar" @click="addListFn">
               <v-icon v-text="'mdi-plus'" />
-            </v-btn>
+            </v-btn> -->
           </div>
+          <v-col class="d-flex justify-end">
+            <v-btn
+              class="ma-1"
+              outlined
+              color="accent"
+            >
+              取消
+            </v-btn>
+            <v-btn
+              class="ma-1"
+              depressed
+              color="primary"
+              @click="submit"
+            >
+              暫存
+            </v-btn>
+            <v-btn
+              class="ma-1"
+              depressed
+              color="success"
+              @click="submit"
+            >
+              送出審核
+            </v-btn>
+          </v-col>
         </div>
       </v-row>
     </fet-card>
@@ -247,7 +309,19 @@
             title: '',
             answer: [{
               answer_id: 1,
-              description: '選項1'
+              description: '非常滿意'
+            },{
+              answer_id: 2,
+              description: '滿意'
+            },{
+              answer_id: 3,
+              description: '普通'
+            },{
+              answer_id: 4,
+              description: '不滿意'
+            },{
+              answer_id: 5,
+              description: '非常不滿意'
             }],
             line_answer: {
               line_value: 1,

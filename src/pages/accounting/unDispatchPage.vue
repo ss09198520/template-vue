@@ -1,7 +1,6 @@
 <template>
   <v-app>
     <v-container>
-      <h2 class="font-bold">未分派區</h2>
       <div class="d-flex w-100" style="margin-top: 20px;">
         <div class="block mr-5 w-100">
           <div>

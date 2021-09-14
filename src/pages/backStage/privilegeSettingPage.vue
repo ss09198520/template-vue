@@ -106,7 +106,7 @@
         <v-col
           class="d-end"
         >
-          <v-btn depressed color="primary" x-large @click="saveAuth()">儲存</v-btn>
+          <v-btn depressed color="primary" @click="saveAuth()">&emsp;儲存&emsp;</v-btn>
         </v-col></v-row>
     </div>
   </v-container>

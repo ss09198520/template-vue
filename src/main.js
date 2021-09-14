@@ -6,6 +6,7 @@ import vuetify from '@/plugins/vuetify'
 import router from '@/router'
 import VueMask from 'v-mask'
 import base from './css/base.css';
+import Notifications from 'vue-notification';
 
 
 // Material icon imports use css loader
@@ -13,6 +14,7 @@ import base from './css/base.css';
 
 // As a plugin
 Vue.use(VueMask);
+Vue.use(Notifications);
 
 // Components
 import './components'
@@ -25,5 +27,6 @@ new Vue({
   store,
   vuetify,
   base,
+  Notifications,
   render: h => h(App)
 }).$mount('#app')

@@ -1,11 +1,7 @@
 <template>
   <v-container>
-    <div>
-      <<<<<<< Updated upstream
-      <h2 class="font-bold">請假清單</h2>
-      =======
-      <h2 class="font-bold">請假清單</h2>      
-      >>>>>>> Stashed changes
+    <div>      
+      <h2 class="font-bold">請假清單</h2>     
       <div class="ml-10">
         <div class="font-18px font-bold">
           <v-row align="center">   

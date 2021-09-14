@@ -67,8 +67,9 @@ export default {
     },
     methods: {
         init(){
-
+            
         },
+        // 判斷點擊哪個按鈕
         action(actionType){
             if(actionType == 'takeAway'){
                 MessageService.showSuccess("案件認領成功");
@@ -79,13 +80,12 @@ export default {
             }
         },
        
-        submit(type){
-            if(type=='dispatch'){
-                MessageService.showSuccess("案件分派成功");
-                this.dispatchModel = false;
-            } 
+        submit(){
+            MessageService.showSuccess("案件分派成功");
+            this.dispatchModel = false;
         },
 
+        // 分派視窗-二則一選擇即可，若點選另一個則將原本的選擇的清掉
         change(type){
             if(type == 'classType'){
                 this.selectEmp = null;

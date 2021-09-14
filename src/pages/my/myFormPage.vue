@@ -22,59 +22,57 @@
         只顯示受理件
       </v-btn>      
     </div>
-    <hr class="mt-6 mb-5 ml-3">
-    <v-row class="ma-3">      
-      <v-data-table
-        :headers="empListHeaders"
-        :items="empMockList"
-        :items-per-page="10"
-        no-data-text="查無資料"
-        hide-default-footer
-        class="elevation-1"
-        disable-sort
-        :page.sync="orderListPage"
-        @page-count="orderListPageCount = $event"
-      >
-        <template v-slot:item.mani="{ item }">   
-          <div v-if="item.mani==true">
-            <v-btn                
-              color="success"
-              class="ma-1"
-              @click="test(item)"
-            >
-              補件操作
-            </v-btn>
-            <v-btn                
-              color="error"
-              class="ma-1"
-              @click="test(item)"
-            >
-              取消案件
-            </v-btn>
-            <v-btn                
-              color="primary"
-              class="ma-1"
-              @click="test(item)"
-            >
-              瀏覽案件
-            </v-btn>
-          </div>                                                                               
-        </template>
-
-        <template v-slot:item.proxyEvent="{ item }">                                                        
-          <div             
-            v-if="item.proxyEvent == true"
-            class="ma-2"
-            icon
+    <hr class="mt-6 mb-5 ml-3">          
+    <v-data-table
+      :headers="empListHeaders"
+      :items="empMockList"
+      :items-per-page="10"
+      no-data-text="查無資料"
+      hide-default-footer
+      class="elevation-1 ml-4"
+      disable-sort
+      :page.sync="orderListPage"
+      @page-count="orderListPageCount = $event"
+    >
+      <template v-slot:item.mani="{ item }">   
+        <div v-if="item.mani==true">
+          <v-btn                
+            color="success"
+            class="ma-1"
             @click="test(item)"
           >
-            <v-icon>
-              mdi-check-bold
-            </v-icon>
-          </div>                         
-        </template>
-      </v-data-table>          
-    </v-row>   
+            補件操作
+          </v-btn>
+          <v-btn                
+            color="error"
+            class="ma-1"
+            @click="test(item)"
+          >
+            取消案件
+          </v-btn>
+          <v-btn                
+            color="primary"
+            class="ma-1"
+            @click="test(item)"
+          >
+            瀏覽案件
+          </v-btn>
+        </div>                                                                               
+      </template>
+
+      <template v-slot:item.proxyEvent="{ item }">                                                        
+        <div             
+          v-if="item.proxyEvent == true"
+          class="ma-2"
+          icon
+          @click="test(item)"
+        >
+          <v-icon>
+            mdi-check-bold
+          </v-icon>
+        </div>                         
+      </template>
+    </v-data-table>                 
     <div class="mt-2">
       <v-pagination
         v-model="orderListPage"

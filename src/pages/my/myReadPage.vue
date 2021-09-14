@@ -1,7 +1,6 @@
 <template>
   <v-app>
-    <v-container>
-      <h2 class="ma-4">調閱查詢</h2>
+    <v-container>      
       <div class="d-flex">
         <div class="ml-9 font-bold">
           <h2 class="font-bold">調閱中</h2>
@@ -12,10 +11,7 @@
           <span style="font-size:96px;">1</span><span style="font-size:30px;">件</span>
         </div>            
       </div>
-            
-      <v-row class="ml-9 mb-5">
-        <h3>查詢條件</h3>
-      </v-row>
+                  
       <div class="ml-10">
         <v-row align="center">
           <v-col cols="1">
@@ -30,8 +26,12 @@
               dense
               placeholder="請輸入受理編號"
             />
-          </v-col>                          
-          電號 :         
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="1">
+            電號 :  
+          </v-col>                                             
           <v-col
             cols="3"
           >
@@ -41,9 +41,9 @@
               dense
               placeholder="請輸入電號"
             />
-          </v-col>          
-          <v-btn class="primary">查詢</v-btn>
-        </v-row>        
+          </v-col>                    
+        </v-row>
+        <v-btn class="primary mt-5">&emsp;查詢&emsp;</v-btn>        
       </div>
       <hr class="mt-6 ml-8 mr-8">
       <v-row class="ma-7">

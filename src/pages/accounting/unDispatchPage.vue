@@ -14,7 +14,7 @@
       <hr>
      
 
-      <div class="content-table-blue">
+      <div>
         <v-data-table
           :headers="unDispatchHeaders"
           :items="unDispatchList"
@@ -132,7 +132,7 @@
             </v-btn>
             <v-btn              
               color="primary"            
-              @click="submit('dispatch')"
+              @click="submit()"
             >
               確認分派
             </v-btn>

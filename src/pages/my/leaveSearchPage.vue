@@ -1,10 +1,7 @@
 <template>
   <v-container>
-    <div>
-      <h2 class="font-bold">請假查詢</h2>
-      <v-row class="ml-5">
-        <h3 class="font-bold">查詢條件</h3>
-      </v-row>
+    <div>      
+      <h2 class="font-bold">請假清單</h2>     
       <div class="ml-10">
         <div class="font-18px font-bold">
           <v-row align="center">   
@@ -105,6 +102,7 @@
                     hide-details
                     v-bind="attrs"
                     style="width:100%"
+                    :clearable="true"
                     v-on="on"
                   />
                 </template>
@@ -131,6 +129,7 @@
                     hide-details
                     v-bind="attrs"
                     style="width:100%"
+                    :clearable="true"
                     v-on="on"
                   />
                 </template>
@@ -157,6 +156,7 @@
                 hide-details
                 single-line
                 dense
+                :clearable="true"
                 placeholder="請選擇請假方式"
                 class="my-auto"
                 color="#ADADAD"
@@ -164,12 +164,12 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-btn color="primary ml-3">查詢</v-btn>
+            <v-btn color="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>
           </v-row>
         
           
           <hr class="mt-6 mb-5">
-          <div class="content-table-blue">
+          <div v-if="empMockList != null">
             <v-data-table
               :headers="empListHeaders"
               :items="empMockList"
@@ -186,7 +186,7 @@
                   class="ma-2"
                   color="error"
                   depressed
-                  @click="test(item)"
+                  @click="deleteLeave(item)"
                 >
                   刪除請假
                 </v-btn>                         
@@ -201,9 +201,48 @@
               />
             </div>
           </div>
-        </div>
-      
+        </div>      
       </div>
-    </div></v-container>
+    </div>
+    <v-dialog
+      v-model="deleteLeaveModel"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          刪除請假
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="deleteLeaveModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            請確認是否刪除該筆請假紀錄?
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="normal"            
+            @click="deleteLeaveModel = false"
+          >
+            取消
+          </v-btn>
+          <v-btn              
+            color="primary"            
+            @click="submit()"
+          >
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 <script src="./leaveSearchPage.js"></script>

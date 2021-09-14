@@ -1,5 +1,7 @@
 <template>
   <v-container>
+    <v-btn class="primary ma-2" @click="User = 'guest'">角色：核算課長/調閱管理員</v-btn>
+    <v-btn class="primary ma-2" @click="User = 'TPESUser'">角色：TPES使用者</v-btn>
     <div v-if="User != 'TPESUser'">
       <h2 class="font-bold">調閱查詢</h2>
       <v-row class="ml-5">
@@ -183,57 +185,58 @@
           </v-col>
         </v-row>        
         <v-row>            
-          <v-btn color="primary ml-3">查詢</v-btn>
+          <v-btn color="primary ml-3" @click="display = true">&emsp;查詢&emsp;</v-btn>
         </v-row>
-        <hr class="mt-6 mb-5">        
-        <v-row>
-          <v-col>
-            <v-data-table
-              :headers="empListHeaders"
-              :items="empMockList"
-              :items-per-page="10"
-              no-data-text="查無資料"              
-              disable-sort
-              hide-default-footer
-              class="elevation-1"
-              :page.sync="applyListPage"
-              @page-count="applyListPageCount = $event"
-            >
-              <template v-slot:item.mani="{ item }">   
-                <div v-if="item.mani==true">
-                  <v-btn
-                    color="success"
-                    @click="search(item)"
-                  >
-                    申請調閱
-                  </v-btn>                 
-                </div>                                                                               
-              </template>
+        <hr class="mt-6 mb-5">
+        <div v-if="display == true">        
+          <v-row>
+            <v-col>
+              <v-data-table
+                :headers="empListHeaders"
+                :items="empMockList"
+                :items-per-page="10"
+                no-data-text="查無資料"              
+                disable-sort
+                hide-default-footer
+                class="elevation-1"
+                :page.sync="applyListPage"
+                @page-count="applyListPageCount = $event"
+              >
+                <template v-slot:item.mani="{ item }">   
+                  <div v-if="item.mani==true">
+                    <v-btn
+                      color="success"
+                      @click="search(item)"
+                    >
+                      申請調閱
+                    </v-btn>                 
+                  </div>                                                                               
+                </template>
 
-              <template v-slot:item.proxyEvent="{ item }">                                                        
-                <div             
-                  v-if="item.proxyEvent == true"
-                  class="ma-2"
-                  icon
-                  @click="test(item)"
-                >
-                  <v-icon>
-                    mdi-check-bold
-                  </v-icon>
-                </div>                         
-              </template>
-            </v-data-table>
-          </v-col>
-        </v-row>
-        <!-- 選頁 -->
-        <div class="mt-2">
-          <v-pagination
-            v-model="applyListPage"
-            color="#2F59C4"
-            :length="applyListPageCount"
-          />
-        </div>
-           
+                <template v-slot:item.proxyEvent="{ item }">                                                        
+                  <div             
+                    v-if="item.proxyEvent == true"
+                    class="ma-2"
+                    icon
+                    @click="test(item)"
+                  >
+                    <v-icon>
+                      mdi-check-bold
+                    </v-icon>
+                  </div>                         
+                </template>
+              </v-data-table>
+            </v-col>
+          </v-row>
+          <!-- 選頁 -->
+          <div class="mt-2">
+            <v-pagination
+              v-model="applyListPage"
+              color="#2F59C4"
+              :length="applyListPageCount"
+            />
+          </div>
+        </div>           
       </div>
 
       <!-- 彈出視窗 -->
@@ -308,7 +311,7 @@
               color="normal"                     
               @click="popOut = false"
             >
-              取消
+              &emsp;取消&emsp;
             </v-btn>
             <v-btn
               color="success"              
@@ -373,56 +376,58 @@
           </v-col>
         </v-row>                                        
         <v-row>            
-          <v-btn class="mb-7 ml-3" color="primary">查詢</v-btn>
+          <v-btn class="mb-7 ml-3" color="primary" @click="display = true">&emsp;查詢&emsp;</v-btn>
         </v-row>
-        <hr>                        
-        <v-row>                    
-          <v-col>
-            <v-data-table
-              :headers="empListHeaders"
-              :items="empMockList"
-              :items-per-page="10"
-              no-data-text="查無資料"              
-              disable-sort
-              hide-default-footer
-              class="elevation-1"
-              :page.sync="applyListPage"
-              @page-count="applyListPageCount = $event"
-            >
-              <template v-slot:item.mani="{ item }">   
-                <div v-if="item.mani==true">
-                  <v-btn                                                                                     
-                    color="success"
-                    @click="search(item)"
-                  >
-                    申請調閱
-                  </v-btn>                 
-                </div>                                                                               
-              </template>
+        <hr>
+        <div v-if="display == true">
+          <v-row>                    
+            <v-col>
+              <v-data-table
+                :headers="empListHeaders"
+                :items="empMockList"
+                :items-per-page="10"
+                no-data-text="查無資料"              
+                disable-sort
+                hide-default-footer
+                class="elevation-1"
+                :page.sync="applyListPage"
+                @page-count="applyListPageCount = $event"
+              >
+                <template v-slot:item.mani="{ item }">   
+                  <div v-if="item.mani==true">
+                    <v-btn                                                                                     
+                      color="success"
+                      @click="search(item)"
+                    >
+                      申請調閱
+                    </v-btn>                 
+                  </div>                                                                               
+                </template>
 
-              <template v-slot:item.proxyEvent="{ item }">                                                        
-                <div             
-                  v-if="item.proxyEvent == true"
-                  class="ma-2"
-                  icon
-                  @click="test(item)"
-                >
-                  <v-icon>
-                    mdi-check-bold
-                  </v-icon>
-                </div>                         
-              </template>
-            </v-data-table>
-          </v-col>
-        </v-row>
-        <!-- 選頁 -->
-        <div class="mt-2">
-          <v-pagination
-            v-model="applyListPage"
-            color="#2F59C4"
-            :length="applyListPageCount"
-          />
-        </div>               
+                <template v-slot:item.proxyEvent="{ item }">                                                        
+                  <div             
+                    v-if="item.proxyEvent == true"
+                    class="ma-2"
+                    icon
+                    @click="test(item)"
+                  >
+                    <v-icon>
+                      mdi-check-bold
+                    </v-icon>
+                  </div>                         
+                </template>
+              </v-data-table>
+            </v-col>
+          </v-row>
+          <!-- 選頁 -->
+          <div class="mt-2">
+            <v-pagination
+              v-model="applyListPage"
+              color="#2F59C4"
+              :length="applyListPageCount"
+            />
+          </div>
+        </div>                                       
       </div>
 
       <!-- 彈出視窗 -->
@@ -432,7 +437,7 @@
       >
         <v-card>
           <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">
-            
+            輸入申請調閱資料
             <v-spacer />
             <v-btn
               color="white"
@@ -500,7 +505,7 @@
               color="normal"              
               @click="popOut = false"
             >
-              取消
+              &emsp;取消&emsp;
             </v-btn>
             <v-btn
               color="success"              

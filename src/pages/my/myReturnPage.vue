@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <v-container>
-      <h2 class="font-bold">我的退件區</h2>
       <div class="d-flex w-100" style="margin-top: 20px;">
-        <span class="annotation">受理部門</span>
         <div class="block mr-5 w-100">
           <div>
             <div class="text-center block-title fw-6 mb-2">案件退件</div>
@@ -12,17 +10,9 @@
             <div class="block-content"><span class="block-number">{{ caseReturnCount }}</span>件</div>
           </div>
         </div>
-        <div class="block mr-5 w-100">
-          <div>
-            <div class="text-center block-title fw-6 mb-2">多媒體退件</div>
-          </div>
-          <div>
-            <div class="block-content"><span class="block-number">{{ multiMediaReturnCount }}</span>件</div>
-          </div>
-        </div>
       </div>
-      <hr>
       <span class="annotation">案件退件區同課皆可看到，請選擇相關操作即可</span>
+      <hr class="mb-3">
       <v-row>
         <v-col cols="12">    
           <v-data-table
@@ -38,8 +28,8 @@
           >
             <template v-slot:item.action="{ item }">
               <v-btn v-if="item.remain" color="success">補證操作</v-btn>
-              <v-btn v-if="item.view" color="primary" style="margin: 3px;">瀏覽案件</v-btn>
-              <v-btn v-if="item.cancel" color="error">取消案件</v-btn>
+              <v-btn v-if="item.cancel" color="error" style="margin: 3px;">取消案件</v-btn>
+              <v-btn v-if="item.view" color="primary">瀏覽案件</v-btn>
             </template>
           </v-data-table>
           <!-- 選頁 -->
@@ -52,8 +42,18 @@
           </div>
         </v-col>
       </v-row>
-      <hr class="mt-10">
+      <div class="d-flex w-100" style="margin-top: 20px;">
+        <div class="block mr-5 w-100">
+          <div>
+            <div class="text-center block-title fw-6 mb-2">多媒體退件</div>
+          </div>
+          <div>
+            <div class="block-content"><span class="block-number">{{ multiMediaReturnCount }}</span>件</div>
+          </div>
+        </div>
+      </div>
       <span class="annotation">多媒體退件區同權限者皆可看到，請選擇相關操作即可</span>
+      <hr class="mb-3">
       <v-row>
         <v-col cols="12">    
           <v-data-table
@@ -164,7 +164,7 @@ export default {
     }
     
     .annotation {
-        font-weight: bold;
-        font-size: 18px;
+        color: gray;
+        font-size: 16px;
     }
 </style>

@@ -1,9 +1,6 @@
 <template>
   <v-container>
-    <h2 class="font-bold">請假查詢</h2>
-    <v-row class="ml-5">
-      <h3 class="font-bold">查詢條件</h3>
-    </v-row>
+    <h2 class="font-bold">請假申請</h2>
     <div class="ml-10">
       <div class="font-18px font-bold">
         <v-row align="center">  
@@ -123,7 +120,7 @@
           </v-col>
         </v-row>
         <v-row>
-          <v-btn color="success" class="ml-3"><v-icon style="margin-right: 3px;">mdi-plus</v-icon>請假</v-btn>
+          <v-btn color="success" class="ml-3">{{ inquireText }}</v-btn>
         </v-row>
       </div>
     </div>
@@ -132,9 +129,9 @@
       <h3 class="font-bold">個人資訊</h3>
     </v-row>
     <div class="ml-10">
-      <div class="font-18px font-bold">
+      <div class="font-18px">
         <v-row align="center">   
-          <v-col cols="2">       
+          <v-col cols="2" class="font-bold">       
             目前狀態
           </v-col>          
           <v-col cols="3">
@@ -142,7 +139,7 @@
           </v-col>
         </v-row>
         <v-row align="center">   
-          <v-col cols="2">       
+          <v-col cols="2" class="font-bold">       
             代理人
           </v-col>          
           <v-col cols="3">
@@ -150,7 +147,7 @@
           </v-col>
         </v-row>
         <v-row align="center">   
-          <v-col cols="2">       
+          <v-col cols="2" class="font-bold">       
             下一次請假時間
           </v-col>          
           <v-col cols="3">
@@ -158,7 +155,7 @@
           </v-col>
         </v-row>
         <v-row align="center">   
-          <v-col cols="2">       
+          <v-col cols="2" class="font-bold">       
             下一次請假代理人
           </v-col>          
           <v-col cols="3">
@@ -188,7 +185,8 @@ export default {
             status: '請假中',
             agent: '代理人  1050334015 王大明',
             nextLeave: '2021/10/12 08:00 - 18:00',
-            nextLeaveAgent: '1050334018	 趙元智'
+            nextLeaveAgent: '1050334018	 趙元智',
+            inquireText: '　請假　'
         }
     },
     methods: {

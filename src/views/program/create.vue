@@ -142,6 +142,34 @@
                         <v-btn class="primary" style="margin:10px;" @click="dialog=true"><v-icon style="margin-right: 3px;">mdi-plus</v-icon>新增</v-btn>
                       </v-col>
                     </v-row>
+                    <v-row 
+                      v-show="isShow"
+                      :dense="dense"
+                      :no-gutters="noGutters"
+                    >
+                      <v-col>
+                        <v-data-table
+                          v-sortable-data-table
+                          disable-sort
+                          hide-default-footer
+                          :headers="headerCRUD"
+                          :items="itemsCRUD"
+                          item-key="id"
+                          class="font-weight-bold elevation-1"
+                          @sorted="saveOrder"
+                        >
+                          <template v-slot:[`item.action`]="{ item }">
+                            <v-icon
+                              class="mr-2"
+                              @click="editItem(item)"
+                              v-on="on"
+                            >
+                              mdi-sort-variant
+                            </v-icon>
+                          </template>
+                        </v-data-table>
+                      </v-col>
+                    </v-row>
                     <v-row
                       :dense="dense"
                       :no-gutters="noGutters"
@@ -281,7 +309,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn style="margin: 0 10px 10px 0;" @click="dialog = false">關閉</v-btn>
-          <v-btn color="primary" style="margin-bottom: 10px;" @click="dialog = false">新增</v-btn>
+          <v-btn color="primary" style="margin-bottom: 10px;" @click="dialog = false ; isShow = true">新增</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -289,9 +317,25 @@
 </template>
 
 <script>
+  import Sortable from 'sortablejs'
+  
   export default {
+    directives: {
+      sortableDataTable: {
+        bind (el, binding, vnode) {
+          const options = {
+            animation: 150,
+            onUpdate: function (event) {
+              vnode.child.$emit('sorted', event)
+            }
+          }
+          Sortable.create(el.getElementsByTagName('tbody')[0], options)
+        }
+      }
+    },
     data() {
       return {
+        isShow: false,
         valid: false,
         dialog: false,
         maxCharacter: 40,
@@ -313,6 +357,41 @@
           maxFilesize: 0.5,
           headers: { "My-Awesome-Header": "header value" }
         },
+        headerCRUD: [
+          // {
+          //   text: '排序',
+          //   value: 'id',
+          //   align: 'center',
+          //   width: '5%'
+          // },
+          {
+            text: '素材名稱',
+            value: 'name',
+            width: '5%'
+          },
+          {
+            text: '撥放順序',
+            value: 'action',
+            sortable: false,
+            align: 'center',
+            width: '5%'
+          },
+        ],
+        itemsCRUD: [
+          {
+            name: '電廠維護公告圖',
+            id: 1,
+          },
+          {
+            name: '秋季節約用電宣導',
+            id: 2,
+            scp_id: '預設',
+          },
+          {
+            name: 'New! 9月11日颱風緊急通報',
+            id: 3,
+          },
+        ],
         resources: [
           {
             "id": 1,
@@ -412,6 +491,16 @@
       }
     },
     methods: {
+      saveOrder (event) {
+        const movedItem = this.itemsCRUD.splice(event.oldIndex, 1)[0];
+        this.itemsCRUD.splice(event.newIndex, 0, movedItem);
+        let step;
+        for (step = 0; step < this.itemsCRUD.length; step++) {
+          // 執行五次：從step為0到4
+          console.log(this.itemsCRUD[step]);
+          // this.itemsCRUD[step].id = step
+        }
+      },
       getParentRouteName() {
         // only show parent route with meta.title
         let matched = this.$route.matched.filter(item => item.meta && item.meta.title)

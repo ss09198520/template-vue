@@ -9,39 +9,34 @@
       >
         <v-form>
           <v-row
-            class="d-flex justify-center"
-            dense
+            class="d-flex justify-start"
+            align="center"
           >
-            <v-col>
+            <v-col cols="1" class="ml-2 font-weight-bold">
+              跑 馬 燈 內 容
+            </v-col>
+            <v-col cols="3" class="mt-5 font-weight-bold">
               <v-text-field
                 class="font-weight-bold"
                 color="accent"
                 dense
-                label="跑馬燈內容"
+                placeholder="跑馬燈內容"
                 outlined
                 clearable
                 persistent-hint
               />
             </v-col>
-            <v-col>
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2 font-weight-bold">
+              跑 馬 燈 類 型
+            </v-col>
+            <v-col cols="3" class="ml-2 font-weight-bold">
               <v-select
                 :items="['一般','預設']"
                 class="font-bold"
                 color="accent"
                 item-color="accent"
-                label="跑馬燈類型"
-                dense
-                outlined
-                hide-details
-              />
-            </v-col>
-            <v-col cols="4">
-              <v-select
-                :items="['暫存', '退件', '審核中', '審核完成']"
-                class="font-bold"
-                color="accent"
-                item-color="accent"
-                label="狀態"
+                placeholder="跑馬燈類型"
                 dense
                 outlined
                 hide-details
@@ -49,22 +44,52 @@
             </v-col>
           </v-row>
           <v-row
-            class="d-flex "
-            dense
+            class="d-flex justify-start"
+            align="center"
           >
-            <v-col cols="4">
+            <v-col cols="1" class="ml-2 font-weight-bold">
+              跑 馬 燈 類 型
+            </v-col>
+            <v-col cols="3">
+              <v-select
+                :items="['暫存', '退件', '審核中', '審核完成']"
+                class="font-bold"
+                color="accent"
+                item-color="accent"
+                placeholder="狀態"
+                dense
+                outlined
+                hide-details
+              />
+            </v-col>
+          </v-row>
+          <v-row
+            class="d-flex justify-start"
+            align="center"
+          >
+            <v-col cols="1" class="ml-2 font-weight-bold">
+              上 架 時 間
+            </v-col>
+            <v-col 
+              cols="3"   
+              class="d-flex"
+            >
               <v-menu
                 v-model="releaseDateStartMenu"
-                min-width="290px"
+                transition="scale-transition"
+                offset-y              
+                min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateStart"
                     append-icon="mdi-calendar"
-                    label="上架時間(起)"
+                    placeholder="上架時間(起)"
                     color="accent"
                     outlined
                     dense
+                    readonly
+                    hide-details   
                     class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
@@ -76,20 +101,23 @@
                   scrollable
                 />
               </v-menu>
-            </v-col>
-            <v-col cols="4">
+              <div class="mt-2"> ~ </div>
               <v-menu
                 v-model="releaseDateEndMenu"
-                min-width="290px"
+                transition="scale-transition"
+                offset-y              
+                min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateEnd"
                     append-icon="mdi-calendar"
-                    label="上架時間(迄)"
+                    placeholder="上架時間(迄)"
                     color="accent"
                     outlined
                     dense
+                    readonly
+                    hide-details   
                     class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
@@ -102,15 +130,19 @@
                 />
               </v-menu>
             </v-col>
-          </v-row>
-          <v-row
-            class="d-flex justify-start"
-            dense
-          >
-            <v-col cols="4">
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2 font-weight-bold">
+              下 架 時 間
+            </v-col>
+            <v-col 
+              cols="3"   
+              class="d-flex"
+            >
               <v-menu
                 v-model="sunsetDateStartMenu"
-                min-width="290px"
+                transition="scale-transition"
+                offset-y              
+                min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
@@ -120,6 +152,8 @@
                     color="accent"
                     outlined
                     dense
+                    readonly
+                    hide-details   
                     class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
@@ -131,8 +165,7 @@
                   scrollable
                 />
               </v-menu>
-            </v-col>
-            <v-col cols="4">
+              <div class="mt-2"> ~ </div>
               <v-menu
                 v-model="sunsetDateEndMenu"
                 min-width="290px"
@@ -145,6 +178,8 @@
                     color="accent"
                     outlined
                     dense
+                    readonly
+                    hide-details   
                     class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
@@ -159,7 +194,7 @@
             </v-col>
           </v-row>
           <v-row
-            class="d-flex justify-start"
+            class="d-flex justify-end"
             dense
           >
             <v-btn
@@ -224,7 +259,6 @@
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-icon
-                  small
                   class="mr-2"
                   color="red"
                   @click="editItem(item)"
@@ -238,7 +272,6 @@
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-icon
-                  small
                   @click="deleteItem(item)"
                   v-on="on"
                 >
@@ -252,7 +285,6 @@
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-icon
-                  small
                   class="mr-2 d-flex justify-center"
                   v-on="on"
                 >
@@ -299,12 +331,6 @@
         itemsPerPage: 10,
         headerCRUD: [
           {
-            text: '操作',
-            value: 'action',
-            sortable: false,
-            align: 'center'
-          },
-          {
             text: '跑馬燈名稱',
             value: 'name',
             width: '24%',
@@ -340,6 +366,12 @@
             sortable: false,
             align: 'center',
           },
+          {
+            text: '操作',
+            value: 'action',
+            sortable: false,
+            align: 'center'
+          },
         ],
         itemsCRUD: [
           {
@@ -351,7 +383,7 @@
             active: true,
             ondate: '2021-09-11',
             offdate: '2021-10-30',
-            signoff: '簽核完成'
+            signoff: '審核完成'
           },
           {
             name: '秋季節約用電宣導',
@@ -362,7 +394,7 @@
             active: false,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '簽核完成'
+            signoff: '審核完成'
           },
           {
             name: 'New! 9月11日颱風緊急通報',

@@ -233,7 +233,7 @@
         itemsPerPage: 10,
         headerCRUD: [
             { text: '下載', value: 'download', align: 'center' },
-            { text: '簽核', value: 'signOff', align: 'center' },
+            { text: '審核', value: 'signOff', align: 'center' },
             { text: '調閱月份', value: 'readMonth', align: 'center' },
             { text: '區處', value: 'region', align: 'center' },
             { text: '調閱管理員簽核時間', value: 'signOffDate1', align: 'center' },
@@ -250,7 +250,7 @@
             active: true,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '簽核完成'
+            signoff: '審核完成'
           },
           {
             name: '秋季節約用電宣導',
@@ -261,7 +261,7 @@
             active: false,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '簽核完成'
+            signoff: '審核完成'
           },
           {
             name: 'New! 9月11日颱風緊急通報',

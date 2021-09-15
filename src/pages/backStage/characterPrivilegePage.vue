@@ -71,10 +71,13 @@
         </v-col>
       </v-row>
       <v-row class="mt-5">
-        <v-btn class="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>        
-        <v-btn class="primary ml-3" @click="popOut(editPopOut)">          
-          依角色設定          
-        </v-btn>
+        <v-col cols="10" />
+        <v-col>
+          <v-btn class="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>        
+          <v-btn class="primary ml-3" @click="popOut(editPopOut)">          
+            依角色設定          
+          </v-btn>
+        </v-col>
       </v-row>         
     </div>    
     <hr class="mt-6 mb-5 ml-8">

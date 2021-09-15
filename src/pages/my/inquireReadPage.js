@@ -42,13 +42,13 @@ export default{
                 {text:'完工結算', value:'10'},
             ],
             empListHeaders: [
-                { text: '狀態操作', value: 'mani', align: 'center' },
                 { text: '受理編號', value: 'orderId', align: 'center' },
                 { text: '電號', value: 'electNum', align: 'center' },
                 { text: '申請日期', value: 'orderDate', align: 'center' },
                 { text: '歸檔日期', value: 'achieveDate', align: 'center' },            
                 { text: '登記單種類', value: 'orderType', align: 'center' },
                 { text: '受理項目', value: 'orderItems', align: 'center' },                
+                { text: '狀態操作', value: 'mani', align: 'center' }
             ],
             empMockList: [                
                 { mani: true, orderId: 'A00024', electNum: '7140000123', orderDate:'20210910 10:00', achieveDate:'20210915 10:00', orderType:'APR0370', orderItems:'QA210軍眷用電申請優待'},

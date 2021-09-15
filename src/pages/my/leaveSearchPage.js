@@ -7,7 +7,6 @@ export default{
     data(){
         return{
             empListHeaders: [
-                { text: '狀態操作', value: 'mani', align: 'center' },
                 { text: '員工編號', value: 'empId', align: 'center' },
                 { text: '員工姓名', value: 'empName', align: 'center' },
                 { text: '休假期間', value: 'empLeave', align: 'center' },
@@ -15,6 +14,7 @@ export default{
                 { text: '代理人姓名', value: 'agentName', align: 'center' },
                 { text: '假別', value: 'leaveStyle', align: 'center' },
                 { text: 'HR帶入/系統輸入', value: 'leaveDataFrom', align: 'center' },
+                { text: '狀態操作', value: 'mani', align: 'center' }
             ],
             empList: [
             

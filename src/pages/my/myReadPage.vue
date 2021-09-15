@@ -42,10 +42,14 @@
             />
           </v-col>     
         </v-row>
-        
-        <v-btn class="primary mt-5" @click="displayList = true">&emsp;查詢&emsp;</v-btn>        
+        <v-row>
+          <v-col cols="11" />
+          <v-col>
+            <v-btn class="primary mt-5" @click="displayList = true">&emsp;查詢&emsp;</v-btn>    
+          </v-col>
+        </v-row>    
       </div>
-      <hr class="mt-6 ml-8 mr-8">
+      <hr class="mt-6">
       <div v-if="displayList == true">
         <v-row class="ma-7">
           <v-col>

@@ -12,7 +12,7 @@
         </div>            
       </div>
                   
-      <div class="ml-10 font-18px font-bold">
+      <div class="mt-10 ml-10 font-18px font-bold">
         <v-row align="center">
           <v-col cols="1">
             受理編號        
@@ -27,8 +27,7 @@
               placeholder="請輸入受理編號"
             />
           </v-col>
-        </v-row>
-        <v-row>
+          <v-col cols="1" />
           <v-col cols="1">
             電號
           </v-col>                                             
@@ -41,8 +40,9 @@
               dense
               placeholder="請輸入電號"
             />
-          </v-col>                    
+          </v-col>     
         </v-row>
+        
         <v-btn class="primary mt-5" @click="displayList = true">&emsp;查詢&emsp;</v-btn>        
       </div>
       <hr class="mt-6 ml-8 mr-8">

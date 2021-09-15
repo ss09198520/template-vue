@@ -46,8 +46,8 @@
         </v-form>
       </v-col>
     </v-row>
-    <v-divider class="mt-6 mb-5" />
-    <!-- <hr class="mt-6 mb-5"> -->
+    <!-- <v-divider class="mt-6 mb-5" /> -->
+    <hr class="mt-6 mb-5">
     <v-row v-show="isShow">
       <v-col md="12">
         <v-data-table
@@ -59,7 +59,7 @@
             showFirstLastPage: true,
           }"
           disable-sort
-          class="font-weight-bold"
+          class="font-weight-bold elevation-1"
         >
           <template v-slot:[`item.download`]="{ item }">
             <v-btn v-if="item.download" class="primary">下載檔案</v-btn>

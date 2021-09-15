@@ -224,15 +224,6 @@
                         <v-btn
                           class="ma-1"
                           depressed
-                          color="primary"
-                          :disabled="!valid"
-                          @click="submit"
-                        >
-                          暫存
-                        </v-btn>
-                        <v-btn
-                          class="ma-1"
-                          depressed
                           color="success"
                           :disabled="!valid"
                           @click="submit"

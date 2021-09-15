@@ -155,6 +155,7 @@
         </fet-card>
       </v-col>
     </v-row>
+    <hr class="mt-6 mb-5">
     <v-row v-show="isShow">
       <v-col md="12">
         <v-data-table
@@ -245,7 +246,7 @@
   export default {
     data() {
       return {
-        isShow: true,
+        isShow: false,
         itemsPerPage: 10,
         resources: [
           {
@@ -335,12 +336,6 @@
         ],
         headerCRUD: [
           {
-            text: '操作',
-            value: 'action',
-            sortable: false,
-            align: 'center'
-          },
-          {
             text: '素材名稱',
             value: 'name',
             width: '24%',
@@ -354,12 +349,6 @@
             text: '上傳時間',
             value: 'ondate',
             align: 'center'
-          },
-          {
-            text: '狀態',
-            value: 'signoff',
-            sortable: false,
-            align: 'center',
           },
         ],
         itemsCRUD: [

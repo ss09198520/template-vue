@@ -37,7 +37,7 @@
           />
         </v-col>
       </v-row>
-      <v-row>
+      <v-row align="center">
         <v-col cols="1">課別</v-col>
         <v-col
           cols="3"
@@ -70,7 +70,7 @@
           />
         </v-col>
       </v-row>
-      <v-row>
+      <v-row class="mt-5">
         <v-btn class="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>        
         <v-btn class="primary ml-3" @click="popOut(editPopOut)">          
           依角色設定          
@@ -100,7 +100,7 @@
                 color="primary"
                 @click="modifyCharacter(item)"
               >
-                編輯
+                &emsp;修改&emsp;
               </v-btn>
             </div> 
                           
@@ -122,7 +122,7 @@
                   >(..還有{{ character.length - maxDisplay }}項)</span>
                 </template>
               </v-select>
-              <v-btn class="mt-3" color="success" @click="submit(item)">送出</v-btn>
+              <v-btn class="mt-3" color="success" @click="submit(item)">&emsp;送出&emsp;</v-btn>
             </div>   
           </template>                 
         </v-data-table>

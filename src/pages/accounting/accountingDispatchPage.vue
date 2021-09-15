@@ -23,10 +23,9 @@
           >
             <template v-slot:item.edit="{ item }">
               <v-btn :disabled="!item.edit" class="success" @click="editDispatch(item)">修改派工</v-btn>
+              <v-btn :disabled="!item.remove" class="error ml-5" @click="remove(item)">刪除派工</v-btn>
             </template>
-            <template v-slot:item.remove="{ item }">
-              <v-btn :disabled="!item.remove" class="error" @click="remove(item)">刪除派工</v-btn>
-            </template>
+           
           </v-data-table>
           <!-- 選頁 -->
           <div class="mt-2">
@@ -304,8 +303,7 @@ export default {
   data() {
     return {
       headers: [
-        { text: '修改', value: 'edit', align: 'center' },
-        { text: '刪除', value: 'remove', align: 'center' },
+        { text: '狀態操作', value: 'edit', align: 'center' },
         { text: '班別', value: 'class', align: 'center' },
         { text: '核算員', value: 'accounting', align: 'center' },
         { text: '核算員姓名', value: 'accountingName', align: 'center' },

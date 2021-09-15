@@ -15,7 +15,6 @@ export default{
             //預設總頁數
             orderListPageCount: 0,
             empListHeaders: [
-                { text: '狀態操作', value: 'mani', align: 'center' },
                 { text: '受理編號', value: 'orderId', align: 'center' },
                 { text: '受理日期', value: 'orderDate', align: 'center' },
                 { text: '訂單狀態', value: 'orderStatus', align: 'center' },
@@ -23,6 +22,7 @@ export default{
                 { text: '受理項目', value: 'orderItems', align: 'center' },
                 { text: '代理案件', value: 'proxyEvent', align: 'center' },
                 { text: '代理件所有人', value: 'eventAgent', align: 'center' },
+                { text: '狀態操作', value: 'mani', align: 'center' }
             ],
             empMockList: [                
                 { mani: true, orderId: 'A00024', orderDate: '20210910 10:00', orderStatus:'受理中', orderType:'APR0370', orderItems:'QA210軍眷用電申請優待', proxyEvent:true,eventAgent:'王大明'},

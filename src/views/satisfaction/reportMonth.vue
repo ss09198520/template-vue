@@ -9,7 +9,7 @@
         <v-form>
           <v-row align="center">
             <v-col cols="1">
-              調閱日期
+              查詢月份
             </v-col>
             <v-col cols="3" class="d-flex">
               <v-menu
@@ -34,33 +34,8 @@
                 </template>
                 <v-date-picker
                   v-model="before7"
+                  type="month"
                   @input="startDate = false"
-                />
-              </v-menu>
-              <div class="mt-1">~</div>
-              <v-menu
-                v-model="endDate"
-                :close-on-content-click="false"
-                transition="scale-transition"
-                offset-y
-                min-width="auto"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-text-field
-                    v-model="date"
-                    append-icon="mdi-calendar"
-                    readonly
-                    outlined
-                    dense
-                    hide-details
-                    v-bind="attrs"
-                    style="padding-top: 0;"
-                    v-on="on"
-                  />
-                </template>
-                <v-date-picker
-                  v-model="date"
-                  @input="endDate = false"
                 />
               </v-menu>
             </v-col>
@@ -86,72 +61,8 @@
           disable-sort
           class="font-weight-bold"
         >
-          <template v-slot:top>
-            <v-dialog v-model="dialog" max-width="500" />
-            <v-dialog v-model="alertDialog" :max-width="250">
-              <v-card>
-                <v-card-title class="justify-center">Are you sure?</v-card-title>
-                <v-card-text />
-                <v-card-actions class="justify-center">
-                  <v-btn color="error" depressed @click="remove" v-text="'Yes'" />
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </template>
-          <template v-slot:[`item.action`]="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  small
-                  class="mr-2"
-                  color="red"
-                  @click="editItem(item)"
-                  v-on="on"
-                >
-                  mdi-pencil
-                </v-icon>
-              </template>
-              <span>編輯</span>
-            </v-tooltip>
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  small
-                  @click="deleteItem(item)"
-                  v-on="on"
-                >
-                  mdi-eye
-                </v-icon>
-              </template>
-              <span>刪除</span>
-            </v-tooltip>
-          </template>
-          <template v-slot:[`item.marquee_content`]="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  small
-                  class="mr-2 d-flex justify-center"
-                  v-on="on"
-                >
-                  mdi-file
-                </v-icon>
-              </template>
-              <span>{{ item.marquee_content }}</span>
-            </v-tooltip>
-          </template>
-          <template v-slot:[`item.state`]="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  class="d-flex justify-center"
-                  :color="item.active?'green darken-2':''"
-                  v-on="on"
-                >
-                  {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
-                </v-icon>
-              </template>
-            </v-tooltip>
+          <template v-slot:[`item.download`]="{ item }">
+            <v-btn v-if="item.download" class="primary">下載檔案</v-btn>
           </template>
         </v-data-table>
       </v-col>
@@ -177,121 +88,32 @@
         itemsPerPage: 10,
         headerCRUD: [
           {
-            text: '操作',
-            value: 'action',
-            sortable: false,
+            text: '下載',
+            value: 'download',
+            width: '10%',
+            align: 'center'
+            
+          },
+          {
+            text: '區處',
+            value: 'region',
             align: 'center'
           },
           {
-            text: '跑馬燈名稱',
-            value: 'name',
-            width: '24%',
-          },
-          {
-            text: '跑馬燈內容',
-            value: 'marquee_content',
-            align: 'center',
-          },
-          {
-            text: '跑馬燈類別',
-            value: 'scp_id',
+            text: '報表產出月份',
+            value: 'readMonth',
             align: 'center'
           },
           {
-            text: '單位',
-            value: 'division',
-            align: 'center',
-          },
-          {
-            text: '上架日期',
-            value: 'ondate',
+            text: '報表產出時間',
+            value: 'signOffDate1',
             align: 'center'
           },
-          {
-            text: '下架日期',
-            value: 'offdate',
-            align: 'center'
-          },
-          {
-            text: '啟用',
-            value: 'state',
-            sortable: false,
-            align: 'center',
-          },
-          {
-            text: '狀態',
-            value: 'signoff',
-            sortable: false,
-            align: 'center',
-          },
+          
         ],
         itemsCRUD: [
-          {
-            name: '電廠維護公告',
-            id: 1,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
-            division:'台中區處',
-            active: true,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '簽核完成'
-          },
-          {
-            name: '秋季節約用電宣導',
-            id: 2,
-            scp_id: '預設',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/footer',
-            division:'業務處',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '簽核完成'
-          },
-          {
-            name: 'New! 9月11日颱風緊急通報',
-            id: 3,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
-            division:'台中區處',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '暫存'
-          },
-          {
-            name: '台電公司對受疫情影響農業及服務業之電費減免措施',
-            id: 4,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'台中區處',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '審核中'
-          },
-          {
-            name: '台電連4年獲亞洲企業社會責任獎',
-            id: 5,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
-            division:'台中區處',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '退件'
-          },
-          {
-            name: '台電首度攜手紙風車劇團，到彰化員林打造露天舞台劇',
-            id: 6,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'業務處',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '退件'
-          },
+          {signOff: false, readMonth: '2021/08', region: '台中', signOffDate1: '2021/09/01 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
+          {signOff: true, readMonth: '2021/09', region: '台中', signOffDate1: '2021/10/01 14:14:42', signOffDate2: '', signOffDate3: '', download: true}
         ],
         defaultItem: {
           name: '',

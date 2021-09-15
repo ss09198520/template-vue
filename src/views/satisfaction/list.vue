@@ -9,49 +9,13 @@
       >
         <v-form>
           <v-row
-            class="d-flex justify-center"
             dense
           >
             <v-col cols="4">
               <v-text-field
                 color="accent"
                 dense
-                label="搜尋條件 1"
-                outlined
-                clearable
-                persistent-hint
-              />
-            </v-col>
-            <v-col cols="4">
-              <v-text-field
-                color="accent"
-                dense
-                label="搜尋條件 2"
-                outlined
-                clearable
-                persistent-hint
-              />
-            </v-col>
-            <v-col cols="4">
-              <v-text-field
-                color="accent"
-                dense
-                label="搜尋條件 3"
-                outlined
-                clearable
-                persistent-hint
-              />
-            </v-col>
-          </v-row>
-          <v-row
-            class="d-flex justify-center"
-            dense
-          >
-            <v-col cols="4">
-              <v-text-field
-                color="accent"
-                dense
-                label="搜尋條件 4"
+                label="滿意度問卷標題"
                 outlined
                 clearable
                 persistent-hint
@@ -59,32 +23,65 @@
             </v-col>
             <v-col cols="4">
               <v-select
-                :items="['option1', 'option2', 'option3']"
+                :items="['暫存', '退件', '審核中', '審核完成']"
+                class="font-bold"
                 color="accent"
                 item-color="accent"
-                label="下拉選單"
+                label="狀態"
                 dense
                 outlined
                 hide-details
               />
             </v-col>
+          </v-row>
+          <v-row
+            dense
+          >
             <v-col cols="4">
               <v-menu
-                v-model="menu"
+                v-model="releaseDateStartMenu"
                 min-width="290px"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="date"
-                    label="日期選擇"
+                    v-model="releaseDateStart"
+                    append-icon="mdi-calendar"
+                    label="上架時間(起)"
                     color="accent"
                     outlined
                     dense
+                    class="font-weight-bold"
+                    :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
-                  v-model="date"
+                  v-model="releaseDateStart"
+                  no-title
+                  scrollable
+                />
+              </v-menu>
+            </v-col>
+            <v-col cols="4">
+              <v-menu
+                v-model="releaseDateEndMenu"
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="releaseDateEnd"
+                    append-icon="mdi-calendar"
+                    label="上架時間(迄)"
+                    color="accent"
+                    outlined
+                    dense
+                    class="font-weight-bold"
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="releaseDateEnd"
                   no-title
                   scrollable
                 />
@@ -92,7 +89,7 @@
             </v-col>
           </v-row>
           <v-row
-            class="d-flex justify-end"
+            class="d-flex justify-start"
             dense
           >
             <!-- <v-btn
@@ -247,9 +244,10 @@
             width: '10%',
           },
           {
-            text: '下架日期',
+            text: '問卷建立日期',
             value: 'offdate',
             width: '10%',
+            align: 'center',
           },
              {
             text: '上架',

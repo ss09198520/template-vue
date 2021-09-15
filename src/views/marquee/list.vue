@@ -60,6 +60,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateStart"
+                    append-icon="mdi-calendar"
                     label="上架時間(起)"
                     color="accent"
                     outlined
@@ -84,6 +85,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateEnd"
+                    append-icon="mdi-calendar"
                     label="上架時間(迄)"
                     color="accent"
                     outlined
@@ -113,6 +115,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="sunsetDateStart"
+                    append-icon="mdi-calendar"
                     label="下架時間(起)"
                     color="accent"
                     outlined
@@ -137,6 +140,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="sunsetDateEnd"
+                    append-icon="mdi-calendar"
                     label="下架時間(迄)"
                     color="accent"
                     outlined
@@ -159,7 +163,7 @@
             dense
           >
             <v-btn
-              class="ma-2 "
+              class="ml-2 "
               fab
               small
               color="success"
@@ -168,7 +172,7 @@
               <v-icon v-text="'mdi-calendar'" />
             </v-btn>
             <v-btn
-              class="ma-2"
+              class="ml-2"
               fab
               small
               color="primary"
@@ -177,7 +181,7 @@
               <v-icon v-text="'mdi-magnify'" />
             </v-btn>
             <v-btn
-              class="ma-2 "
+              class="ml-2 "
               fab
               small
               color="accent"
@@ -281,7 +285,7 @@
   export default {
     data() {
       return {
-        isShow: true,
+        isShow: false,
         // menu: false,
         // date: new Date().toISOString().substr(0, 10),
         releaseDateStartMenu: false,
@@ -342,7 +346,7 @@
             name: '電廠維護公告',
             id: 1,
             scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
+            marquee_content: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
             division:'王大明',
             active: true,
             ondate: '2021-09-11',
@@ -353,7 +357,7 @@
             name: '秋季節約用電宣導',
             id: 2,
             scp_id: '預設',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/footer',
+            marquee_content: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
             division:'李小凡',
             active: false,
             ondate: '2020-12-21',
@@ -364,7 +368,7 @@
             name: 'New! 9月11日颱風緊急通報',
             id: 3,
             scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
+            marquee_content: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
             division:'葉星辰',
             active: false,
             ondate: '2020-12-21',

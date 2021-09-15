@@ -60,6 +60,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateStart"
+                    append-icon="mdi-calendar"
                     label="上架時間(起)"
                     color="accent"
                     outlined
@@ -84,6 +85,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateEnd"
+                    append-icon="mdi-calendar"
                     label="上架時間(迄)"
                     color="accent"
                     outlined
@@ -113,6 +115,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="sunsetDateStart"
+                    append-icon="mdi-calendar"
                     label="下架時間(起)"
                     color="accent"
                     outlined
@@ -137,6 +140,7 @@
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="sunsetDateEnd"
+                    append-icon="mdi-calendar"
                     label="下架時間(迄)"
                     color="accent"
                     outlined
@@ -318,12 +322,6 @@
             value: 'offdate',
           },
           {
-            text: '啟用',
-            value: 'state',
-            sortable: false,
-            align: 'center',
-          },
-          {
             text: '狀態',
             value: 'signoff',
             sortable: false,
@@ -336,42 +334,31 @@
             id: 1,
             scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
-            division:'台中區處',
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
+            division:'業務處',
+            ondate: '2021-09-15',
+            offdate: '2021-10-30',
             active: true,
             signoff: '簽核完成',
           },
           {
             name: '秋季節約用電宣導',
             id: 2,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/footer',
-            division:'台中區處',
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            active: true,
-            signoff: '簽核完成',
-          },
-          {
-            name: 'New! 9月11日颱風緊急通報',
-            id: 3,
             scp_id: '預設',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
+            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/footer',
             division:'業務處',
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
+            ondate: '2021-12-21',
+            offdate: '2022-01-30',
             active: true,
-            signoff: '簽核完成',
+            signoff: '簽核中',
           },
           {
             name: '台電公司對受疫情影響農業及服務業之電費減免措施',
             id: 4,
             scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'台中區處',
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
+            division:'業務處',
+            ondate: '2021-10-21',
+            offdate: '2021-10-30',
             active: true,
             signoff: '簽核完成',
           },
@@ -380,9 +367,9 @@
             id: 5,
             scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
-            division:'台中區處',
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
+            division:'業務處',
+            ondate: '2021-11-11',
+            offdate: '2021-12-24',
             active: true,
             signoff: '簽核完成',
           },
@@ -392,8 +379,8 @@
             scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
             division:'業務處',
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
+            ondate: '2021-12-21',
+            offdate: '2022-04-30',
             active: true,
             signoff: '簽核完成',
           },

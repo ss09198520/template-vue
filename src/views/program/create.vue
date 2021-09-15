@@ -147,11 +147,11 @@
                       :no-gutters="noGutters"
                     >
                       <v-col
-                        cols="3"
+                        cols="5"
                         md="3"
                       >
                         <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          上 傳 檔 案
+                          審 核 附 件 上 傳
                           <span class="red--text">*</span>
                         </v-subheader>
                       </v-col>
@@ -183,6 +183,15 @@
                           color="accent"
                         >
                           取消
+                        </v-btn>
+                        <v-btn
+                          class="ma-1"
+                          depressed
+                          color="primary"
+                          :disabled="!valid"
+                          @click="submit"
+                        >
+                          暫存
                         </v-btn>
                         <v-btn
                           class="ma-1"
@@ -260,8 +269,7 @@
                 :url="resource.url" 
                 @click="selected($event)" 
               >
-                <label class="el-upload-list__item-status-label">
-                </label>
+                <label class="el-upload-list__item-status-label" />
                 <div class="imgBox">
                   <img :src="require(`@/resource/${resource.thumbnail}`)">
                 </div>
@@ -273,7 +281,7 @@
         <v-card-actions>
           <v-spacer />
           <v-btn style="margin: 0 10px 10px 0;" @click="dialog = false">關閉</v-btn>
-          <v-btn color="primary" style="margin-bottom: 10px;" @click="saveNewClass()">新增</v-btn>
+          <v-btn color="primary" style="margin-bottom: 10px;" @click="dialog = false">新增</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

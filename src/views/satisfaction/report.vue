@@ -10,6 +10,7 @@
           <v-row
             class="d-flex justify-center"
             dense
+            cols="4"
           >
             <v-col>
               <v-select
@@ -62,15 +63,17 @@
             class="d-flex "
             dense
           >
-            <v-col>
+            <v-col cols="2" :align-self="'end'">
               <v-menu
                 v-model="releaseDateStartMenu"
-                min-width="290px"
+                :close-on-content-click="false"
+                min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateStart"
-                    label="調查日期"
+                    append-icon="mdi-calendar"
+                    label="調查日期(起)"
                     color="accent"
                     outlined
                     dense
@@ -81,7 +84,31 @@
                 </template>
                 <v-date-picker
                   v-model="releaseDateStart"
-                  no-title
+                  scrollable
+                />
+              </v-menu>
+            </v-col>
+            <v-col cols="2" :align-self="'end'">
+              <v-menu
+                v-model="releaseDateEneMenu"
+                :close-on-content-click="false"
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="releaseDateEnd"
+                    append-icon="mdi-calendar"
+                    label="調查日期(訖)"
+                    color="accent"
+                    outlined
+                    dense
+                    class="font-weight-bold"
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="releaseDateEnd"
                   scrollable
                 />
               </v-menu>
@@ -91,24 +118,12 @@
             class="d-flex justify-start"
             dense
           >
-            <v-btn
-              class="ma-2"
-              fab
-              small
-              color="primary"
-              @click="isShow = true"
-            >
-              <v-icon v-text="'mdi-magnify'" />
-            </v-btn>
-            <v-btn
-              class="ma-2 "
-              fab
-              small
-              color="accent"
-              @click="isShow = false"
-            >
-              <v-icon>mdi-refresh</v-icon>
-            </v-btn>
+            <v-btn color="primary" class="ml-2" @click="isDownload=!isDownload"> 查詢 </v-btn>
+
+            <v-btn :disabled="!isDownload" color="success" class="ml-2" @click="search()"> 下載查詢結果 </v-btn>
+
+            <!-- <v-btn color="success" class="ml-2" @click="goMonth()"> 滿意度區處報表(月) </v-btn>
+            <v-btn color="success" class="ml-2" @click="goWeek()"> 滿意度摘要個人報表(週) </v-btn> -->
           </v-row>
         </v-form>
       </v-col>
@@ -205,9 +220,8 @@
   export default {
     data() {
       return {
-        isShow: true,
-        // menu: false,
-        // date: new Date().toISOString().substr(0, 10),
+        isShow: false,
+        isDownload: false,
         releaseDateStartMenu: false,
         releaseDateStart: '',
         releaseDateEndMenu: false,
@@ -218,54 +232,13 @@
         sunsetDateEnd: '',
         itemsPerPage: 10,
         headerCRUD: [
-          {
-            text: '操作',
-            value: 'action',
-            sortable: false,
-            align: 'center'
-          },
-          {
-            text: '跑馬燈名稱',
-            value: 'name',
-            width: '24%',
-          },
-          {
-            text: '跑馬燈內容',
-            value: 'marquee_content',
-            align: 'center',
-          },
-          {
-            text: '跑馬燈類別',
-            value: 'scp_id',
-            align: 'center'
-          },
-          {
-            text: '單位',
-            value: 'division',
-            align: 'center',
-          },
-          {
-            text: '上架日期',
-            value: 'ondate',
-            align: 'center'
-          },
-          {
-            text: '下架日期',
-            value: 'offdate',
-            align: 'center'
-          },
-          {
-            text: '啟用',
-            value: 'state',
-            sortable: false,
-            align: 'center',
-          },
-          {
-            text: '狀態',
-            value: 'signoff',
-            sortable: false,
-            align: 'center',
-          },
+            { text: '下載', value: 'download', align: 'center' },
+            { text: '簽核', value: 'signOff', align: 'center' },
+            { text: '調閱月份', value: 'readMonth', align: 'center' },
+            { text: '區處', value: 'region', align: 'center' },
+            { text: '調閱管理員簽核時間', value: 'signOffDate1', align: 'center' },
+            { text: '核算課長簽核時間', value: 'signOffDate2', align: 'center' },  
+            { text: '電費經理簽核時間', value: 'signOffDate3', align: 'center' },   
         ],
         itemsCRUD: [
           {
@@ -372,13 +345,11 @@
         }
         this.close()
       },
-      editItem(item) {
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.$router.push({path:`${this.$route.matched[0].path}/create`})
+      goWeek() {
+        this.$router.push({path:`${this.$route.matched[0].path}/satisfyReport/month`})
       },
-      viewSchedule() {
-        this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
+      goMonth() {
+        this.$router.push({path:`${this.$route.matched[0].path}/satisfyReport/week`})
       },
       deleteItem(item) {
         this.alertDialog = true

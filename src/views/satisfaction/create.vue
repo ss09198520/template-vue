@@ -11,63 +11,93 @@
           <div v-if="!loading" class="wrap">
             <div class="content-wrap">
               <div class="item title" :class="{'title-focus': focusIndex === 'title'}" @click="focusTitle($event)">
-                <v-textarea
-                  v-model="data.display_name"
-                  class="form-title"
-                  color="accent"
-                  placeholder="問卷標題"
-                  counter="40"
-                />
-                <v-textarea 
-                  v-model="data.name.desc"
-                  color="accent"
-                  placeholder="問卷描述"
-                  counter="40"
-                />
-                <v-menu
-                  v-model="releaseDateStartMenu"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-model="releaseDateStart"
-                      label="上架時間"
+                <v-row>
+                  <v-col md="3">
+                    <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                      問 卷 標 題
+                      <span class="red--text">*</span>
+                    </v-subheader>
+                  </v-col>
+                  <v-col>
+                    <v-textarea
+                      v-model="data.display_name"
+                      class="form-title"
+                      color="accent"
+                      placeholder="問卷標題"
+                      counter="40"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col md="3">
+                    <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                      問 卷 描 述
+                      <span class="red--text">*</span>
+                    </v-subheader>
+                  </v-col>
+                  <v-col>
+                    <v-textarea 
+                      v-model="data.name.desc"
+                      color="accent"
+                      placeholder="問卷描述"
+                      counter="40"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col md="3">
+                    <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                      上 架 時 間
+                      <span class="red--text">*</span>
+                    </v-subheader>
+                  </v-col>
+                  <v-col md="3">
+                    <v-menu
+                      v-model="releaseDateStartMenu"
+                      min-width="290px"
+                    >
+                      <template v-slot:activator="{ on }">
+                        <v-text-field
+                          v-model="releaseDateStart"
+                          append-icon="mdi-calendar"
+                          label="上架時間"
+                          color="accent"
+                          outlined
+                          dense
+                          class="font-weight-bold"
+                          :clearable="true"
+                          v-on="on"
+                        />
+                      </template>
+                      <v-date-picker
+                        v-model="releaseDateStart"
+                        no-title
+                        scrollable
+                      />
+                    </v-menu>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col md="3">
+                    <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                      審 核 附 件 上 傳
+                      <span class="red--text">*</span>
+                    </v-subheader>
+                  </v-col>
+                  <v-col>
+                    <v-file-input
+                      :hide-details="hideDatails"
+                      label="審 核 附 件 上 傳"
                       color="accent"
                       outlined
                       dense
-                      class="font-weight-bold"
-                      :clearable="true"
-                      v-on="on"
+                      accept="image/jpg"
+                      persistent-hint
+                      prepend-inner-icon="mdi-cloud-upload"
+                      prepend-icon
                     />
-                  </template>
-                  <v-date-picker
-                    v-model="releaseDateStart"
-                    no-title
-                    scrollable
-                  />
-                </v-menu>
-                <v-menu
-                  v-model="releaseDateEndMenu"
-                  min-width="290px"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-model="releaseDateEnd"
-                      label="下架時間"
-                      color="accent"
-                      outlined
-                      dense
-                      class="font-weight-bold"
-                      :clearable="true"
-                      v-on="on"
-                    />
-                  </template>
-                  <v-date-picker
-                    v-model="releaseDateEnd"
-                    no-title
-                    scrollable
-                  />
-                </v-menu>
+                  </v-col>
+                </v-row>
                 <!-- <textarea v-model="i.desc" placeholder="問卷說明" @focus="$autoText($event)" @input="$autoText($event)" /> -->
                 <div v-if="!data.question.length" class="add-list" color="primary">
                   <v-icon @click="addListFn" v-text="'mdi-plus'" />

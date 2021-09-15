@@ -159,6 +159,14 @@
                               inset
                             />
                           </v-col>
+                          <!-- <v-col cols="3" md="3">
+                            <v-switch 
+                              v-model="fontItalic1"
+                              class="mt-1"
+                              :label="`閃爍`"
+                              inset
+                            />
+                          </v-col> -->
                         </v-row>
                         <v-row
                           :dense="dense"
@@ -269,7 +277,7 @@
                             md="3"
                           >
                             <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                              上 傳 檔 案
+                              審 核 附 件 上 傳
                               <span class="red--text">*</span>
                             </v-subheader>
                           </v-col>
@@ -279,7 +287,7 @@
                           >
                             <v-file-input
                               :hide-details="hideDatails"
-                              label="上傳附件"
+                              label="審 核 附 件 上 傳"
                               color="accent"
                               outlined
                               dense

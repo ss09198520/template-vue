@@ -57,7 +57,7 @@
               {{ t }}
             </calendar-btn> -->
             <v-spacer />
-            <v-menu bottom right>
+            <!-- <v-menu bottom right>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn outlined v-bind="attrs" v-on="on">
                   <span>{{ typeToLabel[type] }}</span>
@@ -71,7 +71,7 @@
                   </v-list-item>
                 </template>
               </v-list>
-            </v-menu>
+            </v-menu> -->
 
           </v-toolbar>
 

@@ -184,20 +184,19 @@
                           <v-col class="d-flex justify-end">
                             <v-btn
                               class="ma-1"
-                              depressed
-                              color="accent"
-                              :disabled="!valid"
-                              @click="submit"
-                            >
-                              送出
-                            </v-btn>
-
-                            <v-btn
-                              class="ma-1"
                               outlined
                               color="accent"
                             >
                               取消
+                            </v-btn>
+                            <v-btn
+                              class="ma-1"
+                              depressed
+                              color="primary"
+                              :disabled="!valid"
+                              @click="submit"
+                            >
+                              儲存
                             </v-btn>
                           </v-col>
                         </v-row>
@@ -222,7 +221,7 @@
         maxCharacter: 40,
         filename: '',
         fileDesc: '',
-        uploadType: '',
+        uploadType: '1',
         uploadData: '',
         formData: {
           filename: '',

@@ -155,19 +155,19 @@
               color="primary"              
               @click="popOut = false"
             >
-              預覽
+              預 覽
             </v-btn>
             <v-btn
               color="error"              
               @click="popOut = false"
             >
-              退件
+              退 件
             </v-btn>
             <v-btn
               color="success"              
               @click="popOut = false"
             >
-              簽核
+              核 准
             </v-btn>
           </v-card-actions>
         </v-card>

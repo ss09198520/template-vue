@@ -312,7 +312,7 @@
             </v-btn>
             <v-btn
               color="success"              
-              @click="popOut = false"
+              @click="submit()"
             >
               確定調閱
             </v-btn>
@@ -502,7 +502,7 @@
             </v-btn>
             <v-btn
               color="success"              
-              @click="popOut = false"
+              @click="submit()"
             >
               確定調閱
             </v-btn>

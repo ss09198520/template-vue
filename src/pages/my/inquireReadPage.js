@@ -1,3 +1,5 @@
+import MessageService from "@/assets/services/message.service";
+
 export default{
     data(){
         return{
@@ -68,8 +70,12 @@ export default{
     methods:{
         search(item){
             this.popOut = true;
-            console.log(item);        
+            console.log(item);            
         },
+        submit(){
+            MessageService.showSuccess("調閱成功✓");  
+            this.popOut = false;
+        }
     }
     
 }

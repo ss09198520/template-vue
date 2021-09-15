@@ -181,8 +181,11 @@
           </v-col>
         </v-row>
              
-        <v-row>            
-          <v-btn color="primary ml-3" @click="display = true">&emsp;查詢&emsp;</v-btn>
+        <v-row>       
+          <v-col cols="11" />
+          <v-col>     
+            <v-btn color="primary ml-3" @click="display = true">&emsp;查詢&emsp;</v-btn>
+          </v-col>
         </v-row>
         <hr class="mt-6 mb-5">
         <div v-if="display == true">        
@@ -368,8 +371,11 @@
             />
           </v-col>
         </v-row>                                        
-        <v-row>            
-          <v-btn class="mb-7 ml-3" color="primary" @click="display = true">&emsp;查詢&emsp;</v-btn>
+        <v-row>    
+          <v-col cols="11" />
+          <v-col>        
+            <v-btn class="mb-7 ml-3" color="primary" @click="display = true">&emsp;查詢&emsp;</v-btn>
+          </v-col>
         </v-row>
         <hr>
         <div v-if="display == true">

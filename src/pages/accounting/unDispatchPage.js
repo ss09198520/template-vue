@@ -13,14 +13,14 @@ export default {
         return {
             waitingCount: 4,
             unDispatchHeaders: [
-                { text: '狀態操作', value: 'action', align: 'center' },
                 { text: '受理編號', value: 'acceptNumber', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
                 { text: '電號', value: 'electricNo', align: 'center' },
                 { text: '受理日期', value: 'acceptDate', align: 'center' },
                 { text: '結案日期', value: 'completeDate', align: 'center' },
                 { text: '登記單種類', value: 'category', align: 'center' },  
-                { text: '受理項目', value: 'acceptItem', align: 'center' }
+                { text: '受理項目', value: 'acceptItem', align: 'center' },
+                { text: '狀態操作', value: 'action', align: 'center' }
             ],
             unDispatchList: [
                 {action: true, acceptNumber: 'A00028',contractType:'包制',electricNo:'0120123223', acceptDate: '20210910 10:00', completeDate: '20210910 16:00', category: 'APR0370', acceptItem: 'QA210  軍眷用電申請優待'},

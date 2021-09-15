@@ -164,10 +164,11 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-btn color="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>
+            <v-col cols="11" />
+            <v-col>
+              <v-btn color="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>
+            </v-col>
           </v-row>
-        
-          
           <hr class="mt-6 mb-5">
           <div v-if="empMockList != null">
             <v-data-table

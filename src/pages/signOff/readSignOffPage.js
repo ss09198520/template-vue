@@ -12,15 +12,15 @@ export default {
             displayAll: true,
             //
            signListHeaders: [
-                { text: '狀態操作', value: 'mani', align: 'center' },
-                { text: '調閱狀態', value: 'inquireStatus', align: 'center' },
-                { text: '受理編號', value: 'orderId', align: 'center' },
-                { text: '電號', value: 'electNum', align: 'center' },
-                { text: '調閱單位', value: 'inquireUnit', align: 'center' },            
-                { text: '申請調閱人員', value: 'inquireName', align: 'center' },
-                { text: '調閱日期', value: 'inquireDate', align: 'center' },
-                { text: '登記單種類', value: 'orderType', align: 'center' },
-                { text: '受理項目', value: 'orderItems', align: 'center' },                
+               { text: '調閱狀態', value: 'inquireStatus', align: 'center' },
+               { text: '受理編號', value: 'orderId', align: 'center' },
+               { text: '電號', value: 'electNum', align: 'center' },
+               { text: '調閱單位', value: 'inquireUnit', align: 'center' },            
+               { text: '申請調閱人員', value: 'inquireName', align: 'center' },
+               { text: '調閱日期', value: 'inquireDate', align: 'center' },
+               { text: '登記單種類', value: 'orderType', align: 'center' },
+               { text: '受理項目', value: 'orderItems', align: 'center' },                
+               { text: '狀態操作', value: 'mani', align: 'center' }
             ],
             signList:[
                 { mani: true, inquireStatus: '申請人主管已簽核', orderId: 'A00024', electNum:'7140000123', inquireUnit:'南屯服務所', inquireName:'王大明', inquireDate:'20210915 10:00',orderType:'APR0370',orderItems:'QA210軍眷用電申請優待'},

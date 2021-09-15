@@ -97,12 +97,10 @@
               <div style="width:250px; margin: auto; text-overflow: ellipsis; overflow: hidden; white-space:nowrap;">{{ item.character }}</div>              
               <v-btn
                 class="ma-2"
-                icon
+                color="primary"
                 @click="modifyCharacter(item)"
               >
-                <v-icon dark>
-                  mdi-pencil
-                </v-icon>
+                編輯
               </v-btn>
             </div> 
                           
@@ -114,7 +112,7 @@
                 :items="characterOption"
                 item-text="text"
                 item-value="value"
-                return-object                   
+                return-object        
               >
                 <template v-slot:selection="{ item, index }">
                   <span v-if="index < maxDisplay">{{ item.text }} &nbsp;</span>
@@ -124,7 +122,7 @@
                   >(..還有{{ character.length - maxDisplay }}項)</span>
                 </template>
               </v-select>
-              <v-btn color="error" @click="submit(item)">送出</v-btn>
+              <v-btn class="mt-3" color="success" @click="submit(item)">送出</v-btn>
             </div>   
           </template>                 
         </v-data-table>

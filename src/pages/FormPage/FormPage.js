@@ -2,7 +2,7 @@
 export default {
     name: 'Form',
     props: {
-        districtMode: String
+        restrictMode: String
     },
     mounted() {
         this.init();
@@ -49,8 +49,8 @@ export default {
     methods: {
         init(){
             this.addAttachment();
-            if(this.districtMode){
-                this.mode = this.districtMode;
+            if(this.restrictMode){
+                this.mode = this.restrictMode;
                 this.showModeSelect = false;
             }
         },

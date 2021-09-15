@@ -11,7 +11,7 @@ export default {
       },
     data() {
         return {
-            waitingCount: 5,
+            waitingCount: 4,
             unDispatchHeaders: [
                 { text: '狀態操作', value: 'action', align: 'center' },
                 { text: '受理編號', value: 'acceptNumber', align: 'center' },
@@ -62,6 +62,7 @@ export default {
                 { text: '潘麗麗', value: '9'},
                 { text: '陳小慶', value: '10'},
             ],
+            selectIndex: null,
 
         }
     },
@@ -70,8 +71,13 @@ export default {
             
         },
         // 判斷點擊哪個按鈕
-        action(actionType){
+        action(actionType,item){
+            this.selectIndex = this.unDispatchList.indexOf(item);
             if(actionType == 'takeAway'){
+                if (this.selectIndex > -1) {
+                    this.unDispatchList.splice(this.selectIndex, 1);
+                    this.waitingCount = this.waitingCount -1;
+                  }
                 MessageService.showSuccess("案件認領成功✓");
             } else{
                 this.classType = null;
@@ -81,6 +87,10 @@ export default {
         },
        
         submit(){
+            if (this.selectIndex > -1) {
+                this.unDispatchList.splice(this.selectIndex, 1);
+                this.waitingCount = this.waitingCount -1;
+              }
             MessageService.showSuccess("案件分派成功✓");
             this.dispatchModel = false;
         },

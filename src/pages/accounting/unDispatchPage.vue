@@ -131,7 +131,7 @@
               &emsp;取消&emsp;
             </v-btn>
             <v-btn              
-              color="primary"            
+              color="success"            
               @click="submit()"
             >
               確認分派

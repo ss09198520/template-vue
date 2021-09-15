@@ -149,6 +149,10 @@ body {
     font-size: 96px;
     margin-right: 20px;
 }
+.annotation {
+    color: gray;
+    font-size: 16px;
+}
 
 .table-header {
     background-color: #003D79;
@@ -197,3 +201,14 @@ body {
 }
 
 /* 提示訊息樣式 end*/
+
+/*核算派工設定用 start*/
+.meter-checkbox {
+    width: 50px;
+  }
+
+  .disable-text {
+    color: lightgray;
+  }
+
+/*核算派工設定用 end*/

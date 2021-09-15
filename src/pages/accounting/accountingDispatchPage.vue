@@ -251,10 +251,50 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog
+      v-model="deleteDispatchModel"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          確認是否要刪除派工
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="deleteDispatchModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            請確認是否要刪除派工 ?
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="normal"            
+            @click="deleteDispatchModel = false"
+          >
+            &emsp;取消&emsp;
+          </v-btn>
+          <v-btn              
+            color="primary"            
+            @click="submit()"
+          >
+            &emsp;確定&emsp;
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script>
+import MessageService from "@/assets/services/message.service";
 
 export default {
   name: 'MyWaiting',
@@ -365,7 +405,9 @@ export default {
         endMeterElectricNum: ''
       },
       editIndex: -1,
-      closeText: '　關閉　'
+      closeText: '　關閉　',
+      deleteDispatchModel:false,
+      selectIndex: null,
     }
   },
   methods: {
@@ -463,10 +505,9 @@ export default {
     },
     // 刪除派工
     remove(item) {
-      let index = this.itemList.indexOf(item);
-      if (index > -1) {
-        this.itemList.splice(index, 1);
-      }
+      this.selectIndex = this.itemList.indexOf(item);
+      this.deleteDispatchModel = true;
+      
     },
     getDate() {
       return new Date().getFullYear() + "/" + this.checkNeedZero(new Date().getMonth() + 1) + "/" + 
@@ -477,17 +518,18 @@ export default {
     checkNeedZero(num) {
       let newNum = ('' + num).length == 1? '0' + num : num;
       return newNum
+    },
+    submit(){
+      if (this.selectIndex > -1) {
+        this.itemList.splice(this.selectIndex, 1);
+      }
+      this.deleteDispatchModel = false;
+      MessageService.showSuccess("刪除派工成功✓");
     }
   }
 }
 </script>
 
 <style scoped>
-  .meter-checkbox {
-    width: 50px;
-  }
-
-  .disable-text {
-    color: lightgray;
-  }
+ 
 </style>

@@ -92,12 +92,12 @@
         ],
         //員工清單項目名稱
         empListHeaders: [
+            { text: '角色', value: 'character', align: 'center',width:'25' },
             { text: '編號', value: 'empId', align: 'center' },
             { text: '姓名', value: 'empName', align: 'center' },
             { text: '單位', value: 'empDivision', align: 'center' },
             { text: '組別', value: 'empGroup', align: 'center' },
-            { text: '課別', value: 'empSection', align: 'center' },            
-            { text: '角色', value: 'character', align: 'center' },
+            { text: '課別', value: 'empSection', align: 'center' },
             { text: '設定方式', value: 'settingStyle', align: 'center' },
             { text: '備註', value: 'memo', align: 'center' },
         ],

@@ -41,6 +41,7 @@ export default{
             empListPageCount:0,
             empListPage:1,
             deleteLeaveModel:false, // 控制刪除請假視窗的開關
+            selectIndex:null,
            
         }
     },
@@ -49,11 +50,15 @@ export default{
             
         },
         deleteLeave(item){
+            this.selectIndex = this.empMockList.indexOf(item);
             this.deleteLeaveModel = true;
-            console.log(item);
+            
         },
         submit(){
-            MessageService.showSuccess("刪除成功");
+            if (this.selectIndex > -1) {
+                this.empMockList.splice(this.selectIndex, 1);
+              }
+            MessageService.showSuccess("刪除請假成功✓");
             this.deleteLeaveModel = false;
         },
         search(){

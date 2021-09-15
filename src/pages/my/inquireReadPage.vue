@@ -19,8 +19,7 @@
               placeholder="請輸入員工編號"
             />
           </v-col>
-        </v-row>
-        <v-row align="center">
+          <v-col cols="1" />
           <v-col cols="1">
             電號
           </v-col>
@@ -35,7 +34,7 @@
             />
           </v-col>
         </v-row>
-        <v-row>
+        <v-row align="center">
           <v-col cols="1">
             登記單種類
           </v-col>
@@ -49,8 +48,7 @@
               placeholder="請輸入員工編號"
             />
           </v-col>
-        </v-row>
-        <v-row>
+          <v-col cols="1" />
           <v-col cols="1">
             員工編號
           </v-col>
@@ -65,7 +63,7 @@
             />
           </v-col>
         </v-row>
-        <v-row>
+        <v-row align="center">
           <v-col cols="1">
             受理日期區間
           </v-col>
@@ -123,8 +121,7 @@
               />
             </v-menu>
           </v-col>
-        </v-row>
-        <v-row>
+          <v-col cols="1" />
           <v-col cols="1">
             歸檔日期區間
           </v-col>
@@ -182,7 +179,8 @@
               />
             </v-menu>
           </v-col>
-        </v-row>        
+        </v-row>
+             
         <v-row>            
           <v-btn color="primary ml-3" @click="display = true">&emsp;查詢&emsp;</v-btn>
         </v-row>
@@ -325,9 +323,6 @@
     <!-- 角色為TPES使用者 -->
     <div v-if="User == 'TPESUser'">        
       <h2 class="font-bold">調閱查詢</h2>
-      <v-row class="ml-5">
-        <h3 class="font-bold">查詢條件</h3>
-      </v-row>
       <div class="ml-10 font-18px font-bold">            
         <v-row align="center">          
           <v-col cols="1">
@@ -343,8 +338,7 @@
               placeholder="請輸入員工編號"
             />
           </v-col>
-        </v-row>
-        <v-row align="center">
+          <v-col cols="1" />
           <v-col cols="1">
             電號
           </v-col>

@@ -1,3 +1,4 @@
+import MessageService from "@/assets/services/message.service";
 export default {
     data(){
         return{
@@ -28,11 +29,24 @@ export default {
                 { mani: true, inquireStatus: '申請人主管已簽核', orderId: 'A00605', electNum:'7140000888', inquireUnit:'太平服務所', inquireName:'趙元智', inquireDate:'20210915 09:45',orderType:'APR0160',orderItems:'F3030表燈非時間電價停用廢止'},
                 { mani: false, inquireStatus: '簽核完畢', orderId: 'A00619', electNum:'7140000999', inquireUnit:'服務中心', inquireName:'陳立元', inquireDate:'20210915 13:44',orderType:'APR0200',orderItems:'I0510故障換表'},
             ],
+            returnReasonModel: false,
         }
     },
     methods:{
         sign(){
             this.popOut = true;
         },
+        checkOrder(){
+            MessageService.showSuccess("簽核成功✓")
+            this.popOut = false;
+        },
+        returnOrder(){
+            this.returnReasonModel = true;
+        },
+        returnSubmit(){
+            this.popOut = false;
+            this.returnReasonModel = false;
+            MessageService.showSuccess("已退件成功✓")
+        }
     },
 }

@@ -36,27 +36,69 @@
     >
       <template v-slot:item.mani="{ item }">   
         <div v-if="item.mani==true">
-          <v-btn                
+          <!-- <v-btn                
             color="success"
             class="ma-1"
             @click="action(item)"
           >
             補件操作
-          </v-btn>
-          <v-btn                
+          </v-btn> -->
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="success"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-file-document-edit-outline'" />
+              </v-btn>
+            </template>
+            <span>補件操作</span>
+          </v-tooltip>
+          <!-- <v-btn                
             color="error"
             class="ma-1"
             @click="action('delete',item)"
           >
             取消案件
-          </v-btn>
-          <v-btn                
+          </v-btn> -->
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="error"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-delete'" />
+              </v-btn>
+            </template>
+            <span>取消案件</span>
+          </v-tooltip>
+          <!-- <v-btn                
             color="primary"
             class="ma-1"
             @click="action('browse',item)"
           >
             瀏覽案件
-          </v-btn>
+          </v-btn> -->
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="primary"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-eye'" />
+              </v-btn>
+            </template>
+            <span>瀏覽案件</span>
+          </v-tooltip>
         </div>                                                                               
       </template>
 

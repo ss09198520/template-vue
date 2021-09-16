@@ -1,6 +1,8 @@
 <template>
   <v-app>
     <v-container>
+      <v-btn class="ma-2" :class="{'primary': User == 'manager'}" @click="User = 'manager'">角色：核算課長</v-btn>
+      <v-btn class="ma-2" :class="{'primary': User == 'employee'}" @click="User = 'employee'">角色：核算課課員</v-btn>
       <div class="d-flex w-100" style="margin-top: 20px;">
         <div class="block mr-5 w-100">
           <div>
@@ -27,7 +29,7 @@
           @page-count="unDispatchListPageCount = $event"
         >
           <template v-slot:item.action="{ item }">                                                        
-            <v-tooltip top>
+            <v-tooltip v-if="User == 'manager'" top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   v-if="item.action"                    
@@ -43,7 +45,7 @@
               <span>分派案件</span>
             </v-tooltip>       
             
-            <v-tooltip top>
+            <v-tooltip v-if="User != 'manager'" top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   v-if="item.action"                    

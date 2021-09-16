@@ -63,6 +63,8 @@ export default {
                 { text: '陳小慶', value: '10'},
             ],
             selectIndex: null,
+            //操作者角色
+            User: 'manager',
 
         }
     },

@@ -85,7 +85,21 @@
             @page-count="dataListPageCount = $event"
           >
             <template v-slot:item.signOff="{ item }">
-              <v-btn v-if="item.signOff" color="success">{{ signOffText }}</v-btn>
+              <!-- <v-btn v-if="item.signOff" color="success">{{ signOffText }}</v-btn> -->
+              <v-tooltip v-if="item.signOff" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-account-check-outline'" />
+                  </v-btn>
+                </template>
+                <span>簽核</span>
+              </v-tooltip>
               <span v-else style="color: gray;">已簽核</span>
             </template>
             <template v-slot:item.signOffDate1="{ item }">
@@ -101,7 +115,21 @@
               <span v-else>{{ item.signOffDate3 }}</span>
             </template>    
             <template v-slot:item.download="{ item }">
-              <v-btn v-if="item.download" class="primary">下載檔案</v-btn>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-if="item.download"
+                    class="ma-2"
+                    fab
+                    small
+                    color="primary"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-file-download-outline'" />
+                  </v-btn>
+                </template>
+                <span>下載檔案</span>
+              </v-tooltip>
             </template> 
           </v-data-table>
           <!-- 選頁 -->

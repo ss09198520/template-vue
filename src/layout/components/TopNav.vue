@@ -4,6 +4,7 @@
     app
     min-height="auto"
     height="60"
+    absolute
   >
     <v-toolbar-title class="font-weight-light">
       <v-btn

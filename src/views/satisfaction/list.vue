@@ -1,33 +1,41 @@
 <template>
   <v-container fluid>
-    <p class="text-xl-h4 font-weight-bold">滿意度問卷查詢</p>
-    <p class="text-xl-h5 font-weight-bold">查詢條件</p>
+    <h2 class="font-bold">滿意度問卷查詢</h2>
     <v-row>
       <v-col
-        class="xs"
+        class="ml-10 font-18px"
         cols="12"
       >
         <v-form>
           <v-row
-            dense
+            class="d-flex justify-start"
+            align="center"
           >
-            <v-col cols="4">
+            <v-col cols="1" class="ml-2 font-weight-bold">
+              問 卷 標 題
+            </v-col>
+            <v-col cols="3" class="mt-5 font-weight-bold">
               <v-text-field
+                class="font-weight-bold"
                 color="accent"
                 dense
-                label="滿意度問卷標題"
+                placeholder="滿意度問卷標題"
                 outlined
                 clearable
                 persistent-hint
               />
             </v-col>
-            <v-col cols="4">
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2 font-weight-bold">
+              狀 態
+            </v-col>
+            <v-col cols="3">
               <v-select
                 :items="['暫存', '退件', '審核中', '審核完成']"
                 class="font-bold"
                 color="accent"
                 item-color="accent"
-                label="狀態"
+                placeholder="狀態"
                 dense
                 outlined
                 hide-details
@@ -35,21 +43,32 @@
             </v-col>
           </v-row>
           <v-row
-            dense
+            class="d-flex justify-start"
+            align="center"
           >
-            <v-col cols="4">
+            <v-col cols="1" class="ml-2 font-weight-bold">
+              上 架 時 間
+            </v-col>
+            <v-col 
+              cols="3"   
+              class="d-flex"
+            >
               <v-menu
                 v-model="releaseDateStartMenu"
-                min-width="290px"
+                transition="scale-transition"
+                offset-y              
+                min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateStart"
                     append-icon="mdi-calendar"
-                    label="上架時間(起)"
+                    placeholder="上架時間(起)"
                     color="accent"
                     outlined
                     dense
+                    readonly
+                    hide-details   
                     class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
@@ -61,20 +80,23 @@
                   scrollable
                 />
               </v-menu>
-            </v-col>
-            <v-col cols="4">
+              <span>~</span>
               <v-menu
                 v-model="releaseDateEndMenu"
-                min-width="290px"
+                transition="scale-transition"
+                offset-y              
+                min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateEnd"
                     append-icon="mdi-calendar"
-                    label="上架時間(迄)"
+                    placeholder="上架時間(迄)"
                     color="accent"
                     outlined
                     dense
+                    readonly
+                    hide-details   
                     class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
@@ -88,42 +110,32 @@
               </v-menu>
             </v-col>
           </v-row>
-          <v-row
-            class="d-flex justify-start"
-            dense
-          >
-            <!-- <v-btn
-              class="ma-2 "
-              depressed
-              fab
-              small
-              color="success"
-              @click="viewSchedule"
-            >
-              <v-icon v-text="'mdi-calendar'" />
-            </v-btn> -->
-            <v-btn
-              class="ma-2"
-              fab
-              small
-              color="primary"
-              @click="isShow = true"
-            >
-              <v-icon v-text="'mdi-magnify'" />
-            </v-btn>
-            <v-btn
-              class="ma-2 "
-              depressed
-              fab
-              small
-              color="accent"
-              @click="isShow = false"
-            >
-              <v-icon>mdi-refresh</v-icon>
-            </v-btn>
-          </v-row>
         </v-form>
       </v-col>
+    </v-row>
+    <v-row
+      class="d-flex justify-end"
+      dense
+    >
+      <v-btn
+        class="ma-2"
+        fab
+        small
+        color="primary"
+        @click="isShow = true"
+      >
+        <v-icon v-text="'mdi-magnify'" />
+      </v-btn>
+      <v-btn
+        class="ma-2 "
+        depressed
+        fab
+        small
+        color="accent"
+        @click="isShow = false"
+      >
+        <v-icon>mdi-refresh</v-icon>
+      </v-btn>
     </v-row>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">

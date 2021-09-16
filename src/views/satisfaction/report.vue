@@ -3,7 +3,7 @@
     <h2 class="font-bold">滿意度調查結果</h2>
     <v-row>
       <v-col
-        class="xs"
+        class="xs font-18px"
         cols="12"
       >
         <v-form>

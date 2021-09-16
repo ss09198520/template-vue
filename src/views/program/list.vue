@@ -1,10 +1,9 @@
 <template>
   <v-container fluid>
-    <p class="text-xl-h4 font-weight-bold">節目單查詢</p>
-    <p class="text-xl-h5 font-weight-bold">查詢條件</p>
+    <h2 class="font-bold">節目單查詢</h2>
     <v-row>
       <v-col
-        class="xs"
+        class="ml-10 font-18px"
         cols="12"
       >
         <v-form>
@@ -193,42 +192,43 @@
               </v-menu>
             </v-col>
           </v-row>
-          <v-row
-            class="d-flex justify-end"
-            dense
-          >
-            <v-btn
-              class="ma-2 "
-              depressed
-              fab
-              small
-              color="success"
-              @click="viewSchedule"
-            >
-              <v-icon v-text="'mdi-calendar'" />
-            </v-btn>
-            <v-btn
-              class="ma-2"
-              fab
-              small
-              color="primary"
-              @click="isShow = true"
-            >
-              <v-icon v-text="'mdi-magnify'" />
-            </v-btn>
-            <v-btn
-              class="ma-2 "
-              depressed
-              fab
-              small
-              color="accent"
-              @click="isShow = false"
-            >
-              <v-icon>mdi-refresh</v-icon>
-            </v-btn>
-          </v-row>
         </v-form>
       </v-col>
+    </v-row>
+    <v-row
+      class="d-flex justify-end"
+      dense
+    >
+      <v-btn
+        class="ma-2 "
+        depressed
+        fab
+        small
+        color="success"
+        @click="viewSchedule"
+      >
+        <v-icon v-text="'mdi-calendar'" />
+      </v-btn>
+      <v-btn
+        class="ma-2"
+        depressed
+        fab
+        small
+        color="primary"
+        @click="isShow = true"
+      >
+        <v-icon v-text="'mdi-magnify'" />
+      </v-btn>
+      <v-btn
+        class="ma-2 "
+        depressed
+        fab
+        small
+        color="accent"
+        @click="isShow = false"
+      >
+        <v-icon>mdi-refresh</v-icon>
+      </v-btn>
     </v-row>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">

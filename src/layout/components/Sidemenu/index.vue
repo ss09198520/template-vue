@@ -1,7 +1,7 @@
 <template>
   <v-navigation-drawer
     id="app-drawer"
-    v-model="inputValue"
+    v-model="drawer"
     :mini-variant="miniSidebar"
     :expand-on-hover="miniSidebar"
     app
@@ -9,7 +9,9 @@
     floating
     persistent
     mobile-breakpoint="991"
-    width="220"
+    mini-variant-width="80"
+    width="230"
+    v-bind="$attrs"
   >
     <logo /> <!-- Logo -->
       
@@ -34,7 +36,7 @@
         'permission_routes',
         'color',
       ]),
-      inputValue: {
+      drawer: {
         get() {
           return this.$store.state.app.drawer
         },

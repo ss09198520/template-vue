@@ -1,9 +1,9 @@
 <template>
   <v-container fluid>
-    <p class="text-xl-h4 font-weight-bold">滿意度個人摘要(週)</p>
+    <h2 class="font-bold">滿意度個人摘要(週)</h2>
     <v-row>
       <v-col
-        class="xs"
+        class="xs font-18px"
         cols="12"
       >
         <v-form>

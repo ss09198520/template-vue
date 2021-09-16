@@ -1,10 +1,9 @@
 <template>
   <v-container fluid>
-    <p class="text-h4 font-weight-bold">素材查詢</p>
-    <p class="text-h5 font-weight-bold">查詢條件</p>
+    <h2 class="font-bold">素材查詢</h2>
     <v-row>
       <v-col
-        class="xs"
+        class="ml-10 font-18px"
         cols="12"
       >
         <v-form>

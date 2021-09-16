@@ -88,7 +88,18 @@
       scrollable
     >
       <v-card>
-        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">{{ dialogTitle }}</v-card-title>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">{{ dialogTitle }}
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="dialog = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
         <v-card-text>
           <hr>
           <div class="ml-10">

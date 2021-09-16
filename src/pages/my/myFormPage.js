@@ -1,10 +1,14 @@
 
 import MessageService from "@/assets/services/message.service";
 import formPage from "../FormPage/FormPage.vue";
+import EventBus from "@/assets/services/eventBus";
 
 export default{
     components: {
         formPage,
+    },
+    beforeMount() { // 在這裡做初始化, 勿刪
+        this.init();
     },
     data(){
         return{
@@ -36,10 +40,15 @@ export default{
             browserModel: false,
             returnReason: null,
             returnReasonModel: false,
+            supplementModel: false,
 
         }
     },
     methods: {
+        init(){
+            // 控制補件存檔後將補件跳出視窗關閉
+            EventBus.subscriber('saveFile',this.closeSupplementModel);
+        },
         action(type,item){
             // 抓出選的是第幾筆
             this.selectIndex = this.empMockList.indexOf(item);            
@@ -47,6 +56,8 @@ export default{
                 this.deleteOrderModel = true;
             } else if(type == 'browse'){
                 this.browserModel = true;
+            } else if(type == 'supplement'){
+                this.supplementModel = true;
             }
             
         },
@@ -81,6 +92,9 @@ export default{
         },
         orderRecord(item){
             console.log(item);
+        },
+        closeSupplementModel(){
+            this.supplementModel = false;
         }
     },
 }

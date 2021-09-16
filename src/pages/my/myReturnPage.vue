@@ -42,12 +42,13 @@
                     fab
                     small
                     color="success"
+                    @click="action('supplement',item)"
                     v-on="on"
                   >
                     <v-icon v-text="'mdi-file-document-edit-outline'" />
                   </v-btn>
                 </template>
-                <span>補證操作</span>
+                <span>補件操作</span>
               </v-tooltip>
               <v-tooltip v-if="item.cancel" top>
                 <template v-slot:activator="{ on }">
@@ -308,6 +309,30 @@
               確認退件
             </v-btn>
           </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- 補件操作 -->
+      <v-dialog
+        v-model="supplementModel"
+        max-width="1200px"
+      >
+        <v-card>
+          <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+            補件操作
+            <v-spacer />
+            <v-btn
+              color="white"
+              icon
+              small
+              text
+              @click="supplementModel = false"
+            >
+              <v-icon> mdi-close </v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text>
+            <form-page restrict-mode="edit" />
+          </v-card-text>
         </v-card>
       </v-dialog>
     </v-container>

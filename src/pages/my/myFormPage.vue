@@ -76,7 +76,7 @@
                 small
                 color="success"
                 v-on="on"
-                @click="action(item)"
+                @click="action('supplement',item)"
               >
                 <v-icon v-text="'mdi-file-document-edit-outline'" />
               </v-btn>
@@ -279,6 +279,31 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </v-container></template>
+    <!-- 補件視窗 -->
+    <v-dialog
+      v-model="supplementModel"
+      max-width="1200px"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          補件操作
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="supplementModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <form-page restrict-mode="edit" />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </v-container>
+</template>
 
 <script src="./myFormPage.js"></script>

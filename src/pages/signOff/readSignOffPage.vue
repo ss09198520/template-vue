@@ -204,7 +204,24 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="font-18px">
-          
+            <v-row class="mt-6 ml-1" align="center">
+              <v-col cols="3">
+                退件部門
+              </v-col>
+              <v-col cols="7">
+                <v-select   
+                  v-model="department"
+                  :items="departmentOption"
+                  item-text="text"
+                  :return-object="true"            
+                  color="#ADADAD"
+                  outlined
+                  hide-details
+                  dense
+                  placeholder="請選擇退件部門"
+                />
+              </v-col>
+            </v-row>
             <v-row class="mt-6 ml-1" align="center">
               <v-col cols="3">
                 退件原因

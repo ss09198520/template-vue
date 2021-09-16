@@ -30,6 +30,12 @@ export default {
                 { mani: false, inquireStatus: '簽核完畢', orderId: 'A00619', electNum:'7140000999', inquireUnit:'服務中心', inquireName:'陳立元', inquireDate:'20210915 13:44',orderType:'APR0200',orderItems:'I0510故障換表'},
             ],
             returnReasonModel: false,
+            department:null,
+            departmentOption:[
+                {text:'核算課',value:'1'},
+                {text:'大里服務中心',value:'2'},
+                {text:'東山服務所',value:'3'},
+            ],
         }
     },
     methods:{

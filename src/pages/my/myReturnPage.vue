@@ -29,7 +29,7 @@
             <template v-slot:item.acceptNumber="{ item }"> 
               <v-tooltip top>
                 <template v-slot:activator="{ on }">        
-                  <a href="javascript:void(0)" style="text-decoration:underline;" v-on="on">{{ item.acceptNumber }}</a>
+                  <a href="javascript:void(0)" style="text-decoration:underline;" @click="openFormRecord()" v-on="on">{{ item.acceptNumber }}</a>
                 </template>
                 <span>表單歷程</span>
               </v-tooltip>
@@ -120,7 +120,7 @@
             <template v-slot:item.sendNumber="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">        
-                  <a href="javascript:void(0)" style="text-decoration:underline;" v-on="on">{{ item.sendNumber }}</a>
+                  <a href="javascript:void(0)" style="text-decoration:underline;" @click="openFormRecord()" v-on="on">{{ item.sendNumber }}</a>
                 </template>
                 <span>表單歷程</span>
               </v-tooltip>
@@ -333,6 +333,42 @@
           <v-card-text>
             <form-page restrict-mode="edit" />
           </v-card-text>
+        </v-card>
+      </v-dialog>
+      <!-- 表單歷程視窗 -->
+      <v-dialog
+        v-model="formRecordModel"
+        max-width="700px"
+      >
+        <v-card>
+          <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+            表單歷程
+            <v-spacer />
+            <v-btn
+              color="white"
+              icon
+              small
+              text
+              @click="formRecordModel = false"
+            >
+              <v-icon> mdi-close </v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="mt-10 font-22px">
+            <div>
+              <v-row v-for="(item,index) in formRecordList" :key="index" class="mt-5">
+                {{ item.record }}
+              </v-row>
+            </div>
+          </v-card-text>
+          <v-card-actions class="d-end mt-5">
+            <v-btn              
+              color="primary"
+              @click="formRecordModel = false"
+            >
+              確認
+            </v-btn>
+          </v-card-actions>
         </v-card>
       </v-dialog>
     </v-container>

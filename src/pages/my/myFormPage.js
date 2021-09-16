@@ -37,10 +37,17 @@ export default{
             ],
             deleteOrderModel:false,
             selectIndex: null,
-            browserModel: false,
-            returnReason: null,
-            returnReasonModel: false,
-            supplementModel: false,
+            browserModel: false, // 瀏覽案件視窗開關
+            returnReasonModel: false, // 退件視窗開關
+            supplementModel: false, // 補件操作視窗開關
+            formRecordModel: false, // 表單歷程視窗開關
+            formRecordList:[
+                {record:'2021/09/14 14:20:14 待歸檔 (0151230-020 吳靜)'},
+                {record:'2021/09/14 14:20:14 審核通過 (0151230-020 吳靜)'},
+                {record:'2021/09/14 13:50:14 核算分派 (0151230-001 陳婷婷)'},
+                {record:'2021/09/14 13:20:14 案件成立 (0151230-011 鍾書文)'},
+
+            ]
 
         }
     },
@@ -95,6 +102,9 @@ export default{
         },
         closeSupplementModel(){
             this.supplementModel = false;
+        },
+        openFormRecord(){
+            this.formRecordModel = true;
         }
     },
 }

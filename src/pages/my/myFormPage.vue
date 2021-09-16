@@ -58,6 +58,14 @@
       :page.sync="orderListPage"
       @page-count="orderListPageCount = $event"
     >
+      <template v-slot:item.orderId="{ item }">   
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">        
+            <a href="javascript:void(0)" style="text-decoration:underline;" v-on="on">{{ item.orderId }}</a>
+          </template>
+          <span>表單歷程</span>
+        </v-tooltip>
+      </template>
       <template v-slot:item.mani="{ item }">   
         <div v-if="item.mani==true">
           <v-tooltip top>

@@ -26,6 +26,14 @@
             disable-sort
             @page-count="caseListPageCount = $event"
           >
+            <template v-slot:item.acceptNumber="{ item }"> 
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">        
+                  <a href="javascript:void(0)" style="text-decoration:underline;" v-on="on">{{ item.acceptNumber }}</a>
+                </template>
+                <span>表單歷程</span>
+              </v-tooltip>
+            </template>
             <template v-slot:item.action="{ item }">
               <v-tooltip v-if="item.remain" top>
                 <template v-slot:activator="{ on }">
@@ -108,6 +116,15 @@
             disable-sort
             @page-count="multiMediaListPageCount = $event"
           >
+            <template v-slot:item.sendNumber="{ item }">
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">        
+                  <a href="javascript:void(0)" style="text-decoration:underline;" v-on="on">{{ item.sendNumber }}</a>
+                </template>
+                <span>表單歷程</span>
+              </v-tooltip>
+            </template>
+
             <template v-slot:item.action="{ item }">
               <v-tooltip v-if="item.edit" top>
                 <template v-slot:activator="{ on }">

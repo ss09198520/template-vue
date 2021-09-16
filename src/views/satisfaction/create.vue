@@ -142,10 +142,10 @@
                       <div v-if="focusIndex === index" class="q-item option-wrap">
                         <ul class="option-list">
                           <li>
-                            <v-icon class="" @click="copyListFn(index)" v-text="'mdi-plus'" />
+                            <v-icon @click="copyListFn(index)" v-text="'mdi-content-copy'" />
                           </li>
                           <li>
-                            <v-icon @click="deleteListFn(index)" v-text="'mdi-minus'" />
+                            <v-icon @click="deleteListFn(index)" v-text="'mdi-delete'" />
                           </li>
                           <li class="mt-1">
                             <!-- <v-switch 

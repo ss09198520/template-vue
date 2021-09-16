@@ -276,29 +276,33 @@
           <template v-slot:[`item.action`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-icon
-                  small
-                  class="mr-2"
-                  color="red"
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="primary"
                   @click="editItem(item)"
                   v-on="on"
                 >
-                  mdi-pencil
-                </v-icon>
+                  <v-icon v-text="'mdi-eye'" />
+                </v-btn>
               </template>
-              <span>編輯</span>
+              <span>預覽</span>
             </v-tooltip>
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-icon
-                  small
-                  @click="deleteItem(item)"
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="success"
+                  @click="editItem(item)"
                   v-on="on"
                 >
-                  mdi-eye
-                </v-icon>
+                  <v-icon v-text="'mdi-pencil'" />
+                </v-btn>
               </template>
-              <span>刪除</span>
+              <span>編輯</span>
             </v-tooltip>
           </template>
           <template v-slot:[`item.marquee_content`]="{ item }">
@@ -315,7 +319,7 @@
               <span>{{ item.marquee_content }}</span>
             </v-tooltip>
           </template>
-          <template v-slot:[`item.state`]="{ item }">
+          <template v-slot:[`item.active`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-icon
@@ -349,9 +353,12 @@
         isShow: true,
         menu: false,
         date: new Date().toISOString().substr(0, 10),
+        //分頁
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
+        //分頁 end
+        //日曆
         releaseDateStartMenu: false,
         releaseDateStart: '',
         releaseDateEndMenu: false,
@@ -360,14 +367,8 @@
         sunsetDateStart: '',
         sunsetDateEndMenu: false,
         sunsetDateEnd: '',
+          //日曆 end
         headerCRUD: [
-          
-          {
-            text: '操作',
-            value: 'action',
-            sortable: false,
-            align: 'center',
-          },
           {
             text: '節目名稱',
             value: 'name',
@@ -383,12 +384,20 @@
             align: 'center',
           },
           {
+            text: '狀態',
+            value: 'signoff',
+            sortable: false,
+            align: 'center',
+          },
+          {
             text: '上架日期',
             value: 'ondate',
+            align: 'center',
           },
           {
             text: '下架日期',
             value: 'offdate',
+            align: 'center',
           },
           {
             text: '上架',
@@ -398,8 +407,8 @@
             align: 'center',
           },
           {
-            text: '狀態',
-            value: 'signoff',
+            text: '操作',
+            value: 'action',
             sortable: false,
             align: 'center',
           },
@@ -424,7 +433,7 @@
             division:'業務處',
             ondate: '2021-12-21',
             offdate: '2022-01-30',
-            active: true,
+            active: false,
             signoff: '審核中',
           },
           {
@@ -435,7 +444,7 @@
             division:'業務處',
             ondate: '2021-10-21',
             offdate: '2021-10-30',
-            active: true,
+            active: false,
             signoff: '審核完成',
           },
           {
@@ -446,7 +455,7 @@
             division:'業務處',
             ondate: '2021-11-11',
             offdate: '2021-12-24',
-            active: true,
+            active: false,
             signoff: '審核完成',
           },
           {
@@ -457,7 +466,7 @@
             division:'業務處',
             ondate: '2021-12-21',
             offdate: '2022-04-30',
-            active: true,
+            active: false,
             signoff: '審核完成',
           },
         ],

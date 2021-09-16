@@ -11,47 +11,63 @@
             class="d-flex justify-start"
             align="center"
           >
-            <v-col cols="1" class="ml-2 ">
+            <v-col cols="1" class="ml-2">
+              受 理 部 門
+            </v-col>
+            <v-col cols="3" class="ml-2">
               <v-select
-                :items="['一般','預設']"
-                class="font-bold"
+                :items="['核算課','大里服務中心','東山服務所']"
                 color="accent"
                 item-color="accent"
-                label="受理部門"
+                placeholder="受理部門"
                 dense
                 outlined
                 hide-details
               />
             </v-col>
-            <v-col>
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2">
+              受 理 人 員
+            </v-col>
+            <v-col cols="3" class="mt-5">
               <v-text-field
-                class="font-weight-bold"
                 color="accent"
                 dense
-                label="受理人員"
+                placeholder="受理人員"
                 outlined
                 clearable
                 persistent-hint
               />
             </v-col>
-            <v-col>
+            
+          </v-row>
+          <v-row
+            class="d-flex justify-start"
+            align="center"
+          >
+            <v-col cols="1" class="ml-2">
+              受 理 號 碼
+            </v-col>
+            <v-col cols="3" class="mt-5">
               <v-text-field
-                class="font-weight-bold"
                 color="accent"
                 dense
-                label="受理號碼"
+                placeholder="受理號碼"
                 outlined
                 clearable
                 persistent-hint
               />
             </v-col>
-            <v-col>
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2">
+              申 請 項 目
+            </v-col>
+            <v-col cols="3" class="ml-2">
               <v-select
                 :items="['QA210 軍眷用電申請優待','I0510 故障換表','I0520 增加電表','F3030 表燈非時間電價停用廢止','I0510 故障換表',]"
-                class="font-bold"
                 color="accent"
                 item-color="accent"
-                label="申請項目"
+                placeholder="申請項目"
                 dense
                 outlined
                 hide-details
@@ -59,24 +75,33 @@
             </v-col>
           </v-row>
           <v-row
-            class="d-flex "
-            dense
+            class="d-flex justify-start"
+            align="center"
           >
-            <v-col cols="2" :align-self="'end'">
+            <v-col cols="1" class="ml-2">
+              調 查 日 期
+            </v-col>
+            <v-col 
+              cols="3"   
+              class="d-flex"
+            >
               <v-menu
                 v-model="releaseDateStartMenu"
                 :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
                 min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateStart"
                     append-icon="mdi-calendar"
-                    label="調查日期(起)"
+                    placeholder="調查日期(起)"
                     color="accent"
                     outlined
                     dense
-                    class="font-weight-bold"
+                    readonly
+                    hide-details   
                     :clearable="true"
                     v-on="on"
                   />
@@ -86,22 +111,24 @@
                   scrollable
                 />
               </v-menu>
-            </v-col>
-            <v-col cols="2" :align-self="'end'">
+              <div class="mt-2" v-text="'~'" />
               <v-menu
-                v-model="releaseDateEneMenu"
+                v-model="releaseDateEndMenu"
                 :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
                 min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateEnd"
                     append-icon="mdi-calendar"
-                    label="調查日期(訖)"
+                    placeholder="調查日期(迄)"
                     color="accent"
                     outlined
                     dense
-                    class="font-weight-bold"
+                    readonly
+                    hide-details   
                     :clearable="true"
                     v-on="on"
                   />
@@ -113,19 +140,59 @@
               </v-menu>
             </v-col>
           </v-row>
-          <v-row
-            class="d-flex justify-start"
-            dense
-          >
-            <v-btn color="primary" class="ml-2" @click="isDownload=!isDownload"> 查詢 </v-btn>
-
-            <v-btn :disabled="!isDownload" color="success" class="ml-2" @click="search()"> 下載查詢結果 </v-btn>
-
-            <!-- <v-btn color="success" class="ml-2" @click="goMonth()"> 滿意度區處報表(月) </v-btn>
-            <v-btn color="success" class="ml-2" @click="goWeek()"> 滿意度摘要個人報表(週) </v-btn> -->
-          </v-row>
         </v-form>
       </v-col>
+    </v-row>
+    <v-row
+      class="d-flex justify-end"
+      dense
+    >
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2 "
+            fab
+            small
+            color="success"
+            :disabled="!isDownload"
+            @click="viewSchedule"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-file-download-outline'" />
+          </v-btn>
+        </template>
+        <span>下載查詢結果</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2"
+            fab
+            small
+            color="primary"
+            @click="isDownload=!isDownload"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-magnify'" />
+          </v-btn>
+        </template>
+        <span>查詢</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2 "
+            fab
+            small
+            color="accent"
+            @click="isShow = false"
+            v-on="on"
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+        </template>
+        <span>清空查詢</span>
+      </v-tooltip>
     </v-row>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">

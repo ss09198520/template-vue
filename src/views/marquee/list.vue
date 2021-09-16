@@ -347,7 +347,7 @@
               <span>{{ item.marquee_content }}</span>
             </v-tooltip>
           </template>
-          <template v-slot:[`item.state`]="{ item }">
+          <template v-slot:[`item.active`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-icon
@@ -381,6 +381,7 @@
         isShow: false,
         // menu: false,
         // date: new Date().toISOString().substr(0, 10),
+        //分頁
         releaseDateStartMenu: false,
         releaseDateStart: '',
         releaseDateEndMenu: false,
@@ -389,9 +390,12 @@
         sunsetDateStart: '',
         sunsetDateEndMenu: false,
         sunsetDateEnd: '',
+        //分頁 end
+        //日曆
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
+        //日曆 end
         headerCRUD: [
           {
             text: '跑馬燈名稱',
@@ -414,26 +418,33 @@
             align: 'center',
           },
           {
-            text: '上架日期',
-            value: 'ondate',
-            align: 'center'
-          },
-          {
-            text: '下架日期',
-            value: 'offdate',
-            align: 'center'
-          },
-          {
             text: '狀態',
             value: 'signoff',
             sortable: false,
             align: 'center',
           },
           {
-            text: '狀態操作',
+            text: '上架日期',
+            value: 'ondate',
+            align: 'center',
+          },
+          {
+            text: '下架日期',
+            value: 'offdate',
+            align: 'center',
+          },
+          {
+            text: '上架',
+            value: 'active',
+            sortable: false,
+            width: '10%',
+            align: 'center',
+          },
+          {
+            text: '操作',
             value: 'action',
             sortable: false,
-            align: 'center'
+            align: 'center',
           },
         ],
         itemsCRUD: [

@@ -49,7 +49,7 @@
             :page.sync="inquireListPage"
             @page-count="inquireListPageCount = $event"
           >
-            <template v-slot:item.mani="{ item }">
+            <template v-slot:[`item.mani`]="{ item }">
               <div v-if="item.mani==true">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">

@@ -3,12 +3,15 @@
     <h2 class="font-bold">滿意度個人摘要(週)</h2>
     <v-row>
       <v-col
-        class="xs font-18px"
+        class="ml-10 font-18px"
         cols="12"
       >
-        <v-form>
-          <v-row align="center">
-            <v-col cols="1">
+        <v-form class="font-weight-bold">
+          <v-row
+            class="d-flex justify-start"
+            align="center"
+          >
+            <v-col cols="1" class="ml-2 ">
               查詢日期
             </v-col>
             <v-col cols="3" class="d-flex">
@@ -64,9 +67,28 @@
                 />
               </v-menu>
             </v-col>
+            <v-col cols="1">
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="primary"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-magnify'" />
+                  </v-btn>
+                </template>
+                <span>{{ searchText }}</span>
+              </v-tooltip>
+            </v-col>
           </v-row>
           <v-row>
-            <v-btn color="primary" class="ml-3" @click="search()"><v-icon style="margin-right: 3px;">mdi-magnify</v-icon>查詢</v-btn>
+            <v-col cols="11" />
+            <v-col>
+              <!-- <v-btn color="primary" class="ml-3" @click="search()">{{ searchText }}</v-btn> -->
+            </v-col>
           </v-row>
         </v-form>
       </v-col>
@@ -87,8 +109,21 @@
           class="font-weight-bold elevation-1"
         >
           <template v-slot:[`item.download`]="{ item }">
-            <v-btn v-if="item.download" class="primary">下載檔案</v-btn>
-            <v-btn v-else :disabled="true" class="primary">無報表資料</v-btn>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  :disabled="!item.download"
+                  class="ma-2"
+                  fab
+                  small
+                  color="primary"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-file-download-outline'" />
+                </v-btn>
+              </template>
+              <span v-text="item.download ? '下載檔案' : '無報表資料' " />
+            </v-tooltip>
           </template>
         </v-data-table>
       </v-col>
@@ -114,13 +149,6 @@
         itemsPerPage: 10,
         headerCRUD: [
           {
-            text: '下載',
-            value: 'download',
-            width: '10%',
-            align: 'center'
-            
-          },
-          {
             text: '區處',
             value: 'region',
             align: 'center'
@@ -129,6 +157,13 @@
             text: '報表產出時間',
             value: 'signOffDate1',
             align: 'center'
+          },
+          {
+            text: '下載',
+            value: 'download',
+            width: '10%',
+            align: 'center'
+            
           },
           
         ],

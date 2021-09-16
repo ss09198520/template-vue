@@ -6,17 +6,17 @@
         class="ml-10 font-18px"
         cols="12"
       >
-        <v-form>
+        <v-form class="font-weight-bold">
           <v-row
             class="d-flex justify-start"
             align="center"
           >
-            <v-col cols="1" class="ml-2 font-weight-bold">
+            <v-col cols="1" class="ml-2 ">
               問 卷 標 題
             </v-col>
-            <v-col cols="3" class="mt-5 font-weight-bold">
+            <v-col cols="3" class="mt-5 ">
               <v-text-field
-                class="font-weight-bold"
+                class=""
                 color="accent"
                 dense
                 placeholder="滿意度問卷標題"
@@ -26,7 +26,7 @@
               />
             </v-col>
             <v-col cols="1" />
-            <v-col cols="1" class="ml-2 font-weight-bold">
+            <v-col cols="1" class="ml-2">
               狀 態
             </v-col>
             <v-col cols="3">
@@ -46,7 +46,7 @@
             class="d-flex justify-start"
             align="center"
           >
-            <v-col cols="1" class="ml-2 font-weight-bold">
+            <v-col cols="1" class="ml-2">
               上 架 時 間
             </v-col>
             <v-col 
@@ -55,8 +55,9 @@
             >
               <v-menu
                 v-model="releaseDateStartMenu"
+                :close-on-content-click="false"
                 transition="scale-transition"
-                offset-y              
+                offset-y
                 min-width="auto"
               >
                 <template v-slot:activator="{ on }">
@@ -69,22 +70,21 @@
                     dense
                     readonly
                     hide-details   
-                    class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="releaseDateStart"
-                  no-title
                   scrollable
                 />
               </v-menu>
-              <span>~</span>
+              <div class="mt-2" v-text="'~'" />
               <v-menu
                 v-model="releaseDateEndMenu"
+                :close-on-content-click="false"
                 transition="scale-transition"
-                offset-y              
+                offset-y
                 min-width="auto"
               >
                 <template v-slot:activator="{ on }">
@@ -97,14 +97,12 @@
                     dense
                     readonly
                     hide-details   
-                    class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="releaseDateEnd"
-                  no-title
                   scrollable
                 />
               </v-menu>
@@ -117,25 +115,36 @@
       class="d-flex justify-end"
       dense
     >
-      <v-btn
-        class="ma-2"
-        fab
-        small
-        color="primary"
-        @click="isShow = true"
-      >
-        <v-icon v-text="'mdi-magnify'" />
-      </v-btn>
-      <v-btn
-        class="ma-2 "
-        depressed
-        fab
-        small
-        color="accent"
-        @click="isShow = false"
-      >
-        <v-icon>mdi-refresh</v-icon>
-      </v-btn>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2"
+            fab
+            small
+            color="primary"
+            @click="isShow = true"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-magnify'" />
+          </v-btn>
+        </template>
+        <span>查詢</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2 "
+            fab
+            small
+            color="accent"
+            @click="isShow = false"
+            v-on="on"
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+        </template>
+        <span>清空查詢</span>
+      </v-tooltip>
     </v-row>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">
@@ -146,11 +155,15 @@
           :headers="headerCRUD"
           :items="itemsCRUD"
           :items-per-page="itemsPerPage"
+          :page.sync="itemsListPage"
           :footer-props="{
             showFirstLastPage: true,
           }"
           disable-sort
           class="font-weight-bold elevation-1"
+          hide-default-footer
+          no-data-text="查無資料"
+          @page-count="itemsListPageCount = $event"
         >
           <template v-slot:top>
             <v-dialog v-model="dialog" max-width="500" />
@@ -233,6 +246,12 @@
         menu: false,
         date: new Date().toISOString().substr(0, 10),
         itemsPerPage: 10,
+        itemsListPage: 1,
+        itemsListPageCount: 1,
+        releaseDateStartMenu: false,
+        releaseDateStart: '',
+        releaseDateEndMenu: false,
+        releaseDateEnd: '',
         headerCRUD: [
           {
             text: '滿意度問卷名稱',
@@ -262,7 +281,7 @@
             width: '10%',
             align: 'center',
           },
-             {
+          {
             text: '上架',
             value: 'active',
             sortable: false,

@@ -3,16 +3,15 @@
     <h2 class="font-bold">滿意度調查結果</h2>
     <v-row>
       <v-col
-        class="xs font-18px"
+        class="ml-10 font-18px"
         cols="12"
       >
-        <v-form>
+        <v-form class="font-weight-bold">
           <v-row
-            class="d-flex justify-center"
-            dense
-            cols="4"
+            class="d-flex justify-start"
+            align="center"
           >
-            <v-col>
+            <v-col cols="1" class="ml-2 ">
               <v-select
                 :items="['一般','預設']"
                 class="font-bold"

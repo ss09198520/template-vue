@@ -6,40 +6,53 @@
         class="ml-10 font-18px"
         cols="12"
       >
-        <v-form>
+        <v-form class="font-weight-bold">
           <v-row
-            class="d-flex justify-center"
-            dense
+            class="d-flex justify-start"
+            align="center"
           >
-            <v-col cols="4">
+            <v-col cols="1" class="ml-2">
+              素 材 名 稱
+            </v-col>
+            <v-col cols="3" class="mt-5">
               <v-text-field
                 color="accent"
-                class="font-weight-bold"
                 dense
-                label="素材名稱"
+                placeholder="素材名稱"
                 outlined
                 clearable
                 persistent-hint
               />
             </v-col>
-            <v-col cols="4">
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2">
+              上 傳 人 員
+            </v-col>
+            <v-col cols="3" class="mt-5">
               <v-text-field
                 color="accent"
-                class="font-weight-bold"
                 dense
-                label="上傳人員"
+                placeholder="上傳人員"
                 outlined
                 clearable
                 persistent-hint
               />
             </v-col>
-            <v-col cols="4">
+          </v-row>
+          <v-row
+            class="d-flex justify-start"
+            align="center"
+          >
+            <v-col cols="1" class="ml-2">
+              素 材 類 型
+            </v-col>
+            <v-col cols="3">
               <v-select
                 :items="['圖片', '影片',]"
-                class="font-weight-bold"
+                class="font-bold"
                 color="accent"
                 item-color="accent"
-                label="素材類型"
+                placeholder="素材類型"
                 dense
                 outlined
                 hide-details
@@ -47,89 +60,127 @@
             </v-col>
           </v-row>
           <v-row
-            class="d-flex"
-            dense
+            class="d-flex justify-start"
+            align="center"
           >
-            <v-col cols="4">
+            <v-col cols="1" class="ml-2">
+              上 架 時 間
+            </v-col>
+            <v-col 
+              cols="3"   
+              class="d-flex"
+            >
               <v-menu
                 v-model="releaseDateStartMenu"
-                min-width="290px"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateStart"
                     append-icon="mdi-calendar"
-                    label="上傳時間(起)"
+                    placeholder="上傳時間(起)"
                     color="accent"
                     outlined
                     dense
-                    class="font-weight-bold"
+                    readonly
+                    hide-details   
                     :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="releaseDateStart"
-                  no-title
                   scrollable
                 />
               </v-menu>
-            </v-col>
-            <v-col cols="4">
+              <div class="mt-2"> ~ </div>
               <v-menu
                 v-model="releaseDateEndMenu"
-                min-width="290px"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
                     v-model="releaseDateEnd"
                     append-icon="mdi-calendar"
-                    label="上傳時間(迄)"
+                    placeholder="上傳時間(迄)"
                     color="accent"
                     outlined
                     dense
-                    class="font-weight-bold"
+                    readonly
+                    hide-details   
                     :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="releaseDateEnd"
-                  no-title
                   scrollable
                 />
               </v-menu>
             </v-col>
           </v-row>
-          <v-row
-            class="d-flex justify-start"
-            dense
-          >
-            <v-btn
-              class="ma-2"
-              fab
-              small
-              color="primary"
-              @click="isShow = true"
-            >
-              <v-icon v-text="'mdi-magnify'" />
-            </v-btn>
-            <v-btn
-              class="ma-2 "
-              depressed
-              fab
-              small
-              color="accent"
-              @click="isShow = false"
-            >
-              <v-icon>mdi-refresh</v-icon>
-            </v-btn>
-          </v-row>
         </v-form>
       </v-col>
     </v-row>
+    <v-row
+      class="d-flex justify-end"
+      dense
+    >
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2 justify-center"
+            fab
+            small
+            @click="isGrid = !isGrid"
+            v-on="on"
+          >
+            <v-icon v-text=" !isGrid ? 'mdi-view-grid-outline': 'mdi-format-list-bulleted-square'" />
+          </v-btn>
+        </template>
+        <span>瀏覽模式</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2"
+            fab
+            small
+            color="primary"
+            @click="isShow = true"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-magnify'" />
+          </v-btn>
+        </template>
+        <span>查詢</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2 "
+            fab
+            small
+            color="accent"
+            @click="isShow = false"
+            v-on="on"
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+        </template>
+        <span>清空查詢</span>
+      </v-tooltip>
+    </v-row>
+    <!-- <v-divider class="mt-6 mb-5" /> -->
+    <hr class="mt-6 mb-5">
     <v-row v-show="isShow">
-      <v-col md="12">
+      <v-col v-show="isGrid" md="12">
         <fet-card
           full-width
           title="搜尋結果"
@@ -153,89 +204,124 @@
           </div>
         </fet-card>
       </v-col>
-    </v-row>
-    <hr class="mt-6 mb-5">
-    <v-row v-show="isShow">
-      <v-col md="12">
-        <v-data-table
-          item-key="id"
-          :headers="headerCRUD"
-          :items="itemsCRUD"
-          :items-per-page="itemsPerPage"
-          :footer-props="{
-            showFirstLastPage: true,
-          }"
-          disable-sort
-          class="font-weight-bold"
+      <v-col v-show="!isGrid" md="12">
+        <fet-card
+          full-width
+          title="搜尋結果"
+          text=""
         >
-          <template v-slot:top>
-            <v-dialog v-model="dialog" max-width="500" />
-            <v-dialog v-model="alertDialog" :max-width="250">
-              <v-card>
-                <v-card-title class="justify-center">Are you sure?</v-card-title>
-                <v-card-text />
-                <v-card-actions class="justify-center">
-                  <v-btn color="error" depressed @click="remove" v-text="'Yes'" />
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </template>
-          <template v-slot:[`item.action`]="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  small
-                  class="mr-2"
-                  color="red"
-                  @click="editItem(item)"
-                  v-on="on"
-                >
-                  mdi-pencil
-                </v-icon>
-              </template>
-              <span>編輯</span>
-            </v-tooltip>
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  small
-                  @click="deleteItem(item)"
-                  v-on="on"
-                >
-                  mdi-eye
-                </v-icon>
-              </template>
-              <span>刪除</span>
-            </v-tooltip>
-          </template>
-          <template v-slot:[`item.marquee_content`]="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  small
-                  class="mr-2 d-flex justify-center"
-                  v-on="on"
-                >
-                  mdi-file
-                </v-icon>
-              </template>
-              <span>{{ item.marquee_content }}</span>
-            </v-tooltip>
-          </template>
-          <template v-slot:[`item.active`]="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  class="d-flex justify-center"
-                  :color="item.active?'green darken-2':''"
-                  v-on="on"
-                >
-                  {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
-                </v-icon>
-              </template>
-            </v-tooltip>
-          </template>
-        </v-data-table>
+          <v-data-table
+            item-key="id"
+            :headers="headerCRUD"
+            :items="itemsCRUD"
+            :items-per-page="itemsPerPage"
+            :page.sync="itemsListPage"
+            :footer-props="{
+              showFirstLastPage: true,
+            }"
+            disable-sort
+            class="font-weight-bold elevation-1"
+            hide-default-footer
+            no-data-text="查無資料"
+            @page-count="itemsListPageCount = $event"
+          >
+            <template v-slot:top>
+              <v-dialog v-model="dialog" max-width="500" />
+              <v-dialog v-model="alertDialog" :max-width="250">
+                <v-card>
+                  <v-card-title class="justify-center">Are you sure?</v-card-title>
+                  <v-card-text />
+                  <v-card-actions class="justify-center">
+                    <v-btn color="error" depressed @click="remove" v-text="'Yes'" />
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </template>
+            <template v-slot:[`item.action`]="{ item }">
+              <!-- <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    class="mr-2"
+                    color="red"
+                    @click="editItem(item)"
+                    v-on="on"
+                  >
+                    mdi-pencil
+                  </v-icon>
+                </template>
+                <span>編輯</span>
+              </v-tooltip>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    @click="deleteItem(item)"
+                    v-on="on"
+                  >
+                    mdi-eye
+                  </v-icon>
+                </template>
+                <span>刪除</span>
+              </v-tooltip> -->
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    x-small
+                    color="error"
+                    :disabled="item.active"
+                    @click="action('deleteMultiMedia',item)"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-delete'" />
+                  </v-btn>
+                  <!-- <v-icon
+                    :disabled="item.active"
+                    color="error"
+                    @click="deleteItem(item)"
+                    v-on="on"
+                  >
+                    mdi-delete
+                  </v-icon> -->
+                </template>
+                <span>刪除</span>
+              </v-tooltip>
+            </template>
+            <template v-slot:[`item.marquee_content`]="{ item }">
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    class="mr-2 d-flex justify-center"
+                    v-on="on"
+                  >
+                    mdi-file
+                  </v-icon>
+                </template>
+                <span>{{ item.marquee_content }}</span>
+              </v-tooltip>
+            </template>
+            <template v-slot:[`item.active`]="{ item }">
+              <v-icon
+                class="d-flex justify-center"
+                :color="item.active?'green darken-2':''"
+                v-on="on"
+              >
+                {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
+              </v-icon>
+            </template>
+          </v-data-table>
+          <!-- 選頁 -->
+          <div class="mt-2">
+            <v-pagination
+              v-model="itemsListPage"
+              color="#2F59C4"
+              :length="itemsListPageCount"
+            />
+          </div>
+        </fet-card>
       </v-col>
     </v-row>
   </v-container>
@@ -246,7 +332,18 @@
     data() {
       return {
         isShow: false,
+        isGrid: false,
+        //分頁
         itemsPerPage: 10,
+        itemsListPage: 1,
+        itemsListPageCount: 1,
+        //分頁 end
+        //日曆
+        releaseDateStartMenu: false,
+        releaseDateStart: '',
+        releaseDateEndMenu: false,
+        releaseDateEnd: '',
+        //日曆 end
         resources: [
           {
             "id": 1,
@@ -349,6 +446,18 @@
             value: 'ondate',
             align: 'center'
           },
+          {
+            text: '使用中',
+            value: 'active',
+            sortable: false,
+            align: 'center',
+          },
+            {
+              text: '狀態操作',
+              value: 'action',
+              sortable: false,
+              align: 'center'
+            },
         ],
         itemsCRUD: [
           {

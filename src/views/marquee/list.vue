@@ -6,15 +6,15 @@
         class="ml-10 font-18px"
         cols="12"
       >
-        <v-form>
+        <v-form class="font-weight-bold">
           <v-row
             class="d-flex justify-start"
             align="center"
           >
-            <v-col cols="1" class="ml-2 font-weight-bold">
+            <v-col cols="1" class="ml-2">
               跑 馬 燈 內 容
             </v-col>
-            <v-col cols="3" class="mt-5 font-weight-bold">
+            <v-col cols="3" class="mt-5">
               <v-text-field
                 class="font-weight-bold"
                 color="accent"
@@ -26,10 +26,10 @@
               />
             </v-col>
             <v-col cols="1" />
-            <v-col cols="1" class="ml-2 font-weight-bold">
+            <v-col cols="1" class="ml-2">
               跑 馬 燈 類 型
             </v-col>
-            <v-col cols="3" class="ml-2 font-weight-bold">
+            <v-col cols="3" class="ml-2">
               <v-select
                 :items="['一般','預設']"
                 class="font-bold"
@@ -46,7 +46,7 @@
             class="d-flex justify-start"
             align="center"
           >
-            <v-col cols="1" class="ml-2 font-weight-bold">
+            <v-col cols="1" class="ml-2">
               跑 馬 燈 類 型
             </v-col>
             <v-col cols="3">
@@ -66,7 +66,7 @@
             class="d-flex justify-start"
             align="center"
           >
-            <v-col cols="1" class="ml-2 font-weight-bold">
+            <v-col cols="1" class="ml-2">
               上 架 時 間
             </v-col>
             <v-col 
@@ -75,6 +75,7 @@
             >
               <v-menu
                 v-model="releaseDateStartMenu"
+                :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y              
                 min-width="auto"
@@ -89,20 +90,19 @@
                     dense
                     readonly
                     hide-details   
-                    class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="releaseDateStart"
-                  no-title
                   scrollable
                 />
               </v-menu>
               <div class="mt-2"> ~ </div>
               <v-menu
                 v-model="releaseDateEndMenu"
+                :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y              
                 min-width="auto"
@@ -117,20 +117,18 @@
                     dense
                     readonly
                     hide-details   
-                    class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="releaseDateEnd"
-                  no-title
                   scrollable
                 />
               </v-menu>
             </v-col>
             <v-col cols="1" />
-            <v-col cols="1" class="ml-2 font-weight-bold">
+            <v-col cols="1" class="ml-2">
               下 架 時 間
             </v-col>
             <v-col 
@@ -139,6 +137,7 @@
             >
               <v-menu
                 v-model="sunsetDateStartMenu"
+                :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y              
                 min-width="auto"
@@ -153,21 +152,22 @@
                     dense
                     readonly
                     hide-details   
-                    class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="sunsetDateStart"
-                  no-title
                   scrollable
                 />
               </v-menu>
               <div class="mt-2"> ~ </div>
               <v-menu
                 v-model="sunsetDateEndMenu"
-                min-width="290px"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y              
+                min-width="auto"
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
@@ -179,14 +179,12 @@
                     dense
                     readonly
                     hide-details   
-                    class="font-weight-bold"
                     :clearable="true"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
                   v-model="sunsetDateEnd"
-                  no-title
                   scrollable
                 />
               </v-menu>
@@ -199,36 +197,51 @@
       class="d-flex justify-end"
       dense
     >
-      <v-btn
-        class="ma-2 "
-        depressed
-        fab
-        small
-        color="success"
-        @click="viewSchedule"
-      >
-        <v-icon v-text="'mdi-calendar'" />
-      </v-btn>
-      <v-btn
-        class="ma-2"
-        depressed
-        fab
-        small
-        color="primary"
-        @click="isShow = true"
-      >
-        <v-icon v-text="'mdi-magnify'" />
-      </v-btn>
-      <v-btn
-        class="ma-2 "
-        depressed
-        fab
-        small
-        color="accent"
-        @click="isShow = false"
-      >
-        <v-icon>mdi-refresh</v-icon>
-      </v-btn>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2 "
+            fab
+            small
+            color="success"
+            @click="viewSchedule"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-calendar'" />
+          </v-btn>
+        </template>
+        <span>行事曆劉覽</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2"
+            fab
+            small
+            color="primary"
+            @click="isShow = true"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-magnify'" />
+          </v-btn>
+        </template>
+        <span>查詢</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2 "
+            fab
+            small
+            color="accent"
+            @click="isShow = false"
+            v-on="on"
+          >
+            <v-icon>mdi-refresh</v-icon>
+          </v-btn>
+        </template>
+        <span>清空查詢</span>
+      </v-tooltip>
     </v-row>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">
@@ -239,11 +252,15 @@
           :headers="headerCRUD"
           :items="itemsCRUD"
           :items-per-page="itemsPerPage"
+          :page.sync="itemsListPage"
           :footer-props="{
             showFirstLastPage: true,
           }"
           disable-sort
           class="font-weight-bold elevation-1"
+          hide-default-footer
+          no-data-text="查無資料"
+          @page-count="itemsListPageCount = $event"
         >
           <template v-slot:top>
             <v-dialog v-model="dialog" max-width="500" />
@@ -258,7 +275,7 @@
             </v-dialog>
           </template>
           <template v-slot:[`item.action`]="{ item }">
-            <v-tooltip top>
+            <!-- <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-icon
                   class="mr-2"
@@ -270,15 +287,49 @@
                 </v-icon>
               </template>
               <span>編輯</span>
+            </v-tooltip> -->
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="primary"
+                  @click="editItem(item)"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-eye'" />
+                </v-btn>
+              </template>
+              <span>預覽</span>
             </v-tooltip>
             <v-tooltip top>
               <template v-slot:activator="{ on }">
-                <v-icon
-                  @click="deleteItem(item)"
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="success"
+                  @click="editItem(item)"
                   v-on="on"
                 >
-                  mdi-eye
-                </v-icon>
+                  <v-icon v-text="'mdi-pencil'" />
+                </v-btn>
+              </template>
+              <span>編輯</span>
+            </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="error"
+                  @click="action('deleteMultiMedia',item)"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-delete'" />
+                </v-btn>
               </template>
               <span>刪除</span>
             </v-tooltip>
@@ -310,6 +361,14 @@
             </v-tooltip>
           </template>
         </v-data-table>
+        <!-- 選頁 -->
+        <div class="mt-2">
+          <v-pagination
+            v-model="itemsListPage"
+            color="#2F59C4"
+            :length="itemsListPageCount"
+          />
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -331,6 +390,8 @@
         sunsetDateEndMenu: false,
         sunsetDateEnd: '',
         itemsPerPage: 10,
+        itemsListPage: 1,
+        itemsListPageCount: 1,
         headerCRUD: [
           {
             text: '跑馬燈名稱',
@@ -369,7 +430,7 @@
             align: 'center',
           },
           {
-            text: '操作',
+            text: '狀態操作',
             value: 'action',
             sortable: false,
             align: 'center'

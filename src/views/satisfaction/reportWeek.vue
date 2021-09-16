@@ -102,11 +102,15 @@
           :headers="headerCRUD"
           :items="itemsCRUD"
           :items-per-page="itemsPerPage"
+          :page.sync="itemsListPage"
           :footer-props="{
             showFirstLastPage: true,
           }"
           disable-sort
           class="font-weight-bold elevation-1"
+          hide-default-footer
+          no-data-text="查無資料"
+          @page-count="itemsListPageCount = $event"
         >
           <template v-slot:[`item.download`]="{ item }">
             <v-tooltip top>
@@ -126,6 +130,14 @@
             </v-tooltip>
           </template>
         </v-data-table>
+        <!-- 選頁 -->
+        <div class="mt-2">
+          <v-pagination
+            v-model="itemsListPage"
+            color="#2F59C4"
+            :length="itemsListPageCount"
+          />
+        </div>
       </v-col>
     </v-row>
   </v-container>
@@ -138,6 +150,11 @@
         isShow: true,
         // menu: false,
         // date: new Date().toISOString().substr(0, 10),
+        //分頁
+        itemsPerPage: 10,
+        itemsListPage: 1,
+        itemsListPageCount: 1,
+        //分頁 end
         releaseDateStartMenu: false,
         releaseDateStart: '',
         releaseDateEndMenu: false,
@@ -146,7 +163,6 @@
         sunsetDateStart: '',
         sunsetDateEndMenu: false,
         sunsetDateEnd: '',
-        itemsPerPage: 10,
         headerCRUD: [
           {
             text: '區處',

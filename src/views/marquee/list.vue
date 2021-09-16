@@ -318,7 +318,7 @@
               </template>
               <span>編輯</span>
             </v-tooltip>
-            <v-tooltip top>
+            <!-- <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="ma-2"
@@ -332,7 +332,7 @@
                 </v-btn>
               </template>
               <span>刪除</span>
-            </v-tooltip>
+            </v-tooltip> -->
           </template>
           <template v-slot:[`item.marquee_content`]="{ item }">
             <v-tooltip top>
@@ -348,17 +348,12 @@
             </v-tooltip>
           </template>
           <template v-slot:[`item.active`]="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  class="d-flex justify-center"
-                  :color="item.active?'green darken-2':''"
-                  v-on="on"
-                >
-                  {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
-                </v-icon>
-              </template>
-            </v-tooltip>
+            <v-icon
+              class="d-flex justify-center"
+              :color="item.active?'green darken-2':''"
+            >
+              {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
+            </v-icon>
           </template>
         </v-data-table>
         <!-- 選頁 -->

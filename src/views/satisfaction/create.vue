@@ -129,7 +129,14 @@
                         <div v-for="item, i in content.answer" :key="i" class="q-radio">
                           <div v-if="data.types === '下拉列表' || data.types === '優先級'" class="icon-radio">{{ i + 1 }}.</div>
                           <div v-else class="icon-radio" :class="{'icon-cirle': data.types === '單選題', 'icon-square': data.types === '多選題'}" />
-                          <input v-model="item.description" class="radio-input">
+                          <!-- <input v-model="item.description" class="radio-input"> -->
+                          <v-text-field
+                            v-model="item.description"
+                            color="accent"
+                            class="font-weight-bold"
+                            dense
+                            readonly
+                          />
                           <i v-if="focusIndex === index" class="el-icon-close" @click="deleteRadioFn(index, index1, i)" />
                         </div>
                         <!-- <div v-if="focusIndex === index" class="q-radio">

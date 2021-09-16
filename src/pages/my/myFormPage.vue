@@ -68,6 +68,7 @@
                 small
                 color="success"
                 v-on="on"
+                @click="action(item)"
               >
                 <v-icon v-text="'mdi-file-document-edit-outline'" />
               </v-btn>
@@ -82,6 +83,7 @@
                 small
                 color="error"
                 v-on="on"
+                @click="action('delete',item)"
               >
                 <v-icon v-text="'mdi-delete'" />
               </v-btn>
@@ -96,6 +98,8 @@
                 small
                 color="primary"
                 v-on="on"
+               
+                @click="action('browse',item)"
               >
                 <v-icon v-text="'mdi-eye'" />
               </v-btn>
@@ -110,7 +114,6 @@
           v-if="item.proxyEvent == true"
           class="ma-2"
           icon
-          @click="test(item)"
         >
           <v-icon>
             mdi-check-bold

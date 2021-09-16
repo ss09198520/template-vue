@@ -36,7 +36,7 @@
                     color="success"
                     v-on="on"
                   >
-                    <v-icon v-text="'mdi-id-card'" />
+                    <v-icon v-text="'mdi-file-document-edit-outline'" />
                   </v-btn>
                 </template>
                 <span>補證操作</span>

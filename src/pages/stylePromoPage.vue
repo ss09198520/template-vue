@@ -82,6 +82,25 @@
         <v-col cols="2" class="mt-3">
           下載檔案
         </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="primary"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-eye'" />
+              </v-btn>
+            </template>
+            <span>瀏覽</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          瀏覽
+        </v-col>
       </v-row>
 
       <v-row class="font-20px font-bold mt-3">
@@ -240,6 +259,7 @@
         <v-col cols="2" class="mt-3">
           分派案件
         </v-col>
+        
       </v-row>
 
       <v-row class="font-20px font-bold mt-3">

@@ -87,7 +87,7 @@
                         class="ma-2"
                         fab
                         small
-                        color="success"
+                        color="primary"
                         @click="browerOrder(item)"
                         v-on="on"
                       >

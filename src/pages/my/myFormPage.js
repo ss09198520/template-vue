@@ -78,6 +78,9 @@ export default{
               }
             MessageService.showSuccess("核算成功✓");
             this.browserModel = false;
+        },
+        orderRecord(item){
+            console.log(item);
         }
     },
 }

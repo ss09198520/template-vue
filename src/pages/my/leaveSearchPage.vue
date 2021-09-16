@@ -166,7 +166,22 @@
           <v-row>
             <v-col cols="11" />
             <v-col>
-              <v-btn color="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>
+              <!-- <v-btn color="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn> -->
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="primary"
+                    @click="search()"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-magnify'" />
+                  </v-btn>
+                </template>
+                <span>查詢</span>
+              </v-tooltip>
             </v-col>
           </v-row>
           <hr class="mt-6 mb-5">
@@ -183,14 +198,21 @@
               @page-count="empListPageCount = $event"
             >
               <template v-slot:item.mani="{ item }">                                            
-                <v-btn
-                  class="ma-2"
-                  color="error"
-                  depressed
-                  @click="deleteLeave(item)"
-                >
-                  刪除請假
-                </v-btn>                         
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      class="ma-2"
+                      fab
+                      small
+                      color="error"
+                      @click="deleteLeave(item)"
+                      v-on="on"
+                    >
+                      <v-icon v-text="'mdi-delete'" />
+                    </v-btn>
+                  </template>
+                  <span>刪除請假</span>
+                </v-tooltip>                        
               </template>
             </v-data-table>
             <!-- 選頁 -->

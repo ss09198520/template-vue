@@ -69,14 +69,45 @@
             placeholder="請選擇角色"
           />
         </v-col>
+        <!-- <v-col cols="1" /> -->
       </v-row>
       <v-row class="mt-5">
         <v-col cols="10" />
         <v-col>
-          <v-btn class="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>        
+          <!-- <v-btn class="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn>        
           <v-btn class="primary ml-3" @click="popOut(editPopOut)">          
             依角色設定          
-          </v-btn>
+          </v-btn> -->
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="primary"
+                @click="search()"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-magnify'" />
+              </v-btn>
+            </template>
+            <span>查詢</span>
+          </v-tooltip>     
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="primary"
+                @click="popOut(editPopOut)"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-account'" />
+              </v-btn>
+            </template>
+            <span>依角色設定</span>
+          </v-tooltip>
         </v-col>
       </v-row>         
     </div>    
@@ -98,13 +129,21 @@
             <!--隱藏被選擇的欄位 -->
             <div v-if="!item.edit" class="d-flex">
               <div style="width:250px; margin: auto; text-overflow: ellipsis; overflow: hidden; white-space:nowrap;">{{ item.character }}</div>              
-              <v-btn
-                class="ma-2"
-                color="primary"
-                @click="modifyCharacter(item)"
-              >
-                &emsp;修改&emsp;
-              </v-btn>
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    @click="modifyCharacter(item)"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-pencil'" />
+                  </v-btn>
+                </template>
+                <span>修改</span>
+              </v-tooltip>
             </div> 
                           
             <div v-if="openSelectBox == item.empId" class="d-flex">

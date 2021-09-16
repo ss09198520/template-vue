@@ -2,6 +2,293 @@
   <v-app>
     <v-container>
       <v-row>
+        <h1>icon說明</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="font-20px font-bold mt-3">
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="primary"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-magnify'" />
+              </v-btn>
+            </template>
+            <span>查詢</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          查詢類
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="primary"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-text-box-multiple-outline'" />
+              </v-btn>
+            </template>
+            <span>顯示全部</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          顯示全部
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="primary"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-text-box-search-outline'" />
+              </v-btn>
+            </template>
+            <span>只顯示受理件</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          只顯示受理件
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="primary"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-file-download-outline'" />
+              </v-btn>
+            </template>
+            <span>下載檔案</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          下載檔案
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="primary"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-eye'" />
+              </v-btn>
+            </template>
+            <span>瀏覽</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          瀏覽
+        </v-col>
+      </v-row>
+
+      <v-row class="font-20px font-bold mt-3">
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="error"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-delete'" />
+              </v-btn>
+            </template>
+            <span>取消案件</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          刪除類
+        </v-col>
+      </v-row>
+
+      <v-row class="font-20px font-bold mt-3">
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="success"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-file-document-edit-outline'" />
+              </v-btn>
+            </template>
+            <span>文件補件</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          文件補件、編輯類
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="success"
+                v-on="on"
+              >
+                <v-icon v-text="' mdi-account-plus-outline'" />
+              </v-btn>
+            </template>
+            <span>新增派工</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          新增派工
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="success"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-account-edit-outline'" />
+              </v-btn>
+            </template>
+            <span>修改派工</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          修改派工
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="success"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-eye-plus'" />
+              </v-btn>
+            </template>
+            <span>申請調閱</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          申請調閱
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="success"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-account-check-outline'" />
+              </v-btn>
+            </template>
+            <span>簽核</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          簽核
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="success"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-pencil'" />
+              </v-btn>
+            </template>
+            <span>修改</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          編輯、修改
+        </v-col>
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="success"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-account-arrow-right-outline'" />
+              </v-btn>
+            </template>
+            <span>分派案件</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          分派案件
+        </v-col>
+        
+      </v-row>
+
+      <v-row class="font-20px font-bold mt-3">
+        <v-col cols="1">
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                style="color:white"
+                color="#E98B2A"
+                v-on="on"
+              >
+                <v-icon v-text="'mdi-account-arrow-left-outline'" />
+              </v-btn>
+            </template>
+            <span>認領案件</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="2" class="mt-3">
+          認領案件
+        </v-col>
+      </v-row>
+
+      
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+
+      <v-row>
         <h1>Button顏色說明</h1>
       </v-row>
       <hr style="margin-top: 30px;margin-bottom: 30px;">

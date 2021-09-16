@@ -16,7 +16,7 @@
               outlined
               hide-details                                         
               dense
-              placeholder="請輸入員工編號"
+              placeholder="請輸入受理編號"
             />
           </v-col>
           <v-col cols="1" />
@@ -30,7 +30,7 @@
               outlined
               hide-details
               dense
-              placeholder="請輸入員工姓名"
+              placeholder="請輸入電號"
             />
           </v-col>
         </v-row>
@@ -45,7 +45,7 @@
               outlined
               hide-details
               dense
-              placeholder="請輸入員工編號"
+              placeholder="請輸入登記單種類"
             />
           </v-col>
           <v-col cols="1" />
@@ -59,7 +59,7 @@
               outlined
               hide-details
               dense
-              placeholder="請輸入代理人編號"
+              placeholder="請輸入員工編號"
             />
           </v-col>
         </v-row>
@@ -184,7 +184,22 @@
         <v-row>       
           <v-col cols="11" />
           <v-col>     
-            <v-btn color="primary ml-3" @click="display = true">&emsp;查詢&emsp;</v-btn>
+            <!-- <v-btn color="primary ml-3" @click="display = true">&emsp;查詢&emsp;</v-btn> -->
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  small
+                  color="primary"
+                  @click="display = true"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-magnify'" />
+                </v-btn>
+              </template>
+              <span>查詢</span>
+            </v-tooltip>
           </v-col>
         </v-row>
         <hr class="mt-6 mb-5">
@@ -204,12 +219,21 @@
               >
                 <template v-slot:item.mani="{ item }">   
                   <div v-if="item.mani==true">
-                    <v-btn
-                      color="success"
-                      @click="search(item)"
-                    >
-                      申請調閱
-                    </v-btn>                 
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          class="ma-2"
+                          fab
+                          small
+                          color="success"
+                          @click="search(item)"
+                          v-on="on"
+                        >
+                          <v-icon v-text="'mdi-eye-plus'" />
+                        </v-btn>
+                      </template>
+                      <span>申請調閱</span>
+                    </v-tooltip>                    
                   </div>                                                                               
                 </template>
 
@@ -264,8 +288,8 @@
           <v-card-text>
             <v-row class="mt-3" align="center">
               <v-col cols="2">調閱對象</v-col>
-              <v-col cols="5">
-                <v-select
+              <v-col cols="7">
+                <!-- <v-select
                   v-model="setMember"                
                   :items="memberOption"
                   outlined
@@ -274,12 +298,19 @@
                   placeholder="請選擇調閱對象"
                   return-object 
                   item-text="empName"              
+                /> -->
+                <v-text-field
+                  v-model="setMember"                           
+                  outlined
+                  hide-details
+                  dense
+                  placeholder="請輸入調閱對象"
                 />
               </v-col>
             </v-row>
             <v-row align="center">
               <v-col cols="2">調閱原因</v-col>
-              <v-col cols="5">
+              <v-col cols="7">
                 <v-select
                   v-model="setReason"                
                   :items="reasonOption"
@@ -329,7 +360,7 @@
       <div class="ml-10 font-18px font-bold">            
         <v-row align="center">          
           <v-col cols="1">
-            受理編號         
+            受理編號
           </v-col>
           <v-col
             cols="3"
@@ -338,7 +369,7 @@
               outlined
               hide-details                                         
               dense
-              placeholder="請輸入員工編號"
+              placeholder="請輸入受理編號"
             />
           </v-col>
           <v-col cols="1" />
@@ -352,7 +383,7 @@
               outlined
               hide-details
               dense
-              placeholder="請輸入員工姓名"
+              placeholder="請輸入電號"
             />
           </v-col>
         </v-row>
@@ -367,7 +398,7 @@
               outlined
               hide-details
               dense
-              placeholder="請輸入員工編號"
+              placeholder="請輸入整理號碼"
             />
           </v-col>
         </v-row>                                        
@@ -394,12 +425,21 @@
               >
                 <template v-slot:item.mani="{ item }">   
                   <div v-if="item.mani==true">
-                    <v-btn                                                                                     
-                      color="success"
-                      @click="search(item)"
-                    >
-                      申請調閱
-                    </v-btn>                 
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          class="ma-2"
+                          fab
+                          small
+                          color="success"
+                          @click="search(item)"
+                          v-on="on"
+                        >
+                          <v-icon v-text="'mdi-eye-plus'" />
+                        </v-btn>
+                      </template>
+                      <span>申請調閱</span>
+                    </v-tooltip>              
                   </div>                                                                               
                 </template>
 

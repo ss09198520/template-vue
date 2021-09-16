@@ -15,12 +15,36 @@
       </div>      
     </div>
     <div>
-      <v-btn class="ma-3" :class="{'primary': displayAll}" @click="displayAll = true">
-        顯示全部
-      </v-btn>
-      <v-btn class="ma-3" :class="{'primary': !displayAll}" @click="displayAll = false">
-        只顯示受理件
-      </v-btn>      
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2"
+            fab
+            small
+            :class="{'primary': displayAll}"
+            @click="displayAll = true"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-text-box-multiple-outline'" />
+          </v-btn>
+        </template>
+        <span>顯示全部</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2"
+            fab
+            small
+            :class="{'primary': !displayAll}"
+            @click="displayAll = false"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-text-box-search-outline'" />
+          </v-btn>
+        </template>
+        <span>只顯示受理件</span>
+      </v-tooltip>    
     </div>
     <hr class="mt-6 mb-5 ml-3">          
     <v-data-table
@@ -34,15 +58,16 @@
       :page.sync="orderListPage"
       @page-count="orderListPageCount = $event"
     >
+      <template v-slot:item.orderId="{ item }">   
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">        
+            <a href="javascript:void(0)" style="text-decoration:underline;" v-on="on">{{ item.orderId }}</a>
+          </template>
+          <span>表單歷程</span>
+        </v-tooltip>
+      </template>
       <template v-slot:item.mani="{ item }">   
         <div v-if="item.mani==true">
-          <!-- <v-btn                
-            color="success"
-            class="ma-1"
-            @click="action(item)"
-          >
-            補件操作
-          </v-btn> -->
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -51,19 +76,13 @@
                 small
                 color="success"
                 v-on="on"
+                @click="action(item)"
               >
                 <v-icon v-text="'mdi-file-document-edit-outline'" />
               </v-btn>
             </template>
             <span>補件操作</span>
           </v-tooltip>
-          <!-- <v-btn                
-            color="error"
-            class="ma-1"
-            @click="action('delete',item)"
-          >
-            取消案件
-          </v-btn> -->
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -72,19 +91,13 @@
                 small
                 color="error"
                 v-on="on"
+                @click="action('delete',item)"
               >
                 <v-icon v-text="'mdi-delete'" />
               </v-btn>
             </template>
             <span>取消案件</span>
           </v-tooltip>
-          <!-- <v-btn                
-            color="primary"
-            class="ma-1"
-            @click="action('browse',item)"
-          >
-            瀏覽案件
-          </v-btn> -->
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -93,6 +106,8 @@
                 small
                 color="primary"
                 v-on="on"
+               
+                @click="action('browse',item)"
               >
                 <v-icon v-text="'mdi-eye'" />
               </v-btn>
@@ -107,7 +122,6 @@
           v-if="item.proxyEvent == true"
           class="ma-2"
           icon
-          @click="test(item)"
         >
           <v-icon>
             mdi-check-bold

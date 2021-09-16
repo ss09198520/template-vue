@@ -4,12 +4,36 @@
 
       <h2 class="font-bold mb-5">調閱簽核清單</h2>
       <v-row class="ml-2">
-        <v-btn class="ma-3" :class="{'primary': displayAll}" @click="displayAll = true">
-          顯示全部
-        </v-btn>
-        <v-btn class="ma-3" :class="{'primary': !displayAll}" @click="displayAll = false">
-          只顯示待簽核
-        </v-btn>        
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              class="ma-2"
+              fab
+              small
+              :class="{'primary': displayAll}"
+              @click="displayAll = true"
+              v-on="on"
+            >
+              <v-icon v-text="'mdi-text-box-multiple-outline'" />
+            </v-btn>
+          </template>
+          <span>顯示全部</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              class="ma-2"
+              fab
+              small
+              :class="{'primary': !displayAll}"
+              @click="displayAll = false"
+              v-on="on"
+            >
+              <v-icon v-text="'mdi-text-box-search-outline'" />
+            </v-btn>
+          </template>
+          <span>只顯示待簽核</span>
+        </v-tooltip>        
       </v-row>
       <hr class="mt-6 mb-5 ml-4 mr-5">
       <v-row class="ma-2">
@@ -27,12 +51,21 @@
           >
             <template v-slot:item.mani="{ item }">   
               <div v-if="item.mani==true">
-                <v-btn
-                  color="success"
-                  @click="sign()"
-                >
-                  &emsp;簽核&emsp;
-                </v-btn>                 
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      class="ma-2"
+                      fab
+                      small
+                      color="success"
+                      @click="sign()"
+                      v-on="on"
+                    >
+                      <v-icon v-text="'mdi-account-check-outline'" />
+                    </v-btn>
+                  </template>
+                  <span>簽核</span>
+                </v-tooltip>                 
               </div>                                                                               
             </template>           
           </v-data-table>

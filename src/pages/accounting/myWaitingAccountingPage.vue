@@ -25,8 +25,22 @@
             hide-default-footer
             @page-count="dataListPageCount = $event"
           >
-            <template v-slot:item.action="{ item }">
-              <v-btn v-if="item.action" color="success" @click="accounting(item)">進行核算</v-btn>
+            <template v-slot:item.action="{ item }">              
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    v-if="item.action"                    
+                    class="ma-2 success"
+                    fab
+                    small                
+                    v-on="on"
+                    @click="accounting(item)"
+                  >
+                    <v-icon>mdi-account-check-outline</v-icon>
+                  </v-btn>
+                </template>
+                <span>進行核算</span>
+              </v-tooltip>
             </template>
           </v-data-table>
           <!-- 選頁 -->

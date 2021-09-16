@@ -11,9 +11,37 @@
           </div>
         </div>
       </div>
-      <div style="margin-bottom: 10px;">
-        <v-btn :class="showAllArchieve? 'primary' : ''" @click="showArchieve('all')">顯示全部</v-btn>
-        <v-btn :class="showMyArchieve? 'primary' : ''" style="margin-left: 10px;" @click="showArchieve('my')">只顯示我的待歸檔</v-btn>
+      <div style="margin-bottom: 10px;">        
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              :class="showAllArchieve? 'primary' : ''"                                       
+              class="ma-2"
+              fab
+              small                
+              v-on="on"
+              @click="showArchieve('all')"
+            >
+              <v-icon>mdi-text-box-multiple-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>顯示全部</span>
+        </v-tooltip>        
+        <v-tooltip top>
+          <template v-slot:activator="{ on }">
+            <v-btn
+              :class="showMyArchieve? 'primary' : ''"                                       
+              class="ma-2"
+              fab
+              small                
+              v-on="on"
+              @click="showArchieve('my')"
+            >
+              <v-icon>mdi-text-box-search-outline</v-icon>
+            </v-btn>
+          </template>
+          <span>只顯示我的待歸檔</span>
+        </v-tooltip>
       </div>
       <hr>
       <v-row>

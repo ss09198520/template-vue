@@ -184,7 +184,22 @@
         <v-row>       
           <v-col cols="11" />
           <v-col>     
-            <v-btn color="primary ml-3" @click="display = true">&emsp;查詢&emsp;</v-btn>
+            <!-- <v-btn color="primary ml-3" @click="display = true">&emsp;查詢&emsp;</v-btn> -->
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  small
+                  color="primary"
+                  @click="display = true"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-magnify'" />
+                </v-btn>
+              </template>
+              <span>查詢</span>
+            </v-tooltip>
           </v-col>
         </v-row>
         <hr class="mt-6 mb-5">
@@ -204,12 +219,21 @@
               >
                 <template v-slot:item.mani="{ item }">   
                   <div v-if="item.mani==true">
-                    <v-btn
-                      color="success"
-                      @click="search(item)"
-                    >
-                      申請調閱
-                    </v-btn>                 
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          class="ma-2"
+                          fab
+                          small
+                          color="success"
+                          @click="search(item)"
+                          v-on="on"
+                        >
+                          <v-icon v-text="'mdi-eye-plus'" />
+                        </v-btn>
+                      </template>
+                      <span>申請調閱</span>
+                    </v-tooltip>                    
                   </div>                                                                               
                 </template>
 
@@ -394,12 +418,21 @@
               >
                 <template v-slot:item.mani="{ item }">   
                   <div v-if="item.mani==true">
-                    <v-btn                                                                                     
-                      color="success"
-                      @click="search(item)"
-                    >
-                      申請調閱
-                    </v-btn>                 
+                    <v-tooltip top>
+                      <template v-slot:activator="{ on }">
+                        <v-btn
+                          class="ma-2"
+                          fab
+                          small
+                          color="success"
+                          @click="search(item)"
+                          v-on="on"
+                        >
+                          <v-icon v-text="'mdi-eye-plus'" />
+                        </v-btn>
+                      </template>
+                      <span>申請調閱</span>
+                    </v-tooltip>              
                   </div>                                                                               
                 </template>
 

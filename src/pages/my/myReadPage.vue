@@ -45,7 +45,22 @@
         <v-row>
           <v-col cols="11" />
           <v-col>
-            <v-btn class="primary mt-5" @click="displayList = true">&emsp;查詢&emsp;</v-btn>    
+            <!-- <v-btn class="primary mt-5" @click="displayList = true">&emsp;查詢&emsp;</v-btn>     -->
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  small
+                  color="primary"
+                  @click="displayList = true"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-magnify'" />
+                </v-btn>
+              </template>
+              <span>查詢</span>
+            </v-tooltip>
           </v-col>
         </v-row>    
       </div>
@@ -66,12 +81,21 @@
             >
               <template v-slot:item.mani="{ item }">   
                 <div v-if="item.mani==true">
-                  <v-btn
-                    color="primary"
-                    @click="browerOrder(item)"
-                  >
-                    瀏覽案件
-                  </v-btn>                 
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on }">
+                      <v-btn
+                        class="ma-2"
+                        fab
+                        small
+                        color="success"
+                        @click="browerOrder(item)"
+                        v-on="on"
+                      >
+                        <v-icon v-text="'mdi-eye'" />
+                      </v-btn>
+                    </template>
+                    <span>瀏覽案件</span>
+                  </v-tooltip>                 
                 </div>                                                                               
               </template>
 

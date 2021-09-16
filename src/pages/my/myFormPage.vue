@@ -15,12 +15,36 @@
       </div>      
     </div>
     <div>
-      <v-btn class="ma-3" :class="{'primary': displayAll}" @click="displayAll = true">
-        顯示全部
-      </v-btn>
-      <v-btn class="ma-3" :class="{'primary': !displayAll}" @click="displayAll = false">
-        只顯示受理件
-      </v-btn>      
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2"
+            fab
+            small
+            :class="{'primary': displayAll}"
+            @click="displayAll = true"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-text-box-multiple-outline'" />
+          </v-btn>
+        </template>
+        <span>顯示全部</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2"
+            fab
+            small
+            :class="{'primary': !displayAll}"
+            @click="displayAll = false"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-text-box-search-outline'" />
+          </v-btn>
+        </template>
+        <span>只顯示受理件</span>
+      </v-tooltip>    
     </div>
     <hr class="mt-6 mb-5 ml-3">          
     <v-data-table
@@ -36,13 +60,6 @@
     >
       <template v-slot:item.mani="{ item }">   
         <div v-if="item.mani==true">
-          <!-- <v-btn                
-            color="success"
-            class="ma-1"
-            @click="action(item)"
-          >
-            補件操作
-          </v-btn> -->
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -57,13 +74,6 @@
             </template>
             <span>補件操作</span>
           </v-tooltip>
-          <!-- <v-btn                
-            color="error"
-            class="ma-1"
-            @click="action('delete',item)"
-          >
-            取消案件
-          </v-btn> -->
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -78,13 +88,6 @@
             </template>
             <span>取消案件</span>
           </v-tooltip>
-          <!-- <v-btn                
-            color="primary"
-            class="ma-1"
-            @click="action('browse',item)"
-          >
-            瀏覽案件
-          </v-btn> -->
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn

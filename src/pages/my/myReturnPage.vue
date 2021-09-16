@@ -27,9 +27,50 @@
             @page-count="caseListPageCount = $event"
           >
             <template v-slot:item.action="{ item }">
-              <v-btn v-if="item.remain" color="success">補證操作</v-btn>
-              <v-btn v-if="item.cancel" color="error" style="margin: 3px;" @click="action('delete',item)">取消案件</v-btn>
-              <v-btn v-if="item.view" color="primary" @click="browerOrder()">瀏覽案件</v-btn>
+              <v-tooltip v-if="item.remain" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-id-card'" />
+                  </v-btn>
+                </template>
+                <span>補證操作</span>
+              </v-tooltip>
+              <v-tooltip v-if="item.cancel" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="error"
+                    @click="action('delete',item)"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-delete'" />
+                  </v-btn>
+                </template>
+                <span>取消案件</span>
+              </v-tooltip>
+              <v-tooltip v-if="item.view" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="primary"
+                    @click="browerOrder()"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-eye'" />
+                  </v-btn>
+                </template>
+                <span>瀏覽案件</span>
+              </v-tooltip>
             </template>
           </v-data-table>
           <!-- 選頁 -->
@@ -68,8 +109,35 @@
             @page-count="multiMediaListPageCount = $event"
           >
             <template v-slot:item.action="{ item }">
-              <v-btn v-if="item.edit" color="success" style="margin: 3px;">重新編輯</v-btn>
-              <v-btn v-if="item.cancel" color="error" @click="action('deleteMultiMedia',item)">取消案件</v-btn>
+              <v-tooltip v-if="item.edit" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-pencil'" />
+                  </v-btn>
+                </template>
+                <span>重新編輯</span>
+              </v-tooltip>
+              <v-tooltip v-if="item.cancel" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="error"
+                    @click="action('deleteMultiMedia',item)"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-delete'" />
+                  </v-btn>
+                </template>
+                <span>取消案件</span>
+              </v-tooltip>
             </template>
           </v-data-table>
           <!-- 選頁 -->

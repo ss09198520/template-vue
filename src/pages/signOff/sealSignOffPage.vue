@@ -50,7 +50,7 @@
           >
             <template v-slot:item.mani="{ item }">   
               <div>
-                <v-tooltip top>
+                <v-tooltip v-if="!item.status" top>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       class="ma-2"
@@ -78,10 +78,25 @@
                     </v-btn>
                   </template>
                   <span>簽核</span>
-                </v-tooltip>
-               
+                </v-tooltip>               
               </div>                                                                         
-            </template>           
+            </template> 
+            <template v-slot:item.download="{ item }">  
+              <v-tooltip v-if="item.status" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="primary"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-download-box-outline'" />
+                  </v-btn>
+                </template>
+                <span>專用章檔案下載</span>
+              </v-tooltip>
+            </template>    
           </v-data-table>
         </v-col>
       </v-row>

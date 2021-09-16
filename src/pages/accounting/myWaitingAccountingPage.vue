@@ -11,48 +11,100 @@
           </div>
         </div>
       </div>
-      <hr>
-      <v-row>
-        <v-col cols="12">    
-          <v-data-table
-            :headers="headers"
-            :items="itemList"
-            :page.sync="dataListPage"
-            :items-per-page="10"
-            disable-sort
-            class="elevation-1"
-            no-data-text="查無資料"
-            hide-default-footer
-            @page-count="dataListPageCount = $event"
+      <div class="mt-10 ml-10 font-18px font-bold">
+        <v-row align="center">
+          <v-col cols="1">
+            受理編號        
+          </v-col>          
+          <v-col
+            cols="3"
           >
-            <template v-slot:item.action="{ item }">              
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    v-if="item.action"                    
-                    class="ma-2 success"
-                    fab
-                    small                
-                    v-on="on"
-                    @click="accounting(item)"
-                  >
-                    <v-icon>mdi-account-check-outline</v-icon>
-                  </v-btn>
-                </template>
-                <span>進行核算</span>
-              </v-tooltip>
-            </template>
-          </v-data-table>
-          <!-- 選頁 -->
-          <div class="mt-2">
-            <v-pagination
-              v-model="dataListPage"
-              color="#2F59C4"
-              :length="dataListPageCount"
+            <v-text-field
+              outlined
+              hide-details                                         
+              dense
+              placeholder="請輸入受理編號"
             />
-          </div>
-        </v-col>
-      </v-row>
+          </v-col>
+          <v-col cols="1" />
+          <v-col cols="1">
+            電號
+          </v-col>                                             
+          <v-col
+            cols="3"
+          >
+            <v-text-field                           
+              outlined
+              hide-details
+              dense
+              placeholder="請輸入電號"
+            />
+          </v-col>     
+        </v-row>
+        <v-row>
+          <v-col cols="11" />
+          <v-col>
+            <!-- <v-btn class="primary mt-5" @click="displayList = true">&emsp;查詢&emsp;</v-btn>     -->
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  small
+                  color="primary"
+                  v-on="on"
+                  @click="hasShowList = true"
+                >
+                  <v-icon v-text="'mdi-magnify'" />
+                </v-btn>
+              </template>
+              <span>查詢</span>
+            </v-tooltip>
+          </v-col>
+        </v-row>  
+        <hr class="mt-10 mb-10">
+        <v-row v-if="hasShowList" class="mt-10">
+          <v-col cols="12">    
+            <v-data-table
+              :headers="headers"
+              :items="itemList"
+              :page.sync="dataListPage"
+              :items-per-page="10"
+              disable-sort
+              class="elevation-1"
+              no-data-text="查無資料"
+              hide-default-footer
+              @page-count="dataListPageCount = $event"
+            >
+              <template v-slot:item.action="{ item }">              
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-if="item.action"                    
+                      class="ma-2 success"
+                      fab
+                      small                
+                      v-on="on"
+                      @click="accounting(item)"
+                    >
+                      <v-icon>mdi-account-check-outline</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>進行核算</span>
+                </v-tooltip>
+              </template>
+            </v-data-table>
+            <!-- 選頁 -->
+            <div class="mt-2">
+              <v-pagination
+                v-model="dataListPage"
+                color="#2F59C4"
+                :length="dataListPageCount"
+              />
+            </div>
+          </v-col>
+        </v-row>
+      </div>
     </v-container>
     <v-dialog
       v-model="accountingDialog"
@@ -111,7 +163,24 @@
           </v-btn>
         </v-card-title>
         <v-card-text class="font-18px">
-          
+          <v-row class="mt-6 ml-1" align="center">
+            <v-col cols="3">
+              退件部門
+            </v-col>
+            <v-col cols="7">
+              <v-select   
+                v-model="department"
+                :items="departmentOption"
+                item-text="text"
+                :return-object="true"            
+                color="#ADADAD"
+                outlined
+                hide-details
+                dense
+                placeholder="請選擇退件部門"
+              />
+            </v-col>
+          </v-row>
           <v-row class="mt-6 ml-1" align="center">
             <v-col cols="3">
               退件原因

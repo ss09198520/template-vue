@@ -32,6 +32,13 @@ export default {
             accountingDialog: false,
             returnReasonModel: false,
             selectIndex: null,
+            hasShowList:false,
+            department:null,
+            departmentOption:[
+                {text:'核算課',value:'1'},
+                {text:'大里服務中心',value:'2'},
+                {text:'東山服務所',value:'3'},
+            ],
         }
     },
     methods: {

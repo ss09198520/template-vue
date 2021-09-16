@@ -2,6 +2,51 @@
   <v-app>
     <v-container>
       <v-row>
+        <h1>Button顏色說明</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="font-20px font-bold mt-3">
+        <v-col cols="1">
+          <v-btn depressed color="primary">&emsp;查詢&emsp;</v-btn>
+        </v-col>
+        <v-col cols="4">
+          <span>用於瀏覽 : 不異動到資料的動作，如查詢與瀏覽等。</span>
+        </v-col>
+      </v-row> 
+      <v-row class="font-20px font-bold mt-3">
+        <v-col cols="1">
+          <v-btn depressed color="error">&emsp;刪除&emsp;</v-btn>
+        </v-col>
+        <v-col cols="4">
+          <span>用於刪減 : 會進行負面異動，如刪除與退件等。</span>
+        </v-col>
+      </v-row> 
+      <v-row class="font-20px font-bold mt-3">
+        <v-col cols="1">
+          <v-btn depressed color="success">&emsp;新增&emsp;</v-btn>
+        </v-col>
+        <v-col cols="4">
+          <span>用於增加 : 會新增或異動到資料的動作，如新增或審核等。</span>
+        </v-col>
+      </v-row> 
+      <v-row class="font-20px font-bold mt-3">
+        <v-col cols="1">
+          <v-btn depressed color="#E98B2A" style="color:white">認領案件</v-btn>
+        </v-col>
+        <v-col cols="4">
+          <span>用於其他 : 如用於認領案件，比較難分類的事項。</span>
+        </v-col>
+      </v-row> 
+      <v-row class="font-20px font-bold mt-3">
+        <v-col cols="1">
+          <v-btn depressed color="normal">&emsp;取消&emsp;</v-btn>
+        </v-col>
+        <v-col cols="4">
+          <span>用於次要操作 : 用於未被選擇的按鈕或取消視窗的動作等。</span>
+        </v-col>
+      </v-row> 
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row>
         <h1>Title</h1>
       </v-row>
       <hr style="margin-top: 30px;margin-bottom: 30px;">

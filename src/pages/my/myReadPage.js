@@ -1,5 +1,4 @@
 
-import MessageService from "@/assets/services/message.service";
 import formPage from "../FormPage/FormPage.vue";
 
 export default{
@@ -34,8 +33,6 @@ export default{
             ],
 
             browserModel: false,
-            returnReason: null,
-            returnReasonModel: false,
             department:null,
             departmentOption:[
                 {text:'核算課',value:'1'},
@@ -49,25 +46,8 @@ export default{
             console.log(item);
             this.browserModel = true;
         },
-        returnSubmit(){
-            //刪除該筆資料
-            if (this.selectIndex > -1) {
-                this.empMockList.splice(this.selectIndex, 1);
-              }
-            this.returnReasonModel = false;
-            this.browserModel = false;
-            MessageService.showSuccess("退件成功✓");
-        },
         checkSubmit(){
-            //刪除該筆資料
-            if (this.selectIndex > -1) {
-                this.empMockList.splice(this.selectIndex, 1);
-              }
-            MessageService.showSuccess("核算成功✓");
             this.browserModel = false;
-        },
-        retrunOrder(){
-            this.returnReasonModel = true;
         },
     },
 }

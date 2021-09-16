@@ -38,7 +38,6 @@ export default{
             deleteOrderModel:false,
             selectIndex: null,
             browserModel: false, // 瀏覽案件視窗開關
-            returnReasonModel: false, // 退件視窗開關
             supplementModel: false, // 補件操作視窗開關
             formRecordModel: false, // 表單歷程視窗開關
             formRecordList:[
@@ -82,25 +81,7 @@ export default{
               }
             this.deleteOrderModel = false;
         },
-
-        retrunOrder(){
-            this.returnReasonModel = true;
-        },
-        returnSubmit(){
-            //刪除該筆資料
-            if (this.selectIndex > -1) {
-                this.empMockList.splice(this.selectIndex, 1);
-              }
-            this.returnReasonModel = false;
-            this.browserModel = false;
-            MessageService.showSuccess("退件成功✓");
-        },
         checkSubmit(){
-            //刪除該筆資料
-            if (this.selectIndex > -1) {
-                this.empMockList.splice(this.selectIndex, 1);
-              }
-            MessageService.showSuccess("核算成功✓");
             this.browserModel = false;
         },
         orderRecord(item){

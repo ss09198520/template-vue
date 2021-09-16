@@ -405,7 +405,22 @@
         <v-row>    
           <v-col cols="11" />
           <v-col>        
-            <v-btn class="mb-7 ml-3" color="primary" @click="display = true">&emsp;查詢&emsp;</v-btn>
+            <!-- <v-btn class="mb-7 ml-3" color="primary" @click="display = true">&emsp;查詢&emsp;</v-btn> -->
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  small
+                  color="primary"
+                  @click="display = true"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-magnify'" />
+                </v-btn>
+              </template>
+              <span>查詢</span>
+            </v-tooltip>
           </v-col>
         </v-row>
         <hr>

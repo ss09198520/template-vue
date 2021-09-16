@@ -294,7 +294,7 @@
       </v-row>
       <v-row v-if="mode == 'edit'">
         <v-col cols="12" class="t-right">
-          <v-btn depressed large color="success">
+          <v-btn depressed large color="success" @click="save()">
             <span style="font-size: 18px">儲存</span>
             <v-icon
               right

@@ -1,5 +1,6 @@
 import MessageService from "@/assets/services/message.service";
 import formPage from "../FormPage/FormPage.vue";
+import EventBus from "@/assets/services/eventBus";
 
 export default {
     name: 'MyReturn',
@@ -8,6 +9,9 @@ export default {
     },
     props: {
     
+    },
+    beforeMount() { // 在這裡做初始化, 勿刪
+      this.init();
     },
     data() {
         return {
@@ -55,9 +59,27 @@ export default {
             browserModel: false,
             returnReason: null,
             returnReasonModel: false,
+            supplementModel: false,
+            formRecordModel: false, // 表單歷程視窗開關
+            formRecordList:[
+                {record:'2021/09/14 14:20:14 退件中 (0151230020 吳靜)'},
+                {record:'2021/09/14 13:50:14 核算分派 (0151230001 陳婷婷)'},
+                {record:'2021/09/14 13:20:14 案件成立 (0151230011 鍾書文)'},
+
+            ],
+            department:null,
+            departmentOption:[
+                {text:'核算課',value:'1'},
+                {text:'大里服務中心',value:'2'},
+                {text:'東山服務所',value:'3'},
+            ]
         }
     },
     methods: {
+      init(){
+        // 控制補件存檔後將補件跳出視窗關閉
+        EventBus.subscriber('saveFile',this.closeSupplementModel);
+      },
         action(type,item){
           // 抓出選的是第幾筆
           if(type == 'delete'){            
@@ -68,6 +90,8 @@ export default {
             this.deleteOrderModel = true;
             this.selectIndex = this.multiMediaList.indexOf(item);
             this.isMultimedia = true;
+          } else if(type == 'supplement'){
+            this.supplementModel = true;
           }
         },
          submit(isMultimedia){
@@ -109,6 +133,12 @@ export default {
               }
             MessageService.showSuccess("核算成功✓");
             this.browserModel = false;
-        }
+        },
+        closeSupplementModel(){
+          this.supplementModel = false;
+        },
+        openFormRecord(){
+          this.formRecordModel = true;
+      }
     }
 }

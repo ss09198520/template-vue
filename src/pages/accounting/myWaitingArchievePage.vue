@@ -16,7 +16,7 @@
           <template v-slot:activator="{ on }">
             <v-btn
               :class="showAllArchieve? 'primary' : ''"                                       
-              class="ma-2 primary"
+              class="ma-2"
               fab
               small                
               v-on="on"
@@ -31,7 +31,7 @@
           <template v-slot:activator="{ on }">
             <v-btn
               :class="showMyArchieve? 'primary' : ''"                                       
-              class="ma-2 primary"
+              class="ma-2"
               fab
               small                
               v-on="on"

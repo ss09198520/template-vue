@@ -61,11 +61,27 @@
                 />
               </v-menu>
             </v-col>
+            <v-col cols="1">
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="primary"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-magnify'" />
+                  </v-btn>
+                </template>
+                <span>{{ searchText }}</span>
+              </v-tooltip>
+            </v-col>
           </v-row>
           <v-row>
             <v-col cols="11" />
             <v-col>
-              <v-btn color="primary" class="ml-3" @click="search()">{{ searchText }}</v-btn>
+              <!-- <v-btn color="primary" class="ml-3" @click="search()">{{ searchText }}</v-btn> -->
             </v-col>
           </v-row>
         </div>

@@ -33,21 +33,7 @@
               />
             </v-col>
           </v-row>
-          <v-row align="center">
-            <v-col cols="1">
-              員工編號
-            </v-col>
-            <v-col
-              cols="3"
-            >
-              <v-text-field                           
-                outlined
-                hide-details
-                dense
-                placeholder="請輸入員工編號"
-              />
-            </v-col>
-            <v-col cols="1" />
+          <v-row align="center">         
             <v-col cols="1">
               代理人編號
             </v-col>
@@ -61,9 +47,7 @@
                 placeholder="請輸入代理人編號"
               />
             </v-col>
-          </v-row>
-          <v-row align="center" />
-          <v-row align="center">
+            <v-col cols="1" />
             <v-col cols="1">
               代理人姓名
             </v-col>
@@ -77,7 +61,11 @@
                 placeholder="請輸入代理人姓名"
               />
             </v-col>
-            <v-col cols="1" />
+          </v-row>
+          <v-row align="center" />
+          <v-row align="center">
+           
+            
             <v-col cols="1">
               日期區間
             </v-col>
@@ -139,8 +127,7 @@
                 />
               </v-menu>
             </v-col>
-          </v-row>
-          <v-row align="center">
+            <v-col cols="1" />
             <v-col cols="1">
               請假方式
             </v-col>
@@ -163,6 +150,7 @@
               />
             </v-col>
           </v-row>
+        
           <v-row>
             <v-col cols="11" />
             <v-col>

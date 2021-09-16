@@ -306,7 +306,7 @@
           </v-btn>
         </v-col>
       </v-row>
-      <!-- <v-row v-if="mode == 'audit'">
+      <v-row v-if="mode == 'audit' && showModeSelect">
         <v-col cols="12" class="t-right">
           <v-btn depressed large color="error">
             <span style="font-size: 18px">退件</span>
@@ -329,7 +329,7 @@
             </v-icon>
           </v-btn>
         </v-col>
-      </v-row> -->
+      </v-row>
     </v-container>
 
     <!-- 檢視圖片 modal -->

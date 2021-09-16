@@ -212,3 +212,11 @@ body {
   }
 
 /*核算派工設定用 end*/
+
+/* 核算區-未分派區設定用 start*/
+  .orange {
+      color: #FFFFFF !important;
+      background-color: #E98B2A;
+      border-color: #E98B2A;
+  }
+/* 核算區-未分派區設定用 end*/

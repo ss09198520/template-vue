@@ -26,24 +26,38 @@
           disable-sort
           @page-count="unDispatchListPageCount = $event"
         >
-          <template v-slot:item.action="{ item }">                                            
-            <v-btn
-              class="ma-2"
-              color="success"
-              depressed
-              @click="action('dispatch',item)"
-            >
-              分派案件
-            </v-btn>       
-            <v-btn
-              class="ma-2"
-              style="color:white"
-              color="#E98B2A"
-              depressed
-              @click="action('takeAway',item)"
-            >
-              認領案件
-            </v-btn>                          
+          <template v-slot:item.action="{ item }">                                                        
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-if="item.action"                    
+                  class="ma-2 success"
+                  fab
+                  small                
+                  v-on="on"
+                  @click="action('dispatch',item)"
+                >
+                  <v-icon>mdi-account-arrow-right-outline</v-icon>
+                </v-btn>
+              </template>
+              <span>分派案件</span>
+            </v-tooltip>       
+            
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-if="item.action"                    
+                  class="ma-2 orange"                  
+                  fab
+                  small                
+                  v-on="on"
+                  @click="action('takeAway',item)"
+                >
+                  <v-icon>mdi-account-arrow-left-outline</v-icon>
+                </v-btn>
+              </template>
+              <span>認領案件</span>
+            </v-tooltip>                          
           </template>
         </v-data-table>
         <!-- 選頁 -->

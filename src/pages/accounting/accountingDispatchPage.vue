@@ -4,8 +4,22 @@
       <h2 class="font-bold">核算派工設定</h2>
       <v-row>
         <v-col cols="11" />
-        <v-col>
-          <v-btn class="success" style="margin:10px;" @click="newDispatch()">新增派工</v-btn>
+        <v-col>          
+          <v-tooltip top>
+            <template v-slot:activator="{ on }">
+              <v-btn
+                class="ma-2"
+                fab
+                small
+                color="success"
+                v-on="on"
+                @click="newDispatch()"
+              >
+                <v-icon>mdi-account-plus-outline</v-icon>
+              </v-btn>
+            </template>
+            <span>新增派工</span>
+          </v-tooltip>
         </v-col>
       </v-row>
       <hr>
@@ -22,9 +36,37 @@
             disable-sort
             @page-count="dataListPageCount = $event"
           >
-            <template v-slot:item.edit="{ item }">
-              <v-btn :disabled="!item.edit" class="success" @click="editDispatch(item)">修改派工</v-btn>
-              <v-btn :disabled="!item.remove" class="error ml-5" @click="remove(item)">刪除派工</v-btn>
+            <template v-slot:item.edit="{ item }">              
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    :disabled="!item.edit"
+                    class="ma-2 success"
+                    fab
+                    small                
+                    v-on="on"
+                    @click="editDispatch(item)"
+                  >
+                    <v-icon>mdi-account-edit-outline</v-icon>
+                  </v-btn>
+                </template>
+                <span>修改派工</span>
+              </v-tooltip>              
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    :disabled="!item.remove"
+                    class="ma-2 error"
+                    fab
+                    small                
+                    v-on="on"
+                    @click="remove(item)"
+                  >
+                    <v-icon v-text="'mdi-delete'" />
+                  </v-btn>
+                </template>
+                <span>刪除派工</span>
+              </v-tooltip>
             </template>
            
           </v-data-table>

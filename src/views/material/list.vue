@@ -186,22 +186,40 @@
           title="搜尋結果"
           text=""
         >
-          <div class="imgList">
-            <ul class="resourceList">
-              <li
-                v-for="(resource,id) in resources"
-                :id="resource.id"
-                :key="id"
-                :url="resource.url"
-                @dblclick="preview($event)"
-              >
-                <div class="imgBox">
-                  <img :src="require(`@/resource/${resource.thumbnail}`)">
-                </div>
-                <p>{{ resource.name }}</p>
-              </li>
-            </ul>
-          </div>
+          <v-row>
+            <div class="imgList">
+              <ul class="resourceList">
+                <li
+                  v-for="(resource,id) in resources"
+                  :id="resource.id"
+                  :key="id"
+                  :url="resource.url"
+                  @dblclick="preview($event)"
+                >
+                  <div class="imgBox">
+                    <img :src="require(`@/resource/${resource.thumbnail}`)">
+                  </div>
+                  <p>{{ resource.name }}</p>
+                </li>
+              </ul>
+            </div>
+          </v-row>
+          
+          <v-row>
+            <v-col
+              v-for="(resource,id) in resources"
+              :key="id"
+              class="d-flex view"
+              cols="3"
+              :url="resource.url"
+              @dblclick="preview($event)"
+            >
+              <div class="imgBox">
+                <img :src="require(`@/resource/${resource.thumbnail}`)">
+              </div>
+              <p>{{ resource.name }}</p>
+            </v-col>
+          </v-row>
         </fet-card>
       </v-col>
       <v-col v-show="!isGrid" md="12">
@@ -251,14 +269,6 @@
                   >
                     <v-icon v-text="'mdi-delete'" />
                   </v-btn>
-                  <!-- <v-icon
-                    :disabled="item.active"
-                    color="error"
-                    @click="deleteItem(item)"
-                    v-on="on"
-                  >
-                    mdi-delete
-                  </v-icon> -->
                 </template>
                 <span>刪除</span>
               </v-tooltip>
@@ -278,18 +288,6 @@
               </v-tooltip>
             </template>
             <template v-slot:[`item.thumbnail`]="{ item }">
-              <!-- <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon
-                    small
-                    class="mr-2 d-flex justify-center"
-                    v-on="on"
-                  >
-                    mdi-file
-                  </v-icon>
-                </template>
-                <span>{{ item.thumbnail }}</span>
-              </v-tooltip> -->
               <v-img
                 :src="require('@/resource/'+ item.thumbnail)"
                 :style="`cursor: pointer`"
@@ -634,86 +632,6 @@
 
 <style lang="scss" scoped>
 
-#resource {
-  width: 100%;
-  height: 100%;
-  background-color: #eeeeee;
-}
-
-#resourceTree {
-  border: 1px solid #c1c1c1;
-  height: 98%;
-  width: 12%;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.title {
-  height: 40px;
-  background-color: #d33a31;
-  line-height: 40px;
-  padding-left: 10px;
-  font-size: 1.4rem;
-  color: white;
-  letter-spacing: 3px;
-}
-
-.controlTree {
-  height: 40px;
-  line-height: 40px;
-  text-align: right;
-  padding-right: 10px;
-  border-bottom: 1px solid #dedede;
-}
-
-.controlTree > a {
-  margin-left: 15px;
-}
-
-.controlTree > a > i {
-  margin-right: 3px;
-}
-
-.controlTree > a:hover {
-  color: #d33a31;
-}
-
-#resourceList {
-  border: 1px solid #c1c1c1;
-  height: 98%;
-  border-radius: 10px;
-  overflow: hidden;
-  width: 87%;
-}
-
-.controlBox {
-  height: 40px;
-  line-height: 40px;
-  text-align: right;
-  padding: 10px;
-  border-bottom: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: space-between;
-}
-
-.control a {
-  margin-left: 10px;
-  font-size: 1.4rem;
-  border-right: 1px solid #cfcfcf;
-  padding-right: 10px;
-}
-
-.control > a > i {
-  margin-right: 5px;
-}
-
-.search {
-  display: flex;
-}
-
-.search > div {
-  margin-right: 10px;
-}
 
 .imgList, .tableList {
   padding: 20px;
@@ -748,6 +666,11 @@
   border: 1px solid #e7e7e7;
 }
 
+img {
+  max-width: 120px;
+  max-height: 120px;
+}
+
 .resourceList li img {
   max-width: 120px;
   max-height: 120px;
@@ -761,27 +684,4 @@
   min-width: 20px;
 }
 
-.el-upload-list__item-status-label {
-  position: absolute;
-  right: -15px;
-  top: -7px;
-  width: 46px;
-  height: 26px;
-  background: #13ce66;
-  text-align: center;
-  transform: rotate(45deg);
-  box-shadow: 0 1px 1px #ccc;
-}
-
-.el-upload-list__item-status-label i {
-  font-size: 12px;
-  margin-top: 12px;
-  transform: rotate(-45deg);
-  color: white;
-}
-
-.page {
-  text-align: right;
-  padding-right: 20px;
-}
 </style>

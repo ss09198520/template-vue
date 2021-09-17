@@ -64,7 +64,7 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              上 架 時 間
+              上 傳 時 間
             </v-col>
             <v-col 
               cols="3"   
@@ -192,8 +192,8 @@
                 v-for="(resource,id) in resources"
                 :id="resource.id"
                 :key="id"
-                :url="resource.url" 
-                @click="selected($event)" 
+                :url="resource.url"
+                @dblclick="preview($event)"
               >
                 <div class="imgBox">
                   <img :src="require(`@/resource/${resource.thumbnail}`)">
@@ -238,32 +238,6 @@
               </v-dialog>
             </template>
             <template v-slot:[`item.action`]="{ item }">
-              <!-- <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon
-                    small
-                    class="mr-2"
-                    color="red"
-                    @click="editItem(item)"
-                    v-on="on"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                </template>
-                <span>編輯</span>
-              </v-tooltip>
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-icon
-                    small
-                    @click="deleteItem(item)"
-                    v-on="on"
-                  >
-                    mdi-eye
-                  </v-icon>
-                </template>
-                <span>刪除</span>
-              </v-tooltip> -->
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -303,11 +277,32 @@
                 <span>{{ item.marquee_content }}</span>
               </v-tooltip>
             </template>
+            <template v-slot:[`item.thumbnail`]="{ item }">
+              <!-- <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    small
+                    class="mr-2 d-flex justify-center"
+                    v-on="on"
+                  >
+                    mdi-file
+                  </v-icon>
+                </template>
+                <span>{{ item.thumbnail }}</span>
+              </v-tooltip> -->
+              <v-img
+                :src="require('@/resource/'+ item.thumbnail)"
+                :style="`cursor: pointer`"
+                max-width="50"
+                max-height="50"
+                @dblclick="(previewUrl = item.thumbnail),(overlay = true)"
+              />
+              {{ item.thumbnail }}
+            </template>
             <template v-slot:[`item.active`]="{ item }">
               <v-icon
                 class="d-flex justify-center"
                 :color="item.active?'green darken-2':''"
-                v-on="on"
               >
                 {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
               </v-icon>
@@ -324,6 +319,23 @@
         </fet-card>
       </v-col>
     </v-row>
+    <v-overlay
+      :value="overlay"
+      z-index="1000"
+      class="text-right"
+    >
+      <v-img
+        :src="require('@/resource/'+ previewUrl)"
+        max-width="700"
+        max-height="1024"
+        @load="imageLoaded = true"
+        @click="(overlay = false), (imageLoaded = false)"
+      />
+      <v-progress-circular
+        v-show="!imageLoaded"
+        indeterminate
+      />
+    </v-overlay>
   </v-container>
 </template>
 
@@ -333,6 +345,9 @@
       return {
         isShow: false,
         isGrid: false,
+        overlay: false,
+        previewUrl: 'image/bg1.jpg',
+        imageLoaded: false,
         //分頁
         itemsPerPage: 10,
         itemsListPage: 1,
@@ -347,14 +362,14 @@
         resources: [
           {
             "id": 1,
-            "url": "image/bg1.jpg",
+            "url": "image/bg1_tn.jpg",
             "thumbnail": "image/bg1_tn.jpg",
             "name": "bg1.jpg",
             "type": "image"
           },
           {
             "id": 2,
-            "url": "image/bg2.png",
+            "url": "image/bg2_tn.jpg",
             "thumbnail": "image/bg2_tn.jpg",
             "name": "bg2.jpg",
             "type": "image"
@@ -362,48 +377,48 @@
           {
             "id": 3,
             "url": "image/p1.jpg",
-            "thumbnail": "image/p1_tn.jpg",
+            "thumbnail": "image/p1.jpg",
             "name": "p1.jpg",
             "type": "image"
           },
           {
             "id": 4,
-            "url": "image/p2.jpg",
+            "url": "image/p2_tn.jpg",
             "thumbnail": "image/p2_tn.jpg",
             "name": "p2.jpg",
             "type": "image"
           },
           {
             "id": 5,
-            "url": "image/p3.jpg",
+            "url": "image/p3_tn.jpg",
             "thumbnail": "image/p3_tn.jpg",
             "name": "p3.jpg",
             "type": "image"
           },
           {
             "id": 6,
-            "url": "image/p4.jpg",
+            "url": "image/p4_tn.jpg",
             "thumbnail": "image/p4_tn.jpg",
             "name": "p4.jpg",
             "type": "image"
           },
           {
             "id": 7,
-            "url": "image/p5.jpg",
+            "url": "image/p5_tn.jpg",
             "thumbnail": "image/p5_tn.jpg",
             "name": "p5.jpg",
             "type": "image"
           },
           {
             "id": 8,
-            "url": "image/p6.jpg",
+            "url": "image/p6_tn.jpg",
             "thumbnail": "image/p6_tn.jpg",
             "name": "p6.jpg",
             "type": "image"
           },
           {
             "id": 9,
-            "url": "image/p7.jpg",
+            "url": "image/p7_tn.jpg",
             "thumbnail": "image/p7_tn.jpg",
             "name": "p7.jpg",
             "type": "image"
@@ -447,17 +462,21 @@
             align: 'center'
           },
           {
+            text: '縮圖',
+            value: 'thumbnail',
+          },
+          {
             text: '使用中',
             value: 'active',
             sortable: false,
             align: 'center',
           },
-            {
-              text: '狀態操作',
-              value: 'action',
-              sortable: false,
-              align: 'center'
-            },
+          {
+            text: '狀態操作',
+            value: 'action',
+            sortable: false,
+            align: 'center'
+          },
         ],
         itemsCRUD: [
           {
@@ -469,7 +488,8 @@
             active: true,
             ondate: '2021-09-11',
             offdate: '2021-10-30',
-            signoff: '簽核完成'
+            signoff: '簽核完成',
+            thumbnail: "image/p1.jpg",
           },
           {
             name: '秋季節約用電宣導圖片',
@@ -480,7 +500,8 @@
             active: false,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '簽核完成'
+            signoff: '簽核完成',
+            thumbnail: "image/p2_tn.jpg",
           },
           {
             name: '颱風緊急通報圖片',
@@ -491,7 +512,8 @@
             active: false,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '暫存'
+            signoff: '暫存',
+            thumbnail: "image/p3_tn.jpg",
           },
           {
             name: '宣導圖片',
@@ -502,7 +524,8 @@
             active: false,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '審核中'
+            signoff: '審核中',
+            thumbnail: "image/p4_tn.jpg",
           },
           {
             name: '台電連4年獲亞洲企業社會責任獎',
@@ -513,7 +536,8 @@
             active: false,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '退件'
+            signoff: '退件',
+            thumbnail: "image/p5_tn.jpg",
           },
           {
             name: '台電首度攜手紙風車劇團，到彰化員林打造露天舞台劇',
@@ -524,7 +548,8 @@
             active: false,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '退件'
+            signoff: '退件',
+            thumbnail: "image/p2_tn.jpg",
           },
         ],
         defaultItem: {
@@ -578,6 +603,30 @@
       remove() {
         this.itemsCRUD.splice(this.editedIndex, 1)
         this.close()
+      },
+      preview(e) {
+        console.log(e)
+        
+        this.previewUrl = document.getElementById(e.currentTarget.id).getAttribute("url");
+        // this.title = this.treeName.slice(0, 2);
+        // if (this.url.indexOf('mp4') != '-1') {
+        //   this.format = 'video';
+        // } else if (this.url.indexOf('png') != '-1' || this.url.indexOf('jpg') != '-1' || this.url.indexOf('jpeg') != '-1') {
+        //   this.format = 'image'
+        // } else {
+        //   this.$message({
+        //     message: this.$t('Msg.ID_MSG_26'),
+        //     center: true,
+        //     type: 'warning'
+        //   });
+        //   return false
+        // }
+        this.overlay = true
+         console.log(this.previewUrl)
+        // if (this.format == 'video') {
+        //   let myVideo = document.getElementById('myVideo');
+        //   myVideo.load();
+        // }
       },
     }
   }

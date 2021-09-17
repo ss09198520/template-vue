@@ -62,7 +62,7 @@
             <v-col cols="1" class="ml-2">
               申 請 項 目
             </v-col>
-            <v-col cols="3" class="ml-2">
+            <v-col cols="3" class="ml-5">
               <v-select
                 :items="['QA210 軍眷用電申請優待','I0510 故障換表','I0520 增加電表','F3030 表燈非時間電價停用廢止','I0510 故障換表',]"
                 color="accent"

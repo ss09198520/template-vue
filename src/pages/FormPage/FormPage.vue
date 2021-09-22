@@ -525,6 +525,26 @@
               </v-container>
             </v-expansion-panel-content>
           </v-expansion-panel>
+
+          <v-expansion-panel v-if="mode == 'audit'">
+            <v-expansion-panel-header class="panel-header mb-3">
+              <v-col cols="12">
+                <h2>核算備註區</h2>
+              </v-col>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col cols="12" class="d-center">
+                  <v-textarea
+                    v-model="auditRemark"
+                    outlined
+                    label="核算備註"
+                    placeholder="點選 [儲存備註並關閉]、[退件]、[核算通過] 都會進行儲存"
+                  />
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
         </v-expansion-panels>
       </v-row>
       <v-row v-if="mode == 'edit'">
@@ -541,14 +561,25 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-row v-if="mode == 'audit' && showModeSelect">
+      <v-row v-if="mode == 'audit'">
         <v-col cols="12" class="t-right">
-          <v-btn depressed large color="error">
+          <v-btn depressed large color="#E98B2A">
+            <span style="font-size: 18px; color: white">儲存備註並關閉</span>
+            <v-icon
+              right
+              dark
+              style="font-size: 24px; color: white"
+            >
+              mdi-content-save
+            </v-icon>
+          </v-btn>
+          <v-btn depressed large color="error" class="ml-3">
             <span style="font-size: 18px">退件</span>
             <v-icon
               right
               dark
               style="font-size: 24px"
+              @click="retrunOrder()"
             >
               mdi-close
             </v-icon>
@@ -559,6 +590,7 @@
               right
               dark
               style="font-size: 24px"
+              @click="auditSubmit()"
             >
               mdi-check
             </v-icon>

@@ -125,22 +125,8 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <FormPage :restrict-mode="'audit'" />
+          <FormPage :restrict-mode="'audit'" @returnOrder="returnOrder()" @checkSubmit="checkSubmit()" />
         </v-card-text>
-        <v-card-actions class="d-end mt-5">
-          <v-btn              
-            color="error"            
-            @click="retrunOrder()"
-          >
-            &emsp;退件&emsp;
-          </v-btn>
-          <v-btn              
-            color="success"            
-            @click="checkSubmit()"
-          >
-            核算通過
-          </v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
 
@@ -186,11 +172,15 @@
               退件原因
             </v-col>
             <v-col cols="7">
-              <v-text-field
+              <v-select   
+                v-model="reason"
+                :items="reasonOption"
+                item-text="text"
+                :return-object="true"
                 outlined
-                hide-details                                         
+                hide-details
                 dense
-                placeholder="請輸入退件原因"
+                placeholder="請選擇退件原因"
               />
             </v-col>
           </v-row>

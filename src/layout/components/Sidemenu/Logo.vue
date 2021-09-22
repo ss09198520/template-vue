@@ -10,11 +10,14 @@
         to="/"
       >
         <v-sheet>
-          <img
+          <!-- <img
             :src="logo"
             :style="miniSidebar ? 'max-width: 100%' : ''"
             alt="logo"
-          >
+          >           -->
+          <div class="title">
+            營業櫃檯無紙化系統(TPES)
+          </div>
         </v-sheet>
       </v-list-item>
     </v-list>
@@ -54,6 +57,12 @@ export default {
       max-height: 60px;
     }
   }
+}
+
+.title {
+  color: black;
+  background-color: #fff;
+  text-align: center;  
 }
 
 </style>

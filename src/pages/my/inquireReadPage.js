@@ -59,12 +59,16 @@ export default{
                 { mani: true, orderId: 'A00605',accntName:'文易席',contractType:'高壓',sortNo:'000303', electNum: '7140000888', orderDate:'20210910 09:45', achieveDate:'20210915 09:45',  orderItems:'F3030表燈非時間電價停用廢止'},
                 { mani: true, orderId: 'A00619',accntName:'許慧貞',contractType:'包制',sortNo:'000304', electNum: '7140000999', orderDate:'20210910 13:44', achieveDate:'20210915 13:44',  orderItems:'I0510故障換表'},
             ],
+            //日曆起(受理日期)
             menu1: false,
             date1: '',
+            //日曆迄(受理日期)
             menu2: false,
             date2: '',
+            //日曆起(歸檔日期)
             menu3: false,
             date3: '',
+            //日曆迄(歸檔日期)
             menu4: false,
             date4: '',
             contractType:null,

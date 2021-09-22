@@ -1,7 +1,8 @@
 <template>
   <v-container>
-    <v-btn class="ma-2" :class="{'primary': general}" @click="general = true">角色：受理人員</v-btn>
-    <v-btn class="ma-2" :class="{'primary': !general}" @click="general = false">角色：核算員</v-btn>
+    <v-btn class="ma-2" :class="{'primary': general}" @click="member('1')">角色：受理人員</v-btn>
+    <v-btn class="ma-2" :class="{'primary': accounting}" @click="member('2')">角色：核算員</v-btn>
+    <v-btn class="ma-2" :class="{'primary': signOff}" @click="member('3')">角色：簽核人員</v-btn>
     <!-- 角色:受理人員 -->
     <div v-if="general == true" class="ml-10">
       <h1 class="font-bold">
@@ -18,19 +19,7 @@
             <span style="font-size:96px;">2</span>
             <span style="font-size:30px;">件</span>
           </v-card>
-        </v-col>
-        <v-col cols="2">
-          <v-card
-            elevation="6"
-                        
-            class="font-bold t-center"
-            max-width="200px"       
-          >
-            <h2 class="font-bold">核算中</h2>
-            <span style="font-size:96px;">2</span>
-            <span style="font-size:30px;">件</span>
-          </v-card>
-        </v-col>
+        </v-col>        
         <v-col cols="2">
           <v-card
             elevation="6"
@@ -106,7 +95,7 @@
       </v-row>
     </div>
     <!-- 角色:核算員 -->
-    <div v-if="general == false" class="ml-10">
+    <div v-if="accounting == true" class="ml-10">
       <h1 class="font-bold">
         我的核算區
       </h1>      
@@ -165,6 +154,49 @@
           </v-card>
         </v-col>        
       </v-row>      
+    </div>
+    <!-- 角色:簽核人員 -->
+    <div v-if="signOff == true" class="ml-10">
+      <h1 class="font-bold">
+        我的簽核區
+      </h1>      
+      <v-row class="ml-10">        
+        <v-col cols="2">
+          <v-card
+            elevation="6"                        
+            class="font-bold t-center"
+            max-width="200px"       
+          >
+            <h2 class="font-bold">調閱簽核</h2>
+            <span style="font-size:96px;">5</span>
+            <span style="font-size:30px;">件</span>
+          </v-card>
+        </v-col>
+        <v-col cols="2">
+          <v-card
+            elevation="6"
+                        
+            class="font-bold t-center"  
+            max-width="200px"     
+          >
+            <h2 class="font-bold">專用章簽核</h2>
+            <span style="font-size:96px;">4</span>
+            <span style="font-size:30px;">件</span>
+          </v-card>
+        </v-col>
+        <v-col cols="2">
+          <v-card
+            elevation="6"
+                        
+            class="font-bold t-center"  
+            max-width="200px"     
+          >
+            <h2 class="font-bold">多媒體簽核</h2>
+            <span style="font-size:96px;">3</span>
+            <span style="font-size:30px;">件</span>
+          </v-card>
+        </v-col>       
+      </v-row>         
     </div>
   </v-container>
 </template>

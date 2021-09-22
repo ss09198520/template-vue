@@ -194,15 +194,18 @@
                             </v-icon><br>
                             {{ attachment.file.name }}
                           </div>
+                          <div v-else-if="mode == 'viewMyRead'">
+                            <span>調閱附件一</span>
+                          </div>
                           <div v-else class="not-scan-area">
-                            <span>尚未上傳</span>
+                            <span>尚未上傳一</span>
                           </div>
                         </div>
                       </v-col> 
                                            
                     </v-row>
                     <v-row>
-                      <v-col cols="12" class="d-center">
+                      <v-col v-if="mode != 'viewMyRead'" cols="12" class="d-center">
                         <v-checkbox 
                           v-model="attachment.useStamp" 
                           :disabled="mode != 'edit'"
@@ -243,7 +246,7 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row v-if="mode == 'audit' || mode=='viewSealSignOffAfter'">
+                    <v-row v-if="mode == 'audit' || mode=='viewSealSignOffAfter' || mode == 'viewMyRead'">
                       <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="viewImage(attachment)">
                           檢視
@@ -255,7 +258,7 @@
                           </v-icon>
                         </v-btn>
                       </v-col>
-                      <v-col v-else cols="12" class="t-center">
+                      <v-col v-else cols="12" class="t-center mt-3">
                         <v-btn depressed color="primary" :disabled="!attachment.file">
                           下載
                           <v-icon

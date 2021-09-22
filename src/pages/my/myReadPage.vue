@@ -15,7 +15,7 @@
       <div class="mt-10 ml-10 font-18px font-bold">
         <v-row align="center">
           <v-col cols="1">
-            受理編號        
+            受理號碼        
           </v-col>          
           <v-col
             cols="3"
@@ -40,6 +40,79 @@
               dense
               placeholder="請輸入電號"
             />
+          </v-col>     
+        </v-row>
+        <v-row align="center">
+          <v-col cols="1">
+            整理號碼        
+          </v-col>          
+          <v-col
+            cols="3"
+          >
+            <v-text-field
+              outlined
+              hide-details                                         
+              dense
+              placeholder="請輸入整理號碼"
+            />
+          </v-col>
+          <v-col cols="1" />
+          <v-col cols="1">
+            申請調閱日期
+          </v-col>                                             
+          <v-col
+            cols="3"
+            class="d-flex"
+          >
+            <v-menu
+              v-model="menu1"
+              :close-on-content-click="false"              
+              transition="scale-transition"
+              offset-y              
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="date1"                  
+                  append-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  outlined
+                  dense
+                  hide-details                  
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="date1"
+                @input="menu1 = false"
+              />
+            </v-menu>          
+            <div style="margin:auto 0;">~</div>          
+            <v-menu
+              v-model="menu2"
+              :close-on-content-click="false"              
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="date2"                  
+                  append-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  outlined
+                  dense
+                  hide-details
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="date2"
+                @input="menu2 = false"
+              />
+            </v-menu>
           </v-col>     
         </v-row>
         <v-row>
@@ -143,14 +216,14 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <form-page restrict-mode="view" />
+            <form-page restrict-mode="viewMyRead" />
           </v-card-text>
           <v-card-actions class="d-end mt-5">
             <v-btn              
               color="primary"            
               @click="checkSubmit()"
             >
-              &emsp;確定&emsp;
+              &emsp;關閉&emsp;
             </v-btn>
           </v-card-actions>
         </v-card>

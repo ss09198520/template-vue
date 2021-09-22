@@ -1,6 +1,10 @@
 import MessageService from "@/assets/services/message.service";
+import formPage from "../FormPage/FormPage.vue";
 
 export default {
+    components:{
+        formPage,
+    },
     name: 'SealSignOff',
     props: {
     
@@ -26,6 +30,8 @@ export default {
                 ],
              sealSignListPageCount:0,
              sealSignListPage:1,
+             browserModel: false, // 瀏覽案件視窗開關  
+             sealOffFinish: false, //控制簽核前後瀏覽表單附件內容                   
         }
     },
     methods: {
@@ -33,8 +39,27 @@ export default {
             console.log(item);
             let index = this.sealSignList.indexOf(item);
             this.sealSignList[index].inquireStatus = '套印完成';
-            this.sealSignList[index].status = true;
+            this.sealSignList[index].status = true;            
             MessageService.showSuccess("簽核成功✓");
-        }
+        },
+        action(type,item){
+            // 抓出選的是第幾筆                       
+            this.selectIndex = this.sealSignList.indexOf(item);            
+            if(type=='delete'){
+                this.deleteOrderModel = true;
+            } else if(type == 'browse'){
+                this.browserModel = true;
+            } else if(type == 'supplement'){
+                this.supplementModel = true;
+            }     
+            if(item.inquireStatus == '套印完成'){
+                this.sealOffFinish = true;                                
+            }else{
+                this.sealOffFinish = false;                
+            }               
+        },
+        checkSubmit(){
+            this.browserModel = false;
+        },
     }
 }

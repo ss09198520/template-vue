@@ -31,12 +31,12 @@
                       <v-icon dark size="7vh">
                         mdi-file-document-outline
                       </v-icon><br>
-                      <div v-if="mode==='audit'" class="big-btn-text mt-2">檢視表單</div>
+                      <div v-if="mode==='audit' || mode=='viewSealSignOffAfter'" class="big-btn-text mt-2">檢視表單</div>
                       <div v-else class="big-btn-text mt-2">開啟表單</div>
                     </span>
                   </v-btn>
                 </v-col>
-                <v-col v-if="mode!=='audit'" cols="6">
+                <v-col v-if="mode!=='audit' || mode=='viewSealSignOffAfter'" cols="6">
                   <div class="sign-preview-area">
                     <span>簽名預覽</span>
                     <img v-if="signPreviewImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + signPreviewImgSrc">
@@ -126,7 +126,7 @@
                           </v-icon>
                         </v-btn>
                       </v-col>
-                      <v-col v-if="mode == 'audit'" cols="12" class="t-center">
+                      <v-col v-if="mode == 'audit' || mode=='viewSealSignOffAfter'" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="viewImage(certificate)">
                           檢視
                           <v-icon
@@ -171,8 +171,8 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-container>
-                <v-row>
-                  <v-col v-for="(attachment, index) in attachmentList" :key="attachment.id" cols="3" class="mb-2">
+                <v-row v-if="mode!='viewSealSignOffAfter' && mode!='viewSealSignOffBefore'">
+                  <v-col v-for="(attachment, index) in attachmentList" :key="attachment.id" cols="3" class="mb-2">                    
                     <v-row>
                       <v-col cols="12" style="text-align: center;">
                         <v-text-field
@@ -185,7 +185,7 @@
                       </v-col>
                     </v-row>
                     <v-row>
-                      <v-col cols="12">
+                      <v-col>
                         <div class="img-area d-center">
                           <img v-if="attachment.imgSrc" style="width: 100%; max-height: 100%" :src="attachment.imgSrc">
                           <div v-else-if="attachment.file" class="t-center">
@@ -198,7 +198,8 @@
                             <span>尚未上傳</span>
                           </div>
                         </div>
-                      </v-col>
+                      </v-col> 
+                                           
                     </v-row>
                     <v-row>
                       <v-col cols="12" class="d-center">
@@ -242,7 +243,241 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row v-if="mode == 'audit'">
+                    <v-row v-if="mode == 'audit' || mode=='viewSealSignOffAfter'">
+                      <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
+                        <v-btn depressed color="normal" @click="viewImage(attachment)">
+                          檢視
+                          <v-icon
+                            right
+                            dark
+                          >
+                            mdi-eye
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                      <v-col v-else cols="12" class="t-center">
+                        <v-btn depressed color="primary" :disabled="!attachment.file">
+                          下載
+                          <v-icon
+                            right
+                            dark
+                          >
+                            mdi-cloud-download
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="3" class="add-attachment-area">
+                    <v-row class="h-100">
+                      <v-col cols="12" class="h-100 d-center">
+                        <v-btn
+                          v-if="mode == 'edit'"
+                          class="mx-2"
+                          fab
+                          dark
+                          depressed
+                          color="primary"
+                          @click="addAttachment()"
+                        >
+                          <v-icon dark>
+                            mdi-plus
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row v-if="mode=='viewSealSignOffBefore'">
+                  <v-col v-for="(attachment, index) in attachmentListMockBefore" :key="attachment.id" cols="3" class="mb-2">                    
+                    <v-row>
+                      <v-col cols="12" style="text-align: center;">
+                        <v-text-field
+                          v-model="attachment.name"
+                          :disabled="mode != 'edit'"
+                          dense
+                          hide-details
+                          class="h3 t-center"
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <div class="img-area d-center">
+                          <img v-if="attachment.imgSrc" style="width: 100%; max-height: 100%" :src="attachment.imgSrc">
+                          <div v-else-if="attachment.file" class="t-center">
+                            <v-icon x-large class="mb-2">
+                              mdi-file-document-outline
+                            </v-icon><br>
+                            {{ attachment.file.name }}
+                          </div>
+                          <div v-else class="not-scan-area">
+                            <span>證明函檔案</span>
+                          </div>
+                        </div>
+                      </v-col> 
+                                           
+                    </v-row>
+                    <!-- <v-row>
+                      <v-col cols="12" class="d-center">
+                        <v-checkbox 
+                          v-model="attachment.useStamp" 
+                          :disabled="mode != 'edit'"
+                          class="mt-0" 
+                          label="套印專用章" 
+                          color="success" 
+                          hide-details
+                        />
+                      </v-col>
+                    </v-row> -->
+                    <v-row v-if="mode == 'edit'">
+                      <v-col cols="6" class="t-center">
+                        <v-btn depressed color="error" @click="deleteAttachment(index)">
+                          刪除
+                          <v-icon
+                            right
+                            dark
+                          >
+                            mdi-delete
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="6" class="t-center">
+                        <v-btn depressed color="primary" :loading="attachment.isSelecting" @click="uploadFile(attachment, index)">
+                          上傳
+                          <v-icon
+                            right
+                            dark
+                          >
+                            mdi-cloud-upload
+                          </v-icon>
+                        </v-btn>
+                        <input
+                          ref="uploaders"
+                          class="d-none"
+                          type="file"
+                          @change="onFileChanged"
+                        >
+                      </v-col>
+                    </v-row>
+                    <v-row v-if="mode == 'audit' || mode=='viewSealSignOffAfter'">
+                      <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
+                        <v-btn depressed color="normal" @click="viewImage(attachment)">
+                          檢視
+                          <v-icon
+                            right
+                            dark
+                          >
+                            mdi-eye
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                      <v-col v-else cols="12" class="t-center">
+                        <v-btn depressed color="primary" :disabled="!attachment.file">
+                          下載
+                          <v-icon
+                            right
+                            dark
+                          >
+                            mdi-cloud-download
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                  <v-col cols="3" class="add-attachment-area">
+                    <v-row class="h-100">
+                      <v-col cols="12" class="h-100 d-center">
+                        <v-btn
+                          v-if="mode == 'edit'"
+                          class="mx-2"
+                          fab
+                          dark
+                          depressed
+                          color="primary"
+                          @click="addAttachment()"
+                        >
+                          <v-icon dark>
+                            mdi-plus
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row v-if="mode=='viewSealSignOffAfter'">
+                  <v-col v-for="(attachment, index) in attachmentListMockAfter" :key="attachment.id" cols="3" class="mb-2">                    
+                    <v-row>
+                      <v-col cols="12" style="text-align: center;">
+                        <v-text-field
+                          v-model="attachment.name"
+                          :disabled="mode != 'edit'"
+                          dense
+                          hide-details
+                          class="h3 t-center"
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col>
+                        <div class="img-area d-center">
+                          <img v-if="attachment.imgSrc" style="width: 100%; max-height: 100%" :src="attachment.imgSrc">
+                          <div v-else-if="attachment.file" class="t-center">
+                            <v-icon x-large class="mb-2">
+                              mdi-file-document-outline
+                            </v-icon><br>
+                            {{ attachment.file.name }}
+                          </div>
+                          <div v-else class="not-scan-area">
+                            <span>證明函檔案</span>
+                          </div>
+                        </div>
+                      </v-col> 
+                                           
+                    </v-row>
+                    <!-- <v-row>
+                      <v-col cols="12" class="d-center">
+                        <v-checkbox 
+                          v-model="attachment.useStamp" 
+                          :disabled="mode != 'edit'"
+                          class="mt-0" 
+                          label="套印專用章" 
+                          color="success" 
+                          hide-details
+                        />
+                      </v-col>
+                    </v-row> -->
+                    <v-row v-if="mode == 'edit'">
+                      <v-col cols="6" class="t-center">
+                        <v-btn depressed color="error" @click="deleteAttachment(index)">
+                          刪除
+                          <v-icon
+                            right
+                            dark
+                          >
+                            mdi-delete
+                          </v-icon>
+                        </v-btn>
+                      </v-col>
+                      <v-col cols="6" class="t-center">
+                        <v-btn depressed color="primary" :loading="attachment.isSelecting" @click="uploadFile(attachment, index)">
+                          上傳
+                          <v-icon
+                            right
+                            dark
+                          >
+                            mdi-cloud-upload
+                          </v-icon>
+                        </v-btn>
+                        <input
+                          ref="uploaders"
+                          class="d-none"
+                          type="file"
+                          @change="onFileChanged"
+                        >
+                      </v-col>
+                    </v-row>
+                    <v-row v-if="mode == 'audit' || mode=='viewSealSignOffAfter'">
                       <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="viewImage(attachment)">
                           檢視

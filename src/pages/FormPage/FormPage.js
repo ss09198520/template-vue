@@ -14,6 +14,8 @@ export default {
                 {name: "新增/修改", value: "edit"},
                 {name: "核算", value: "audit"},
                 {name: "檢視", value: "view"},
+                {name: "檢視專用章簽核(審核前)", value: "viewSealSignOffBefore"},
+                {name: "檢視專用章簽核(審核後)", value: "viewSealSignOffAfter"},
             ],
             mode: "edit",
             panel: [0, 1, 2],
@@ -39,6 +41,9 @@ export default {
             ],
             certificateNo: 3,
             attachmentList: [],
+            //Mock的prototype
+            attachmentListMockBefore: [{id: '1',name:'證明函(未套印)'}],
+            attachmentListMockAfter: [{id: '1',name:'證明函(未套印)'},{id: '2',name:'證明函(套印完成)'}],
             attachmentNo: 1,
             selectedAttachment: null,
             viewImageDialog: false,
@@ -48,9 +53,9 @@ export default {
         }
     },
     methods: {
-        init(){
-            this.addAttachment();
-            if(this.restrictMode){
+        init(){            
+            this.addAttachment();            
+            if(this.restrictMode){                
                 this.mode = this.restrictMode;
                 this.showModeSelect = false;
             }

@@ -3,11 +3,11 @@
     <v-btn class="ma-2" :class="{'primary': User == 'guest'}" @click="User = 'guest'">角色：核算課長/調閱管理員</v-btn>
     <v-btn class="ma-2" :class="{'primary': User == 'TPESUser'}" @click="User = 'TPESUser'">角色：TPES使用者</v-btn>
     <div v-if="User != 'TPESUser'">
-      <h2 class="font-bold">調閱查詢</h2>      
+      <h2 class="font-bold">案件查詢</h2>      
       <div class="ml-10 font-18px font-bold">        
         <v-row align="center">
           <v-col cols="1">
-            案件查詢受理號碼     
+            受理號碼     
           </v-col>          
           <v-col
             cols="3"
@@ -44,8 +44,8 @@
             <v-text-field
               outlined
               hide-details                                         
-              dense
-              placeholder="請輸入受理編號"
+              dense              
+              placeholder="請輸入戶名"
             />
           </v-col>
           <v-col cols="1" />
@@ -379,11 +379,11 @@
     </div>
     <!-- 角色為TPES使用者 -->
     <div v-if="User == 'TPESUser'">        
-      <h2 class="font-bold">調閱查詢</h2>
+      <h2 class="font-bold">案件查詢</h2>
       <div class="ml-10 font-18px font-bold">            
         <v-row align="center">          
           <v-col cols="1">
-            案件查詢受理號碼
+            受理號碼
           </v-col>
           <v-col
             cols="3"

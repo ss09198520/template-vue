@@ -14,6 +14,7 @@ export default {
                 {name: "新增/修改", value: "edit"},
                 {name: "核算", value: "audit"},
                 {name: "檢視", value: "view"},
+                {name: "檢視我的表單", value: "viewMyForm"},
                 {name: "檢視我的調閱區", value: "viewMyRead"},
                 {name: "檢視專用章簽核(審核前)", value: "viewSealSignOffBefore"},
                 {name: "檢視專用章簽核(審核後)", value: "viewSealSignOffAfter"},
@@ -56,11 +57,11 @@ export default {
     },
     methods: {
         init(){            
-            this.addAttachment();            
+            this.addAttachment();    
             if(this.restrictMode){                
                 this.mode = this.restrictMode;
                 this.showModeSelect = false;
-            }
+            }   
         },
         cleanCertificateImg(certificate) {
             certificate.imgSrc = null;

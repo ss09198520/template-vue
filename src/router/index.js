@@ -127,7 +127,7 @@ export const constantRoutes = [
         path: 'inquireLeave',
         name: 'InquireLeave',
         component: () => import('@/pages/my/inquireLeavePage.vue'),
-        meta: { title: '請假申請', icon: 'mdi-account-box-outline' }
+        meta: { title: '代理申請', icon: 'mdi-account-box-outline' }
       },
     ]
   },

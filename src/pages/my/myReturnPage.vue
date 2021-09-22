@@ -50,21 +50,6 @@
                 </template>
                 <span>補件操作</span>
               </v-tooltip>
-              <v-tooltip v-if="item.cancel" top>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    class="ma-2"
-                    fab
-                    small
-                    color="error"
-                    @click="action('delete',item)"
-                    v-on="on"
-                  >
-                    <v-icon v-text="'mdi-delete'" />
-                  </v-btn>
-                </template>
-                <span>取消案件</span>
-              </v-tooltip>
               <v-tooltip v-if="item.view" top>
                 <template v-slot:activator="{ on }">
                   <v-btn

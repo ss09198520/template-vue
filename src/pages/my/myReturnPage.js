@@ -19,18 +19,21 @@ export default {
             multiMediaReturnCount: 3,
             caseHeaders: [
                 { text: '受理編號', value: 'acceptNumber', align: 'center' },
+                { text: '契約種類', value: 'contractType', align: 'center' },
+                { text: '電號', value: 'electricNo', align: 'center' },
+                { text: '戶名', value: 'accntName', align: 'center' },
+                { text: '計算日', value: 'computeDate', align: 'center' },
                 { text: '退件日期', value: 'returnDate', align: 'center' },
                 { text: '退件原因', value: 'reason', align: 'center' },
                 { text: '退件說明', value: 'desc', align: 'center' },  
-                { text: '受理項目', value: 'acceptItem', align: 'center' },          
-                { text: '原受理人', value: 'acceptUser', align: 'center' },
+                { text: '受理項目', value: 'acceptItem', align: 'center' },
                 { text: '原受理人姓名', value: 'acceptName', align: 'center' },
                 { text: '退件人', value: 'returner', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
             caseList: [
-                {action: true, remain: true, cancel: true, view: true, acceptNumber: 'A00028', returnDate: '20210910 15:00', reason: '證件不清楚', desc: '現役軍人眷屬身分證圖片不清楚，須補證件', acceptItem: 'QA210  軍眷用電申請優待', acceptUser: '1050334016', acceptName: '李小凡',returner:'陳麗杉'},
-                {action: true, remain: true, cancel: true, view: true, acceptNumber: 'A00633', returnDate: '20210910 16:45', reason: '佐證文件不足', desc: '須提供XXX佐證文件', acceptItem: 'F3030  表燈非時間電價停用廢止', acceptUser: '1050334017', acceptName: '葉星辰',returner:'林雯雯'}
+                {action: true, remain: true, cancel: true, view: true, acceptNumber: 'A00028', contractType: "表制", electricNo:'0120123223', accntName:"余文文", computeDate: '01', returnDate: '20210910 15:00', reason: '證件不清楚', desc: '現役軍人眷屬身分證圖片不清楚，須補證件', acceptItem: 'QA210  軍眷用電申請優待', acceptName: '李小凡',returner:'陳麗杉'},
+                {action: true, remain: true, cancel: true, view: true, acceptNumber: 'A00633', contractType: "包制", electricNo:'0120123222', accntName:"陳詩宇", computeDate: '05', returnDate: '20210910 16:45', reason: '佐證文件不足', desc: '須提供XXX佐證文件', acceptItem: 'F3030  表燈非時間電價停用廢止', acceptName: '葉星辰',returner:'林雯雯'}
             ],
             multiMediaHeaders: [
                 { text: '送件編號', value: 'sendNumber', align: 'center' },

@@ -15,7 +15,7 @@
                 outlined
                 hide-details                                         
                 dense
-                placeholder="請輸入員工編號"
+                placeholder="請輸入姓名代號"
               />
             </v-col>
             <v-col cols="1" />
@@ -44,7 +44,7 @@
                 outlined
                 hide-details
                 dense
-                placeholder="請輸入代理人編號"
+                placeholder="請輸入代理人姓名代號"
               />
             </v-col>
             <v-col cols="1" />
@@ -144,7 +144,7 @@
                 single-line
                 dense
                 :clearable="true"
-                placeholder="請選擇請假方式"
+                placeholder="請選擇資料來源"
                 class="my-auto"
                 color="#ADADAD"
               />

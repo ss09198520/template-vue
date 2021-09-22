@@ -11,6 +11,8 @@ export default {
         { text: '班別', value: 'class', align: 'center' },
         { text: '核算員', value: 'accounting', align: 'center' },
         { text: '核算員姓名', value: 'accountingName', align: 'center' },
+        { text: '檢算員', value: 'checking', align: 'center' },
+        { text: '檢算員姓名', value: 'checkingName', align: 'center' },
         { text: '設定人員', value: 'settingUser', align: 'center' },
         { text: '設定人員姓名', value: 'settingUserName', align: 'center' },
         { text: '設定日期', value: 'settingDate', align: 'center' },
@@ -21,6 +23,8 @@ export default {
           class: '1', 
           accounting: '1050434018', 
           accountingName: '王大明', 
+          checking: '1050434017',
+          checkingName: '葉星辰',
           settingUser: '1050334016', 
           settingUserName: '李小凡', 
           settingDate: '2021/09/11 10:55:31', 
@@ -33,8 +37,10 @@ export default {
             useMeter: false,
             meterType: 0,
             computeDate: [],
-            startElectricNum: '07-14-0000-00-0',
-            endElectricNum: '07-14-9999-99-9',
+            electricNumList: [
+              {start: '07-14-0000-00-0', end: '07-14-9999-99-9'},
+              {start: '07-16-0000-00-0', end: '07-16-9999-99-9'},
+            ],
             startPackageElectricNum: '',
             endPackageElectriNum: '',
             startHighVoltageElectricNum: '',
@@ -47,6 +53,8 @@ export default {
           class: '2', 
           accounting: '1050434019', 
           accountingName: '李阿貴', 
+          checking: '1050434017',
+          checkingName: '葉星辰',
           settingUser: '1050334016', 
           settingUserName: '李小凡', 
           settingDate: '2021/09/11 10:57:13', 
@@ -59,8 +67,9 @@ export default {
             useMeter: true,
             meterType: 1,
             computeDate: ['01', '03', '05', '07', '09'],
-            startElectricNum: '',
-            endElectricNum: '',
+            electricNumList: [
+              {start: '', end: ''},
+            ],
             startPackageElectricNum: '',
             endPackageElectriNum: '',
             startHighVoltageElectricNum: '',
@@ -82,6 +91,8 @@ export default {
         class: '',
         // 核算員
         accountingName: '',
+        // 檢算員
+        checkingName: '',
         // 派工方式 0: 直接以電號分派 / 1: 依契約種類設定分派
         // dispatchType: 0,
         // 包制
@@ -95,8 +106,9 @@ export default {
         // 選擇的計算日
         computeDate: [],
         // 電號區間
-        startElectricNum: '',
-        endElectricNum: '',
+        electricNumList: [
+          {start: '', end: ''},
+        ],
         // 包制電號區間
         startPackageElectricNum: '',
         endPackageElectriNum: '',
@@ -123,14 +135,16 @@ export default {
       this.dialogContent = {
         class: '',
         accountingName: '',
+        checkingName: '',
         // dispatchType: 0,
         usePackage: false,
         useHighVoltage: false,
         useMeter: false,
         // meterType: 0,
         computeDate: [],
-        startElectricNum: '',
-        endElectricNum: '',
+        electricNumList: [
+          {start: '', end: ''},
+        ],
         startPackageElectricNum: '',
         endPackageElectriNum: '',
         startHighVoltageElectricNum: '',
@@ -158,6 +172,8 @@ export default {
         class: this.dialogContent.class,
         accounting: this.dialogContent.accountingName.split(" ")[0],
         accountingName: this.dialogContent.accountingName.split(" ")[1],
+        checking: this.dialogContent.checkingName.split(" ")[0],
+        checkingName: this.dialogContent.checkingName.split(" ")[1],
         settingUser: '1050334016', 
         settingUserName: '李小凡', 
         settingDate: this.getDate(),
@@ -175,6 +191,7 @@ export default {
       this.dialogContent = item.dialogContent;
       this.dialogContent.class = item.class;
       this.dialogContent.accountingName = item.accounting + " " + item.accountingName;
+      this.dialogContent.checkingName = item.checking + " " + item.checkingName;
       // 記下這次修改的 item
       this.editIndex = this.itemList.indexOf(item);
       // 切換 dialog 模式
@@ -188,6 +205,8 @@ export default {
           class: this.dialogContent.class,
           accounting: this.dialogContent.accountingName.split(" ")[0],
           accountingName: this.dialogContent.accountingName.split(" ")[1],
+          checking: this.dialogContent.checkingName.split(" ")[0],
+          checkingName: this.dialogContent.checkingName.split(" ")[1],
           settingUser: '1050334016', 
           settingUserName: '李小凡', 
           settingDate: this.getDate(),
@@ -221,6 +240,12 @@ export default {
     checkNeedZero(num) {
       let newNum = ('' + num).length == 1? '0' + num : num;
       return newNum
+    },
+    addElectricNum(){
+      this.dialogContent.electricNumList.push({start: '', end: ''});
+    },
+    removeElectricNum(index){
+      this.dialogContent.electricNumList.splice(index, 1);
     },
     submit(){
       if (this.selectIndex > -1) {

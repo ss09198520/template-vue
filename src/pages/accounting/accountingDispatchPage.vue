@@ -135,33 +135,72 @@
                 </v-col>
               </v-row>
               <v-row align="center">
+                <v-col cols="2">       
+                  檢算員
+                </v-col>         
+                <v-col cols="6">
+                  <v-select
+                    v-model="dialogContent.checkingName"
+                    outlined
+                    hide-details
+                    dense
+                    placeholder="請選擇檢算員"
+                    :items="employeeList"
+                  />
+                </v-col>
+              </v-row>
+              <v-row align="center">
                 <v-col cols="4">
                   登記單分派班別設定：
                 </v-col>
               </v-row>
               <v-radio-group v-model="dialogContent.dispatchType">
                 <v-radio label="不論契約種類，皆以電號設定分派班別。" />
-                <v-row style="margin: 0 10px 10px 0;" align="center">
+                <v-row v-for="(electricNum, index) in dialogContent.electricNumList" :key="index" style="margin: 0 10px 10px 0;" align="center">
                   <div style="height: 10px; width: 15px;" />
-                  <span style="margin-right: 10px;" :class="dialogContent.dispatchType===0? '':'disable-text'">電號 : </span>         
+                  <span style="margin-right: 10px;" :class="dialogContent.dispatchType === 0? '':'disable-text'">電號 : </span>         
                   <v-col cols="3">
                     <v-text-field
-                      v-model="dialogContent.startElectricNum"
+                      v-model="electricNum.start"
                       outlined
                       hide-details                                         
                       dense
                       :disabled="dialogContent.dispatchType !== 0"
                     />
                   </v-col>
-                  <span :class="dialogContent.dispatchType!==1? '':'disable-text'">~</span>
+                  <span :class="dialogContent.dispatchType !== 1? '':'disable-text'">~</span>
                   <v-col cols="3">
                     <v-text-field
-                      v-model="dialogContent.endElectricNum"
+                      v-model="electricNum.end"
                       outlined
                       hide-details                                         
                       dense
                       :disabled="dialogContent.dispatchType !== 0"
                     />
+                  </v-col>
+                  <v-col v-if="dialogContent.dispatchType == 0" cols="1">
+                    <v-btn
+                      :disabled="dialogContent.dispatchType !== 0"
+                      class="ma-2"
+                      color="error"
+                      fab
+                      small
+                      @click="removeElectricNum(index)"
+                    >
+                      <v-icon v-text="'mdi-minus'" />
+                    </v-btn>
+                  </v-col>
+                  <v-col v-if="index == dialogContent.electricNumList.length - 1 && dialogContent.dispatchType == 0" cols="1">
+                    <v-btn
+                      :disabled="dialogContent.dispatchType !== 0"
+                      class="ma-2"
+                      color="primary"
+                      fab
+                      small
+                      @click="addElectricNum()"
+                    >
+                      <v-icon v-text="'mdi-plus'" />
+                    </v-btn>
                   </v-col>
                 </v-row>
                 <v-radio label="依契約種類設定分派班別：" />

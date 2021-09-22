@@ -13,20 +13,22 @@ export default {
         return {
             waitingCount: 4,
             unDispatchHeaders: [
-                { text: '受理編號', value: 'acceptNumber', align: 'center' },
+                { text: '受理號碼', value: 'acceptNumber', align: 'center' },
+                { text: '整理號碼', value: 'sortNumber', align: 'center' },
+                { text: '戶名', value: 'accntName', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
                 { text: '電號', value: 'electricNo', align: 'center' },
+                { text: '計算日期', value: 'countDate', align: 'center' },
                 { text: '受理日期', value: 'acceptDate', align: 'center' },
                 { text: '結案日期', value: 'completeDate', align: 'center' },
-                { text: '登記單種類', value: 'category', align: 'center' },  
                 { text: '受理項目', value: 'acceptItem', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
             unDispatchList: [
-                {action: true, acceptNumber: 'A00028',contractType:'包制',electricNo:'0120123223', acceptDate: '20210910 10:00', completeDate: '20210910 16:00', category: 'APR0370', acceptItem: 'QA210  軍眷用電申請優待'},
-                {action: true, acceptNumber: 'A00040', contractType:'高壓',electricNo:'012012321',acceptDate: '20210907 15:36', completeDate: '20210908 15:06', category: 'APR0200', acceptItem: 'I0520  增加電表'},
-                {action: true, acceptNumber: 'A00605', contractType:'表制',electricNo:'0120123222',acceptDate: '20210910 09:45', completeDate: '20210915 10:50', category: 'APR0160', acceptItem: 'F3030  表燈非時間電價停用廢止'},
-                {action: true, acceptNumber: 'A00619', contractType:'包制',electricNo:'0120123225',acceptDate: '20210910 13:44', completeDate: '20210910 15:26', category: 'APR0200', acceptItem: 'I0510  故障換表'}
+                {action: true, acceptNumber: 'A00028',sortNumber: '000201', accntName: '許小花',contractType:'包制',electricNo:'0120123223', countDate: '20210910 10:00', acceptDate: '20210910 10:00', completeDate: '20210910 16:00', category: 'APR0370', acceptItem: 'QA210  軍眷用電申請優待'},
+                {action: true, acceptNumber: 'A00040',sortNumber: '000202', accntName: '陳文生',contractType:'高壓',electricNo:'012012321',countDate: '20210910 10:00', acceptDate: '20210907 15:36', completeDate: '20210908 15:06', category: 'APR0200', acceptItem: 'I0520  增加電表'},
+                {action: true, acceptNumber: 'A00605',sortNumber: '000203', accntName: '連瑜千',contractType:'表制',electricNo:'0120123222',countDate: '20210910 10:00', acceptDate: '20210910 09:45', completeDate: '20210915 10:50', category: 'APR0160', acceptItem: 'F3030  表燈非時間電價停用廢止'},
+                {action: true, acceptNumber: 'A00619',sortNumber: '000204', accntName: '辰文興',contractType:'包制',electricNo:'0120123225',countDate: '20210910 10:00', acceptDate: '20210910 13:44', completeDate: '20210910 15:26', category: 'APR0200', acceptItem: 'I0510  故障換表'}
             ],
             // 頁數
             unDispatchListPageCount:1,

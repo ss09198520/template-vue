@@ -91,21 +91,6 @@
                 class="ma-2"
                 fab
                 small
-                color="error"
-                v-on="on"
-                @click="action('delete',item)"
-              >
-                <v-icon v-text="'mdi-delete'" />
-              </v-btn>
-            </template>
-            <span>取消案件</span>
-          </v-tooltip>
-          <v-tooltip top>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                class="ma-2"
-                fab
-                small
                 color="primary"
                 v-on="on"
                
@@ -138,46 +123,6 @@
         :length="orderListPageCount"
       />
     </div>
-    <!-- 取消案件 -->
-    <v-dialog
-      v-model="deleteOrderModel"
-      max-width="500"
-    >
-      <v-card>
-        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
-          確認是否要取消案件
-          <v-spacer />
-          <v-btn
-            color="white"
-            icon
-            small
-            text
-            @click="deleteOrderModel = false"
-          >
-            <v-icon> mdi-close </v-icon>
-          </v-btn>
-        </v-card-title>
-        <v-card-text class="font-24px">
-          <v-row class="mt-6 ml-1 font-bold">
-            取消案件將會刪除所有表單與附檔，是否執行 ?
-          </v-row>
-        </v-card-text>
-        <v-card-actions class="d-end mt-6">
-          <v-btn              
-            color="normal"            
-            @click="deleteOrderModel = false"
-          >
-            &emsp;取消&emsp;
-          </v-btn>
-          <v-btn              
-            color="primary"            
-            @click="submit()"
-          >
-            &emsp;確定&emsp;
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
     <!-- 瀏覽案件 -->
     <v-dialog
       v-model="browserModel"

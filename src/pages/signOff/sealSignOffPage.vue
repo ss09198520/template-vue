@@ -50,7 +50,7 @@
           >
             <template v-slot:item.mani="{ item }">   
               <div>
-                <v-tooltip v-if="!item.status" top>
+                <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       class="ma-2"
@@ -58,11 +58,12 @@
                       small
                       color="primary"
                       v-on="on"
+                      @click="action('browse',item)"
                     >
-                      <v-icon v-text="'mdi-file-download-outline'" />
+                      <v-icon v-text="'mdi-eye'" />
                     </v-btn>
                   </template>
-                  <span>下載檔案</span>
+                  <span>瀏覽表單</span>
                 </v-tooltip>
                 <v-tooltip v-if="!item.status" top>
                   <template v-slot:activator="{ on }">
@@ -108,6 +109,46 @@
           :length="sealSignListPageCount"
         />
       </div>
+      <!-- 瀏覽案件 -->
+      <v-dialog
+        v-model="browserModel"
+        max-width="1200px"
+      >
+        <v-card>
+          <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+            瀏覽表單
+            <v-spacer />
+            <v-btn
+              color="white"
+              icon
+              small
+              text
+              @click="browserModel = false"
+            >
+              <v-icon> mdi-close </v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text>
+            <div v-show="sealOffFinish">
+              <form-page restrict-mode="viewSealSignOffAfter" />
+            </div>
+            <div v-show="!sealOffFinish">
+              <form-page restrict-mode="viewSealSignOffBefore" /> 
+            </div>         
+          </v-card-text>
+          <!-- <v-card-text>
+            <form-page v-if="sealOffFinishNot" restrict-mode="viewSealSignOffBefore" />            
+          </v-card-text>           -->
+          <v-card-actions class="d-end mt-5">
+            <v-btn              
+              color="primary"            
+              @click="checkSubmit()"
+            >
+              &emsp;確定&emsp;
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
     </v-container>
   </v-app>
 </template>

@@ -7,7 +7,7 @@
       <div class="ml-10 font-18px font-bold">        
         <v-row align="center">
           <v-col cols="1">
-            受理編號          
+            案件查詢受理號碼     
           </v-col>          
           <v-col
             cols="3"
@@ -16,7 +16,7 @@
               outlined
               hide-details                                         
               dense
-              placeholder="請輸入受理編號"
+              placeholder="請輸入受理號碼"
             />
           </v-col>
           <v-col cols="1" />
@@ -36,21 +36,21 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
-            登記單種類
-          </v-col>
+            戶名
+          </v-col>          
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
               outlined
-              hide-details
+              hide-details                                         
               dense
-              placeholder="請輸入登記單種類"
+              placeholder="請輸入受理編號"
             />
           </v-col>
           <v-col cols="1" />
           <v-col cols="1">
-            員工編號
+            整理號碼
           </v-col>
           <v-col
             cols="3"
@@ -59,11 +59,33 @@
               outlined
               hide-details
               dense
-              placeholder="請輸入員工編號"
+              placeholder="請輸入整理號碼"
             />
           </v-col>
         </v-row>
         <v-row align="center">
+          <v-col cols="1">
+            契約種類
+          </v-col>
+          <v-col            
+            cols="3"   
+            class="d-flex"         
+          >
+            <v-select
+              v-model="contractType"
+              :items="contractTypeOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              :clearable="true"
+              class="my-auto"
+              color="#ADADAD"
+            />
+          </v-col>
+          <v-col cols="1" />
           <v-col cols="1">
             受理日期區間
           </v-col>
@@ -121,7 +143,8 @@
               />
             </v-menu>
           </v-col>
-          <v-col cols="1" />
+        </v-row>
+        <v-row>
           <v-col cols="1">
             歸檔日期區間
           </v-col>
@@ -360,7 +383,7 @@
       <div class="ml-10 font-18px font-bold">            
         <v-row align="center">          
           <v-col cols="1">
-            受理編號
+            案件查詢受理號碼
           </v-col>
           <v-col
             cols="3"
@@ -369,7 +392,7 @@
               outlined
               hide-details                                         
               dense
-              placeholder="請輸入受理編號"
+              placeholder="請輸入受理號碼"
             />
           </v-col>
           <v-col cols="1" />
@@ -389,6 +412,20 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
+            戶名
+          </v-col>
+          <v-col
+            cols="3"
+          >
+            <v-text-field                           
+              outlined
+              hide-details
+              dense
+              placeholder="請輸入戶名"
+            />
+          </v-col>
+          <v-col cols="1" />
+          <v-col cols="1">
             整理號碼
           </v-col>
           <v-col
@@ -401,7 +438,29 @@
               placeholder="請輸入整理號碼"
             />
           </v-col>
-        </v-row>                                        
+        </v-row>
+        <v-row align="center">
+          <v-col cols="1">
+            契約種類
+          </v-col>
+          <v-col
+            cols="3"
+          >
+            <v-select
+              v-model="contractType"
+              :items="contractTypeOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              :clearable="true"
+              class="my-auto"
+              color="#ADADAD"
+            />
+          </v-col>
+        </v-row>                                                 
         <v-row>    
           <v-col cols="11" />
           <v-col>        
@@ -518,7 +577,7 @@
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="2">受理編號</v-col>
+              <v-col cols="2">受理號碼</v-col>
               <v-col cols="3">
                 A00040
               </v-col>

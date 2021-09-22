@@ -6,7 +6,7 @@
         <div class="font-18px font-bold">
           <v-row align="center">   
             <v-col cols="1">       
-              員工編號
+              姓名代號
             </v-col>          
             <v-col
               cols="3"
@@ -35,7 +35,7 @@
           </v-row>
           <v-row align="center">         
             <v-col cols="1">
-              代理人編號
+              代理人姓名代號
             </v-col>
             <v-col
               cols="3"
@@ -129,7 +129,7 @@
             </v-col>
             <v-col cols="1" />
             <v-col cols="1">
-              請假方式
+              資料來源
             </v-col>
             <v-col
               cols="3"
@@ -246,8 +246,41 @@
             取消
           </v-btn>
           <v-btn              
-            color="primary"            
+            color="error"            
             @click="submit()"
+          >
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog
+      v-model="alertModel"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          提醒
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="alertModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px red--text">
+          <v-row class="mt-6 ml-1 font-bold">
+            已成功刪除請假紀錄，請記得到差假管理系統辦理銷假，謝謝
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="primary"            
+            @click="alertModel = false"
           >
             確定
           </v-btn>

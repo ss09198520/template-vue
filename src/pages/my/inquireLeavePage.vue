@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="font-bold">請假申請</h2>
+    <h2 class="font-bold">代理申請</h2>
     <div class="ml-10">
       <div class="font-18px font-bold">
         <v-row align="center">  
@@ -87,36 +87,6 @@
                 @input="menu2 = false"
               />
             </v-menu>
-          </v-col>
-          <v-col cols="1" />
-          <v-col cols="1">
-            假別
-          </v-col>
-          <v-col cols="3">
-            <v-select
-              outlined
-              :items="leaveTypeList"
-              :return-object="true"
-              hide-details
-              single-line
-              dense
-              placeholder="請選擇假別"
-              class="my-auto"
-              color="#ADADAD"
-            />
-          </v-col>
-        </v-row>
-        <v-row align="center">
-          <v-col cols="1">
-            請假原因
-          </v-col>
-          <v-col cols="3">
-            <v-text-field                           
-              outlined
-              hide-details
-              dense
-              placeholder="請輸入請假原因"
-            />
           </v-col>
         </v-row>
         <v-row>

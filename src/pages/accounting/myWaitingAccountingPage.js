@@ -39,6 +39,19 @@ export default {
                 {text:'大里服務中心',value:'2'},
                 {text:'東山服務所',value:'3'},
             ],
+            reason: null,
+            reasonOption:[
+                {text:'原因由台電提供_1',value:'1'},
+                {text:'原因由台電提供_2',value:'2'},
+                {text:'原因由台電提供_3',value:'3'},
+                {text:'原因由台電提供_4',value:'4'},
+                {text:'原因由台電提供_5',value:'5'},
+                {text:'原因由台電提供_6',value:'6'},
+                {text:'原因由台電提供_7',value:'7'},
+                {text:'原因由台電提供_8',value:'8'},
+                {text:'原因由台電提供_9',value:'9'},
+                {text:'原因由台電提供_10',value:'10'},
+            ],
         }
     },
     methods: {
@@ -46,7 +59,7 @@ export default {
           this.selectIndex = this.itemList.indexOf(item);
           this.accountingDialog = true;
         },
-        retrunOrder(){
+        returnOrder(){
             this.returnReasonModel = true;
         },
         returnSubmit(){

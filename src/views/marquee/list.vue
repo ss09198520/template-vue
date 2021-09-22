@@ -334,6 +334,25 @@
               <span>刪除</span>
             </v-tooltip> -->
           </template>
+          <template v-slot:[`item.returnInfo`]="{ item }">
+            <v-tooltip v-if="item.returnInfo" top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="mr-2 d-flex justify-center"
+                  color="error"
+                  v-on="on"
+                >
+                  mdi-information-outline
+                </v-icon>
+              </template>
+              <v-data-table
+                :headers="headerReturn"
+                :items="[item.returnInfo]" 
+                disable-sort
+                hide-default-footer
+              />
+            </v-tooltip>
+          </template>
           <template v-slot:[`item.marquee_content`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
@@ -436,11 +455,21 @@
             align: 'center',
           },
           {
+            text: '退件資訊',
+            value: 'returnInfo',
+            align: 'center'
+          },
+          {
             text: '操作',
             value: 'action',
             sortable: false,
             align: 'center',
           },
+        ],
+        headerReturn:[
+          {text: '退件主管名稱',value: 'returnManagerName',align: 'center',},
+          {text: '退件日期',value: 'returnDate',align: 'center',},
+          {text: '退件原因',value: 'returnReason',align: 'center',},
         ],
         itemsCRUD: [
           {
@@ -496,7 +525,12 @@
             active: false,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '退件'
+            signoff: '退件',
+            returnInfo: {
+              returnManagerName: '黃課長',
+              returnDate: '上架',
+              returnReason: '文字錯誤',
+            },
           },
           {
             name: '台電首度攜手紙風車劇團，到彰化員林打造露天舞台劇',
@@ -507,7 +541,12 @@
             active: false,
             ondate: '2020-12-21',
             offdate: '2021-04-30',
-            signoff: '退件'
+            signoff: '退件',
+            returnInfo: {
+              returnManagerName: '陳組長',
+              returnDate: '上架',
+              returnReason: '名稱錯誤',
+            },
           },
         ],
         defaultItem: {

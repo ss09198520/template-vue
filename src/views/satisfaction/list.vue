@@ -208,6 +208,24 @@
               </template>
               <span>編輯</span>
             </v-tooltip>
+          </template><template v-slot:[`item.returnInfo`]="{ item }">
+            <v-tooltip v-if="item.returnInfo" top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="mr-2 d-flex justify-center"
+                  color="error"
+                  v-on="on"
+                >
+                  mdi-information-outline
+                </v-icon>
+              </template>
+              <v-data-table
+                :headers="headerReturn"
+                :items="[item.returnInfo]" 
+                disable-sort
+                hide-default-footer
+              />
+            </v-tooltip>
           </template>
           <template v-slot:[`item.marquee_content`]="{ item }">
             <v-tooltip top>
@@ -299,11 +317,21 @@
             align: 'center',
           },
           {
+            text: '退件資訊',
+            value: 'returnInfo',
+            align: 'center'
+          },
+          {
             text: '操作',
             value: 'action',
             sortable: false,
             align: 'center',
           },
+        ],
+        headerReturn:[
+          {text: '退件主管名稱',value: 'returnManagerName',align: 'center',},
+          {text: '退件日期',value: 'returnDate',align: 'center',},
+          {text: '退件原因',value: 'returnReason',align: 'center',},
         ],
         itemsCRUD: [
           {
@@ -325,6 +353,21 @@
             active: false,
             ondate: '2021-10-01',
             offdate: '2021-10-30',
+          },
+          {
+            name: '櫃台形象滿意度調查',
+            id: 1,
+            scp_id: '李小凡',
+            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
+            state:'退件',
+            active: false,
+            ondate: '2021-10-01',
+            offdate: '2021-10-30',
+            returnInfo: {
+              returnManagerName: '陳組長',
+              returnDate: '上架',
+              returnReason: '題目錯誤',
+            },
           },
         ],
         defaultItem: {

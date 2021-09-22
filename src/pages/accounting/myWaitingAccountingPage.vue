@@ -1,6 +1,8 @@
 <template>
   <v-app>
     <v-container>
+      <v-btn class="ma-2" :class="{'primary': User == 'auditer'}" @click="User = 'auditer'">角色：核算員</v-btn>
+      <v-btn class="ma-2" :class="{'primary': User == 'checker'}" @click="User = 'checker'">角色：檢算員</v-btn>
       <div class="d-flex w-100" style="margin-top: 20px;">
         <div class="block mr-5 w-100">
           <div>
@@ -113,7 +115,7 @@
               @page-count="dataListPageCount = $event"
             >
               <template v-slot:item.action="{ item }">              
-                <v-tooltip top>
+                <v-tooltip v-if="User=='auditer'" top>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       v-if="item.action"                    
@@ -127,6 +129,21 @@
                     </v-btn>
                   </template>
                   <span>進行核算</span>
+                </v-tooltip>
+                <v-tooltip v-if="User=='checker'" top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      v-if="item.action"                    
+                      class="ma-2 primary"
+                      fab
+                      small                
+                      v-on="on"
+                      @click="checking(item)"
+                    >
+                      <v-icon>mdi-eye</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>瀏覽案件</span>
                 </v-tooltip>
               </template>
               <template v-slot:item.hasView="{ item }">              
@@ -187,6 +204,30 @@
         </v-card-title>
         <v-card-text>
           <FormPage :restrict-mode="'audit'" @returnOrder="returnOrder()" @checkSubmit="checkSubmit()" @saveComments="saveComments()" />
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="checkingDialog"
+      max-width="1200px"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          瀏覽案件
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="checkingDialog = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text>
+          <FormPage :restrict-mode="'viewMyRead'" />
         </v-card-text>
       </v-card>
     </v-dialog>

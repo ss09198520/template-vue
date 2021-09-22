@@ -11,6 +11,7 @@ export default {
     },
     data() {
         return {
+            User: 'auditer',
             waitingCount: 5,
             headers: [
                 { text: '受理號碼', value: 'acceptNumber', align: 'center' },
@@ -38,6 +39,7 @@ export default {
             dataListPage: 1,
             dataListPageCount: 1,
             accountingDialog: false,
+            checkingDialog: false,
             returnReasonModel: false,
             selectIndex: null,
             hasShowList:false,
@@ -88,6 +90,10 @@ export default {
           this.selectIndex = this.itemList.indexOf(item);
           this.accountingDialog = true;
           item.hasView = true;
+        },
+        checking(item){
+            this.selectIndex = this.itemList.indexOf(item);
+            this.checkingDialog = true;
         },
         returnOrder(){
             this.returnReasonModel = true;

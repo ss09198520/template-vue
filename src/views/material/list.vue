@@ -257,18 +257,23 @@
                 <span>刪除</span>
               </v-tooltip>
             </template>
-            <template v-slot:[`item.marquee_content`]="{ item }">
-              <v-tooltip top>
+            <template v-slot:[`item.relatedInfo`]="{ item }">
+              <v-tooltip v-if="item.relatedInfo" top>
                 <template v-slot:activator="{ on }">
                   <v-icon
-                    small
                     class="mr-2 d-flex justify-center"
+                    color="success"
                     v-on="on"
                   >
-                    mdi-file
+                    mdi-information-outline
                   </v-icon>
                 </template>
-                <span>{{ item.marquee_content }}</span>
+                <v-data-table
+                  :headers="headerReleate"
+                  :items="item.relatedInfo"
+                  disable-sort
+                  hide-default-footer
+                />
               </v-tooltip>
             </template>
             <template v-slot:[`item.thumbnail`]="{ item }">
@@ -448,6 +453,11 @@
             value: 'thumbnail',
           },
           {
+            text: '關聯使用資訊',
+            value: 'relatedInfo',
+            align: 'center'
+          },
+          {
             text: '使用中',
             value: 'active',
             sortable: false,
@@ -459,6 +469,12 @@
             sortable: false,
             align: 'center'
           },
+        ],
+        headerReleate:[
+          {text: '節目單標題',value: 'programTitle',align: 'center',},
+          {text: '關聯節目單類別',value: 'programPlayState',align: 'center',},
+          {text: '關聯節目單審核狀態',value: 'programState',align: 'center',},
+          {text: '關聯節目單播放狀態',value: 'programPlayState',align: 'center',},
         ],
         itemsCRUD: [
           {
@@ -472,6 +488,26 @@
             offdate: '2021-10-30',
             signoff: '簽核完成',
             thumbnail: "image/p1.jpg",
+            relatedInfo: [
+              {
+                programState: '審核完成',
+                programPlayState: '上架中',
+                programType: '一般',
+                programTitle: '中秋節目測試',
+              },
+              {
+                programState: '審核完成',
+                programPlayState: '上架中',
+                programType: '一般',
+                programTitle: '中秋節目測試2',
+              },
+              {
+                programState: '審核完成',
+                programPlayState: '上架中',
+                programType: '一般',
+                programTitle: '中秋節目測試3',
+              },
+            ]
           },
           {
             name: '秋季節約用電宣導圖片',

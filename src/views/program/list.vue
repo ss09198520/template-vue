@@ -305,6 +305,25 @@
               <span>編輯</span>
             </v-tooltip>
           </template>
+          <template v-slot:[`item.returnInfo`]="{ item }">
+            <v-tooltip v-if="item.returnInfo" top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="mr-2 d-flex justify-center"
+                  color="error"
+                  v-on="on"
+                >
+                  mdi-information-outline
+                </v-icon>
+              </template>
+              <v-data-table
+                :headers="headerReturn"
+                :items="[item.returnInfo]" 
+                disable-sort
+                hide-default-footer
+              />
+            </v-tooltip>
+          </template>
           <template v-slot:[`item.marquee_content`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
@@ -402,11 +421,21 @@
             align: 'center',
           },
           {
+            text: '退件資訊',
+            value: 'returnInfo',
+            align: 'center'
+          },
+          {
             text: '操作',
             value: 'action',
             sortable: false,
             align: 'center',
           },
+        ],
+        headerReturn:[
+          {text: '退件主管名稱',value: 'returnManagerName',align: 'center',},
+          {text: '退件日期',value: 'returnDate',align: 'center',},
+          {text: '退件原因',value: 'returnReason',align: 'center',},
         ],
         itemsCRUD: [
           {
@@ -429,7 +458,12 @@
             ondate: '2021-12-21',
             offdate: '2022-01-30',
             active: false,
-            signoff: '審核中',
+            signoff: '退件',
+            returnInfo: {
+              returnManagerName: '陳組長',
+              returnDate: '上架',
+              returnReason: '文字錯誤',
+            },
           },
           {
             name: '台電公司對受疫情影響農業及服務業之電費減免措施',
@@ -440,7 +474,12 @@
             ondate: '2021-10-21',
             offdate: '2021-10-30',
             active: false,
-            signoff: '審核完成',
+            signoff: '退件',
+            returnInfo: {
+              returnManagerName: '黃課長',
+              returnDate: '上架',
+              returnReason: '文字錯誤',
+            },
           },
           {
             name: '台電連4年獲亞洲企業社會責任獎',

@@ -204,22 +204,6 @@
               </ul>
             </div>
           </v-row>
-          
-          <v-row>
-            <v-col
-              v-for="(resource,id) in resources"
-              :key="id"
-              class="d-flex view"
-              cols="3"
-              :url="resource.url"
-              @dblclick="preview($event)"
-            >
-              <div class="imgBox">
-                <img :src="require(`@/resource/${resource.thumbnail}`)">
-              </div>
-              <p>{{ resource.name }}</p>
-            </v-col>
-          </v-row>
         </fet-card>
       </v-col>
       <v-col v-show="!isGrid" md="12">

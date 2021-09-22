@@ -155,23 +155,6 @@
                 2021-09-15 13:44
               </v-col>
             </v-row>
-            <v-row>
-              <v-col
-                cols="3"
-              >
-                退件原因
-              </v-col>
-              <v-col
-                cols="9"
-                md="8"
-              >
-                <v-textarea
-                  color="accent"
-                  outlined
-                  placeholder="請輸入文字"
-                />
-              </v-col>
-            </v-row>
           </v-card-text>
 
           <v-divider />
@@ -192,15 +175,80 @@
             </v-btn>
             <v-btn
               color="error"              
-              @click="showMessage('退件成功')"
+              @click="returnReasonModel = true"
             >
               退 件
             </v-btn>
             <v-btn
               color="success"              
-              @click="showMessage('核准成功')"
+              @click="showMessage('簽核成功')"
             >
               核 准
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- 退件原因 -->
+      <v-dialog
+        v-model="returnReasonModel"
+        max-width="600"
+      >
+        <v-card>
+          <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+            請填寫退件原因
+            <v-spacer />
+            <v-btn
+              color="white"
+              icon
+              small
+              text
+              @click="returnReasonModel = false"
+            >
+              <v-icon> mdi-close </v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="font-18px">
+            <v-row class="mt-6 ml-1" align="center">
+              <v-col cols="3">
+                退件原因
+              </v-col>
+              <v-col cols="7">
+                <v-text-field
+                  outlined
+                  hide-details                                         
+                  dense
+                  placeholder="請輸入退件原因"
+                />
+              </v-col>
+            </v-row>
+            <v-row class="ml-1" align="center">
+              <v-col cols="3">
+                退件說明
+              </v-col>
+              <v-col cols="7">
+                <v-textarea            
+                  color="#ADADAD"
+                  outlined
+                  name="input-7-4"
+                  :no-resize="true"
+                  placeholder="請輸入退件說明"
+                  hide-details
+                />
+              </v-col>
+            </v-row>
+          </v-card-text>
+          <v-card-actions class="d-end mt-5">
+            <v-btn              
+              color="normal"            
+              @click="returnReasonModel = false"
+            >
+              &emsp;取消&emsp;
+            </v-btn>
+            <v-btn              
+              color="error"            
+              @click="showMessage('已退件成功')"
+            >
+              確認退件
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -243,6 +291,8 @@ export default {
             popOut: false,
             //預設簽核顯示範圍按鈕
             displayAll: true,
+            //退件原因說明視窗
+            returnReasonModel: false,
             snackbar: false,
             alert: false,
             //
@@ -271,8 +321,14 @@ export default {
         },
         showMessage(msg) {
           MessageService.showSuccess(msg + "✓")
-          this.popOut = false
+          this.popOut = false;
+          this.returnReasonModel = false;
         },
+        returnSubmit(){
+            this.popOut = false;
+            this.returnReasonModel = false;
+            MessageService.showSuccess("已退件成功✓")
+        }
         
     },
 }

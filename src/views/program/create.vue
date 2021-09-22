@@ -1,243 +1,236 @@
 <template>
   <v-container fluid>
-    <v-row>
-      <v-col>
-        <v-card width="100%">
-          <v-container>
-            <v-row class="d-flex justify-center">
+    <h2 class="font-bold">節 目 單 製 作</h2>
+    <v-row class="d-flex justify-center">
+      <v-col
+        sm="10"
+        md="8"
+      >
+        <fet-card
+          flat
+          full-width
+          outlined
+          title="節 目 單 製 作"
+          text
+        >
+          <v-form ref="form" v-model="valid" lazy-validation>
+            <v-row
+              :dense="dense"
+              :no-gutters="noGutters"
+            >
               <v-col
-                sm="10"
-                md="8"
+                cols="4"
+                md="3"
               >
-                <fet-card
-                  flat
-                  full-width
+                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                  節 目 標 題
+                  <span class="red--text">*</span>
+                </v-subheader>
+              </v-col>
+              <v-col
+                cols="7"
+                md="6"
+              >
+                <v-text-field
+                  v-model="filename"
+                  :rules="rules.requiredRule.concat(rules.lengthRules)"
+                  :hide-details="hideDatails"
+                  color="accent"
+                  label=" 節 目 標 題"
+                  placeholder="請輸入節目標題"
+                  :counter="maxCharacter"
                   outlined
-                  title="節 目 表 製 作"
-                  text
-                >
-                  <v-form ref="form" v-model="valid" lazy-validation>
-                    <v-row
-                      :dense="dense"
-                      :no-gutters="noGutters"
-                    >
-                      <v-col
-                        cols="4"
-                        md="3"
-                      >
-                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          節 目 標 題
-                          <span class="red--text">*</span>
-                        </v-subheader>
-                      </v-col>
-                      <v-col
-                        cols="7"
-                        md="6"
-                      >
-                        <v-text-field
-                          v-model="filename"
-                          :rules="rules.requiredRule.concat(rules.lengthRules)"
-                          :hide-details="hideDatails"
-                          color="accent"
-                          label=" 節 目 標 題"
-                          placeholder="請輸入節目標題"
-                          :counter="maxCharacter"
-                          outlined
-                          required
-                          dense
-                        />
-                      </v-col>
-                    </v-row>
-                    <v-row
-                      :dense="dense"
-                      :no-gutters="noGutters"
-                    >
-                      <v-col
-                        cols="3"
-                        md="3"
-                      >
-                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          節 目 說 明
-                        </v-subheader>
-                      </v-col>
-                      <v-col
-                        cols="7"
-                        md="6"
-                      >
-                        <v-text-field
-                          v-model="fileDesc"
-                          :rules="rules.lengthRules"
-                          :hide-details="hideDatails"
-                          color="accent"
-                          label="檔 案 描 述"
-                          placeholder="請輸入檔案描述"
-                          :counter="maxCharacter"
-                          outlined
-                          dense
-                          persistent-hint
-                        />
-                      </v-col>
-                    </v-row>
-                    <v-row
-                      :dense="dense"
-                      :no-gutters="noGutters"
-                    >
-                      <v-col cols="3" md="3">
-                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          輪 播 時 間
-                        </v-subheader>
-                      </v-col>
-                      <v-col
-                        cols="12"
-                        sm="6"
-                        md="4"
-                      >
-                        <v-menu
-                          ref="dateMenu"
-                          v-model="dateMenu"
-                          :close-on-content-click="false"
-                          :return-value="dates"
-                          transition="scale-transition"
-                          offset-y
-                          min-width="auto"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <v-text-field
-                              v-model="dateRangeText"
-                              label="請 選 擇 時 間 區 間"
-                              prepend-icon="mdi-calendar"
-                              readonly
-                              v-bind="attrs"
-                              v-on="on"
-                            />
-                          </template>
-                          <v-date-picker
-                            v-model="dates"
-                            no-title
-                            range
-                            @input="dateMenu = dates.length < 2 ? true :false"
-                          >
-                            <v-spacer />
-                          </v-date-picker>
-                        </v-menu>
-                      </v-col>
-                    </v-row>
-                    <v-row
-                      :dense="dense"
-                      :no-gutters="noGutters"
-                    >
-                      <v-col
-                        cols="3"
-                        md="3"
-                      >
-                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          選 擇 素 材
-                          <span class="red--text">*</span>
-                        </v-subheader>
-                      </v-col>
-                      <v-col
-                        cols="7"
-                        md="6"
-                      >
-                        <v-btn class="primary" style="margin:10px;" @click="dialog=true"><v-icon style="margin-right: 3px;">mdi-plus</v-icon>新增</v-btn>
-                      </v-col>
-                    </v-row>
-                    <v-row 
-                      v-show="isShow"
-                      :dense="dense"
-                      :no-gutters="noGutters"
-                    >
-                      <v-col>
-                        <v-data-table
-                          v-sortable-data-table
-                          disable-sort
-                          hide-default-footer
-                          :headers="headerCRUD"
-                          :items="itemsCRUD"
-                          item-key="id"
-                          class="font-weight-bold elevation-1"
-                          @sorted="saveOrder"
-                        >
-                          <template v-slot:[`item.action`]="{ item }">
-                            <v-icon
-                              class="mr-2"
-                              @click="editItem(item)"
-                              v-on="on"
-                            >
-                              mdi-sort-variant
-                            </v-icon>
-                          </template>
-                        </v-data-table>
-                      </v-col>
-                    </v-row>
-                    <v-row
-                      :dense="dense"
-                      :no-gutters="noGutters"
-                    >
-                      <v-col
-                        cols="5"
-                        md="3"
-                      >
-                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                          審 核 附 件 上 傳
-                          <span class="red--text">*</span>
-                        </v-subheader>
-                      </v-col>
-                      <v-col
-                        cols="7"
-                        md="6"
-                      >
-                        <v-file-input
-                          :hide-details="hideDatails"
-                          label="上傳附件"
-                          color="accent"
-                          outlined
-                          dense
-                          accept="image/jpg"
-                          persistent-hint
-                          prepend-inner-icon="mdi-cloud-upload"
-                          prepend-icon
-                        />
-                      </v-col>
-                    </v-row>
-                    <v-row
-                      :dense="dense"
-                      :no-gutters="noGutters"
-                    >
-                      <v-col class="d-flex justify-end">
-                        <v-btn
-                          class="ma-1"
-                          outlined
-                          color="accent"
-                        >
-                          取消
-                        </v-btn>
-                        <v-btn
-                          class="ma-1"
-                          depressed
-                          color="primary"
-                          :disabled="!valid"
-                          @click="submit"
-                        >
-                          暫存
-                        </v-btn>
-                        <v-btn
-                          class="ma-1"
-                          depressed
-                          color="success"
-                          :disabled="!valid"
-                          @click="submit"
-                        >
-                          送出審核
-                        </v-btn>
-                      </v-col>
-                    </v-row>
-                  </v-form>
-                </fet-card>
+                  required
+                  dense
+                />
               </v-col>
             </v-row>
-          </v-container>
-        </v-card>
+            <v-row
+              :dense="dense"
+              :no-gutters="noGutters"
+            >
+              <v-col
+                cols="3"
+                md="3"
+              >
+                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                  節 目 說 明
+                </v-subheader>
+              </v-col>
+              <v-col
+                cols="7"
+                md="6"
+              >
+                <v-text-field
+                  v-model="fileDesc"
+                  :rules="rules.lengthRules"
+                  :hide-details="hideDatails"
+                  color="accent"
+                  label="檔 案 描 述"
+                  placeholder="請輸入檔案描述"
+                  :counter="maxCharacter"
+                  outlined
+                  dense
+                  persistent-hint
+                />
+              </v-col>
+            </v-row>
+            <v-row
+              :dense="dense"
+              :no-gutters="noGutters"
+            >
+              <v-col cols="3" md="3">
+                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                  輪 播 時 間
+                </v-subheader>
+              </v-col>
+              <v-col
+                cols="12"
+                sm="6"
+                md="4"
+              >
+                <v-menu
+                  ref="dateMenu"
+                  v-model="dateMenu"
+                  :close-on-content-click="false"
+                  :return-value="dates"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      v-model="dateRangeText"
+                      label="請 選 擇 時 間 區 間"
+                      prepend-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    />
+                  </template>
+                  <v-date-picker
+                    v-model="dates"
+                    no-title
+                    range
+                    @input="dateMenu = dates.length < 2 ? true :false"
+                  >
+                    <v-spacer />
+                  </v-date-picker>
+                </v-menu>
+              </v-col>
+            </v-row>
+            <v-row
+              :dense="dense"
+              :no-gutters="noGutters"
+            >
+              <v-col
+                cols="3"
+                md="3"
+              >
+                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                  選 擇 素 材
+                  <span class="red--text">*</span>
+                </v-subheader>
+              </v-col>
+              <v-col
+                cols="7"
+                md="6"
+              >
+                <v-btn class="primary" style="margin:10px;" @click="dialog=true"><v-icon style="margin-right: 3px;">mdi-plus</v-icon>新增</v-btn>
+              </v-col>
+            </v-row>
+            <v-row 
+              v-show="isShow"
+              :dense="dense"
+              :no-gutters="noGutters"
+            >
+              <v-col>
+                <v-data-table
+                  v-sortable-data-table
+                  disable-sort
+                  hide-default-footer
+                  :headers="headerCRUD"
+                  :items="itemsCRUD"
+                  item-key="id"
+                  class="font-weight-bold elevation-1"
+                  @sorted="saveOrder"
+                >
+                  <template v-slot:[`item.action`]="{ item }">
+                    <v-icon
+                      class="mr-2"
+                      @click="editItem(item)"
+                      v-on="on"
+                    >
+                      mdi-sort-variant
+                    </v-icon>
+                  </template>
+                </v-data-table>
+              </v-col>
+            </v-row>
+            <v-row
+              :dense="dense"
+              :no-gutters="noGutters"
+            >
+              <v-col
+                cols="5"
+                md="3"
+              >
+                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                  審 核 附 件 上 傳
+                  <span class="red--text">*</span>
+                </v-subheader>
+              </v-col>
+              <v-col
+                cols="7"
+                md="6"
+              >
+                <v-file-input
+                  :hide-details="hideDatails"
+                  label="上傳附件"
+                  color="accent"
+                  outlined
+                  dense
+                  accept="image/jpg"
+                  persistent-hint
+                  prepend-inner-icon="mdi-cloud-upload"
+                  prepend-icon
+                />
+              </v-col>
+            </v-row>
+            <v-row
+              :dense="dense"
+              :no-gutters="noGutters"
+            >
+              <v-col class="d-flex justify-end">
+                <v-btn
+                  class="ma-1"
+                  outlined
+                  color="accent"
+                >
+                  取消
+                </v-btn>
+                <v-btn
+                  class="ma-1"
+                  depressed
+                  color="primary"
+                  :disabled="!valid"
+                  @click="submit"
+                >
+                  暫存
+                </v-btn>
+                <v-btn
+                  class="ma-1"
+                  depressed
+                  color="success"
+                  :disabled="!valid"
+                  @click="submit"
+                >
+                  送出審核
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-form>
+        </fet-card>
       </v-col>
     </v-row>
     <v-dialog
@@ -349,12 +342,6 @@
           headers: { "My-Awesome-Header": "header value" }
         },
         headerCRUD: [
-          // {
-          //   text: '排序',
-          //   value: 'id',
-          //   align: 'center',
-          //   width: '5%'
-          // },
           {
             text: '素材名稱',
             value: 'name',
@@ -544,48 +531,10 @@
 </script>
 
 <style lang="scss" scoped>
-#resource {
+  #resource {
     width: 100%;
     height: 100%;
     background-color: #eeeeee;
-  }
-
-  #resourceTree {
-    border: 1px solid #c1c1c1;
-    height: 98%;
-    width: 12%;
-    border-radius: 10px;
-    overflow: hidden;
-  }
-
-  .title {
-    height: 40px;
-    background-color: #d33a31;
-    line-height: 40px;
-    padding-left: 10px;
-    font-size: 1.4rem;
-    color: white;
-    letter-spacing: 3px;
-  }
-
-  .controlTree {
-    height: 40px;
-    line-height: 40px;
-    text-align: right;
-    padding-right: 10px;
-    border-bottom: 1px solid #dedede;
-  }
-
-  .controlTree > a {
-    margin-left: 15px;
-  }
-
-  .controlTree > a > i {
-    margin-right: 3px;
-  }
-
-  .controlTree > a:hover {
-    color: #d33a31;
   }
 
   #resourceList {
@@ -594,40 +543,6 @@
     border-radius: 10px;
     overflow: hidden;
     width: 87%;
-  }
-
-  .controlBox {
-    height: 40px;
-    line-height: 40px;
-    text-align: right;
-    padding: 10px;
-    border-bottom: 1px solid #e0e0e0;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .control a {
-    margin-left: 10px;
-    font-size: 1.4rem;
-    border-right: 1px solid #cfcfcf;
-    padding-right: 10px;
-  }
-
-  .control > a > i {
-    margin-right: 5px;
-  }
-
-  .search {
-    display: flex;
-  }
-
-  .search > div {
-    margin-right: 10px;
-  }
-
-  .imgList, .tableList {
-    padding: 20px;
-    height: 580px;
   }
 
   .resourceList {
@@ -690,8 +605,4 @@
     color: white;
   }
 
-  .page {
-    text-align: right;
-    padding-right: 20px;
-  }
 </style>

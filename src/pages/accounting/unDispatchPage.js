@@ -18,7 +18,7 @@ export default {
                 { text: '戶名', value: 'accntName', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
                 { text: '電號', value: 'electricNo', align: 'center' },
-                { text: '計算日期', value: 'countDate', align: 'center' },
+                { text: '計算日', value: 'countDate', align: 'center' },
                 { text: '受理日期', value: 'acceptDate', align: 'center' },
                 { text: '結案日期', value: 'completeDate', align: 'center' },
                 { text: '受理項目', value: 'acceptItem', align: 'center' },

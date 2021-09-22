@@ -18,18 +18,18 @@ export default {
             caseReturnCount: 2,
             multiMediaReturnCount: 3,
             caseHeaders: [
-                { text: '受理編號', value: 'acceptNumber', align: 'center' },
-                { text: '契約種類', value: 'contractType', align: 'center' },
+                { text: '受理編號', value: 'acceptNumber', align: 'center',width:'10%' },
+                { text: '契約種類', value: 'contractType', align: 'center',width:'10%' },
                 { text: '電號', value: 'electricNo', align: 'center' },
-                { text: '戶名', value: 'accntName', align: 'center' },
-                { text: '計算日', value: 'computeDate', align: 'center' },
+                { text: '戶名', value: 'accntName', align: 'center',width:'10%'},
+                { text: '計算日', value: 'computeDate', align: 'center',width:'10%' },
                 { text: '退件日期', value: 'returnDate', align: 'center' },
-                { text: '退件原因', value: 'reason', align: 'center' },
-                { text: '退件說明', value: 'desc', align: 'center' },  
+                { text: '退件原因', value: 'reason', align: 'center',sortable: false,},
+                { text: '退件說明', value: 'desc', align: 'center',sortable: false, },  
                 { text: '受理項目', value: 'acceptItem', align: 'center' },
                 { text: '原受理人姓名', value: 'acceptName', align: 'center' },
                 { text: '退件人', value: 'returner', align: 'center' },
-                { text: '狀態操作', value: 'action', align: 'center' }
+                { text: '狀態操作', value: 'action', align: 'center',sortable: false, }
             ],
             caseList: [
                 {action: true, remain: true, cancel: true, view: true, acceptNumber: 'A00028', contractType: "表制", electricNo:'0120123223', accntName:"余文文", computeDate: '01', returnDate: '20210910 15:00', reason: '證件不清楚', desc: '現役軍人眷屬身分證圖片不清楚，須補證件', acceptItem: 'QA210  軍眷用電申請優待', acceptName: '李小凡',returner:'陳麗杉'},

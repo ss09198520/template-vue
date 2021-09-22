@@ -54,7 +54,6 @@
       no-data-text="查無資料"
       hide-default-footer
       class="elevation-1 ml-4"
-      disable-sort
       :page.sync="orderListPage"
       @page-count="orderListPageCount = $event"
     >

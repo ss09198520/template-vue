@@ -23,7 +23,6 @@
             hide-default-footer
             no-data-text="查無資料"
             class="elevation-1"
-            disable-sort
             @page-count="caseListPageCount = $event"
           >
             <template v-slot:item.acceptNumber="{ item }"> 
@@ -99,7 +98,6 @@
             hide-default-footer
             no-data-text="查無資料"
             class="elevation-1"
-            disable-sort
             @page-count="multiMediaListPageCount = $event"
           >
             <template v-slot:item.sendNumber="{ item }">

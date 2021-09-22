@@ -30,8 +30,8 @@ export default{
             empMockList:null,
             leaveWay:null,
             leaveWayOption:[
-                { text: 'HR帶入', value: '1' },
-                { text: '系統輸入', value: '2' },
+                { text: '差假管理系統', value: '1' },
+                { text: '人工設定', value: '2' },
             ],
             menu1: false,
             date1: '',

@@ -101,7 +101,7 @@
           <v-card-text>
             <v-row class="mt-3">
               <v-col cols="3">
-                調閱日期:
+                申請調閱日期:
               </v-col>
               <v-col>
                 20210915 10:00
@@ -117,7 +117,7 @@
             </v-row>
             <v-row>
               <v-col cols="3">
-                調閱單位:
+                調閱部門:
               </v-col>
               <v-col>
                 南屯服務所

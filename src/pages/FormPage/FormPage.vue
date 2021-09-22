@@ -541,8 +541,9 @@
                   <v-textarea
                     v-model="auditRemark"
                     outlined
-                    label="核算備註"
                     placeholder="點選 [儲存備註並關閉]、[退件]、[核算通過] 都會進行儲存"
+                    :no-resize="true"
+                    hide-details
                   />
                 </v-col>
               </v-row>
@@ -566,7 +567,7 @@
       </v-row>
       <v-row v-if="mode == 'audit'">
         <v-col cols="12" class="t-right">
-          <v-btn depressed large color="#E98B2A">
+          <v-btn depressed large color="#E98B2A" @click="saveComments()">
             <span style="font-size: 18px; color: white">儲存備註並關閉</span>
             <v-icon
               right
@@ -576,24 +577,22 @@
               mdi-content-save
             </v-icon>
           </v-btn>
-          <v-btn depressed large color="error" class="ml-3">
+          <v-btn depressed large color="error" class="ml-3" @click="retrunOrder()">
             <span style="font-size: 18px">退件</span>
             <v-icon
               right
               dark
               style="font-size: 24px"
-              @click="retrunOrder()"
             >
               mdi-close
             </v-icon>
           </v-btn>
-          <v-btn depressed large color="success" class="ml-3">
+          <v-btn depressed large color="success" class="ml-3" @click="auditSubmit()">
             <span style="font-size: 18px">核算通過</span>
             <v-icon
               right
               dark
               style="font-size: 24px"
-              @click="auditSubmit()"
             >
               mdi-check
             </v-icon>

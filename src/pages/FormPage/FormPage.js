@@ -140,5 +140,8 @@ export default {
         auditSubmit(){
             this.$emit("checkSubmit");
         },
+        saveComments(){
+            this.$emit("saveComments");
+        }
     }
 }

@@ -14,7 +14,7 @@
       <div class="mt-10 ml-10 font-18px font-bold">
         <v-row align="center">
           <v-col cols="1">
-            受理編號        
+            受理號碼       
           </v-col>          
           <v-col
             cols="3"
@@ -23,7 +23,7 @@
               outlined
               hide-details                                         
               dense
-              placeholder="請輸入受理編號"
+              placeholder="請輸入受理號碼"
             />
           </v-col>
           <v-col cols="1" />
@@ -38,6 +38,42 @@
               hide-details
               dense
               placeholder="請輸入電號"
+            />
+          </v-col>     
+        </v-row>
+        <v-row align="center">
+          <v-col cols="1">
+            計算日       
+          </v-col>          
+          <v-col
+            cols="3"
+          >
+            <v-select
+              v-model="calDate"
+              :items="calDateOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              :clearable="true"
+              class="my-auto"
+              color="#ADADAD"
+            />
+          </v-col>
+          <v-col cols="1" />
+          <v-col cols="1">
+            整理號碼
+          </v-col>                                             
+          <v-col
+            cols="3"
+          >
+            <v-text-field                           
+              outlined
+              hide-details
+              dense
+              placeholder="請輸入整理號碼"
             />
           </v-col>     
         </v-row>
@@ -93,6 +129,31 @@
                   <span>進行核算</span>
                 </v-tooltip>
               </template>
+              <template v-slot:item.hasView="{ item }">              
+                <v-checkbox 
+                  v-model="item.hasView" 
+                  hide-details
+                  class="shrink mt-0 ml-5"
+                  style="margin-top: 0;" 
+                  disabled
+                />
+              </template>
+              <template v-slot:item.comments="{ item }">              
+                <v-tooltip top>
+                  <template v-slot:activator="{ on }">
+                    <v-btn
+                      class="ma-2 primary"
+                      fab
+                      small                
+                      v-on="on"
+                      @click="openComments(item)"
+                    >
+                      <v-icon>mdi-information-outline</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>檢視備註</span>
+                </v-tooltip>
+              </template>
             </v-data-table>
             <!-- 選頁 -->
             <div class="mt-2">
@@ -119,13 +180,13 @@
             icon
             small
             text
-            @click="browserModel = false"
+            @click="accountingDialog = false"
           >
             <v-icon> mdi-close </v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <FormPage :restrict-mode="'audit'" @returnOrder="returnOrder()" @checkSubmit="checkSubmit()" />
+          <FormPage :restrict-mode="'audit'" @returnOrder="returnOrder()" @checkSubmit="checkSubmit()" @saveComments="saveComments()" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -216,33 +277,41 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- 備註視窗 -->
+    <v-dialog
+      v-model="commentsModel"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          備註
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="commentsModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-18px">
+          <v-row class="mt-10">
+            測試備註
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-5">
+          <v-btn              
+            color="primary"            
+            @click="commentsModel = false"
+          >
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
 <script src="./myWaitingAccountingPage.js" />
-
-<style scoped>
-    .block {
-        height: 250px;
-        padding: 18px;
-        position: relative;
-    }
-
-    .block .block-content {
-        font-size: 24px;
-        font-weight: 700;
-        height: 100px;
-        white-space: pre-wrap;
-    }
-
-    .block .block-title {
-        font-size: 36px;
-        font-weight: bold;
-    }
-
-    .block .block-number {
-        font-weight: bold;
-        font-size: 96px;
-        margin-right: 20px;
-    }
-</style>

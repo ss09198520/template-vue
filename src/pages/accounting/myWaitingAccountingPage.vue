@@ -173,7 +173,7 @@
     >
       <v-card>
         <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
-          瀏覽案件
+          核算案件
           <v-spacer />
           <v-btn
             color="white"

@@ -1,6 +1,6 @@
 <template>
-  <v-container fluid>
-    <h2 class="font-bold">滿意度個人摘要(週)</h2>
+  <v-container>
+    <h2 class="font-bold ">不滿意度個人摘要(週)</h2>
     <v-row>
       <v-col
         class="ml-10 font-18px"

@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <h2 class="font-bold">滿意度調查結果</h2>
     <v-row>
       <v-col

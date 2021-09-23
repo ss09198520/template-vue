@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <h2 class="font-bold">素材查詢</h2>
     <v-row>
       <v-col

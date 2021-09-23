@@ -1,17 +1,15 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <h2 class="font-bold">素 材 上 傳</h2>
     <v-row class="d-flex justify-center">
       <v-col
-        sm="10"
-        md="8"
+        class="ml-10"
+        cols="12"
       >
         <fet-card
-          flat
           full-width
           outlined
           title="素 材 上 傳"
-          text
         >
           <v-form ref="form" v-model="valid" lazy-validation>
             <v-row

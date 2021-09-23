@@ -1,12 +1,13 @@
 <template>
-  <v-container fluid>
+  <v-container>
     <h2 class="font-bold">滿意度問卷設計</h2>
     <v-row class="justify-center">
       <v-col
-        sm="10"
-        md="8"
+        class="ml-10"
+        cols="12"
       >
         <fet-card
+          full-width
           outlined
           title="問 卷 設 計"
         >

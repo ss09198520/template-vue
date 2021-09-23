@@ -85,7 +85,7 @@ export default{
             console.log(item);            
         },
         submit(){
-            MessageService.showSuccess("調閱成功✓");  
+            MessageService.showSuccess("成功✓",'調閱申請');  
             this.popOut = false;
         }
     }

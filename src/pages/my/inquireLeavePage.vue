@@ -32,12 +32,12 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
-            請假區間
+            請假起日
           </v-col>
           <v-col cols="3" class="d-flex">
             <v-menu
               v-model="startDateMenu"
-              :close-on-content-click="false"
+              :close-on-content-click="true"
               :nudge-right="40"
               transition="scale-transition"
               offset-y
@@ -61,10 +61,42 @@
                 @input="menu1 = false"
               />
             </v-menu>
-            <div class="mt-1">~</div>
+            <v-select
+              v-model="startHour"
+              :items="hourOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              class="my-auto ml-2 font-14px"
+              color="#ADADAD"
+            />            
+            <span class="mt-2 ml-1 mr-1">時</span>
+            <v-select
+              v-model="startMin"
+              :items="minOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              class="my-auto font-14px"
+              color="#ADADAD"
+            />        
+            <span class="mt-2 ml-1">分</span>
+          </v-col>
+          <v-col cols="1" />
+          <v-col cols="1">
+            請假迄日
+          </v-col>
+          <v-col cols="3" class="d-flex">
             <v-menu
               v-model="endDateMenu"
-              :close-on-content-click="false"
+              :close-on-content-click="true"
+              :nudge-right="40"
               transition="scale-transition"
               offset-y
               min-width="auto"
@@ -87,8 +119,35 @@
                 @input="menu2 = false"
               />
             </v-menu>
+            <v-select
+              v-model="endHour"
+              :items="hourOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              class="my-auto ml-2 font-14px"
+              color="#ADADAD"
+            />            
+            <span class="mt-2 ml-1 mr-1">時</span>
+            <v-select
+              v-model="endMin"
+              :items="minOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              class="my-auto font-14px"
+              color="#ADADAD"
+            />        
+            <span class="mt-2 ml-1">分</span>
           </v-col>
         </v-row>
+      
         <v-row>
           <v-col cols="11" />
           <v-col>

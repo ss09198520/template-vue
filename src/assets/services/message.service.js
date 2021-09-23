@@ -6,25 +6,25 @@ MessageService
 */
 const MessageService = {
     async showError(message,title){
-        var defaultTitle = "";
+        var defaultTitle = "發生錯誤";
 
         // // this.notify 噴錯
         // // this.$notify 噴錯
         // //window.vm.$notify 沒噴錯但沒訊息
         Vue.notify({
             group : 'topRight',
-            title : (title || defaultTitle),
+            title : title + defaultTitle,
             text : message,
             type: 'noti-error'
         });
         console.log(title);
         console.log(message);
     },
-    async showSuccess(message,title){
+    async showSuccess(title){
         Vue.notify({
             group : 'topRight',
             title : title,
-            text : message,
+            text : "成功✓",
             type: 'noti-success'
         });
     },

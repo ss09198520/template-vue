@@ -3,6 +3,9 @@ export default {
     props: {
     
     },
+    beforeMount() {
+        this.init();
+      },
     data() {
         return {
             employeeList: ['王大明', '葉星辰', '辛吉德', '羅斯柴'],
@@ -14,10 +17,39 @@ export default {
             status: '請假中',
             agent: '代理人  1050334015 王大明',
             nextLeave: '2021/10/12 08:00 - 18:00',
-            nextLeaveAgent: '1050334018	 趙元智'
+            nextLeaveAgent: '1050334018	 趙元智',
+            startHour: null,            
+            startMin:null,
+            endHour: null,            
+            endMin:null,
+            hourOption:[],
+            minOption:[],
         }
     },
+    
     methods: {
-        
+        init(){
+            this.defaultDate();
+        },
+
+        defaultDate(){
+            let index = 7;
+            for(index; index < 21; index++ ){
+                if(index.toString().length == 1){
+                    this.hourOption.push('0'+index.toString());
+                } else {
+                    this.hourOption.push(index.toString());
+                }
+            }
+            let i = 0;
+            for(i;i < 60; i++){
+                if(i.toString().length == 1){
+                    this.minOption.push('0'+i.toString());
+                } else {
+                    this.minOption.push(i.toString());
+                }
+                i=i+4;
+            }
+        }
     }
 }

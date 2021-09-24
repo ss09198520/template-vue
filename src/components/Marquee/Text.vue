@@ -40,7 +40,7 @@
         default: 'normal'
       },
     },
-    render(h, { $style, props: { duration, repeat, paused, reverse , fontColor , backgroundColor , fontWeight ,fontItalic }, children, data: { staticClass, key, on } }) {
+    render(h, { $style, props: { duration, repeat, paused, reverse }, children, data: { staticClass, key, on } }) {
       // console.log('$style', $style)
       // console.log('children', children[0].text)
       // '台灣電力公司跑馬燈輪播測試!!! :   今日預告台北將不會停電!!!!'
@@ -48,12 +48,15 @@
         class: $style.text,
         style: {
           animationDuration: `${duration}s`,
-          color: fontColor,
-          backgroundColor: backgroundColor,
-          fontWeight: fontWeight,
-          fontStyle: fontItalic,
+          // color: fontColor,
+          // backgroundColor: backgroundColor,
+          // fontWeight: fontWeight,
+          // fontStyle: fontItalic,
           animationDirection: reverse ? 'reverse' : undefined
-        }
+        },
+        domProps: {
+          innerHTML: children[0].text
+        },
       }, children)
       
       return h('div', {//Text_wrap
@@ -63,7 +66,7 @@
           'v-list-item',
           staticClass,
           $style.wrap
-        ]
+        ],
       }, [
         h('div', {//Text_content
           class: [
@@ -71,7 +74,7 @@
               ? $style.paused
               : undefined,
             $style.content
-          ]
+          ],
         }, Array(repeat).fill(text))
       ])
     }

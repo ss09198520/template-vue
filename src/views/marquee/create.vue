@@ -78,14 +78,15 @@
                 cols="9"
                 md="8"
               >
-                <v-textarea
+                <!-- <v-textarea
                   v-model="marqueeText"
                   :rules="rules.requiredRule.concat(rules.lengthRules)"
                   color="accent"
                   outlined
                   placeholder="請輸入文字"
                   counter="100"
-                />
+                /> -->
+                <tinymce ref="editor" v-model="marqueeText" :height="400" />
               </v-col>
             </v-row>
             <v-row
@@ -132,7 +133,7 @@
                 </v-menu>
               </v-col>
             </v-row>
-            <v-row>
+            <!-- <v-row>
               <v-col cols="3" md="3">
                 <v-subheader class="justify-center text-md-body-1 font-weight-bold">
                   外 觀 樣 式
@@ -154,16 +155,8 @@
                   inset
                 />
               </v-col>
-              <!-- <v-col cols="3" md="3">
-                <v-switch 
-                  v-model="fontItalic1"
-                  class="mt-1"
-                  :label="`閃爍`"
-                  inset
-                />
-              </v-col> -->
-            </v-row>
-            <v-row
+            </v-row> -->
+            <!-- <v-row
               :dense="dense"
               :no-gutters="noGutters"
             >
@@ -212,7 +205,7 @@
                   </template>
                 </v-text-field>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row
               :dense="dense"
               :no-gutters="noGutters"
@@ -332,8 +325,17 @@
 </template>
 
 <script>
-  
+  import Tinymce from '@/components/Tinymce'
+
+  // const defaultForm = {
+  //   marqueeName: '',
+  //   content: '', 
+  //   id: undefined,
+  //   comment_disabled: false,
+  //   importance: 0
+  // }
   export default {
+    components: { Tinymce},
     data() {
       return {
         valid: false,

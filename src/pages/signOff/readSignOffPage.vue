@@ -3,7 +3,7 @@
     <v-container>
 
       <h2 class="font-bold mb-5">調閱簽核清單</h2>
-      <v-row class="ml-2">
+      <!-- <v-row class="ml-2">
         <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn
@@ -34,7 +34,7 @@
           </template>
           <span>只顯示待簽核</span>
         </v-tooltip>        
-      </v-row>
+      </v-row> -->
       <hr class="mt-6 mb-5 ml-4 mr-5">
       <v-row class="ma-2">
         <v-col>
@@ -204,7 +204,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="font-18px">
-            <v-row class="mt-6 ml-1" align="center">
+            <!-- <v-row class="mt-6 ml-1" align="center">
               <v-col cols="3">
                 退件部門
               </v-col>
@@ -221,7 +221,7 @@
                   placeholder="請選擇退件部門"
                 />
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row class="mt-6 ml-1" align="center">
               <v-col cols="3">
                 退件原因

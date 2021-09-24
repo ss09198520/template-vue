@@ -312,7 +312,7 @@
             <v-row class="mt-3" align="center">
               <v-col cols="2">調閱對象</v-col>
               <v-col cols="7">
-                <!-- <v-select
+                <v-select
                   v-model="setMember"                
                   :items="memberOption"
                   outlined
@@ -321,18 +321,18 @@
                   placeholder="請選擇調閱對象"
                   return-object 
                   item-text="empName"              
-                /> -->
-                <v-text-field
+                />
+                <!-- <v-text-field
                   v-model="setMember"                           
                   outlined
                   hide-details
                   dense
                   placeholder="請輸入調閱對象"
-                />
+                /> -->
               </v-col>
             </v-row>
             <v-row align="center">
-              <v-col cols="2">調閱原因</v-col>
+              <v-col cols="2">調閱事由</v-col>
               <v-col cols="7">
                 <v-select
                   v-model="setReason"                
@@ -340,13 +340,13 @@
                   outlined
                   hide-details
                   dense
-                  placeholder="請選擇調閱原因"
+                  placeholder="請選擇調閱事由"
                   return-object
                 />
               </v-col>
             </v-row>
             <v-row align="center">
-              <v-col cols="2">其他原因</v-col>
+              <v-col cols="2">其他事由</v-col>
               <v-col>
                 <v-textarea
                   outlined                  
@@ -588,6 +588,12 @@
                 7140000123
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="2">整理號碼</v-col>
+              <v-col cols="3">
+                000300
+              </v-col>
+            </v-row>
             <v-row class="mb-5">
               <v-col cols="2">調閱事由</v-col>
               <v-textarea
@@ -597,7 +603,7 @@
                 rows="4"
                 hide-details
               />
-            </v-row>
+            </v-row>            
             <v-row>
               <v-col cols="2">備註</v-col>
               <v-textarea

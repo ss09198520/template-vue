@@ -144,7 +144,7 @@
               color="primary"            
               @click="checkSubmit()"
             >
-              &emsp;確定&emsp;
+              &emsp;關閉&emsp;
             </v-btn>
           </v-card-actions>
         </v-card>

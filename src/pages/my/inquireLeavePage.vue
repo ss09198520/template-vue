@@ -53,12 +53,14 @@
                   hide-details
                   v-bind="attrs"
                   style="width:100%"
-                  v-on="on"
+                  v-on="on"                  
                 />
               </template>
               <v-date-picker
                 v-model="startDate"
+                :min="sysDate"
                 @input="menu1 = false"
+                @change="changeStartDate()"
               />
             </v-menu>
             <v-select
@@ -72,6 +74,7 @@
               dense
               class="my-auto ml-2 font-14px"
               color="#ADADAD"
+              @change="changeStartDate()"
             />            
             <span class="mt-2 ml-1 mr-1">時</span>
             <v-select
@@ -85,6 +88,7 @@
               dense
               class="my-auto font-14px"
               color="#ADADAD"
+              @change="changeStartDate()"
             />        
             <span class="mt-2 ml-1">分</span>
           </v-col>
@@ -116,7 +120,9 @@
               </template>
               <v-date-picker
                 v-model="endDate"
+                :min="sysDate"
                 @input="menu2 = false"
+                @change="changeEndDate()"
               />
             </v-menu>
             <v-select
@@ -130,6 +136,7 @@
               dense
               class="my-auto ml-2 font-14px"
               color="#ADADAD"
+              @change="changeEndDate()"
             />            
             <span class="mt-2 ml-1 mr-1">時</span>
             <v-select
@@ -143,6 +150,7 @@
               dense
               class="my-auto font-14px"
               color="#ADADAD"
+              @change="changeEndDate()"
             />        
             <span class="mt-2 ml-1">分</span>
           </v-col>

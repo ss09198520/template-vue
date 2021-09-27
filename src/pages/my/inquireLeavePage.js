@@ -5,7 +5,8 @@ export default {
     },
     beforeMount() {
         this.init();
-      },
+    },
+   
     data() {
         return {
             employeeList: ['王大明', '葉星辰', '辛吉德', '羅斯柴'],
@@ -24,6 +25,9 @@ export default {
             endMin:null,
             hourOption:[],
             minOption:[],
+            finalStartDate:null,
+            finalEndDate: null,
+            sysDate: new Date().toISOString().slice(0, 10),
         }
     },
     
@@ -50,6 +54,16 @@ export default {
                 }
                 i=i+4;
             }
-        }
+        },
+        changeStartDate(){
+            if(this.startDate != '' && this.startHour != '' && this.startMin != ''){
+                this.finalStartDate = this.startDate +' '+ this.startHour +':'+ this.startMin+':00'; // 組合開始日期
+            }
+        },
+        changeEndDate(){
+            if(this.endDate != '' && this.endHour != '' && this.endMin != ''){
+                this.finalEndDate = this.endDate +' '+ this.endHour +':'+ this.endMin+':00'; // 組合開始日期
+            }
+        },
     }
 }

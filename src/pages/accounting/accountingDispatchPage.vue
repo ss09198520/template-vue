@@ -217,7 +217,7 @@
                       />
                       <span style="margin: 10px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">包制</span>
                     </v-row>
-                    <v-row v-for="(packageNum, index) in dialogContent.packageNumList" :key="index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
+                    <v-row v-for="(packageNum, index) in dialogContent.packageNumList" :key="packageNum+index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
                       <div style="height: 10px; width: 15px;" />
                       <span style="margin-right: 10px;" :class="dialogContent.dispatchType !== 0 && dialogContent.usePackage? '':'disable-text'">電號 : </span>         
                       <v-col cols="3">

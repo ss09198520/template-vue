@@ -35,11 +35,20 @@ export default {
             usePackage: false,
             useHighVoltage: false,
             useMeter: false,
-            meterType: 0,
+            meterType: null,
             computeDate: [],
             electricNumList: [
               {start: '07-14-0000-00-0', end: '07-14-9999-99-9'},
               {start: '07-16-0000-00-0', end: '07-16-9999-99-9'},
+            ],
+            packageNumList: [
+              {start: '', end: ''},
+            ],
+            highVoltageNumList:[
+              {start: '', end: ''},
+            ],
+            meterElectricNumList:[
+              {start: '', end: ''},
             ],
             startPackageElectricNum: '',
             endPackageElectriNum: '',
@@ -47,7 +56,7 @@ export default {
             endHighVoltageElectricNum: '',
             startMeterElectricNum: '',
             endMeterElectricNum: ''
-          }
+          },
         },
         { 
           class: '2', 
@@ -62,12 +71,21 @@ export default {
           remove: true,
           dialogContent: {
             dispatchType: 1,
-            usePackage: false,
-            useHighVoltage: false,
+            usePackage: true,
+            useHighVoltage: true,
             useMeter: true,
             meterType: 1,
             computeDate: ['01', '03', '05', '07', '09'],
             electricNumList: [
+              {start: '', end: ''},
+            ],
+            packageNumList: [
+              {start: '07-14-0000-00-0', end: '07-14-9999-99-9'},
+            ],
+            highVoltageNumList:[
+              {start: '07-14-0000-00-0', end: '07-14-9999-99-9'},
+            ],
+            meterElectricNumList:[
               {start: '', end: ''},
             ],
             startPackageElectricNum: '',
@@ -110,6 +128,16 @@ export default {
           {start: '', end: ''},
         ],
         // 包制電號區間
+        packageNumList: [
+          {start: '', end: ''},
+        ],
+        //高壓電號區間
+        highVoltageNumList:[
+          {start: '', end: ''},
+        ],
+        meterElectricNumList:[
+          {start: '', end: ''},
+        ],
         startPackageElectricNum: '',
         endPackageElectriNum: '',
         // 高壓電號區間
@@ -143,6 +171,15 @@ export default {
         // meterType: 0,
         computeDate: [],
         electricNumList: [
+          {start: '', end: ''},
+        ],
+        packageNumList:[
+          {start: '', end: ''},
+        ],
+        highVoltageNumList:[
+          {start: '', end: ''},
+        ],
+        meterElectricNumList:[
           {start: '', end: ''},
         ],
         startPackageElectricNum: '',
@@ -241,18 +278,41 @@ export default {
       let newNum = ('' + num).length == 1? '0' + num : num;
       return newNum
     },
+    // 新增電號
     addElectricNum(){
       this.dialogContent.electricNumList.push({start: '', end: ''});
     },
     removeElectricNum(index){
       this.dialogContent.electricNumList.splice(index, 1);
     },
+    // 新增包制電號
+    addPackageNum(){
+      this.dialogContent.packageNumList.push({start: '', end: ''});
+    },
+    removePackageNum(index){
+      this.dialogContent.packageNumList.splice(index, 1);
+    },
+    // 新增高壓電號
+    addHighVoltageNum(){
+      this.dialogContent.highVoltageNumList.push({start: '', end: ''});
+    },
+    removeHighVoltageNum(index){
+      this.dialogContent.highVoltageNumList.splice(index, 1);
+    },
+    addMeterElectricNum(){
+      this.dialogContent.meterElectricNumList.push({start: '', end: ''});
+    },
+
+    removeMeterElectricNum(index){
+      this.dialogContent.meterElectricNumList.splice(index, 1);
+    },
+
     submit(){
       if (this.selectIndex > -1) {
         this.itemList.splice(this.selectIndex, 1);
       }
       this.deleteDispatchModel = false;
       MessageService.showSuccess("刪除派工成功✓");
-    }
+    },
   }
 }

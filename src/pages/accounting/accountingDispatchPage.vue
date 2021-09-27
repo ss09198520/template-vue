@@ -178,7 +178,7 @@
                       :disabled="dialogContent.dispatchType !== 0"
                     />
                   </v-col>
-                  <v-col v-if="dialogContent.dispatchType == 0" cols="1">
+                  <v-col v-if="dialogContent.dispatchType == 0 && dialogContent.electricNumList.length > 1" cols="1">
                     <v-btn
                       :disabled="dialogContent.dispatchType !== 0"
                       class="ma-2"
@@ -204,6 +204,7 @@
                   </v-col>
                 </v-row>
                 <v-radio label="依契約種類設定分派班別：" />
+                <!-- 包制 -->
                 <v-row style="margin: 10px;" align="center">
                   <v-col style="padding-top: 0;">
                     <v-row align="center">            
@@ -212,58 +213,117 @@
                         hide-details
                         class="shrink mt-0"
                         style="margin-top: 0;" 
-                        :disabled="dialogContent.dispatchType===0"
+                        :disabled="dialogContent.dispatchType !== 1"
                       />
-                      <span style="margin: 10px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">包制: 電號</span>        
+                      <span style="margin: 10px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">包制</span>
+                    </v-row>
+                    <v-row v-for="(packageNum, index) in dialogContent.packageNumList" :key="index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
+                      <div style="height: 10px; width: 15px;" />
+                      <span style="margin-right: 10px;" :class="dialogContent.dispatchType !== 0 && dialogContent.usePackage? '':'disable-text'">電號 : </span>         
                       <v-col cols="3">
                         <v-text-field
-                          v-model="dialogContent.startPackageElectricNum"
+                          v-model="packageNum.start"
                           outlined
                           hide-details                                         
                           dense
-                          :disabled="!dialogContent.usePackage"
+                          :disabled="dialogContent.dispatchType !== 1 || !dialogContent.usePackage"
                         />
                       </v-col>
-                      <span :class="dialogContent.dispatchType!==0 && dialogContent.usePackage? '':'disable-text'">~</span>
+                      <span :class="dialogContent.dispatchType !== 0 && dialogContent.usePackage ? '':'disable-text'">~</span>
                       <v-col cols="3">
                         <v-text-field
-                          v-model="dialogContent.endPackageElectricNum"
+                          v-model="packageNum.end"
                           outlined
                           hide-details                                         
                           dense
-                          :disabled="!dialogContent.usePackage"
+                          :disabled="dialogContent.dispatchType !== 1 || !dialogContent.usePackage"
                         />
+                      </v-col>
+                      <v-col v-if="dialogContent.dispatchType == 1 && dialogContent.packageNumList.length > 1" cols="1">
+                        <v-btn
+                          :disabled="dialogContent.dispatchType !== 1"
+                          class="ma-2"
+                          color="error"
+                          fab
+                          small
+                          @click="removePackageNum(index)"
+                        >
+                          <v-icon v-text="'mdi-minus'" />
+                        </v-btn>
+                      </v-col>
+                      <v-col v-if="index == dialogContent.packageNumList.length - 1 && dialogContent.dispatchType == 1 && dialogContent.usePackage" cols="1">
+                        <v-btn
+                          :disabled="dialogContent.dispatchType !== 1 && dialogContent.usePackage"
+                          class="ma-2"
+                          color="primary"
+                          fab
+                          small
+                          @click="addPackageNum()"
+                        >
+                          <v-icon v-text="'mdi-plus'" />
+                        </v-btn>
                       </v-col>
                     </v-row>
+                    <!-- 高壓 -->
                     <v-row align="center">            
                       <v-checkbox 
                         v-model="dialogContent.useHighVoltage"
                         hide-details
                         class="shrink mt-0" 
                         style="margin-top: 0;"
-                        :disabled="dialogContent.dispatchType===0"
+                        :disabled="dialogContent.dispatchType !== 1"
                       />
-                      <span style="margin: 10px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">高壓: 電號</span>        
+                      <span style="margin: 10px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">高壓</span>        
+                    </v-row>
+                    <v-row v-for="(highVoltageNum, index) in dialogContent.highVoltageNumList" :key="index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
+                      <div style="height: 10px; width: 15px;" />
+                      <span style="margin-right: 10px;" :class="dialogContent.dispatchType !== 0 && dialogContent.useHighVoltage? '':'disable-text'">電號 : </span>         
                       <v-col cols="3">
                         <v-text-field
-                          v-model="dialogContent.startHighVoltageElectricNum"
+                          v-model="highVoltageNum.start"
                           outlined
                           hide-details                                         
                           dense
-                          :disabled="!dialogContent.useHighVoltage"
+                          :disabled="dialogContent.dispatchType !== 1 || !dialogContent.useHighVoltage"
                         />
                       </v-col>
-                      <span :class="dialogContent.dispatchType!==0 && dialogContent.useHighVoltage? '':'disable-text'">~</span>
+                      <span :class="dialogContent.dispatchType !== 0 && dialogContent.useHighVoltage ? '':'disable-text'">~</span>
                       <v-col cols="3">
                         <v-text-field
-                          v-model="dialogContent.endHighVoltageElectricNum"
+                          v-model="highVoltageNum.end"
                           outlined
                           hide-details                                         
                           dense
-                          :disabled="!dialogContent.useHighVoltage"
+                          :disabled="dialogContent.dispatchType !== 1 || !dialogContent.useHighVoltage"
                         />
+                      </v-col>
+                      <v-col v-if="dialogContent.dispatchType == 1 && dialogContent.highVoltageNumList.length > 1 && dialogContent.useHighVoltage" cols="1">
+                        <v-btn
+                          :disabled="dialogContent.dispatchType !== 1"
+                          class="ma-2"
+                          color="error"
+                          fab
+                          small
+                          @click="removeHighVoltageNum(index)"
+                        >
+                          <v-icon v-text="'mdi-minus'" />
+                        </v-btn>
+                      </v-col>
+                      <v-col v-if="index == dialogContent.highVoltageNumList.length - 1 && dialogContent.dispatchType == 1 && dialogContent.useHighVoltage" cols="1">
+                        <v-btn
+                          :disabled="dialogContent.dispatchType !== 1 && dialogContent.useHighVoltage"
+                          class="ma-2"
+                          color="primary"
+                          fab
+                          small
+                          @click="addHighVoltageNum()"
+                        >
+                          <v-icon v-text="'mdi-plus'" />
+                        </v-btn>
                       </v-col>
                     </v-row>
+
+                    <!-- 表制 -->
                     <v-radio-group v-model="dialogContent.meterType">
                       <v-row align="center">
                         <v-checkbox 
@@ -271,36 +331,69 @@
                           hide-details
                           class="shrink mt-0"
                           style="margin-top: 0;"
-                          :disabled="dialogContent.dispatchType===0" 
+                          :disabled="dialogContent.dispatchType !== 1" 
                         />
-                        <span style="margin-left: 10px; width: 40px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">表制: </span>
-                        <v-radio class="mt-2" :disabled="!dialogContent.useMeter" />
-                        <v-row align="center">
-                          <span style="margin: 10px;" :class="dialogContent.dispatchType===1 && dialogContent.useMeter && dialogContent.meterType===0? '':'disable-text'">電號</span>
-                          <v-col cols="4">
-                            <v-text-field
-                              v-model="dialogContent.startMeterElectricNum"
-                              outlined
-                              hide-details                                         
-                              dense
-                              :disabled="!dialogContent.useMeter || dialogContent.meterType!==0"
-                            />
-                          </v-col>
-                          <span :class="dialogContent.dispatchType===1 && dialogContent.useMeter && dialogContent.meterType===0? '':'disable-text'">~</span>
-                          <v-col cols="4">
-                            <v-text-field
-                              v-model="dialogContent.endMeterElectricNum"
-                              outlined
-                              hide-details                                         
-                              dense
-                              :disabled="!dialogContent.useMeter || dialogContent.meterType!==0"
-                            />
-                          </v-col>
-                        </v-row>
+                        <span style="margin-left: 10px; width: 40px;" :class="dialogContent.dispatchType!==0? '':'disable-text'">表制 </span>                 
                       </v-row>
+                      <v-row v-for="(meterElectricNum, index) in dialogContent.meterElectricNumList" :key="index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
+                        <div v-if="index == 0">
+                          <v-radio class="ml-5" :disabled="dialogContent.dispatchType!==1 || !dialogContent.useMeter" />
+                        </div>
+                        <div style="height: 10px;" />
+                        <div v-if="index == 0">
+                          <span class="mr-1" :class="dialogContent.dispatchType !== 0 && dialogContent.useMeter && dialogContent.meterType == 0? '':'disable-text'">電號： </span>         
+                        </div>
+                        <div v-if="index != 0" class="ml-13">
+                          <span class="mr-1" :class="dialogContent.dispatchType !== 0 && dialogContent.useMeter && dialogContent.meterType == 0? '':'disable-text'">電號： </span>         
+                        </div>
+                        <v-col cols="3">
+                          <v-text-field
+                            v-model="meterElectricNum.start"
+                            outlined
+                            hide-details                                         
+                            dense
+                            :disabled="!dialogContent.useMeter || dialogContent.meterType!==0"
+                          />
+                        </v-col>
+                        <span :class="dialogContent.dispatchType !== 0 && dialogContent.useMeter ? '':'disable-text'">~</span>
+                        <v-col cols="3">
+                          <v-text-field
+                            v-model="meterElectricNum.end"
+                            outlined
+                            hide-details                                         
+                            dense
+                            :disabled=" !dialogContent.useMeter || dialogContent.meterType!==0"
+                          />
+                        </v-col>
+                        <v-col v-if="dialogContent.dispatchType == 1 && dialogContent.meterElectricNumList.length > 1 && dialogContent.useMeter && dialogContent.meterType == 0" cols="1">
+                          <v-btn
+                            :disabled="dialogContent.dispatchType !== 1"
+                            class="ma-2"
+                            color="error"
+                            fab
+                            small
+                            @click="removeMeterElectricNum(index)"
+                          >
+                            <v-icon v-text="'mdi-minus'" />
+                          </v-btn>
+                        </v-col>
+                        <v-col v-if="index == dialogContent.meterElectricNumList.length - 1 && dialogContent.dispatchType == 1 && dialogContent.useMeter && dialogContent.meterType == 0" cols="1">
+                          <v-btn
+                            :disabled="dialogContent.dispatchType !== 1 && dialogContent.useMeter"
+                            class="ma-2"
+                            color="primary"
+                            fab
+                            small
+                            @click="addMeterElectricNum()"
+                          >
+                            <v-icon v-text="'mdi-plus'" />
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                     
                       <v-row>
-                        <div style="height: 10px;width: 82px;" />
-                        <v-radio style="margin-top: 10px;" :disabled="!dialogContent.useMeter" />
+                        <div style="height: 10px;width: 50px;" />
+                        <v-radio style="margin-top: 10px;" :disabled="dialogContent.dispatchType !== 1 || !dialogContent.useMeter" />
                         <v-row align="center">
                           <span style="margin: 10px;" :class="dialogContent.dispatchType===1 && dialogContent.useMeter && dialogContent.meterType==1? '':'disable-text'">計算日</span>
                           <v-col>
@@ -318,7 +411,7 @@
                         </v-row>
                       </v-row>
                       <v-row style="margin-top: 0;">
-                        <div style="height: 10px;width: 170px;" />
+                        <div style="height: 10px;width: 140px;" />
                         <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="09" value="09" class="meter-checkbox" />
                         <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="10" value="10" class="meter-checkbox" />
                         <v-checkbox v-model="dialogContent.computeDate" :disabled="!dialogContent.useMeter || dialogContent.meterType!==1" label="11" value="11" class="meter-checkbox" />

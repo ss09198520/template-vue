@@ -45,7 +45,9 @@
       // console.log('children', children[0].text)
       // '台灣電力公司跑馬燈輪播測試!!! :   今日預告台北將不會停電!!!!'
       const text = h('div', {
-        class: $style.text,
+        class: [
+          $style.text,
+        ],
         style: {
           animationDuration: `${duration}s`,
           // color: fontColor,
@@ -55,7 +57,7 @@
           animationDirection: reverse ? 'reverse' : undefined
         },
         domProps: {
-          innerHTML: children[0].text
+          innerHTML: children[0].text,
         },
       }, children)
       
@@ -80,6 +82,14 @@
     }
   }
 </script>
+
+<style>
+p ,b, strong {
+  font-size: 0.8cm !important;
+  margin-top: 15px;
+  margin: 0 !important;
+}
+</style>
 
 <style module>
   .wrap {

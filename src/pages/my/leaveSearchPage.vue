@@ -185,8 +185,12 @@
               disable-sort
               @page-count="empListPageCount = $event"
             >
+              <!-- 代理請假日期範圍 -->
+              <template v-slot:item.empLeave="{ item }">                                            
+                {{ item.startDate }}~{{ item.endDate }}
+              </template>
               <template v-slot:item.mani="{ item }">                                            
-                <v-tooltip top>
+                <v-tooltip v-if="new Date(item.endDate) > sysDate" top>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       class="ma-2"

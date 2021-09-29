@@ -5,6 +5,9 @@ export default {
   props: {
   
   },
+  beforeMount(){
+    this.init();
+  },
   data() {
     return {
       headers: [
@@ -38,8 +41,8 @@ export default {
             meterType: null,
             computeDate: [],
             electricNumList: [
-              {start: '07-14-0000-00-0', end: '07-14-9999-99-9'},
-              {start: '07-16-0000-00-0', end: '07-16-9999-99-9'},
+              {start: '07140000000', end: '07149999999'},
+              {start: '07160000000', end: '07169999999'},
             ],
             packageNumList: [
               {start: '', end: ''},
@@ -80,10 +83,10 @@ export default {
               {start: '', end: ''},
             ],
             packageNumList: [
-              {start: '07-14-0000-00-0', end: '07-14-9999-99-9'},
+              {start: '07140000000', end: '07149999999'},
             ],
             highVoltageNumList:[
-              {start: '07-14-0000-00-0', end: '07-14-9999-99-9'},
+              {start: '07140000000', end: '07149999999'},
             ],
             meterElectricNumList:[
               {start: '', end: ''},
@@ -151,9 +154,12 @@ export default {
       closeText: '　關閉　',
       deleteDispatchModel:false,
       selectIndex: null,
+      oldItemList:[],
     }
   },
   methods: {
+    init(){
+    },
     // 開啟新增派工 dialog
     newDispatch(){
       // 切換 dialog 模式

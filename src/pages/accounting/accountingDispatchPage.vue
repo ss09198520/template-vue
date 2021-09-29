@@ -109,13 +109,18 @@
                   班別
                 </v-col>   
                 <v-col cols="6">
-                  <v-text-field
-                    v-model="dialogContent.class"
-                    outlined
-                    hide-details                                         
-                    dense
-                    placeholder="請輸入班別"
-                  />
+                  <div v-if="dialogType==='add'">
+                    <v-text-field
+                      v-model="dialogContent.class"
+                      outlined
+                      hide-details                                         
+                      dense
+                      placeholder="請輸入班別"
+                    />
+                  </div>
+                  <div v-if="dialogType!=='add'">
+                    {{ dialogContent.class }}
+                  </div>                  
                 </v-col>
               </v-row>
               <v-row align="center">
@@ -123,15 +128,20 @@
                   核算員
                 </v-col>         
                 <v-col cols="6">
-                  <v-select
-                    id="accountingSelect"
-                    v-model="dialogContent.accountingName"
-                    outlined
-                    hide-details                                         
-                    dense
-                    placeholder="請選擇核算員"
-                    :items="employeeList"
-                  />
+                  <div v-if="dialogType==='add'">
+                    <v-select
+                      id="accountingSelect"
+                      v-model="dialogContent.accountingName"
+                      outlined
+                      hide-details                                         
+                      dense
+                      placeholder="請選擇核算員"
+                      :items="employeeList"
+                    />
+                  </div>
+                  <div v-if="dialogType!=='add'">
+                    {{ dialogContent.accountingName }}
+                  </div>   
                 </v-col>
               </v-row>
               <v-row align="center">
@@ -139,14 +149,19 @@
                   檢算員
                 </v-col>         
                 <v-col cols="6">
-                  <v-select
-                    v-model="dialogContent.checkingName"
-                    outlined
-                    hide-details
-                    dense
-                    placeholder="請選擇檢算員"
-                    :items="employeeList"
-                  />
+                  <div v-if="dialogType==='add'">
+                    <v-select
+                      v-model="dialogContent.checkingName"
+                      outlined
+                      hide-details
+                      dense
+                      placeholder="請選擇檢算員"
+                      :items="employeeList"
+                    />
+                  </div>
+                  <div v-if="dialogType!=='add'">
+                    {{ dialogContent.checkingName }}
+                  </div>   
                 </v-col>
               </v-row>
               <v-row align="center">

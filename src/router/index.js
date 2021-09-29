@@ -217,14 +217,12 @@ export const constantRoutes = [
         name: 'Satisfaction-Report-Monthly',
         component: () => import('@/views/satisfaction/reportMonth'),
         meta: { title: '滿意度各區處報表(月)', icon: 'mdi-clipboard-search' }
-        // meta: { title: '各區處滿意度彙整報表查詢(月)', icon: 'mdi-clipboard-search' } //TODO will remove
       },
       {
         path: 'satisfyReport/week',
         name: 'Satisfaction-Report-Weekly',
         component: () => import('@/views/satisfaction/reportWeek'),
         meta: { title: '滿意度個人摘要(週)', icon: 'mdi-clipboard-search  ' }
-        // meta: { title: '各區處滿意度彙整報表查詢(月)', icon: 'mdi-clipboard-search' } //TODO will remove
       }
     ]
   },

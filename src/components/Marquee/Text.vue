@@ -47,6 +47,7 @@
       const text = h('div', {
         class: [
           $style.text,
+          'marquee',
         ],
         style: {
           animationDuration: `${duration}s`,
@@ -89,6 +90,42 @@ p ,b, strong {
   margin-top: 15px;
   margin: 0 !important;
 }
+
+.marquee.span{
+  height:50px;
+}
+div.marquee .ql-size-small {
+    font-size: 0.75em;
+}
+
+div.marquee .ql-size-large {
+    font-size: 1.25em;
+}
+
+div.marquee .ql-size-huge{
+    font-size: 1.50em;
+}
+
+div.marquee > b, strong {
+    font-weight: bolder !important;
+    font-size: inherit;
+    
+}
+div.marquee > h1, h2, h3, .h1, .h2, .h3 {
+    margin-top: 0px;
+    margin-bottom: 0px !important;
+}
+div.marquee >p{
+  font-size: 32px !important;
+  margin: 0px;
+  font-weight: normal !important;
+  display:inline;
+} 
+
+div.marquee > span {
+   font-weight: normal !important;
+   font-size: 32px !important;
+}
 </style>
 
 <style module>
@@ -96,7 +133,7 @@ p ,b, strong {
     overflow: hidden;
   }
   .content {
-    width: 200000px;
+    width: 2000px;
   }
   .text {
     animation-name: animation;

@@ -35,8 +35,7 @@ const ValidateUtil = {
     validateDate(date){
         const namePattern = /^[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/;
         return namePattern.test(date);
-    },
-
+    }, 
 
     /*
     驗證傳入日期時間格式是否正確 2021-09-10 08:00:00
@@ -46,6 +45,26 @@ const ValidateUtil = {
         return namePattern.test(dateTime);
     },
 
+     /*
+    驗證傳入日期起訖日範圍是否正確
+    */
+    validateDateRange(startD,endD){
+        // 將字串日期先轉成日期格式作比較
+        let startDate = new Date(startD);
+        let endDate = new Date(endD);
+        // 判斷日期格式及日期範圍是否正確
+        let dateRule = false;
+
+        // 先判斷日期格式是否正確，正確則會繼續判斷日期起訖規則是否正確
+        if((this.validateDate(startD) && this.validateDate(endD)) 
+            || (this.validateDateTime(startD) && this.validateDateTime(endD))){
+            // 判斷起始日期是否小於等於結束日期
+            if(startDate <= endDate){
+                dateRule = true;
+            }
+        }
+        return dateRule;
+    },
 
     /*
     驗證傳入參數是否為空(null、空字串、空陣列)

@@ -227,7 +227,7 @@
                 />
               </v-col>
             </v-row>
-            <v-row class="ml-1" align="center">
+            <v-row class="ml-1">
               <v-col cols="3">
                 退件說明
               </v-col>
@@ -238,7 +238,7 @@
                   name="input-7-4"
                   :no-resize="true"
                   placeholder="請輸入退件說明"
-                  hide-details
+                  counter="50"
                 />
               </v-col>
             </v-row>

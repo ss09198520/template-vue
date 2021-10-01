@@ -311,7 +311,7 @@
           <v-card-text>
             <v-row class="mt-3" align="center">
               <v-col cols="2">調閱對象</v-col>
-              <v-col cols="7">
+              <v-col cols="9">
                 <v-select
                   v-model="setMember"                
                   :items="memberOption"
@@ -333,7 +333,7 @@
             </v-row>
             <v-row align="center">
               <v-col cols="2">調閱事由</v-col>
-              <v-col cols="7">
+              <v-col cols="9">
                 <v-select
                   v-model="setReason"                
                   :items="reasonOption"
@@ -347,11 +347,12 @@
             </v-row>
             <v-row align="center">
               <v-col cols="2">其他事由</v-col>
-              <v-col>
+              <v-col cols="9">
                 <v-textarea
                   outlined                  
                   value=""
-                  hide-details
+                  auto-grow
+                  counter="50"
                 />
               </v-col>
             </v-row>
@@ -594,25 +595,29 @@
                 000300
               </v-col>
             </v-row>
-            <v-row class="mb-5">
+            <v-row>
               <v-col cols="2">調閱事由</v-col>
-              <v-textarea
-                outlined
-                class="ml-3"
-                value=""
-                rows="4"
-                hide-details
-              />
+              <v-col cols="9">
+                <v-textarea
+                  outlined
+                  value=""
+                  rows="4"
+                  auto-grow
+                  counter="50"
+                />
+              </v-col>
             </v-row>            
             <v-row>
               <v-col cols="2">備註</v-col>
-              <v-textarea
-                outlined
-                class="ml-3"
-                value=""
-                rows="4"
-                hide-details
-              />
+              <v-col cols="9">
+                <v-textarea
+                  outlined
+                  value=""
+                  rows="4"
+                  counter="50"
+                  auto-grow
+                />
+              </v-col>
             </v-row>
           </v-card-text>
 

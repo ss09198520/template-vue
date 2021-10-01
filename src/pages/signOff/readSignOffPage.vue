@@ -155,14 +155,6 @@
                 客戶來要求查詢當時申請項目
               </v-col>
             </v-row>
-            <v-row>
-              <v-col cols="3">
-                備註:
-              </v-col>
-              <v-col>
-                客戶已來抱怨兩次
-              </v-col>
-            </v-row>
           </v-card-text>
 
           <v-divider />

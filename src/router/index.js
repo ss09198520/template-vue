@@ -286,6 +286,19 @@ export const constantRoutes = [
         meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },
       {
+        path: 't-create',
+        name: 't-Marquee-Edit',
+        component: () => import('@/views/marquee/t-create'),
+        meta: { title: 't-跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
+      },
+      {
+        path: 't-calendarList',
+        name: 't-Marquee-List-Calendar',
+        component: () => import('@/views/marquee/t-calendar'),
+        hidden: true,
+        meta: { title: 't-跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
+      },
+      {
         path: 'calendarList',
         name: 'Marquee-List-Calendar',
         component: () => import('@/views/marquee/calendar'),

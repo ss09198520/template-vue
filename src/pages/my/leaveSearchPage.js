@@ -60,7 +60,7 @@ export default{
             if (this.selectIndex > -1) {
                 this.empMockList.splice(this.selectIndex, 1);
               }
-            MessageService.showSuccess("刪除請假成功✓");
+            MessageService.showSuccess("刪除代理申請紀錄");
             this.deleteLeaveModel = false;
             if(this.selectOne.leaveDataFrom == '差假管理系統'){
                 this.alertModel = true;

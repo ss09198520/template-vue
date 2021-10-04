@@ -10,11 +10,10 @@ export default {
           { text: '退件日期', value: 'returnDate', align: 'center' },
             { text: '主辦業務計劃員簽核時間', value: 'signOffDate1', align: 'center' },
             { text: '核算課長簽核時間', value: 'signOffDate2', align: 'center' },         
-            { text: '下載', value: 'download', align: 'center' },
-            { text: '簽核', value: 'signOff', align: 'center' }
+            { text: '下載', value: 'download', align: 'center' },            
         ],
         itemList: [
-            {signOff: false, returnDate: '2021/09/06 ~ 2021/09/12',  signOffDate1: '2021/09/17 13:00:26', signOffDate2: '2021/09/18 10:36:53', download: true},
+            {signOff: false, returnDate: '2021/09/06 ~ 2021/09/12',  signOffDate1: '2021/09/17 13:00:26', signOffDate2: '', download: true},
             {signOff: true, returnDate: '2021/09/13 ~ 2021/09/19',  signOffDate1: '', signOffDate2: '', download: true}
         ],
         dataListPage: 1,

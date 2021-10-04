@@ -118,12 +118,41 @@
               </v-tooltip>
               <span v-else style="color: gray;">已簽核</span>
             </template>
-            <template v-slot:item.signOffDate1="{ item }">
-              <span v-if="!item.signOffDate1" style="color: gray;">未簽核</span>
+
+            <template v-slot:item.signOffDate1="{ item }">              
+              <v-tooltip v-if="!item.signOffDate1" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-account-check-outline'" />
+                  </v-btn>
+                </template>
+                <span>簽核</span>
+              </v-tooltip>
               <span v-else>{{ item.signOffDate1 }}</span>
             </template>
+            
             <template v-slot:item.signOffDate2="{ item }">
-              <span v-if="!item.signOffDate2" style="color: gray;">未簽核</span>
+              <span v-if="!item.signOffDate2 && !item.signOffDate1" style="color: gray;">未簽核</span>
+              <v-tooltip v-else-if="!item.signOffDate2" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-account-check-outline'" />
+                  </v-btn>
+                </template>
+                <span>簽核</span>
+              </v-tooltip>
               <span v-else>{{ item.signOffDate2 }}</span>
             </template>    
             <template v-slot:item.download="{ item }">              

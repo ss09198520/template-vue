@@ -13,8 +13,8 @@ export default {
             { text: '下載', value: 'download', align: 'center' },            
         ],
         itemList: [
-            {signOff: false, returnDate: '2021/09/06 ~ 2021/09/12',  signOffDate1: '2021/09/17 13:00:26', signOffDate2: '', download: true},
-            {signOff: true, returnDate: '2021/09/13 ~ 2021/09/19',  signOffDate1: '', signOffDate2: '', download: true}
+            {signOff: false, returnDate: '2021-09-06 ~ 2021-09-12',  signOffDate1: '2021-09-17 13:00:26', signOffDate2: '', download: true},
+            {signOff: true, returnDate: '2021-09-13 ~ 2021-09-19',  signOffDate1: '', signOffDate2: '', download: true}
         ],
         dataListPage: 1,
         dataListPageCount: 1,

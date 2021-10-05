@@ -26,9 +26,9 @@ export default {
                 { text: '狀態操作', value: 'mani', align: 'center' }
              ],
              sealSignList:[
-                 {status:false,inquireStatus:'待簽核',orderId:'A00349',orderDate: '20210910 10:00',electNum:'7140000123',orderType:'APR0370',orderItems:'QA210軍眷用電申請優待', accntName:'劉艷艷', contractType:'包制', calDate:'20210909 11:21'},
-                 {status:false,inquireStatus:'待簽核',orderId:'A00389',orderDate: '20210908 10:00',electNum:'7140000128',orderType:'APR0200',orderItems:'I0510故障換表', accntName:'陳艷均', contractType:'包制', calDate:'20210909 11:21'},
-                 {status:true,inquireStatus:'套印完成',orderId:'A00389',orderDate: '20210908 10:00',electNum:'7140000128',orderType:'APR0200',orderItems:'I0510故障換表', accntName:'連文彥', contractType:'包制', calDate:'20210909 11:21'},
+                 {status:false,inquireStatus:'待簽核',orderId:'A00349',orderDate: '2021-09-10 10:00',electNum:'7140000123',orderType:'APR0370',orderItems:'QA210軍眷用電申請優待', accntName:'劉艷艷', contractType:'包制', calDate:'01'},
+                 {status:false,inquireStatus:'待簽核',orderId:'A00389',orderDate: '2021-09-08 10:00',electNum:'7140000128',orderType:'APR0200',orderItems:'I0510故障換表', accntName:'陳艷均', contractType:'包制', calDate:'12'},
+                 {status:true,inquireStatus:'套印完成',orderId:'A00389',orderDate: '2021-09-08 10:00',electNum:'7140000128',orderType:'APR0200',orderItems:'I0510故障換表', accntName:'連文彥', contractType:'包制', calDate:'10'},
                 ],
              sealSignListPageCount:0,
              sealSignListPage:1,

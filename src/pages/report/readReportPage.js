@@ -17,8 +17,8 @@ export default {
             
           ],
           itemList: [
-            {signOff: false, readMonth: '2021/08', signOffDate1: '2021/09/01 13:00:26', signOffDate2: '',signOffDate3: '', download: true},
-            {signOff: true, readMonth: '2021/09', signOffDate1: '', signOffDate2: '',signOffDate3: '', download: true}
+            {signOff: false, readMonth: '2021-08', signOffDate1: '2021-09-01 13:00:26', signOffDate2: '',signOffDate3: '', download: true},
+            {signOff: true, readMonth: '2021-09', signOffDate1: '', signOffDate2: '',signOffDate3: '', download: true}
           ],
           dataListPage: 1,
           dataListPageCount: 1,

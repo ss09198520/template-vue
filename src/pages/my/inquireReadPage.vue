@@ -568,7 +568,7 @@
             <v-row class="mt-3">
               <v-col cols="2">調閱日期</v-col>
               <v-col cols="3">
-                20210910 13:45
+                2021-09-10 13:45
               </v-col>
             </v-row>
             <v-row>

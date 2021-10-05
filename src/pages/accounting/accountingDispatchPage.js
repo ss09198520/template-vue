@@ -30,7 +30,7 @@ export default {
           checkingName: '葉星辰',
           settingUser: '1050334016', 
           settingUserName: '李小凡', 
-          settingDate: '2021/09/11 10:55:31', 
+          settingDate: '2021-09-11 10:55:31', 
           edit: true, 
           remove: true,
           dialogContent: {
@@ -69,7 +69,7 @@ export default {
           checkingName: '葉星辰',
           settingUser: '1050334016', 
           settingUserName: '李小凡', 
-          settingDate: '2021/09/11 10:57:13', 
+          settingDate: '2021-09-11 10:57:13', 
           edit: true, 
           remove: true,
           dialogContent: {
@@ -275,7 +275,7 @@ export default {
       
     },
     getDate() {
-      return new Date().getFullYear() + "/" + this.checkNeedZero(new Date().getMonth() + 1) + "/" + 
+      return new Date().getFullYear() + "-" + this.checkNeedZero(new Date().getMonth() + 1) + "-" + 
         this.checkNeedZero(new Date().getDate()) + " " + this.checkNeedZero(new Date().getHours()) + ":" + 
         this.checkNeedZero(new Date().getMinutes()) + ":" + this.checkNeedZero(new Date().getSeconds());
     },

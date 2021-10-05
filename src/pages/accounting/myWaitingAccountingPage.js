@@ -31,11 +31,11 @@ export default {
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
             itemList: [
-                {action: true, acceptNumber: 'A00028',agentCase:false,hasView:false,sortNo:'000700',dispatchDate:'20210910 10:00',electricNo:'91020122',accntName:'利小凡',calDate:'02',contractType:'表制',accumulatedDate:'3', acceptDate: '20210910 10:00', completeDate: '20210910 16:00',  acceptItem: 'QA210  軍眷用電申請優待'},
-                {action: true, acceptNumber: 'A00615',agentCase:true,hasView:false,sortNo:'000701',dispatchDate:'20210910 10:00',electricNo:'91020122',accntName:'陳和千',calDate:'05',contractType:'包制',accumulatedDate:'1', acceptDate: '20210909 11:21', completeDate: '20210909 15:21',  acceptItem: 'I0510  故障換表'},
-                {action: true, acceptNumber: 'A00040',agentCase:false,hasView:false,sortNo:'000702',dispatchDate:'20210910 10:00',electricNo:'91020122',accntName:'黎維成',calDate:'10',contractType:'表制',accumulatedDate:'4', acceptDate: '20210907 15:36', completeDate: '20210908 15:06', acceptItem: 'I0520  增加電表'},
-                {action: true, acceptNumber: 'A00605',agentCase:true,hasView:false,sortNo:'000703',dispatchDate:'20210910 10:00',electricNo:'91020122',accntName:'區立言',calDate:'16',contractType:'高壓',accumulatedDate:'3', acceptDate: '20210910 09:45', completeDate: '20210915 10:50',  acceptItem: 'F3030  表燈非時間電價停用廢止'},
-                {action: true, acceptNumber: 'A00619',agentCase:false,hasView:false,sortNo:'000704',dispatchDate:'20210910 10:00',electricNo:'91020122',accntName:'馮文卿',calDate:'01',contractType:'表制',accumulatedDate:'2', acceptDate: '20210910 13:44', completeDate: '20210910 15:26',  acceptItem: 'I0510  故障換表'}
+                {action: true, acceptNumber: 'A00028',agentCase:false,hasView:false,sortNo:'000700',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'利小凡',calDate:'02',contractType:'表制',accumulatedDate:'3', acceptDate: '2021-09-10 10:00', completeDate: '2021-09-10 16:00',  acceptItem: 'QA210  軍眷用電申請優待'},
+                {action: true, acceptNumber: 'A00615',agentCase:true,hasView:false,sortNo:'000701',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'陳和千',calDate:'05',contractType:'包制',accumulatedDate:'1', acceptDate: '2021-09-09 11:21', completeDate: '2021-09-09 15:21',  acceptItem: 'I0510  故障換表'},
+                {action: true, acceptNumber: 'A00040',agentCase:false,hasView:false,sortNo:'000702',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'黎維成',calDate:'10',contractType:'表制',accumulatedDate:'4', acceptDate: '2021-09-07 15:36', completeDate: '2021-09-08 15:06', acceptItem: 'I0520  增加電表'},
+                {action: true, acceptNumber: 'A00605',agentCase:true,hasView:false,sortNo:'000703',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'區立言',calDate:'16',contractType:'高壓',accumulatedDate:'3', acceptDate: '2021-09-10 09:45', completeDate: '2021-09-15 10:50',  acceptItem: 'F3030  表燈非時間電價停用廢止'},
+                {action: true, acceptNumber: 'A00619',agentCase:false,hasView:false,sortNo:'000704',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'馮文卿',calDate:'01',contractType:'表制',accumulatedDate:'2', acceptDate: '2021-09-10 13:44', completeDate: '2021-09-10 15:26',  acceptItem: 'I0510  故障換表'}
             ],
             dataListPage: 1,
             dataListPageCount: 1,

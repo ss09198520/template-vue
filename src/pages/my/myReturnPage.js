@@ -32,8 +32,8 @@ export default {
                 { text: '狀態操作', value: 'action', align: 'center',sortable: false, }
             ],
             caseList: [
-                {action: true, remain: true, cancel: true, view: true, acceptNumber: 'A00028', contractType: "表制", electricNo:'0120123223', accntName:"余文文", computeDate: '01', returnDate: '20210910 15:00', reason: '證件不清楚', desc: '現役軍人眷屬身分證圖片不清楚，須補證件', acceptItem: 'QA210  軍眷用電申請優待', acceptName: '李小凡',returner:'陳麗杉'},
-                {action: true, remain: true, cancel: true, view: true, acceptNumber: 'A00633', contractType: "包制", electricNo:'0120123222', accntName:"陳詩宇", computeDate: '05', returnDate: '20210910 16:45', reason: '佐證文件不足', desc: '須提供XXX佐證文件', acceptItem: 'F3030  表燈非時間電價停用廢止', acceptName: '葉星辰',returner:'林雯雯'}
+                {action: true, remain: true, cancel: true, view: true, acceptNumber: 'A00028', contractType: "表制", electricNo:'0120123223', accntName:"余文文", computeDate: '01', returnDate: '2021-09-10 15:00', reason: '證件不清楚', desc: '現役軍人眷屬身分證圖片不清楚，須補證件', acceptItem: 'QA210  軍眷用電申請優待', acceptName: '李小凡',returner:'陳麗杉'},
+                {action: true, remain: true, cancel: true, view: true, acceptNumber: 'A00633', contractType: "包制", electricNo:'0120123222', accntName:"陳詩宇", computeDate: '05', returnDate: '2021-09-10 16:45', reason: '佐證文件不足', desc: '須提供XXX佐證文件', acceptItem: 'F3030  表燈非時間電價停用廢止', acceptName: '葉星辰',returner:'林雯雯'}
             ],
             multiMediaHeaders: [
                 { text: '送件編號', value: 'sendNumber', align: 'center' },
@@ -47,9 +47,9 @@ export default {
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
             multiMediaList: [
-                { action: true, edit: true, cancel: true, sendNumber: 'M00001', returnDate: '20210910 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '跑馬燈', acceptUser: '1050330001', acceptName: '林美美',returner:'甘仙文' },
-                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '20210910 15:00', reason: '影片、圖片錯誤', desc: '文字錯誤請重新修改', sendItem: '節目單', acceptUser: '1050330002', acceptName: '王曉花',returner:'駱文成' },
-                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '20210910 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '滿意度調查', acceptUser: '1050330003', acceptName: '李小凡',returner:'蔡又新' }
+                { action: true, edit: true, cancel: true, sendNumber: 'M00001', returnDate: '2021-09-10 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '跑馬燈', acceptUser: '1050330001', acceptName: '林美美',returner:'甘仙文' },
+                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '影片、圖片錯誤', desc: '文字錯誤請重新修改', sendItem: '節目單', acceptUser: '1050330002', acceptName: '王曉花',returner:'駱文成' },
+                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '滿意度調查', acceptUser: '1050330003', acceptName: '李小凡',returner:'蔡又新' }
             ],
             caseListPage: 1,
             caseListPageCount: 1,
@@ -65,9 +65,9 @@ export default {
             supplementModel: false,
             formRecordModel: false, // 表單歷程視窗開關
             formRecordList:[
-                {record:'2021/09/14 14:20:14 退件中 (0151230020 吳靜)'},
-                {record:'2021/09/14 13:50:14 核算分派 (0151230001 陳婷婷)'},
-                {record:'2021/09/14 13:20:14 案件成立 (0151230011 鍾書文)'},
+                {record:'2021-09-14 14:20:14 退件中 (0151230020 吳靜)'},
+                {record:'2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)'},
+                {record:'2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)'},
 
             ],
             department:null,

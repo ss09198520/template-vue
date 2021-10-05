@@ -104,7 +104,7 @@
                 申請調閱日期:
               </v-col>
               <v-col>
-                20210915 10:00
+                2021-09-15 10:00
               </v-col>
             </v-row>
             <v-row>
@@ -153,14 +153,6 @@
               </v-col>
               <v-col>
                 客戶來要求查詢當時申請項目
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="3">
-                備註:
-              </v-col>
-              <v-col>
-                客戶已來抱怨兩次
               </v-col>
             </v-row>
           </v-card-text>
@@ -235,7 +227,7 @@
                 />
               </v-col>
             </v-row>
-            <v-row class="ml-1" align="center">
+            <v-row class="ml-1">
               <v-col cols="3">
                 退件說明
               </v-col>
@@ -246,7 +238,7 @@
                   name="input-7-4"
                   :no-resize="true"
                   placeholder="請輸入退件說明"
-                  hide-details
+                  counter="50"
                 />
               </v-col>
             </v-row>

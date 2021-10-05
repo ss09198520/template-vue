@@ -99,10 +99,28 @@
             class="elevation-1"
             disable-sort
             @page-count="dataListPageCount = $event"
-          >
-            <template v-slot:item.signOff="{ item }">
-              <!-- <v-btn v-if="item.signOff" color="success">{{ signOffText }}</v-btn> -->
-              <v-tooltip v-if="item.signOff" top>
+          >            
+            <template v-slot:item.signOffDate1="{ item }">              
+              <v-tooltip v-if="!item.signOffDate1" style="color: gray;" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-account-check-outline'" />
+                  </v-btn>
+                </template>
+                <span>簽核</span>
+              </v-tooltip>                
+              <span v-else>{{ item.signOffDate1 }}</span>
+            </template>
+
+            <template v-slot:item.signOffDate2="{ item }">                            
+              <span v-if="!item.signOffDate1 && !item.signOffDate2">未簽核</span>  
+              <v-tooltip v-else-if="!item.signOffDate2" style="color: gray;" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -116,16 +134,28 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else style="color: gray;">已簽核</span>
-            </template>
-            <template v-slot:item.signOffDate1="{ item }">
-              <span v-if="!item.signOffDate1" style="color: gray;">未簽核</span>
-              <span v-else>{{ item.signOffDate1 }}</span>
-            </template>
-            <template v-slot:item.signOffDate2="{ item }">
-              <span v-if="!item.signOffDate2" style="color: gray;">未簽核</span>
               <span v-else>{{ item.signOffDate2 }}</span>
             </template>
+
+            <template v-slot:item.signOffDate3="{ item }">                            
+              <span v-if="!item.signOffDate2 && !item.signOffDate3">未簽核</span>  
+              <v-tooltip v-else-if="!item.signOffDate3" style="color: gray;" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-account-check-outline'" />
+                  </v-btn>
+                </template>
+                <span>簽核</span>
+              </v-tooltip>
+              <span v-else>{{ item.signOffDate3 }}</span>
+            </template>
+
             <template v-slot:item.download="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">

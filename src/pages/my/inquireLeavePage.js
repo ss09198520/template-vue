@@ -17,7 +17,7 @@ export default {
             endDate: '',
             status: '請假中',
             agent: '代理人  1050334015 王大明',
-            nextLeave: '2021/10/12 08:00 - 18:00',
+            nextLeave: '2021-10-12 08:00 ~ 2021-10-12 18:00',
             nextLeaveAgent: '1050334018	 趙元智',
             startHour: null,            
             startMin:null,

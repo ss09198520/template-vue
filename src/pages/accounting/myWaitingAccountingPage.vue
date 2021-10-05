@@ -79,6 +79,28 @@
             />
           </v-col>     
         </v-row>
+        <v-row align="center">
+          <v-col cols="1">
+            代理件顯示       
+          </v-col>          
+          <v-col
+            cols="3"
+          >
+            <v-select
+              v-model="agentCase"
+              :items="agentCaseOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              :clearable="true"
+              class="my-auto"
+              color="#ADADAD"
+            />
+          </v-col>    
+        </v-row>
         <v-row>
           <v-col cols="11" />
           <v-col>
@@ -114,6 +136,18 @@
               hide-default-footer
               @page-count="dataListPageCount = $event"
             >
+
+              <template v-slot:item.agentCase="{ item }"> 
+                <div             
+                  v-if="item.agentCase"
+                  class="ma-2"
+                  icon
+                >
+                  <v-icon>
+                    mdi-check-bold
+                  </v-icon>
+                </div>       
+              </template>
               <template v-slot:item.action="{ item }">              
                 <v-tooltip v-if="User=='auditer'" top>
                   <template v-slot:activator="{ on }">

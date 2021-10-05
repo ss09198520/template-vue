@@ -53,11 +53,11 @@ export default{
                 { text: '狀態操作', value: 'mani', align: 'center' }
             ],
             empMockList: [                
-                { mani: true, orderId: 'A00024',accntName:'吳小花',contractType:'高壓',sortNo:'000300', electNum: '7140000123', orderDate:'20210910 10:00', achieveDate:'20210915 10:00',  orderItems:'QA210軍眷用電申請優待'},
-                { mani: true, orderId: 'A00615',accntName:'虞小寒',contractType:'包制',sortNo:'000301', electNum: '7140000456', orderDate:'20210909 11:21', achieveDate:'20210915 11:21',  orderItems:'I0510故障換表'},
-                { mani: true, orderId: 'A00040',accntName:'孔維祥',contractType:'表制',sortNo:'000302', electNum: '7140000789', orderDate:'20210907 15:36', achieveDate:'20210915 15:36',  orderItems:'I0520增加電表'},
-                { mani: true, orderId: 'A00605',accntName:'文易席',contractType:'高壓',sortNo:'000303', electNum: '7140000888', orderDate:'20210910 09:45', achieveDate:'20210915 09:45',  orderItems:'F3030表燈非時間電價停用廢止'},
-                { mani: true, orderId: 'A00619',accntName:'許慧貞',contractType:'包制',sortNo:'000304', electNum: '7140000999', orderDate:'20210910 13:44', achieveDate:'20210915 13:44',  orderItems:'I0510故障換表'},
+                { mani: true, orderId: 'A00024',accntName:'吳小花',contractType:'高壓',sortNo:'000300', electNum: '7140000123', orderDate:'2021-09-10 10:00', achieveDate:'2021-09-15 10:00',  orderItems:'QA210軍眷用電申請優待'},
+                { mani: true, orderId: 'A00615',accntName:'虞小寒',contractType:'包制',sortNo:'000301', electNum: '7140000456', orderDate:'2021-09-09 11:21', achieveDate:'2021-09-15 11:21',  orderItems:'I0510故障換表'},
+                { mani: true, orderId: 'A00040',accntName:'孔維祥',contractType:'表制',sortNo:'000302', electNum: '7140000789', orderDate:'2021-09-07 15:36', achieveDate:'2021-09-15 15:36',  orderItems:'I0520增加電表'},
+                { mani: true, orderId: 'A00605',accntName:'文易席',contractType:'高壓',sortNo:'000303', electNum: '7140000888', orderDate:'2021-09-10 09:45', achieveDate:'2021-09-15 09:45',  orderItems:'F3030表燈非時間電價停用廢止'},
+                { mani: true, orderId: 'A00619',accntName:'許慧貞',contractType:'包制',sortNo:'000304', electNum: '7140000999', orderDate:'2021-09-10 13:44', achieveDate:'2021-09-15 13:44',  orderItems:'I0510故障換表'},
             ],
             //日曆起(受理日期)
             menu1: false,

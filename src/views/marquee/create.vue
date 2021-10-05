@@ -257,10 +257,6 @@
                 <!-- <v-color-picker v-model="color" /> -->
                 <marquee-text
                   :duration="animationDuration"
-                  :background-color="backgroundColor"
-                  :font-color="fontColor"
-                  :font-weight=" !!fontBold ? 'bold':''"
-                  :font-italic=" !!fontItalic ? 'italic':'normal'"
                   :repeat="1"
                 >
                   {{ marqueeText }}
@@ -362,23 +358,18 @@
         releaseStartDate: '',
         releaseEndDateMenu: false,
         releaseEndDate: '',
-        fontColor: '#000000FF',
-        backgroundColor: '#38CEA3FF',
-        fontBold: false,
-        fontItalic: false,
         menu: false,
         menu1: false,
-        dateMenu: false,
         dense: false,
         noGutters: false,
         hideDatails: false,
         snackbar: false,
-        basicStyle : {
-          cursor: 'pointer',
-          height: '20px',
-          width: '20px',
-          transition: 'border-radius 200ms ease-in-out'
-        },
+        // basicStyle : {
+        //   cursor: 'pointer',
+        //   height: '20px',
+        //   width: '20px',
+        //   transition: 'border-radius 200ms ease-in-out'
+        // },
         rules: {
           requiredRule: [v => !!v || '此欄位為必填欄位'],
           lengthRules: [v => (v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
@@ -391,21 +382,21 @@
       animationDuration() {
         return 600 / this.duration
       },
-      backgroundStyle() {
-        const { backgroundColor, menu1 } = this
-        return Object.assign({
-          backgroundColor: backgroundColor,
-          borderRadius: menu1 ? '4px' : '50%',
-        }, this.basicStyle)
-      },
-      fontStyle() {
-        const { fontColor, menu } = this
-        return Object.assign({
-          backgroundColor: fontColor,
+      // backgroundStyle() {
+      //   const { backgroundColor, menu1 } = this
+      //   return Object.assign({
+      //     backgroundColor: backgroundColor,
+      //     borderRadius: menu1 ? '4px' : '50%',
+      //   }, this.basicStyle)
+      // },
+      // fontStyle() {
+      //   const { fontColor, menu } = this
+      //   return Object.assign({
+      //     backgroundColor: fontColor,
           
-          borderRadius: menu ? '50%' : '4px',
-        }, this.basicStyle)
-      },
+      //     borderRadius: menu ? '50%' : '4px',
+      //   }, this.basicStyle)
+      // },
     },
     methods: {
       getParentRouteName() {

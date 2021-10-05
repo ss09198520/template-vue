@@ -1,15 +1,13 @@
 <template>
-  <div class="container" :style="{width:containerWidth}">
-    <quill-editor
-      :id="quillId"
-      ref="vueQuillEditor"
-      v-model="content"
-      :options="editorOption" 
-      @blur="onEditorBlur($event)"
-      @focus="onEditorFocus($event)"
-      @change="onEditorChange($event)"
-    />
-  </div>
+  <quill-editor
+    :id="quillId"
+    ref="vueQuillEditor"
+    v-model="content"
+    :options="editorOption" 
+    @blur="onEditorBlur($event)"
+    @focus="onEditorFocus($event)"
+    @change="onEditorChange($event)"
+  />
 </template>
 
 <script>
@@ -36,16 +34,6 @@ export default {
       type: String,
       default: ''
     },
-    height: {
-      type: [Number, String],
-      required: false,
-      default: 360
-    },
-    width: {
-      type: [Number, String],
-      required: false,
-      default: 'auto'
-    }
   },
   data() {
     return {
@@ -66,13 +54,6 @@ export default {
     }
   },
   computed: {
-    containerWidth() {
-      const width = this.width
-      if (/^[\d]+(\.[\d]+)?$/.test(width)) { // matches `100`, `'100'`
-        return `${width}px`
-      }
-      return width
-    },
     editor() {
       return this.$refs.vueQuillEditor.quill;
     },
@@ -92,8 +73,6 @@ export default {
     // 值發生變化
     onEditorChange(editor) {
       this.$emit('change', editor.html );
-      console.log(editor);
-      console.log(editor.html);
     },
   }
 }

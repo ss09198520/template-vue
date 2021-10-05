@@ -24,7 +24,7 @@
               outlined
               hide-details                                         
               dense
-              placeholder="請輸入受理編號"
+              placeholder="請輸入受理號碼"
             />
           </v-col>
           <v-col cols="1" />
@@ -53,7 +53,7 @@
               outlined
               hide-details                                         
               dense
-              placeholder="請輸入整理編號"
+              placeholder="請輸入整理號碼"
             />
           </v-col>
         </v-row>

@@ -47,7 +47,7 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              跑 馬 燈 類 型
+              狀態
             </v-col>
             <v-col cols="3">
               <v-select

@@ -68,13 +68,12 @@ export const constantRoutes = [
   },
   {
     path: '/',
-    name: 'HomePage',
     component: Layout,
     hidden: true,
     meta: { title: '首頁', icon: 'mdi-cloud-upload' },    
     children: [
       {
-      path: '',      
+      path: '',
       component: () => import('@/pages/homePage.vue'),
       meta: { title: '首頁', icon: 'mdi-cloud-upload', },
       }
@@ -208,7 +207,7 @@ export const constantRoutes = [
       },
       {
         path: 'satisfyReport/search',
-        name: 'Satisfaction-Report-Monthly',
+        name: 'Satisfaction-Report',
         component: () => import('@/views/satisfaction/report'),
         meta: { title: '滿意度報表', icon: 'mdi-clipboard-search' }
       },

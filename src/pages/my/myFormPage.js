@@ -32,21 +32,21 @@ export default{
                 { text: '狀態操作', value: 'mani', align: 'center' }
             ],
             empMockList: [                
-                { mani: true, orderId: 'A00024',accntName: '劉艷艷',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210910 10:00', orderStatus:'受理中', orderType:'APR0370', orderItems:'QA210軍眷用電申請優待', proxyEvent:true,eventAgent:'王大明'},
-                { mani: false, orderId: 'A00615',accntName: '劉齊民',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210909 11:21', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0510故障換表', proxyEvent:'',eventAgent:''},
-                { mani: false, orderId: 'A00040',accntName: '陳艷均',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210907 15:36', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0520增加電表', proxyEvent:'',eventAgent:''},
-                { mani: true, orderId: 'A00605',accntName: '王筱涵',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210910 09:45', orderStatus:'受理中', orderType:'APR0160', orderItems:'F3030表燈非時間電價停用廢止', proxyEvent:'',eventAgent:''},
-                { mani: false, orderId: 'A00619',accntName: '連文彥',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210910 13:44', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0510故障換表', proxyEvent:'',eventAgent:''},
+                { mani: true, orderId: 'A00024',accntName: '劉艷艷',eletricNo:'000123',contractType:'包制',calDate:'2021-09-09 11:21', orderDate: '2021-09-10 10:00', orderStatus:'受理中', orderType:'APR0370', orderItems:'QA210軍眷用電申請優待', proxyEvent:true,eventAgent:'王大明'},
+                { mani: false, orderId: 'A00615',accntName: '劉齊民',eletricNo:'000123',contractType:'包制',calDate:'2021-09-09 11:21', orderDate: '2021-09-09 11:21', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0510故障換表', proxyEvent:'',eventAgent:''},
+                { mani: false, orderId: 'A00040',accntName: '陳艷均',eletricNo:'000123',contractType:'包制',calDate:'2021-09-09 11:21', orderDate: '2021-09-07 15:36', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0520增加電表', proxyEvent:'',eventAgent:''},
+                { mani: true, orderId: 'A00605',accntName: '王筱涵',eletricNo:'000123',contractType:'包制',calDate:'2021-09-09 11:21', orderDate: '2021-09-10 09:45', orderStatus:'受理中', orderType:'APR0160', orderItems:'F3030表燈非時間電價停用廢止', proxyEvent:'',eventAgent:''},
+                { mani: false, orderId: 'A00619',accntName: '連文彥',eletricNo:'000123',contractType:'包制',calDate:'2021-09-09 11:21', orderDate: '2021-09-10 13:44', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0510故障換表', proxyEvent:'',eventAgent:''},
             ],
             selectIndex: null,
             browserModel: false, // 瀏覽案件視窗開關
             supplementModel: false, // 補件操作視窗開關
             formRecordModel: false, // 表單歷程視窗開關
             formRecordList:[
-                {record:'2021/09/14 14:20:14 待歸檔 (0151230020 吳靜)'},
-                {record:'2021/09/14 14:20:14 審核通過 (0151230020 吳靜)'},
-                {record:'2021/09/14 13:50:14 核算分派 (0151230001 陳婷婷)'},
-                {record:'2021/09/14 13:20:14 案件成立 (0151230011 鍾書文)'},
+                {record:'2021-09-14 14:20:14 待歸檔 (0151230020 吳靜)'},
+                {record:'2021-09-14 14:20:14 審核通過 (0151230020 吳靜)'},
+                {record:'2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)'},
+                {record:'2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)'},
 
             ],
             department:null,

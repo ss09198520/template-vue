@@ -204,11 +204,11 @@
                       </v-col> 
                                            
                     </v-row>
-                    <v-row v-if="mode == 'view' || mode == 'edit'">
+                    <v-row>
                       <v-col cols="12" class="d-center">
                         <v-checkbox 
                           v-model="attachment.useStamp" 
-                          :disabled="mode != 'edit'"
+                          :disabled="mode != 'edit' || mode == 'view'"
                           class="mt-0" 
                           label="套印專用章" 
                           color="success" 

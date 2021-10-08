@@ -7,7 +7,7 @@
             <div class="text-center block-title fw-6 mb-2">案件退件</div>
           </div>
           <div>
-            <div class="block-content"><span class="block-number">{{ caseReturnCount }}</span>件</div>
+            <div class="block-content"><span class="block-number">{{ numberOfReject }}</span>件</div>
           </div>
         </div>
       </div>
@@ -25,16 +25,17 @@
             class="elevation-1"
             @page-count="caseListPageCount = $event"
           >
-            <template v-slot:item.acceptNumber="{ item }"> 
+            <template v-slot:item.acceptNum="{ item }"> 
               <v-tooltip top>
                 <template v-slot:activator="{ on }">        
-                  <a href="javascript:void(0)" style="text-decoration:underline;" @click="openFormRecord()" v-on="on">{{ item.acceptNumber }}</a>
+                  <a href="javascript:void(0)" style="text-decoration:underline;" @click="openFormHistory(item)" v-on="on">{{ item.acceptNum }}</a>
                 </template>
                 <span>表單歷程</span>
               </v-tooltip>
             </template>
             <template v-slot:item.action="{ item }">
-              <v-tooltip v-if="item.remain" top>
+              <v-tooltip top>
+                <!-- <v-tooltip v-if="item.remain" top> -->
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -49,7 +50,8 @@
                 </template>
                 <span>補件操作</span>
               </v-tooltip>
-              <v-tooltip v-if="item.view" top>
+              <v-tooltip top>
+                <!-- <v-tooltip v-if="item.view" top> -->
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -82,7 +84,7 @@
             <div class="text-center block-title fw-6 mb-2">多媒體退件</div>
           </div>
           <div>
-            <div class="block-content"><span class="block-number">{{ multiMediaReturnCount }}</span>件</div>
+            <div class="block-content"><span class="block-number">{{ multimediaReject }}</span>件</div>
           </div>
         </div>
       </div>
@@ -103,7 +105,7 @@
             <template v-slot:item.sendNumber="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">        
-                  <a href="javascript:void(0)" style="text-decoration:underline;" @click="openFormRecord()" v-on="on">{{ item.sendNumber }}</a>
+                  <a href="javascript:void(0)" style="text-decoration:underline;" @click="openFormHistory()" v-on="on">{{ item.sendNumber }}</a>
                 </template>
                 <span>表單歷程</span>
               </v-tooltip>
@@ -216,7 +218,7 @@
           <v-card-actions class="d-end mt-5">
             <v-btn              
               color="primary"            
-              @click="checkSubmit()"
+              @click="browserModel = false"
             >
               &emsp;確定&emsp;
             </v-btn>
@@ -249,7 +251,7 @@
       </v-dialog>
       <!-- 表單歷程視窗 -->
       <v-dialog
-        v-model="formRecordModel"
+        v-model="formHistoryModel"
         max-width="700px"
       >
         <v-card>
@@ -261,22 +263,22 @@
               icon
               small
               text
-              @click="formRecordModel = false"
+              @click="formHistoryModel = false"
             >
               <v-icon> mdi-close </v-icon>
             </v-btn>
           </v-card-title>
           <v-card-text class="mt-10 font-22px">
             <div>
-              <v-row v-for="(item,index) in formRecordList" :key="index" class="mt-5">
-                {{ item.record }}
+              <v-row v-for="(item,index) in formHistoryList" :key="index" class="mt-5">
+                {{ item }}
               </v-row>
             </div>
           </v-card-text>
           <v-card-actions class="d-end mt-5">
             <v-btn              
               color="primary"
-              @click="formRecordModel = false"
+              @click="formHistoryModel = false"
             >
               確認
             </v-btn>

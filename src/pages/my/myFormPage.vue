@@ -50,8 +50,8 @@
       no-data-text="查無資料"
       hide-default-footer
       class="elevation-1 ml-4"
-      :page.sync="orderListPage"
-      @page-count="orderListPageCount = $event"
+      :page.sync="formListPage"
+      @page-count="formListPageCount = $event"
     >
       <!-- 受理編號 -->
       <template v-slot:item.acceptNum="{ item }">   
@@ -113,9 +113,9 @@
     </v-data-table>                 
     <div class="mt-2">
       <v-pagination
-        v-model="orderListPage"
+        v-model="formListPage"
         color="#2F59C4"
-        :length="orderListPageCount"
+        :length="formListPageCount"
       />
     </div>
     <!-- 瀏覽案件 -->

@@ -14,9 +14,9 @@ export default{
             //預設受理類型按鈕
             displayAll: true,
             //預設當前頁數
-            orderListPage: 1,
+            formListPage: 1,
             //預設總頁數
-            orderListPageCount: 0,
+            formListPageCount: 0,
             formListHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
@@ -36,6 +36,7 @@ export default{
             oriFormList:[], // 原始資料
             formList: [                
                 { 
+                    seq:1,
                     acceptNum: 'A00024',
                     custName: '劉艷艷',
                     eletricNum:'000123',
@@ -53,6 +54,7 @@ export default{
                     ],
                 },
                 { 
+                    seq:12,
                     acceptNum: 'A00615',
                     custName: '劉齊民',
                     eletricNum:'000123',
@@ -69,6 +71,7 @@ export default{
                     ],
                 },
                 { 
+                    seq:23,
                     acceptNum: 'A00040',
                     custName: '陳艷均',
                     eletricNum:'000123',
@@ -87,7 +90,8 @@ export default{
                         '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
                     ],
                 },
-                {                     
+                {               
+                    seq:27,      
                     acceptNum: 'A00605',
                     custName: '王筱涵',
                     eletricNum:'000123',
@@ -106,6 +110,7 @@ export default{
                     ],
                 },
                 { 
+                    seq:34,
                     acceptNum: 'A00619',
                     custName: '連文彥',
                     eletricNum:'000123',

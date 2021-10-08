@@ -83,18 +83,6 @@
                       </v-col>
                     </v-row>
                     <v-row>
-                      <v-col cols="12" class="d-center">
-                        <v-checkbox 
-                          v-model="certificate.isIdCard" 
-                          :disabled="mode != 'edit'"
-                          class="mt-0" 
-                          label="本人身分證" 
-                          color="success" 
-                          hide-details
-                        />
-                      </v-col>
-                    </v-row>
-                    <v-row>
                       <v-col v-if="mode == 'edit'" cols="6" class="t-center">
                         <v-btn v-if="certificate.isAdditional" depressed color="error" @click="deleteCertificate(index)">
                           刪除
@@ -553,7 +541,7 @@
       </v-row>
       <v-row v-if="mode == 'edit'">
         <v-col cols="12" class="t-right">
-          <v-btn depressed large color="success" @click="save()">
+          <v-btn depressed large color="success" @click="saveFile()">
             <span style="font-size: 18px">儲存</span>
             <v-icon
               right

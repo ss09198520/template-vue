@@ -243,7 +243,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <form-page restrict-mode="edit" />
+            <form-page restrict-mode="edit" @saveFile="saveFile()" />
           </v-card-text>
         </v-card>
       </v-dialog>

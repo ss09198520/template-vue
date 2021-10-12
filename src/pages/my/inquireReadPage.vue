@@ -230,15 +230,15 @@
           <v-row>
             <v-col>
               <v-data-table
-                :headers="empListHeaders"
-                :items="empMockList"
+                :headers="readFormHeaders"
+                :items="readFormList"
                 :items-per-page="10"
                 no-data-text="查無資料"              
                 disable-sort
                 hide-default-footer
                 class="elevation-1"
-                :page.sync="applyListPage"
-                @page-count="applyListPageCount = $event"
+                :page.sync="readFormListPage"
+                @page-count="readFormListPageCount = $event"
               >
                 <template v-slot:item.mani="{ item }">   
                   <div v-if="item.mani==true">
@@ -278,9 +278,9 @@
           <!-- 選頁 -->
           <div class="mt-2">
             <v-pagination
-              v-model="applyListPage"
+              v-model="readFormListPage"
               color="#2F59C4"
-              :length="applyListPageCount"
+              :length="readFormListPageCount"
             />
           </div>
         </div>           
@@ -313,8 +313,8 @@
               <v-col cols="2">調閱對象</v-col>
               <v-col cols="9">
                 <v-select
-                  v-model="setMember"                
-                  :items="memberOption"
+                  v-model="readAudience"                
+                  :items="readAudienceOpt"
                   outlined
                   hide-details
                   dense
@@ -329,26 +329,30 @@
                   dense
                   placeholder="請輸入調閱對象"
                 /> -->
+                <span v-if="errMsg.readAudience" class="red--text">{{ errMsg.readAudience }}</span>
               </v-col>
             </v-row>
             <v-row align="center">
               <v-col cols="2">調閱事由</v-col>
               <v-col cols="9">
                 <v-select
-                  v-model="setReason"                
-                  :items="reasonOption"
+                  v-model="readReason"                
+                  :items="readReasonOpt"
                   outlined
                   hide-details
                   dense
                   placeholder="請選擇調閱事由"
                   return-object
+                  item-text="reason"
                 />
+                <span class="red--text"> {{ errMsg.readReason }}</span>
               </v-col>
             </v-row>
             <v-row align="center">
               <v-col cols="2">其他事由</v-col>
               <v-col cols="9">
                 <v-textarea
+                  v-model="otherReason"
                   outlined                  
                   value=""
                   auto-grow
@@ -488,15 +492,15 @@
           <v-row>                    
             <v-col>
               <v-data-table
-                :headers="empListHeaders"
-                :items="empMockList"
+                :headers="readFormHeaders"
+                :items="readFormList"
                 :items-per-page="10"
                 no-data-text="查無資料"              
                 disable-sort
                 hide-default-footer
                 class="elevation-1"
-                :page.sync="applyListPage"
-                @page-count="applyListPageCount = $event"
+                :page.sync="readFormListPage"
+                @page-count="readFormListPageCount = $event"
               >
                 <template v-slot:item.mani="{ item }">   
                   <div v-if="item.mani==true">
@@ -536,9 +540,9 @@
           <!-- 選頁 -->
           <div class="mt-2">
             <v-pagination
-              v-model="applyListPage"
+              v-model="readFormListPage"
               color="#2F59C4"
-              :length="applyListPageCount"
+              :length="readFormListPageCount"
             />
           </div>
         </div>                                       
@@ -567,38 +571,39 @@
           <v-card-text>
             <v-row class="mt-3">
               <v-col cols="2">調閱日期</v-col>
-              <v-col cols="3">
-                2021-09-10 13:45
+              <v-col>
+                {{ readDate }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">調閱編號</v-col>
               <v-col cols="3">
-                7110000001
+                {{ readNum }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">受理號碼</v-col>
               <v-col cols="3">
-                A00040
+                {{ selectForm.acceptNum }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">電號</v-col>
               <v-col cols="3">
-                7140000123
+                {{ selectForm.electricNum }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">整理號碼</v-col>
               <v-col cols="3">
-                000300
+                {{ selectForm.archieveNum }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">調閱事由</v-col>
               <v-col cols="9">
                 <v-textarea
+                  v-model="readReason"
                   outlined
                   value=""
                   rows="4"
@@ -611,6 +616,7 @@
               <v-col cols="2">備註</v-col>
               <v-col cols="9">
                 <v-textarea
+                  v-model="memo"
                   outlined
                   value=""
                   rows="4"

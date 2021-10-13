@@ -10,7 +10,7 @@
               fab
               small
               :class="{'primary': displayAll}"
-              @click="displayAll = true"
+              @click="display()"
               v-on="on"
             >
               <v-icon v-text="'mdi-text-box-multiple-outline'" />
@@ -25,7 +25,7 @@
               fab
               small
               :class="{'primary': !displayAll}"
-              @click="displayAll = false"
+              @click="displayWaitToSign()"
               v-on="on"
             >
               <v-icon v-text="'mdi-text-box-search-outline'" />
@@ -46,6 +46,7 @@
             hide-default-footer
             class="elevation-1"
             :page.sync="sealSignListPage"
+            :search="waitToSign"
             @page-count="sealSignListPageCount = $event"
           >
             <template v-slot:item.mani="{ item }">   

@@ -271,7 +271,7 @@
                           fab
                           small
                           color="success"
-                          @click="search(item)"
+                          @click="applyRead(item)"
                           v-on="on"
                         >
                           <v-icon v-text="'mdi-eye-plus'" />

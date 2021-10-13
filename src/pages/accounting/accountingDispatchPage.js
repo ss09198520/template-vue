@@ -103,7 +103,7 @@ export default {
       dialog: false,
       dialogType: 'add',
       dialogTitle: '新增派工',
-      employeeList: ['1050334016 李小凡', '1050434017 葉星辰', '1050434018 王大明', '1050434019 李阿貴'],
+      employeeList: ['李小凡', '葉星辰', '王大明', '李阿貴'],
       dataListPage: 1,
       dataListPageCount: 1,
       // 新增/修改 Modal 內容
@@ -233,8 +233,8 @@ export default {
       // 把選取的派工資訊放到 dialog 上
       this.dialogContent = item.dialogContent;
       this.dialogContent.class = item.class;
-      this.dialogContent.accountingName = item.accounting + " " + item.accountingName;
-      this.dialogContent.checkingName = item.checking + " " + item.checkingName;
+      this.dialogContent.accountingName =  item.accountingName;
+      this.dialogContent.checkingName = item.checkingName;
       // 記下這次修改的 item
       this.editIndex = this.itemList.indexOf(item);
       // 切換 dialog 模式

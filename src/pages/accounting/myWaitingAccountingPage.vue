@@ -45,6 +45,35 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
+            戶名       
+          </v-col>          
+          <v-col
+            cols="3"
+          >            
+            <v-text-field                  
+              outlined
+              hide-details
+              dense
+              placeholder="請輸入戶名"
+            />
+          </v-col>
+          <v-col cols="1" />
+          <v-col cols="1">
+            待核算累積日數
+          </v-col>                                             
+          <v-col
+            cols="3"
+          >
+            <v-text-field                           
+              outlined
+              hide-details
+              dense
+              placeholder="請輸入待核算累積日數"
+            />
+          </v-col>     
+        </v-row>
+        <v-row align="center">
+          <v-col cols="1">
             計算日       
           </v-col>          
           <v-col
@@ -62,6 +91,7 @@
               :clearable="true"
               class="my-auto"
               color="#ADADAD"
+              placeholder="請選擇計算日"
             />
           </v-col>
           <v-col cols="1" />
@@ -76,6 +106,62 @@
               hide-details
               dense
               placeholder="請輸入整理號碼"
+            />
+          </v-col>     
+        </v-row>
+        <v-row align="center">
+          <v-col cols="1">
+            派工日期       
+          </v-col>          
+          <v-col
+            cols="3"
+          >
+            <v-menu
+              v-model="menu1"
+              :close-on-content-click="false"              
+              transition="scale-transition"
+              offset-y              
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="dispatchDate"                  
+                  append-icon="mdi-calendar"
+                  readonly
+                  v-bind="attrs"
+                  outlined
+                  dense
+                  hide-details                  
+                  clearable
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="dispatchDate"
+                @input="menu1 = false"
+              />
+            </v-menu>
+          </v-col>
+          <v-col cols="1" />
+          <v-col cols="1">
+            契約種類
+          </v-col>                                             
+          <v-col
+            cols="3"
+          >
+            <v-select
+              v-model="contractType"
+              :items="contractTypeOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              :clearable="true"
+              class="my-auto"
+              color="#ADADAD"
+              placeholder="請選擇契約種類"
             />
           </v-col>     
         </v-row>
@@ -130,7 +216,7 @@
               :items="itemList"
               :page.sync="dataListPage"
               :items-per-page="10"
-              disable-sort
+
               class="elevation-1"
               no-data-text="查無資料"
               hide-default-footer

@@ -14,21 +14,21 @@ export default {
             User: 'auditer',
             waitingCount: 5,
             headers: [
-                { text: '受理號碼', value: 'acceptNumber', align: 'center' },
-                { text: '受理日期', value: 'acceptDate', align: 'center' },
-                { text: '結案日期', value: 'completeDate', align: 'center' },
-                { text: '戶名', value: 'accntName', align: 'center' },
-                { text: '受理項目', value: 'acceptItem', align: 'center' },
-                { text: '計算日', value: 'calDate', align: 'center' },
-                { text: '電號', value: 'electricNo', align: 'center' },
-                { text: '待核算累積日數', value: 'accumulatedDate', align: 'center' },
-                { text: '派工日期', value: 'dispatchDate', align: 'center' },
-                { text: '契約種類', value: 'contractType', align: 'center' },
-                { text: '整理號碼', value: 'sortNo', align: 'center' },
-                { text: '檢視註記', value: 'hasView', align: 'center' },
-                { text: '代理件', value: 'agentCase', align: 'center' },
-                { text: '備註', value: 'comments', align: 'center' },
-                { text: '狀態操作', value: 'action', align: 'center' }
+                { text: '受理號碼', value: 'acceptNumber', align: 'center',width:'10%' },
+                { text: '受理日期', value: 'acceptDate', align: 'center',width:'10%'  },
+                { text: '結案日期', value: 'completeDate', align: 'center',width:'10%'  },
+                { text: '戶名', value: 'accntName', align: 'center',sortable:false,width:'5%'  },
+                { text: '受理項目', value: 'acceptItem', align: 'center',width:'10%'  },
+                { text: '計算日', value: 'calDate', align: 'center',width:'5%' },
+                { text: '電號', value: 'electricNo', align: 'center',width:'5%'  },
+                { text: '待核算累積日數', value: 'accumulatedDate', align: 'center',width:'5%'  },
+                { text: '派工日期', value: 'dispatchDate', align: 'center',width:'10%'  },
+                { text: '契約種類', value: 'contractType', align: 'center',width:'10%' },
+                { text: '整理號碼', value: 'sortNo', align: 'center',width:'10%' },
+                { text: '檢視註記', value: 'hasView', align: 'center',width:'5%'},
+                { text: '代理件', value: 'agentCase', align: 'center',width:'5%' },
+                { text: '備註', value: 'comments', align: 'center',sortable:false,width:'2%' },
+                { text: '狀態操作', value: 'action', align: 'center',sortable:false,width:'2%' }
             ],
             itemList: [
                 {action: true, acceptNumber: 'A00028',agentCase:false,hasView:false,sortNo:'000700',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'利小凡',calDate:'02',contractType:'表制',accumulatedDate:'3', acceptDate: '2021-09-10 10:00', completeDate: '2021-09-10 16:00',  acceptItem: 'QA210  軍眷用電申請優待'},
@@ -90,6 +90,16 @@ export default {
             ],
 
             commentsModel:false,
+            contractTypeOption:[
+                {text:'表制', value:'1'},
+                {text:'高壓', value:'2'},
+                {text:'包制', value:'3'},
+            ],
+            contractType:null,
+            
+             //日曆起(受理日期)
+             menu1: false,
+             dispatchDate:null,
         }
     },
     methods: {

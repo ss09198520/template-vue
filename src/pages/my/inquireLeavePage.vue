@@ -9,12 +9,26 @@
           </v-col>         
           <v-col cols="3">
             <v-select
+              v-model="selectEmp"
               outlined
-              :items="employeeList"
+              :items="empOpt"
               dense
               hide-details
               placeholder="請選擇員工"
-            />
+              item-text="empName"
+              :return-object="true"
+              @change="changeEmp()"
+            >
+              <template v-slot:selection="data">
+                <span>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.dept }})</span>
+              </template>
+              <template v-slot:item="data">
+                <template>
+                  <v-list-item-content>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.dept }})</v-list-item-content>
+                </template>
+              </template>
+            </v-select>
+            <span class="red--text font-14px">{{ errMsg.selectEmp }}</span>
           </v-col>
           <v-col cols="1" />
           <v-col cols="1">       
@@ -22,12 +36,26 @@
           </v-col>
           <v-col cols="3">
             <v-select
+              v-model="selectAgent"
               outlined
-              :items="employeeList"
+              :items="agentOpt"
               hide-details=""
+              :return-object="true"
               dense
+              item-text="empName"
               placeholder="請選擇代理人"
-            />
+              @change="checkAgent()"
+            >
+              <template v-slot:selection="data">
+                <span>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.dept }})</span>
+              </template>
+              <template v-slot:item="data">
+                <template>
+                  <v-list-item-content>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.dept }})</v-list-item-content>
+                </template>
+              </template>
+            </v-select>
+            <span class="red--text font-14px">{{ errMsg.selectAgent }}</span>
           </v-col>
         </v-row>
         <v-row align="center">
@@ -154,12 +182,17 @@
             />        
             <span class="mt-2 ml-1">分</span>
           </v-col>
+          <v-col cols="3" />
+          <v-col cols="1" />
+          <v-col cols="3" style="margin-top:-25px">
+            <span class="red--text font-14px">{{ errMsg.selectDate }}</span>
+          </v-col>
         </v-row>
       
         <v-row>
           <v-col cols="11" />
           <v-col>
-            <v-btn color="success" class="ml-3">&emsp;請假&emsp;</v-btn>
+            <v-btn color="success" class="ml-3" @click="submit()">&emsp;請假&emsp;</v-btn>
           </v-col>
         </v-row>
       </div>
@@ -175,7 +208,7 @@
             目前狀態
           </v-col>          
           <v-col cols="3">
-            {{ status }}
+            {{ empInfo.status }}
           </v-col>
         </v-row>
         <v-row align="center">   
@@ -183,7 +216,7 @@
             代理人
           </v-col>          
           <v-col cols="3">
-            {{ agent }}
+            {{ empInfo.agent }}&emsp;{{ empInfo.agentName }}
           </v-col>
         </v-row>
         <v-row align="center">   
@@ -191,7 +224,7 @@
             下一次請假時間
           </v-col>          
           <v-col cols="3">
-            {{ nextLeave }}
+            {{ empInfo.nextLeaveStartDate }}~{{ empInfo.nextLeaveEndDate }}
           </v-col>
         </v-row>
         <v-row align="center">   
@@ -199,7 +232,7 @@
             下一次請假代理人
           </v-col>          
           <v-col cols="3">
-            {{ nextLeaveAgent }}
+            {{ empInfo.nextAgent }}&emsp;{{ empInfo.nextAgentName }}
           </v-col>
         </v-row>
       </div>

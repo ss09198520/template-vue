@@ -343,7 +343,7 @@
                   dense
                   placeholder="請選擇調閱事由"
                   return-object
-                  item-text="reason"
+                  item-text="readReason"
                 />
                 <span class="red--text"> {{ errMsg.readReason }}</span>
               </v-col>

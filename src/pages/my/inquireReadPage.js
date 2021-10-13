@@ -43,7 +43,7 @@ export default{
             //調閱原因清單-先放假資料
             readReasonOpt:[
                 {readReason:'確認換表指數及內容', reasonCode:'REASON01'},
-                {readReason:'確認設備容量', readReasonCode:'readReason02'},
+                {readReason:'確認設備容量', reasonCode:'REASON02'},
                 {readReason:'確認是否須拆除外線', reasonCode:'REASON03'},
                 {readReason:'確認用電地址', reasonCode:'REASON04'},
                 {readReason:'確認中抄指數', reasonCode:'REASON05'},
@@ -73,16 +73,26 @@ export default{
             ],
             //日曆起(受理日期)
             menu1: false,
-            date1: '',
+            // date1: '',
+            acceptDate:{
+                start:null,
+                end: null,
+            },
+            acceptStartDate:null,            
             //日曆迄(受理日期)
             menu2: false,
-            date2: '',
+            // date2: '',
+            acceptEndDate:null,
             //日曆起(歸檔日期)
-            menu3: false,
-            date3: '',
+            menu3: false,            
             //日曆迄(歸檔日期)
             menu4: false,
-            date4: '',
+            archieveDate:{
+                start: null,
+                end: null,
+            },
+            archieveStartDate: null,
+            archieveEndDate: null,
             contractType:null,
             contractTypeOption:[
                 {text:'表制', value:'1'},
@@ -100,11 +110,29 @@ export default{
                 readAudience: null,
                 readReason:null,
                 memo:null,
-            }
+                otherReason:null,
+                acceptDate:null,
+                archieveDate:null,
+            },
+            requiredArray : [],
+            formatArray : [],
         }
     },
     methods:{
-        search(item){
+        // 依條件查詢
+        search(){
+            // 先驗證條件參數
+            if(!this.validSearch()){
+                return;
+            } else {
+                this.display = true;
+                // 打後端取資料
+            }
+
+        },
+
+        // 點擊申請調閱按鈕
+        applyRead(item){
             // 將輸入框資料清空
             this.resetVal();
 
@@ -117,60 +145,37 @@ export default{
             // 打開視窗
             this.popOut = true;
         },
+
+        // 送出申請調閱
         submit(){
-            if(this.checkVal()){
+            // 再次驗證資料
+            if(this.validApplyVal()){
+                // 將資料送至後端放這裡
                 MessageService.showSuccess('調閱申請');
                 this.popOut = false;
+                this.resetVal();
             }
         },
+
+        // 清空資料
         resetVal(){
             this.otherReason = null; 
             this.readReason = null;
             this.memo = null;
             this.setMember = null;
             this.setReason = null;
+            this.errMsg.readAudience =  null;
+            this.errMsg.readReason =  null;
+            this.errMsg.memo =  null;
+            this.errMsg.otherReason =  null;
         },
-        checkVal(){
-            let requiredArray = [];
-            let formatArray = [];
-            let hasCheck = true;
-            // 若為TPES使用者申請調閱
-            if(this.User !== 'TPESUser'){
-                if(ValidateUtil.isEmpty(this.readAudience)){
-                    requiredArray.push('調閱對象');
-                    hasCheck = false;
-                    this.errMsg.readAudience = "請選擇調閱對象";
-                }
-                if(ValidateUtil.isEmpty(this.readReason)){
-                    requiredArray.push('調閱事由');
-                    hasCheck = false;
-                    this.errMsg.readReason = "請選擇調閱事由";
-                }
-                if(!ValidateUtil.isEmpty(this.otherReason) && this.otherReason.length > 50){
-                    formatArray.push('其他事由');
-                    hasCheck = false;
-                }
-            // 若為核算課長/調閱管理員申請調閱
-            } else {
-                if(ValidateUtil.isEmpty(this.readReason)){
-                    requiredArray.push('調閱事由');
-                    hasCheck = false;
-                } else if(this.readReason.length > 50){
-                    formatArray.push('調閱事由');
-                    hasCheck = false;
-                }
-                if(!ValidateUtil.isEmpty(this.memo) && this.memo.length > 50){
-                    formatArray.push('備註');
-                    hasCheck = false;
-                    this.errMsg.readReason = false;
-                }
-            }
-            if(!hasCheck){
-                MessageService.showCheckInfo(requiredArray,formatArray);
-            }
 
-            return hasCheck;
+        // 清空日期欄位 obj為哪種日期類別,name為開始日期or結束日期
+        resetDate(obj,name){
+            this[obj][name] = null;
+            this.checkDate();
         },
+
 
         /**
          * Ajax start 
@@ -184,11 +189,206 @@ export default{
          **/
 
 
+        
+        /**
+         * Validate start 
+         * 
+         * */
+
+        // 驗證日期格式
+
+        // 依條件查詢清單送出前再次驗證
+        validSearch(){
+            let hasCheck = true;
+            this.requiredArray = [];
+            this.formatArray = [];
+
+            if(!this.checkDate()){
+                hasCheck = false;                
+            }
+
+            if(!hasCheck){
+                MessageService.showCheckInfo(this.requiredArray,this.formatArray);
+            }
+
+            return hasCheck;
+        },
+
+        // 送出調閱申請前再次驗證
+        validApplyVal(){
+            let hasCheck = true;
+            this.requiredArray = [];
+            this.formatArray = [];
+
+            // 若為核算課長/調閱管理員申請調閱
+            if(this.User !== 'TPESUser'){
+                if(!this.checkReadAudience()){                   
+                    hasCheck = false;                   
+                }
+                if(!this.checkReadReason('mgmn')){                   
+                    hasCheck = false;                   
+                }
+                if(!this.checkOtherReason()){                   
+                    hasCheck = false;
+                }
+            // 若為TPES使用者申請調閱
+            } else {
+                if(!this.checkReadReason()){                   
+                    hasCheck = false;
+                } 
+                if(!this.checkMemo()){                    
+                    hasCheck = false;                    
+                }
+            }
+            if(!hasCheck){
+                MessageService.showCheckInfo(this.requiredArray,this.formatArray);
+            }
+            return hasCheck;
+        },
+
+        checkDate(){
+            let hasCheck = true;
+            
+            // 1-1 判斷受理日期起迄日都有選擇 
+            if(!ValidateUtil.isEmpty(this.acceptDate.start) && !ValidateUtil.isEmpty(this.acceptDate.end)){
+                this.acceptStartDate = this.acceptDate.start +' 00:00:00';
+                this.acceptEndDate = this.acceptDate.end +' 23:59:59';
+
+                //  驗證日期範圍格式是否正確
+                if(!ValidateUtil.validateDateRange(this.acceptStartDate,this.acceptEndDate)){
+                    this.errMsg.acceptDate = "受理日期選擇範圍錯誤";
+                    this.formatArray.push('受理日期區間');
+                    hasCheck = false;         
+                } else {
+                    this.errMsg.acceptDate = null;      
+                }
+
+            // 1-2 判斷受理日期起迄日只有其中一欄有選擇日期 
+            } else if(!ValidateUtil.isEmpty(this.acceptDate.start) || !ValidateUtil.isEmpty(this.acceptDate.end)){
+                this.errMsg.acceptDate = "受理日期未選擇完整範圍";
+                this.formatArray.push('受理日期區間'); 
+                hasCheck = false;
+
+            // 1-3 判斷受理日期起訖日欄位皆未選擇
+            } else {
+                this.errMsg.acceptDate = null;
+            }
+
+            // 2-1 判斷歸檔日期起迄日都有選擇 
+            if(!ValidateUtil.isEmpty(this.archieveDate.start) && !ValidateUtil.isEmpty(this.archieveDate.end)){
+                this.archieveStartDate = this.archieveDate.start +' 00:00:00';
+                this.archieveEndDate = this.archieveDate.end +' 23:59:59';
+
+                //  驗證日期範圍格式是否正確
+                if(!ValidateUtil.validateDateRange(this.archieveStartDate,this.archieveEndDate)){
+                    this.errMsg.archieveDate = "歸檔日期選擇範圍錯誤";
+                    this.formatArray.push('歸檔日期區間');
+                    hasCheck = false;    
+                } else {
+                    this.errMsg.archieveDate = null;
+                }
+            
+             // 2-2 判斷歸檔日期起迄日只有其中一欄有選擇
+            } else if(!ValidateUtil.isEmpty(this.archieveDate.start) || !ValidateUtil.isEmpty(this.archieveDate.end)){
+                this.errMsg.archieveDate = "歸檔日期未選擇完整範圍";
+                this.formatArray.push('歸檔日期區間');   
+                hasCheck = false;
+            
+            // 2-3 判斷歸檔日期起迄日欄位皆未選擇
+            } else {
+                this.errMsg.archieveDate = null;
+            }
+
+            return hasCheck;
+        },
+
+
+        // 驗證調閱對象
+        checkReadAudience(){
+            let hasCheck = true;
+
+            if(ValidateUtil.isEmpty(this.readAudience)){
+                this.requiredArray.push('調閱對象');
+                hasCheck = false;
+                this.errMsg.readAudience = "請選擇調閱對象";
+            } else {
+                this.errMsg.readAudience = null;
+            }
+
+            return hasCheck;
+        },
+        // 驗證調閱事由
+        checkReadReason(type){
+            let hasCheck = true;
+
+            if(type === 'mgmn'){
+                if(ValidateUtil.isEmpty(this.readReason)){
+                    this.requiredArray.push('調閱事由');
+                    hasCheck = false;
+                    this.errMsg.readReason = "請選擇調閱事由";
+                } else {
+                    this.errMsg.readReason = null;
+                }
+            } else {
+                if(ValidateUtil.isEmpty(this.readReason)){
+                    this.requiredArray.push('調閱事由');
+                    this.errMsg.readReason = "請輸入調閱事由";
+                    hasCheck = false;
+                } else if(this.readReason.length > 50){
+                    this.formatArray.push('調閱事由');
+                    this.errMsg.readReason = "已超過字數限制";
+                    hasCheck = false;
+                } else {
+                    this.errMsg.readReason = null;
+                }
+            }
+
+            return hasCheck;
+        },
+
+         // 驗證其他事由
+        checkOtherReason(){
+            let hasCheck = true;
+
+            if(!ValidateUtil.isEmpty(this.otherReason) && this.otherReason.length > 50){
+                this.formatArray.push('其他事由');
+                this.errMsg.otherReason = "已超過字數限制";
+                hasCheck = false;
+            } else {
+                this.errMsg.otherReason = null;
+            }
+            return hasCheck;
+        },
+        // 驗證備註
+        checkMemo(){
+            let hasCheck = true;
+
+            if(!ValidateUtil.isEmpty(this.memo) && this.memo.length > 50)
+            {
+                this.formatArray.push('備註');
+                hasCheck = false;
+                this.errMsg.memo = "超過50字";                
+            }
+
+            return hasCheck;
+        },
+
+        
+        /**
+         * Validate end 
+         * 
+         * */
+
+        
+
+
 
         /**
          * UI start 
          * 
          * */
+
+        // 轉換日期格式為字串
         formatDateTime(date) {
             var moment = require('moment');
             moment().format();

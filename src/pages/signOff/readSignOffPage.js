@@ -26,11 +26,11 @@ export default {
                { text: '狀態操作', value: 'mani', align: 'center' }
             ],
             signList:[
-                { mani: true, acceptNum: 'A00024', custName: '虞仁彥', electricNum:'7140000123', readDept:'南屯服務所', applier:'申請人的姓名代號', applierName:'王大明', applyDate:'2021-09-15 10:00',archieveNum:'APR0370',acceptItem:'QA210軍眷用電申請優待', readReason:'客戶來要求查詢當時申請項目', readNum:'07110001', level:'1', signer:'簽核人一號'},
-                { mani: true, acceptNum: 'A00615', custName: '陳新宇', electricNum:'7140000456', readDept:'烏日服務所', applier:'申請人的姓名代號', applierName:'李小凡', applyDate:'2021-09-15 11:21',archieveNum:'APR0200',acceptItem:'I0510故障換表', readReason:'調閱原因一', readNum:'18110032', level:'1', signer:'簽核人二號'},
-                { mani: true, acceptNum: 'A00040', custName: '劉芳維', electricNum:'7140000789', readDept:'大里服務所', applier:'申請人的姓名代號', applierName:'葉星辰', applyDate:'2021-09-15 15:36',archieveNum:'APR0200',acceptItem:'I0520增加電表', readReason:'調閱原因二', readNum:'62114301', level:'1', signer:'簽核人三號'},
-                { mani: true, acceptNum: 'A00605', custName: '辰馨馨', electricNum:'7140000888', readDept:'太平服務所', applier:'申請人的姓名代號', applierName:'趙元智', applyDate:'2021-09-15 09:45',archieveNum:'APR0160',acceptItem:'F3030表燈非時間電價停用廢止', readReason:'調閱原因三', readNum:'45360001', level:'1', signer:'簽核人四號'},
-                { mani: true, acceptNum: 'A00619', custName: '賀文仲', electricNum:'7140000999', readDept:'服務中心', applier:'申請人的姓名代號', applierName:'陳立元', applyDate:'2021-09-15 13:44',archieveNum:'APR0200',acceptItem:'I0510故障換表', readReason:'調閱原因四', readNum:'33185731', level:'1', signer:'簽核人五號'},
+                { mani: true, acceptNum: 'A00024', custName: '虞仁彥', electricNum:'7140000123', readDept:'南屯服務所', applier:'申請人的姓名代號', applierName:'王大明', applyDate:'2021-09-15 10:00',archieveNum:'APR0370',acceptItem:'QA210軍眷用電申請優待', readReason:'客戶來要求查詢當時申請項目', readNum:'07110001', level:'1'},
+                { mani: true, acceptNum: 'A00615', custName: '陳新宇', electricNum:'7140000456', readDept:'烏日服務所', applier:'申請人的姓名代號', applierName:'李小凡', applyDate:'2021-09-15 11:21',archieveNum:'APR0200',acceptItem:'I0510故障換表', readReason:'調閱原因一', readNum:'18110032', level:'1'},
+                { mani: true, acceptNum: 'A00040', custName: '劉芳維', electricNum:'7140000789', readDept:'大里服務所', applier:'申請人的姓名代號', applierName:'葉星辰', applyDate:'2021-09-15 15:36',archieveNum:'APR0200',acceptItem:'I0520增加電表', readReason:'調閱原因二', readNum:'62114301', level:'1'},
+                { mani: true, acceptNum: 'A00605', custName: '辰馨馨', electricNum:'7140000888', readDept:'太平服務所', applier:'申請人的姓名代號', applierName:'趙元智', applyDate:'2021-09-15 09:45',archieveNum:'APR0160',acceptItem:'F3030表燈非時間電價停用廢止', readReason:'調閱原因三', readNum:'45360001', level:'1'},
+                { mani: true, acceptNum: 'A00619', custName: '賀文仲', electricNum:'7140000999', readDept:'服務中心', applier:'申請人的姓名代號', applierName:'陳立元', applyDate:'2021-09-15 13:44',archieveNum:'APR0200',acceptItem:'I0510故障換表', readReason:'調閱原因四', readNum:'33185731', level:'1'},
             ],
             selectedSign: '', //選擇要操作的該筆調閱簽核
             returnReasonModel: false,
@@ -90,8 +90,6 @@ export default {
             // AjaxService.post('/ECPAP/SYSAPI/CustApproveController/queryCustApply.action',
             // {
             //     readNum: this.selectedSign.readNum,
-            //     signer: this.selectedSign.signer,
-            //     signerName: this.selectedSign.signerName,
             //     level: this.selectedSign.level,
             // },
             // (response) => {
@@ -134,8 +132,6 @@ export default {
             // AjaxService.post('/ECPAP/SYSAPI/CustApproveController/queryCustApply.action',
             // {
             //     readNum: this.selectedSign.readNum,
-            //     signer: this.selectedSign.signer,
-            //     signerName: this.selectedSign.signerName,
             //     rejectReason: this.selectedSign.rejectReason,
             //     rejectDesc: this.selectedSign.rejectDesc,
             // },

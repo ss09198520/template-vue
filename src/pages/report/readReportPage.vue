@@ -10,7 +10,7 @@
             </v-col>
             <v-col cols="3" class="d-flex">
               <v-menu
-                v-model="startDate"
+                v-model="openStartDate"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -30,13 +30,13 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="before7"
-                  @input="startDate = false"
+                  v-model="startDate"
+                  @input="openStartDate = false"
                 />
               </v-menu>
               <div class="mt-1">~</div>
               <v-menu
-                v-model="endDate"
+                v-model="openEndDate"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -56,8 +56,8 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="date"
-                  @input="endDate = false"
+                  v-model="endDate"
+                  @input="openEndDate = false"
                 />
               </v-menu>
             </v-col>
@@ -100,8 +100,8 @@
             disable-sort
             @page-count="dataListPageCount = $event"
           >            
-            <template v-slot:item.signOffDate1="{ item }">              
-              <v-tooltip v-if="!item.signOffDate1" style="color: gray;" top>
+            <template v-slot:item.readMgmtSignDate="{ item }">              
+              <v-tooltip v-if="!item.readMgmtSignDate" style="color: gray;" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -115,12 +115,12 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>                
-              <span v-else>{{ item.signOffDate1 }}</span>
+              <span v-else>{{ item.readMgmtSignDate }}</span>
             </template>
 
-            <template v-slot:item.signOffDate2="{ item }">                            
-              <span v-if="!item.signOffDate1 && !item.signOffDate2">未簽核</span>  
-              <v-tooltip v-else-if="!item.signOffDate2" style="color: gray;" top>
+            <template v-slot:item.leaderSignDate="{ item }">                            
+              <span v-if="!item.readMgmtSignDate && !item.leaderSignDate">未簽核</span>  
+              <v-tooltip v-else-if="!item.leaderSignDate" style="color: gray;" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -134,12 +134,12 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else>{{ item.signOffDate2 }}</span>
+              <span v-else>{{ item.leaderSignDate }}</span>
             </template>
 
-            <template v-slot:item.signOffDate3="{ item }">                            
-              <span v-if="!item.signOffDate2 && !item.signOffDate3">未簽核</span>  
-              <v-tooltip v-else-if="!item.signOffDate3" style="color: gray;" top>
+            <template v-slot:item.managerSignDate="{ item }">                            
+              <span v-if="!item.leaderSignDate && !item.managerSignDate">未簽核</span>  
+              <v-tooltip v-else-if="!item.managerSignDate" style="color: gray;" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -153,7 +153,7 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else>{{ item.signOffDate3 }}</span>
+              <span v-else>{{ item.managerSignDate }}</span>
             </template>
 
             <template v-slot:item.download="{ item }">

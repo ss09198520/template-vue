@@ -111,34 +111,61 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
-            派工日期       
-          </v-col>          
-          <v-col
+            派工日期區間
+          </v-col>
+          <v-col            
             cols="3"
+            class="d-flex"
           >
             <v-menu
-              v-model="menu1"
+              v-model="menu3"
               :close-on-content-click="false"              
               transition="scale-transition"
-              offset-y              
+              offset-y
               min-width="auto"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="dispatchDate"                  
+                  v-model="dispatchDate.start"                  
                   append-icon="mdi-calendar"
                   readonly
-                  v-bind="attrs"
-                  outlined
                   dense
-                  hide-details                  
+                  outlined
+                  hide-details
+                  v-bind="attrs"
                   clearable
                   v-on="on"
                 />
               </template>
               <v-date-picker
-                v-model="dispatchDate"
-                @input="menu1 = false"
+                v-model="dispatchDate.start"
+                @input="menu3 = false"
+              />
+            </v-menu>          
+            <div style="margin:auto 0;">~</div>          
+            <v-menu
+              v-model="menu4"
+              :close-on-content-click="false"              
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="dispatchDate.end"                  
+                  append-icon="mdi-calendar"
+                  readonly
+                  outlined
+                  dense
+                  hide-details
+                  v-bind="attrs"
+                  clearable
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="dispatchDate.end"
+                @input="menu4 = false"
               />
             </v-menu>
           </v-col>

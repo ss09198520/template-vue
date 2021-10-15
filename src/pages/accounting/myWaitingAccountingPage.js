@@ -99,7 +99,10 @@ export default {
             
              //日曆起(受理日期)
              menu1: false,
-             dispatchDate:null,
+             dispatchDate:{
+                start: null,
+                end:null,
+             },
         }
     },
     methods: {

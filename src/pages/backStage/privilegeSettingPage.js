@@ -33,6 +33,10 @@ export default {
 
         ],
         authorityList:[],
+        //查詢角色權限結果
+        rolePrivilegeList : [
+
+        ],
 
       };
     },

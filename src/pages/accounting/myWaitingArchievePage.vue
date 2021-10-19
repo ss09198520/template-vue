@@ -91,7 +91,25 @@
           class="elevation-1"
           disable-sort
           @page-count="dataListPageCount = $event"
-        />
+        >
+          <template v-slot:item.action="{ item }">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  v-if="item.action"                    
+                  class="ma-2 success"
+                  fab
+                  small                
+                  v-on="on"
+                  @click="returnToAccounting()"
+                >
+                  <v-icon>mdi-account-arrow-left-outline</v-icon>
+                </v-btn>
+              </template>
+              <span>退回核算</span>
+            </v-tooltip>
+          </template>
+        </v-data-table>
         <!-- 選頁 -->
         <div class="mt-2">
           <v-pagination
@@ -102,6 +120,46 @@
         </div>
       </div>
     </v-container>
+    <!-- 退回核算確認視窗 -->
+    <v-dialog
+      v-model="returnModel"
+      max-width="600"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          退回核算
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="returnModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-18px">
+          <v-row class="mt-10">
+            此操作將把案件由待歸檔區退回待核算區，若要進行退回請按 [確認] ，若維持原狀請按 [取消]
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-5">
+          <v-btn              
+            color="error"            
+            @click="returnModel = false"
+          >
+            取消
+          </v-btn>
+          <v-btn              
+            color="success"            
+            @click="returnModel = false"
+          >
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 

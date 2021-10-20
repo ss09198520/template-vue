@@ -46,7 +46,29 @@
               v-if="$refs.calendar"
               class="d-flex text-xl-h5 font-weight-bold justify-start"
             >
-              {{ $refs.calendar.title }}
+              <v-menu
+                v-model="startDateMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    outlined
+                    dark
+                    class="mr-4"
+                    color="primary grey darken-2"
+                    v-on="on"
+                  >
+                    {{ $refs.calendar.title }}
+                  </v-btn>
+                </template>
+                <v-date-picker
+                  v-model="startDate"
+                  scrollable
+                />
+              </v-menu>
             </v-toolbar-title>
             
             <!-- <calendar-btn
@@ -87,8 +109,8 @@
               :events="events"
               :event-color="getEventColor"
               :type="type"
+              :start="startDate"
               @click:event="showEvent"
-              @click:more="viewDay"
               @click:date="viewDay"
               @change="updateRange"
             />
@@ -177,6 +199,8 @@
     },
 
     data: () => ({
+      startDateMenu: false,
+      startDate: '2021-01-01',
       focus: '',
       type: 'month',
       types: [
@@ -223,7 +247,7 @@
     methods: {
       viewDay ({ date }) {
         this.focus = date
-        this.type = 'day'
+        this.type = 'month'
       },
       getEventColor (event) {
         return event.color
@@ -255,6 +279,7 @@
         nativeEvent.stopPropagation()
       },
       updateRange ({ start, end }) {
+        console.log('start', start)
         const newevents = []
 
         const min = new Date(`${start.date}T00:00:00`)

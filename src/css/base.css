@@ -166,8 +166,7 @@ body {
 .vue-notification {
     padding: 10px;
     margin: 0 5px 5px;
-
-    font-size: 36px !important;
+    font-size: 30px !important;
 
     color: #ffffff;
     background: #44A4FC;
@@ -192,6 +191,14 @@ body {
     border-left-color: #42A85F;
     /* opacity: 0.9; */
 }
+
+.vue-notification.noti-checkInfo {
+    background: 	#FF9224	;
+    border-left-color: #D26900;
+
+    /* opacity: 0.9; */
+}
+
 .v-fade-right-enter-active,
 .v-fade-right-leave-active,
 .v-fade-right-move {
@@ -224,3 +231,10 @@ body {
       border-color: #E98B2A;
   }
 /* 核算區-未分派區設定用 end*/
+
+/* 隱藏數字 input 箭頭 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

@@ -78,14 +78,7 @@
                 cols="9"
                 md="8"
               >
-                <v-textarea
-                  v-model="marqueeText"
-                  :rules="rules.requiredRule.concat(rules.lengthRules)"
-                  color="accent"
-                  outlined
-                  placeholder="請輸入文字"
-                  counter="100"
-                />
+                <quill ref="editor" v-model="marqueeText" :height="400" @change="selfUpdate" />
               </v-col>
             </v-row>
             <v-row
@@ -97,42 +90,62 @@
                   輪 播 時 間
                 </v-subheader>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
+              <v-col cols="1" md="3">
                 <v-menu
-                  ref="dateMenu"
-                  v-model="dateMenu"
-                  :close-on-content-click="false"
-                  :return-value="dates"
+                  v-model="releaseStartDateMenu"
                   transition="scale-transition"
                   offset-y
                   min-width="auto"
                 >
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ on }">
                     <v-text-field
-                      v-model="dateRangeText"
-                      label="請 選 擇 時 間 區 間"
-                      prepend-icon="mdi-calendar"
+                      v-model="releaseStartDate"
+                      append-icon="mdi-calendar"
+                      placeholder="上架時間(起)"
+                      color="accent"
+                      outlined
+                      dense
                       readonly
-                      v-bind="attrs"
+                      hide-details   
+                      :clearable="true"
                       v-on="on"
                     />
                   </template>
                   <v-date-picker
-                    v-model="dates"
-                    no-title
-                    range
-                    @input="dateMenu = dates.length < 2 ? true :false"
-                  >
-                    <v-spacer />
-                  </v-date-picker>
+                    v-model="releaseStartDate"
+                    scrollable
+                  />
+                </v-menu>
+              </v-col>
+              <v-col cols="1" md="3">
+                <v-menu
+                  v-model="releaseEndDateMenu"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="releaseEndDate"
+                      append-icon="mdi-calendar"
+                      placeholder="上架時間(迄)"
+                      color="accent"
+                      outlined
+                      dense
+                      readonly
+                      hide-details   
+                      :clearable="true"
+                      v-on="on"
+                    />
+                  </template>
+                  <v-date-picker
+                    v-model="releaseEndDate"
+                    scrollable
+                  />
                 </v-menu>
               </v-col>
             </v-row>
-            <v-row>
+            <!-- <v-row>
               <v-col cols="3" md="3">
                 <v-subheader class="justify-center text-md-body-1 font-weight-bold">
                   外 觀 樣 式
@@ -154,16 +167,8 @@
                   inset
                 />
               </v-col>
-              <!-- <v-col cols="3" md="3">
-                <v-switch 
-                  v-model="fontItalic1"
-                  class="mt-1"
-                  :label="`閃爍`"
-                  inset
-                />
-              </v-col> -->
-            </v-row>
-            <v-row
+            </v-row> -->
+            <!-- <v-row
               :dense="dense"
               :no-gutters="noGutters"
             >
@@ -212,7 +217,7 @@
                   </template>
                 </v-text-field>
               </v-col>
-            </v-row>
+            </v-row> -->
             <v-row
               :dense="dense"
               :no-gutters="noGutters"
@@ -252,10 +257,6 @@
                 <!-- <v-color-picker v-model="color" /> -->
                 <marquee-text
                   :duration="animationDuration"
-                  :background-color="backgroundColor"
-                  :font-color="fontColor"
-                  :font-weight=" !!fontBold ? 'bold':''"
-                  :font-italic=" !!fontItalic ? 'italic':'normal'"
                   :repeat="1"
                 >
                   {{ marqueeText }}
@@ -332,37 +333,43 @@
 </template>
 
 <script>
-  
+  import Quill from '@/components/Quill'
+  // const defaultForm = {
+  //   marqueeName: '',
+  //   content: '', 
+  //   id: undefined,
+  //   comment_disabled: false,
+  //   importance: 0
+  // }
   export default {
+    components: { Quill},
     data() {
       return {
         valid: false,
         maxCharacter: 30,
-        duration: 20,
-        min: 60,
-        max: 600,
+        duration: 30,
+        min: 1,
+        max: 60,
         marqueeName: '跑馬燈輪播測試',
-        marqueeText: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
+        marqueeText: `<p><strong style="color: rgb(255, 255, 204); background-color: rgb(255, 153, 0);">此</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(240, 102, 102);">時</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(194, 133, 255);">已</strong><strong style="color: rgb(136, 136, 136); background-color: rgb(255, 255, 102);">鶯</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(136, 136, 136);">飛</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(0, 41, 102);">草</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(102, 163, 224);">長</strong><strong> </strong><strong style="background-color: rgb(255, 194, 102); color: rgb(153, 51, 255);" class="ql-size-small">愛的人正在路上</strong></p><p><strong style="color: rgb(161, 0, 0);">我知他<u>風雨兼程</u> </strong><strong style="color: rgb(178, 178, 0);">途經日暮不賞 </strong></p><p><strong style="color: rgb(204, 232, 204); background-color: rgb(178, 107, 0);"> 穿越人海</strong><strong style="color: rgb(204, 232, 204);"> </strong><strong style="color: rgb(102, 185, 102);" class="ql-size-small">只為與你相擁</strong></p><p><span style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);"> </span><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);">此</strong><strong style="color: rgb(0, 102, 204); background-color: rgb(255, 255, 0);">刻</strong><strong style="color: rgb(153, 51, 255); background-color: rgb(255, 255, 0);">已</strong><strong style="color: rgb(0, 97, 0); background-color: rgb(255, 255, 0);">皓</strong><strong style="color: rgb(178, 107, 0); background-color: rgb(255, 255, 0);">月</strong><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);">當</strong><strong style="color: rgb(240, 102, 102); background-color: rgb(255, 255, 0);">空</strong><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);"> </strong><span style="color: rgb(230, 0, 0); background-color: rgb(102, 163, 224);"> </span><em style="color: rgb(255, 255, 255); background-color: rgb(102, 163, 224);">愛的人手捧星光</em></p><p><strong style="color: rgb(255, 255, 255); background-color: rgb(0, 55, 0);">我知他乘風破浪 </strong><span style="color: rgb(187, 187, 187); background-color: rgb(0, 55, 0);"> </span><strong style="color: rgb(255, 235, 204); background-color: rgb(240, 102, 102);">去了黑暗一趟</strong></p>`,
         marqueeDesc: '',
         uploadType: '',
-        dates: [],
-        fontColor: '#000000FF',
-        backgroundColor: '#38CEA3FF',
-        fontBold: false,
-        fontItalic: false,
+        releaseStartDateMenu: false,
+        releaseStartDate: '',
+        releaseEndDateMenu: false,
+        releaseEndDate: '',
         menu: false,
         menu1: false,
-        dateMenu: false,
         dense: false,
         noGutters: false,
         hideDatails: false,
         snackbar: false,
-        basicStyle : {
-          cursor: 'pointer',
-          height: '20px',
-          width: '20px',
-          transition: 'border-radius 200ms ease-in-out'
-        },
+        // basicStyle : {
+        //   cursor: 'pointer',
+        //   height: '20px',
+        //   width: '20px',
+        //   transition: 'border-radius 200ms ease-in-out'
+        // },
         rules: {
           requiredRule: [v => !!v || '此欄位為必填欄位'],
           lengthRules: [v => (v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
@@ -375,24 +382,21 @@
       animationDuration() {
         return 600 / this.duration
       },
-      backgroundStyle() {
-        const { backgroundColor, menu1 } = this
-        return Object.assign({
-          backgroundColor: backgroundColor,
-          borderRadius: menu1 ? '4px' : '50%',
-        }, this.basicStyle)
-      },
-      fontStyle() {
-        const { fontColor, menu } = this
-        return Object.assign({
-          backgroundColor: fontColor,
+      // backgroundStyle() {
+      //   const { backgroundColor, menu1 } = this
+      //   return Object.assign({
+      //     backgroundColor: backgroundColor,
+      //     borderRadius: menu1 ? '4px' : '50%',
+      //   }, this.basicStyle)
+      // },
+      // fontStyle() {
+      //   const { fontColor, menu } = this
+      //   return Object.assign({
+      //     backgroundColor: fontColor,
           
-          borderRadius: menu ? '50%' : '4px',
-        }, this.basicStyle)
-      },
-      dateRangeText () {
-        return this.dates.join(' ~ ')
-      },
+      //     borderRadius: menu ? '50%' : '4px',
+      //   }, this.basicStyle)
+      // },
     },
     methods: {
       getParentRouteName() {
@@ -420,8 +424,36 @@
       incrementDuration() { //加快撥放
         this.duration = this.duration + 6 || 0
       },
+      selfUpdate(val) {
+        this.marqueeText = val;
+      }
     }
   }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+.ql-editor {
+  line-height: 1.42;
+  height: 150px;
+  font-size: 32px;
+}
+
+.ql-editor p{
+  font-weight: normal !important; 
+  font-size: 32px !important; 
+}
+
+
+.ql-editor .ql-size-small {
+    font-size: 0.75em;
+}
+
+.ql-editor  .ql-size-large {
+    font-size: 1.25em;
+}
+
+.ql-editor .ql-size-huge {
+    font-size: 1.50em;
+}
+</style>

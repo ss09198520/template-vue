@@ -70,13 +70,12 @@ export const constantRoutes = [
   },
   {
     path: '/',
-    name: 'HomePage',
     component: Layout,
     hidden: true,
     meta: { title: '首頁', icon: 'mdi-cloud-upload' },    
     children: [
       {
-      path: '',      
+      path: '',
       component: () => import('@/pages/homePage.vue'),
       meta: { title: '首頁', icon: 'mdi-cloud-upload', },
       }
@@ -210,7 +209,7 @@ export const constantRoutes = [
       },
       {
         path: 'satisfyReport/search',
-        name: 'Satisfaction-Report-Monthly',
+        name: 'Satisfaction-Report',
         component: () => import('@/views/satisfaction/report'),
         meta: { title: '滿意度報表', icon: 'mdi-clipboard-search' }
       },
@@ -219,14 +218,12 @@ export const constantRoutes = [
         name: 'Satisfaction-Report-Monthly',
         component: () => import('@/views/satisfaction/reportMonth'),
         meta: { title: '滿意度各區處報表(月)', icon: 'mdi-clipboard-search' }
-        // meta: { title: '各區處滿意度彙整報表查詢(月)', icon: 'mdi-clipboard-search' } //TODO will remove
       },
       {
         path: 'satisfyReport/week',
         name: 'Satisfaction-Report-Weekly',
         component: () => import('@/views/satisfaction/reportWeek'),
         meta: { title: '滿意度個人摘要(週)', icon: 'mdi-clipboard-search  ' }
-        // meta: { title: '各區處滿意度彙整報表查詢(月)', icon: 'mdi-clipboard-search' } //TODO will remove
       }
     ]
   },
@@ -288,6 +285,19 @@ export const constantRoutes = [
         name: 'Marquee-List',
         component: () => import('@/views/marquee/list'),
         meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
+      },
+      {
+        path: 't-create',
+        name: 't-Marquee-Edit',
+        component: () => import('@/views/marquee/t-create'),
+        meta: { title: 't-跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
+      },
+      {
+        path: 't-calendarList',
+        name: 't-Marquee-List-Calendar',
+        component: () => import('@/views/marquee/t-calendar'),
+        hidden: true,
+        meta: { title: 't-跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
       },
       {
         path: 'calendarList',

@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import getters from './getters'
+import Moment from 'moment';
 
+window.moment = Moment;
 Vue.use(Vuex)
 
 // https://webpack.js.org/guides/dependency-management/#requirecontext

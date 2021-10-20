@@ -1,4 +1,7 @@
 import MessageService from "@/assets/services/message.service";
+import ValidateUtil from "@/assets/services/validateUtil";
+// import AjaxService from "@/assets/services/ajax.service";
+
 export default {
     data(){
         return{
@@ -11,25 +14,25 @@ export default {
             //預設簽核顯示範圍按鈕
             displayAll: true,
             //
-           signListHeaders: [
-            // { text: '簽核狀態', value: 'inquireStatus', align: 'center' },
-               { text: '受理號碼', value: 'orderId', align: 'center' },
-               { text: '戶名', value: 'accntName', align: 'center' },
-               { text: '電號', value: 'electNum', align: 'center' },
-               { text: '調閱部門', value: 'inquireUnit', align: 'center' },            
-               { text: '申請調閱人員', value: 'inquireName', align: 'center' },
-               { text: '申請調閱日期', value: 'inquireDate', align: 'center' },
-               { text: '整理號碼', value: 'orderType', align: 'center' },
-               { text: '受理項目', value: 'orderItems', align: 'center' },                
+           signListHeaders: [            
+               { text: '受理號碼', value: 'acceptNum', align: 'center' },
+               { text: '戶名', value: 'custName', align: 'center' },
+               { text: '電號', value: 'electricNum', align: 'center' },
+               { text: '調閱部門', value: 'readDept', align: 'center' },            
+               { text: '申請調閱人員', value: 'applierName', align: 'center' },
+               { text: '申請調閱日期', value: 'applyDate', align: 'center' },
+               { text: '整理號碼', value: 'archieveNum', align: 'center' },
+               { text: '受理項目', value: 'acceptItem', align: 'center' },                
                { text: '狀態操作', value: 'mani', align: 'center' }
             ],
             signList:[
-                { mani: true, inquireStatus: '未簽核', orderId: 'A00024', accntName: '虞仁彥',electNum:'7140000123', inquireUnit:'南屯服務所', inquireName:'王大明', inquireDate:'20210915 10:00',orderType:'APR0370',orderItems:'QA210軍眷用電申請優待'},
-                { mani: true, inquireStatus: '未簽核', orderId: 'A00615', electNum:'7140000456',accntName: '陳新宇', inquireUnit:'烏日服務所', inquireName:'李小凡', inquireDate:'20210915 11:21',orderType:'APR0200',orderItems:'I0510故障換表'},
-                { mani: true, inquireStatus: '未簽核', orderId: 'A00040', electNum:'7140000789', accntName: '劉芳維',inquireUnit:'大里服務所', inquireName:'葉星辰', inquireDate:'20210915 15:36',orderType:'APR0200',orderItems:'I0520增加電表'},
-                { mani: true, inquireStatus: '未簽核', orderId: 'A00605', electNum:'7140000888',accntName: '辰馨馨', inquireUnit:'太平服務所', inquireName:'趙元智', inquireDate:'20210915 09:45',orderType:'APR0160',orderItems:'F3030表燈非時間電價停用廢止'},
-                { mani: false, inquireStatus: '未簽核', orderId: 'A00619', electNum:'7140000999', accntName: '賀文仲',inquireUnit:'服務中心', inquireName:'陳立元', inquireDate:'20210915 13:44',orderType:'APR0200',orderItems:'I0510故障換表'},
+                { mani: true, acceptNum: 'A00024', custName: '虞仁彥', electricNum:'7140000123', readDept:'南屯服務所', applier:'申請人的姓名代號', applierName:'王大明', applyDate:'2021-09-15 10:00',archieveNum:'APR0370',acceptItem:'QA210軍眷用電申請優待', readReason:'客戶來要求查詢當時申請項目', readNum:'07110001', level:'1'},
+                { mani: true, acceptNum: 'A00615', custName: '陳新宇', electricNum:'7140000456', readDept:'烏日服務所', applier:'申請人的姓名代號', applierName:'李小凡', applyDate:'2021-09-15 11:21',archieveNum:'APR0200',acceptItem:'I0510故障換表', readReason:'調閱原因一', readNum:'18110032', level:'1'},
+                { mani: true, acceptNum: 'A00040', custName: '劉芳維', electricNum:'7140000789', readDept:'大里服務所', applier:'申請人的姓名代號', applierName:'葉星辰', applyDate:'2021-09-15 15:36',archieveNum:'APR0200',acceptItem:'I0520增加電表', readReason:'調閱原因二', readNum:'62114301', level:'1'},
+                { mani: true, acceptNum: 'A00605', custName: '辰馨馨', electricNum:'7140000888', readDept:'太平服務所', applier:'申請人的姓名代號', applierName:'趙元智', applyDate:'2021-09-15 09:45',archieveNum:'APR0160',acceptItem:'F3030表燈非時間電價停用廢止', readReason:'調閱原因三', readNum:'45360001', level:'1'},
+                { mani: true, acceptNum: 'A00619', custName: '賀文仲', electricNum:'7140000999', readDept:'服務中心', applier:'申請人的姓名代號', applierName:'陳立元', applyDate:'2021-09-15 13:44',archieveNum:'APR0200',acceptItem:'I0510故障換表', readReason:'調閱原因四', readNum:'33185731', level:'1'},
             ],
+            selectedSign: '', //選擇要操作的該筆調閱簽核
             returnReasonModel: false,
             department:null,
             departmentOption:[
@@ -40,17 +43,117 @@ export default {
         }
     },
     methods:{
-        sign(){
+        init(){
+            //initialSignList();
+        },
+
+        initialSignList(){
+            //callAPI
+            // AjaxService.post('/ECPAP/SYSAPI/CustApproveController/queryCustApply.action',
+            // {
+            //            
+            // },
+            // (response) => {
+            //     if (response != null &&
+            //         response != undefined &&
+            //         response.resultMessage != null &&
+            //         response.resultMessage != undefined &&
+            //         response.resultMessage.message == 's') {
+            //         if (ValidateUtil.isEmpty(response.custAccountBeanList)) {
+            //             MessageService.showInfo('查無資料');
+            //             
+            //         } else {                    
+            //             this.signList = Object.assign(response.signList);
+            //             response.signList.forEach((e, idx) => {
+            //                 this.signList[idx].mani = true;
+            //             });                                                
+            //         }
+            //     } else {
+            //       //接後端候要放errorMsg
+            //       //MessageService.showError('查詢審核帳號申請清單 失敗');
+            //     }
+            // },
+            //     (response) => { // server 出錯才會進入
+            //         // server error
+            //         //MessageService.showSystemError();
+            //     }
+            // );
+        },
+        
+        sign(item){
+            this.selectedSign = item;
             this.popOut = true;
         },
-        checkOrder(){
+
+        checkOrder(){                        
+            //callAPI
+            // AjaxService.post('/ECPAP/SYSAPI/CustApproveController/queryCustApply.action',
+            // {
+            //     readNum: this.selectedSign.readNum,
+            //     level: this.selectedSign.level,
+            // },
+            // (response) => {
+            //     if (response != null &&
+            //         response != undefined &&
+            //         response.resultMessage != null &&
+            //         response.resultMessage != undefined &&
+            //         response.resultMessage.message == 's') {
+            //         if (ValidateUtil.isEmpty(response.custAccountBeanList)) {
+            //             MessageService.showInfo('查無資料');
+            //             this.resultForm = true;
+            //         } else {                    
+            //                                               
+            //         }
+            //     } else {
+            //       //接後端候要放errorMsg
+            //       //MessageService.showError('查詢審核帳號申請清單 失敗');
+            //     }
+            // },
+            //     (response) => { // server 出錯才會進入
+            //         // server error
+            //         //MessageService.showSystemError();
+            //     }
+            // );            
             MessageService.showSuccess("簽核成功✓")
             this.popOut = false;
         },
+
         returnOrder(){
             this.returnReasonModel = true;
         },
+
         returnSubmit(){
+            // 驗證
+            if (ValidateUtil.isEmpty(this.selectedSign.rejectReason)) {
+                MessageService.showCheckInfo(['退件原因'],'');
+                return;
+            }
+            // //callAPI
+            // AjaxService.post('/ECPAP/SYSAPI/CustApproveController/queryCustApply.action',
+            // {
+            //     readNum: this.selectedSign.readNum,
+            //     rejectReason: this.selectedSign.rejectReason,
+            //     rejectDesc: this.selectedSign.rejectDesc,
+            // },
+            // (response) => {
+            //     if (response != null &&
+            //         response != undefined &&
+            //         response.resultMessage != null &&
+            //         response.resultMessage != undefined &&
+            //         response.resultMessage.message == 's') {                                      
+            //             console.log('退件成功'+response);                                     
+            //     } else {
+            //       //接後端候要放errorMsg
+            //       //MessageService.showError('查詢審核帳號申請清單 失敗');
+            //     }
+            // },
+            //     (response) => { // server 出錯才會進入
+            //         // server error
+            //         console.log(response);//到時候要刪掉
+            //         MessageService.showSystemError();
+            //     }
+            // );
+
             this.popOut = false;
             this.returnReasonModel = false;
             MessageService.showSuccess("已退件成功✓")

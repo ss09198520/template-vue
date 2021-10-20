@@ -1,7 +1,6 @@
 
 import MessageService from "@/assets/services/message.service";
 import formPage from "../FormPage/FormPage.vue";
-import EventBus from "@/assets/services/eventBus";
 
 export default{
     components: {
@@ -15,57 +14,114 @@ export default{
             //預設受理類型按鈕
             displayAll: true,
             //預設當前頁數
-            orderListPage: 1,
+            formListPage: 1,
             //預設總頁數
-            orderListPageCount: 0,
-            empListHeaders: [
-                { text: '受理號碼', value: 'orderId', align: 'center' },
-                { text: '戶名', value: 'accntName', align: 'center' },
-                { text: '電號', value: 'eletricNo', align: 'center' },
+            formListPageCount: 0,
+            formListHeaders: [
+                { text: '受理號碼', value: 'acceptNum', align: 'center' },
+                { text: '戶名', value: 'custName', align: 'center' },
+                { text: '電號', value: 'eletricNum', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
-                { text: '受理日期', value: 'orderDate', align: 'center' },
-                { text: '計算日', value: 'calDate', align: 'center' },
-                { text: '案件狀態', value: 'orderStatus', align: 'center' },     
-                { text: '受理項目', value: 'orderItems', align: 'center' },
-                { text: '代理案件', value: 'proxyEvent', align: 'center' },
-                { text: '代理件所有人', value: 'eventAgent', align: 'center' },
-                { text: '狀態操作', value: 'mani', align: 'center' }
+                { text: '受理日期', value: 'acceptDate', align: 'center' },
+                { text: '計算日', value: 'computedDate', align: 'center' },
+                { text: '案件狀態', value: 'status', align: 'center' },     
+                { text: '受理項目', value: 'acceptItem', align: 'center' },
+                { text: '代理案件', value: 'isAgent', align: 'center' },
+                { text: '代理件所有人', value: 'acceptUser', align: 'center' },
+                { text: '狀態操作', value: 'action', align: 'center' }
             ],
-            empMockList: [                
-                { mani: true, orderId: 'A00024',accntName: '劉艷艷',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210910 10:00', orderStatus:'受理中', orderType:'APR0370', orderItems:'QA210軍眷用電申請優待', proxyEvent:true,eventAgent:'王大明'},
-                { mani: false, orderId: 'A00615',accntName: '劉齊民',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210909 11:21', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0510故障換表', proxyEvent:'',eventAgent:''},
-                { mani: false, orderId: 'A00040',accntName: '陳艷均',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210907 15:36', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0520增加電表', proxyEvent:'',eventAgent:''},
-                { mani: true, orderId: 'A00605',accntName: '王筱涵',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210910 09:45', orderStatus:'受理中', orderType:'APR0160', orderItems:'F3030表燈非時間電價停用廢止', proxyEvent:'',eventAgent:''},
-                { mani: false, orderId: 'A00619',accntName: '連文彥',eletricNo:'000123',contractType:'包制',calDate:'20210909 11:21', orderDate: '20210910 13:44', orderStatus:'核算中', orderType:'APR0200', orderItems:'I0510故障換表', proxyEvent:'',eventAgent:''},
+            // 先放假資料
+            numberOfAccept: 4,
+            numberOfAgent:1, 
+            oriFormList:[], // 原始資料
+            formList: [                
+                { 
+                    seq:1,
+                    acceptNum: 'A00024',
+                    custName: '劉艷艷',
+                    eletricNum:'000123',
+                    contractType:'包制',
+                    computedDate:'10', 
+                    acceptDate: '2021-09-10 10:00', 
+                    status:'受理中',
+                    acceptItem:'QA210軍眷用電申請優待',
+                    isAgent:true,acceptUser:'王大明',
+                    formHistoryList:[
+                        '2021-09-14 14:20:14 待歸檔 (0151230020 吳靜)',
+                        '2021-09-14 14:20:14 審核通過 (0151230020 吳靜)',
+                        '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
+                        '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
+                    ],
+                },
+                { 
+                    seq:12,
+                    acceptNum: 'A00615',
+                    custName: '劉齊民',
+                    eletricNum:'000123',
+                    contractType:'包制',
+                    computedDate:'12',
+                    acceptDate: '2021-09-09 11:21',
+                    status:'受理中',  
+                    acceptItem:'I0510故障換表', 
+                    isAgent:'',
+                    acceptUser:'',
+                    formHistoryList:[
+                        '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
+                        '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
+                    ],
+                },
+                {               
+                    seq:27,      
+                    acceptNum: 'A00605',
+                    custName: '王筱涵',
+                    eletricNum:'000123',
+                    contractType:'包制',
+                    computedDate:'10',
+                    acceptDate: '2021-09-10 09:45',
+                    status:'受理中',
+                    acceptItem:'F3030表燈非時間電價停用廢止', 
+                    isAgent:'',
+                    acceptUser:'',
+                    formHistoryList:[
+                        '2021-09-14 14:20:14 待歸檔 (0151230020 吳靜)',
+                        '2021-09-14 14:20:14 審核通過 (0151230020 吳靜)',
+                        '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
+                        '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
+                    ],
+                },
+                { 
+                    seq:34,
+                    acceptNum: 'A00619',
+                    custName: '連文彥',
+                    eletricNum:'000123',
+                    contractType:'包制',
+                    computedDate:'16',
+                    acceptDate: '2021-09-10 13:44',
+                    status:'受理中', 
+                    acceptItem:'I0510故障換表', 
+                    isAgent:'',
+                    acceptUser:'',
+                    formHistoryList:[
+                        '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
+                    ],
+                },
             ],
             selectIndex: null,
             browserModel: false, // 瀏覽案件視窗開關
             supplementModel: false, // 補件操作視窗開關
-            formRecordModel: false, // 表單歷程視窗開關
-            formRecordList:[
-                {record:'2021/09/14 14:20:14 待歸檔 (0151230020 吳靜)'},
-                {record:'2021/09/14 14:20:14 審核通過 (0151230020 吳靜)'},
-                {record:'2021/09/14 13:50:14 核算分派 (0151230001 陳婷婷)'},
-                {record:'2021/09/14 13:20:14 案件成立 (0151230011 鍾書文)'},
-
-            ],
-            department:null,
-            departmentOption:[
-                {text:'核算課',value:'1'},
-                {text:'大里服務中心',value:'2'},
-                {text:'東山服務所',value:'3'},
-            ]
+            formHistoryModel: false, // 表單歷程視窗開關
+            formHistoryList:[],
 
         }
     },
     methods: {
         init(){
-            // 控制補件存檔後將補件跳出視窗關閉
-            EventBus.subscriber('saveFile',this.closeSupplementModel);
+            // 從後端取得案件清單，先複製一份，先暫時放init，之後會移到ajax打後端後取得資料直接複製
+            this.oriFormList = JSON.parse(JSON.stringify(this.formList));
         },
         action(type,item){
             // 抓出選的是第幾筆
-            this.selectIndex = this.empMockList.indexOf(item);            
+            this.selectIndex = this.formList.indexOf(item);            
             if(type == 'browse'){
                 this.browserModel = true;
             } else if(type == 'supplement'){
@@ -77,7 +133,7 @@ export default{
             MessageService.showSuccess("取消案件成功✓");
             //刪除該筆資料
             if (this.selectIndex > -1) {
-                this.empMockList.splice(this.selectIndex, 1);
+                this.formList.splice(this.selectIndex, 1);
               }
             this.deleteOrderModel = false;
         },
@@ -87,11 +143,46 @@ export default{
         orderRecord(item){
             console.log(item);
         },
-        closeSupplementModel(){
+        saveFile(){
             this.supplementModel = false;
         },
-        openFormRecord(){
-            this.formRecordModel = true;
-        }
+        // 開啟
+        openFormHistory(item){
+            this.formHistoryList = item.formHistoryList;
+            this.formHistoryModel = true;
+        },
+
+        // 顯示全部/只顯示受理件
+        display(item){
+            this.formList = [];
+            if(item === 'all'){
+                this.displayAll = true;
+                this.formList = JSON.parse(JSON.stringify(this.oriFormList));
+            } else {
+                this.displayAll = false;
+                for(let i in this.oriFormList){
+                    if(this.oriFormList[i].status === '受理中'){
+                        this.formList.push(this.oriFormList[i]);
+                    }
+                }
+            }
+        },
+
+        /**
+         * 
+         * Ajax start 
+         * 
+         * */
+
+        //打Ajax 寫這裡↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+
+
+
+
+        /**
+         * 
+         * Ajax end 
+         * 
+         * */
     },
 }

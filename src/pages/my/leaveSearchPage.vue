@@ -173,20 +173,24 @@
             </v-col>
           </v-row>
           <hr class="mt-6 mb-5">
-          <div v-if="empMockList != null">
+          <div v-if="leaveList != null">
             <v-data-table
-              :headers="empListHeaders"
-              :items="empMockList"
-              :page.sync="empListPage"
+              :headers="leaveListHeaders"
+              :items="leaveList"
+              :page.sync="leaveListPage"
               :items-per-page="10"
               hide-default-footer
               no-data-text="查無資料"
               class="elevation-1"
               disable-sort
-              @page-count="empListPageCount = $event"
+              @page-count="leaveListPageCount = $event"
             >
-              <template v-slot:item.mani="{ item }">                                            
-                <v-tooltip top>
+              <!-- 代理請假日期範圍 -->
+              <template v-slot:item.leaveDate="{ item }">                                            
+                {{ item.startDate }}~{{ item.endDate }}
+              </template>
+              <template v-slot:item.action="{ item }">                                            
+                <v-tooltip v-if="new Date(item.endDate) > sysDate" top>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       class="ma-2"
@@ -206,9 +210,9 @@
             <!-- 選頁 -->
             <div class="mt-2">
               <v-pagination
-                v-model="empListPage"
+                v-model="leaveListPage"
                 color="#1976D2"
-                :length="empListPageCount"
+                :length="leaveListPageCount"
               />
             </div>
           </div>

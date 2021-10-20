@@ -58,7 +58,7 @@
                       fab
                       small
                       color="success"
-                      @click="sign()"
+                      @click="sign(item)"
                       v-on="on"
                     >
                       <v-icon v-text="'mdi-account-check-outline'" />
@@ -104,7 +104,7 @@
                 申請調閱日期:
               </v-col>
               <v-col>
-                20210915 10:00
+                {{ selectedSign.applyDate }}
               </v-col>
             </v-row>
             <v-row>
@@ -112,7 +112,7 @@
                 調閱編號:
               </v-col>
               <v-col>
-                07-110-000001
+                {{ selectedSign.readNum }}
               </v-col>
             </v-row>
             <v-row>
@@ -120,7 +120,7 @@
                 調閱部門:
               </v-col>
               <v-col>
-                南屯服務所
+                {{ selectedSign.readDept }}
               </v-col>
             </v-row>
             <v-row>
@@ -128,7 +128,7 @@
                 申請調閱人員:
               </v-col>
               <v-col>
-                王大明
+                {{ selectedSign.applierName }}
               </v-col>
             </v-row>
             <v-row>
@@ -136,7 +136,7 @@
                 受理號碼:
               </v-col>
               <v-col>
-                A00024
+                {{ selectedSign.acceptNum }}
               </v-col>
             </v-row>
             <v-row>
@@ -144,7 +144,7 @@
                 電號:
               </v-col>
               <v-col>
-                7140000123
+                {{ selectedSign.electricNum }}
               </v-col>
             </v-row>
             <v-row>
@@ -152,15 +152,7 @@
                 調閱事由:
               </v-col>
               <v-col>
-                客戶來要求查詢當時申請項目
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col cols="3">
-                備註:
-              </v-col>
-              <v-col>
-                客戶已來抱怨兩次
+                {{ selectedSign.readReason }}
               </v-col>
             </v-row>
           </v-card-text>
@@ -235,7 +227,7 @@
                 />
               </v-col>
             </v-row>
-            <v-row class="ml-1" align="center">
+            <v-row class="ml-1">
               <v-col cols="3">
                 退件說明
               </v-col>
@@ -246,7 +238,7 @@
                   name="input-7-4"
                   :no-resize="true"
                   placeholder="請輸入退件說明"
-                  hide-details
+                  counter="50"
                 />
               </v-col>
             </v-row>

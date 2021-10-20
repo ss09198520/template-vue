@@ -40,20 +40,26 @@
         default: 'normal'
       },
     },
-    render(h, { $style, props: { duration, repeat, paused, reverse , fontColor , backgroundColor , fontWeight ,fontItalic }, children, data: { staticClass, key, on } }) {
+    render(h, { $style, props: { duration, repeat, paused, reverse }, children, data: { staticClass, key, on } }) {
       // console.log('$style', $style)
       // console.log('children', children[0].text)
       // '台灣電力公司跑馬燈輪播測試!!! :   今日預告台北將不會停電!!!!'
       const text = h('div', {
-        class: $style.text,
+        class: [
+          $style.text,
+          'marquee',
+        ],
         style: {
           animationDuration: `${duration}s`,
-          color: fontColor,
-          backgroundColor: backgroundColor,
-          fontWeight: fontWeight,
-          fontStyle: fontItalic,
+          // color: fontColor,
+          // backgroundColor: backgroundColor,
+          // fontWeight: fontWeight,
+          // fontStyle: fontItalic,
           animationDirection: reverse ? 'reverse' : undefined
-        }
+        },
+        domProps: {
+          innerHTML: children[0].text,
+        },
       }, children)
       
       return h('div', {//Text_wrap
@@ -63,7 +69,7 @@
           'v-list-item',
           staticClass,
           $style.wrap
-        ]
+        ],
       }, [
         h('div', {//Text_content
           class: [
@@ -71,19 +77,63 @@
               ? $style.paused
               : undefined,
             $style.content
-          ]
+          ],
         }, Array(repeat).fill(text))
       ])
     }
   }
 </script>
 
+<style>
+p ,b, strong {
+  font-size: 0.8cm !important;
+  margin-top: 15px;
+  margin: 0 !important;
+}
+
+.marquee.span{
+  height:50px;
+}
+div.marquee .ql-size-small {
+    font-size: 0.75em;
+}
+
+div.marquee .ql-size-large {
+    font-size: 1.25em;
+}
+
+div.marquee .ql-size-huge{
+    font-size: 1.50em;
+}
+
+div.marquee > b, strong {
+    font-weight: bolder !important;
+    font-size: inherit;
+    
+}
+div.marquee > h1, h2, h3, .h1, .h2, .h3 {
+    margin-top: 0px;
+    margin-bottom: 0px !important;
+}
+div.marquee >p{
+  font-size: 32px !important;
+  margin: 0px;
+  font-weight: normal !important;
+  display:inline;
+} 
+
+div.marquee > span {
+   font-weight: normal !important;
+   font-size: 32px !important;
+}
+</style>
+
 <style module>
   .wrap {
     overflow: hidden;
   }
   .content {
-    width: 200000px;
+    width: 2000px;
   }
   .text {
     animation-name: animation;

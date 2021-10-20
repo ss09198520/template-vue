@@ -9,45 +9,40 @@ export default{
         return{
             //是否顯示下方清單
             displayList: false,
-            //預設受理類型按鈕
-            displayAll: false,
             //預設當前頁數
-            orderListPage: 1,
+            formListPage: 1,
             //預設總頁數
-            orderListPageCount: 0,
-            empListHeaders: [
-                { text: '受理號碼', value: 'orderId', align: 'center' },
-                { text: '受理日期', value: 'orderDate', align: 'center' },
-                { text: '歸檔日期', value: 'fileInDate', align: 'center' },
-                { text: '調閱狀態', value: 'inquireStatus', align: 'center' },            
+            formListPageCount: 0,
+            formListHeaders: [
+                { text: '受理號碼', value: 'acceptNum', align: 'center' },
+                { text: '受理日期', value: 'acceptDate', align: 'center' },
+                { text: '歸檔日期', value: 'archieveDate', align: 'center' },
+                { text: '調閱狀態', value: 'status', align: 'center' },            
                 { text: '退件原因', value: 'rejectReason', align: 'center' },
-                { text: '戶名', value: 'accountName', align: 'center' },
+                { text: '戶名', value: 'custName', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
-                { text: '整理號碼', value: 'arrangeNum', align: 'center' },
-                { text: '受理項目', value: 'orderItems', align: 'center' },                
-                { text: '狀態操作', value: 'mani', align: 'center' }
+                { text: '整理號碼', value: 'archieveNum', align: 'center' },
+                { text: '受理項目', value: 'acceptItem', align: 'center' },                
+                { text: '狀態操作', value: 'action', align: 'center' }
             ],
-            empMockList: [                
-                { mani: true, orderId: 'A00024', orderDate: '20210910 10:00', fileInDate:'20210915 10:00', inquireStatus:'有效日至 20211030', rejectReason:'', accountName:'戶名一', contractType:'契約種類一', arrangeNum:'04-41234567', orderItems:'QA210軍眷用電申請優待'},
-                { mani: true, orderId: 'A00615', orderDate: '20210909 11:21', fileInDate:'20210915 10:00', inquireStatus:'有效日至 20211030', rejectReason:'', accountName:'戶名二', contractType:'契約種類二', arrangeNum:'04-41234568', orderItems:'I0510故障換表'},
-                { mani: true, orderId: 'A00040', orderDate: '20210907 15:36', fileInDate:'20210915 11:21', inquireStatus:'退件', rejectReason:'無法增加', accountName:'戶名三', contractType:'契約種類三', arrangeNum:'04-41234569', orderItems:'I0520增加電表'},
-                { mani: true, orderId: 'A00605', orderDate: '20210910 09:45', fileInDate:'20210919 11:05', inquireStatus:'有效日至 20211030', rejectReason:'', accountName:'戶名四', contractType:'契約種類四', arrangeNum:'04-41234570', orderItems:'F3030表燈非時間電價停用廢止'},
-                { mani: false, orderId: 'A00619', orderDate: '20210910 13:44', fileInDate:'20210919 11:05', inquireStatus:'申請中', rejectReason:'', accountName:'戶名五', contractType:'契約種類五', arrangeNum:'04-41234571', orderItems:'I0510故障換表'},
+            formList: [                
+                { acceptNum: 'A00024', acceptDate: '2021-09-10 10:00', archieveDate:'2021-09-15 10:00', status:'通過', validDate: '2021-10-30', rejectReason:'', custName:'戶名一', contractType:'契約種類一', archieveNum:'04-41234567', acceptItem:'QA210軍眷用電申請優待'},
+                { acceptNum: 'A00615', acceptDate: '2021-09-09 11:21', archieveDate:'2021-09-15 10:00', status:'通過',validDate: '2021-10-01', rejectReason:'', custName:'戶名二', contractType:'契約種類二', archieveNum:'04-41234568', acceptItem:'I0510故障換表'},
+                { acceptNum: 'A00040', acceptDate: '2021-09-07 15:36', archieveDate:'2021-09-15 11:21', status:'退件',validDate: '', rejectReason:'無法增加', custName:'戶名三', contractType:'契約種類三', archieveNum:'04-41234569', acceptItem:'I0520增加電表'},
+                { acceptNum: 'A00605', acceptDate: '2021-09-10 09:45', archieveDate:'2021-09-19 11:05', status:'通過',validDate: '2021-10-20', rejectReason:'', custName:'戶名四', contractType:'契約種類四', archieveNum:'04-41234570', acceptItem:'F3030表燈非時間電價停用廢止'},
+                { acceptNum: 'A00619', acceptDate: '2021-09-10 13:44', archieveDate:'2021-09-19 11:05', status:'申請中',validDate: '', rejectReason:'', custName:'戶名五', contractType:'契約種類五', archieveNum:'04-41234571', acceptItem:'I0510故障換表'},
             ],
 
             browserModel: false,
-            department:null,
-            departmentOption:[
-                {text:'核算課',value:'1'},
-                {text:'大里服務中心',value:'2'},
-                {text:'東山服務所',value:'3'},
-            ],
             //日曆起
             menu1: false,
             date1: '',
             //日曆迄
             menu2: false,
             date2: '',
+            sysDate: new Date(),
+            numOfRead:2,
+            numOfReadApply: 1,
         }
     },
     methods: {

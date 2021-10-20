@@ -4,11 +4,11 @@
       <div class="d-flex">
         <div class="ml-9 font-bold">
           <h2 class="font-bold">調閱中</h2>
-          <span style="font-size:96px;">2</span><span style="font-size:30px;">件</span>
+          <span style="font-size:96px;">{{ numOfRead }}</span><span style="font-size:30px;">件</span>
         </div>
         <div class="ml-9 font-bold">
           <h2 class="font-bold">申請中</h2>
-          <span style="font-size:96px;">1</span><span style="font-size:30px;">件</span>
+          <span style="font-size:96px;">{{ numOfReadApply }}</span><span style="font-size:30px;">件</span>
         </div>            
       </div>
                   
@@ -80,6 +80,7 @@
                   outlined
                   dense
                   hide-details                  
+                  :clearable="true"
                   v-on="on"
                 />
               </template>
@@ -105,6 +106,7 @@
                   outlined
                   dense
                   hide-details
+                  :clearable="true"
                   v-on="on"
                 />
               </template>
@@ -138,22 +140,35 @@
         </v-row>    
       </div>
       <hr class="mt-6">
-      <div v-if="displayList == true">
+      <div>
         <v-row class="ma-7">
           <v-col>
             <v-data-table
-              :headers="empListHeaders"
-              :items="empMockList"
+              :headers="formListHeaders"
+              :items="formList"
               :items-per-page="10"
               no-data-text="查無資料"              
               disable-sort
               hide-default-footer
               class="elevation-1"
-              :page.sync="orderListPage"
-              @page-count="orderListPageCount = $event"
+              :page.sync="formListPage"
+              @page-count="formListPageCount = $event"
             >
-              <template v-slot:item.mani="{ item }">   
-                <div v-if="item.mani==true">
+              <!-- 調閱狀態欄位 -->
+              <template v-slot:item.status="{ item }">                                                        
+                <div v-if="item.status === '通過' && new Date(item.validDate) > sysDate">
+                  有效日至{{ item.validDate }}
+                </div>
+                <div v-else-if="item.status === '通過' && new Date(item.validDate) < sysDate">
+                  已逾期
+                </div>
+                <div v-else>
+                  {{ item.status }}
+                </div>
+
+              </template>
+              <template v-slot:item.action="{ item }">   
+                <div v-if="item.status === '通過' && new Date(item.validDate) > sysDate">
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-btn
@@ -190,9 +205,9 @@
         <!-- 選頁 -->
         <div class="mt-2">
           <v-pagination
-            v-model="orderListPage"
+            v-model="formListPage"
             color="#2F59C4"
-            :length="orderListPageCount"
+            :length="formListPageCount"
           />
         </div>
       </div>

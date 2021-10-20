@@ -1,9 +1,11 @@
-import EventBus from "@/assets/services/eventBus";
+// import EventBus from "@/assets/services/eventBus";
 
 export default {
     name: 'Form',
     props: {
-        restrictMode: String
+        restrictMode: String,
+        // signPreviewImgSrc:String,
+        // certificateList: Array,
     },
     mounted() {
         this.init();
@@ -157,12 +159,12 @@ export default {
             this.showModeSelect = false;
             setTimeout(() => this.showModeSelect = true, 5000);
         },
-        save(){
-            if(this.restrictMode){
-                //當點擊儲存按鈕，則使用EventBus通知可關閉
-                EventBus.publish('saveFile');
-            }
-        },
+        // save(){
+        //     if(this.restrictMode){
+        //         //當點擊儲存按鈕，則使用EventBus通知可關閉
+        //         EventBus.publish('saveFile');
+        //     }
+        // },
         retrunOrder(){
             this.$emit("returnOrder");
         },
@@ -171,6 +173,9 @@ export default {
         },
         saveComments(){
             this.$emit("saveComments");
+        },
+        saveFile(){
+            this.$emit("saveFile");
         }
     }
 }

@@ -12,7 +12,7 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              跑 馬 燈 內 容
+              跑馬燈內容
             </v-col>
             <v-col cols="3" class="mt-5">
               <v-text-field
@@ -27,7 +27,7 @@
             </v-col>
             <v-col cols="1" />
             <v-col cols="1" class="ml-2">
-              跑 馬 燈 類 型
+              跑馬燈類型
             </v-col>
             <v-col cols="3" class="ml-2">
               <v-select
@@ -47,7 +47,7 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              狀態
+              跑馬燈類型
             </v-col>
             <v-col cols="3">
               <v-select
@@ -67,7 +67,7 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              上 架 時 間
+              上架時間
             </v-col>
             <v-col 
               cols="3"   
@@ -129,7 +129,7 @@
             </v-col>
             <v-col cols="1" />
             <v-col cols="1" class="ml-2">
-              下 架 時 間
+              下架時間
             </v-col>
             <v-col 
               cols="3"   
@@ -275,19 +275,6 @@
             </v-dialog>
           </template>
           <template v-slot:[`item.action`]="{ item }">
-            <!-- <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  class="mr-2"
-                  color="red"
-                  @click="editItem(item)"
-                  v-on="on"
-                >
-                  mdi-pencil
-                </v-icon>
-              </template>
-              <span>編輯</span>
-            </v-tooltip> -->
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -318,21 +305,6 @@
               </template>
               <span>編輯</span>
             </v-tooltip>
-            <!-- <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  class="ma-2"
-                  fab
-                  x-small
-                  color="error"
-                  @click="action('deleteMultiMedia',item)"
-                  v-on="on"
-                >
-                  <v-icon v-text="'mdi-delete'" />
-                </v-btn>
-              </template>
-              <span>刪除</span>
-            </v-tooltip> -->
           </template>
           <template v-slot:[`item.returnInfo`]="{ item }">
             <v-tooltip v-if="item.returnInfo" top>

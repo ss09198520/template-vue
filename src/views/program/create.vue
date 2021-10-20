@@ -82,38 +82,58 @@
                   輪 播 時 間
                 </v-subheader>
               </v-col>
-              <v-col
-                cols="12"
-                sm="6"
-                md="4"
-              >
+              <v-col cols="1" md="3">
                 <v-menu
-                  ref="dateMenu"
-                  v-model="dateMenu"
-                  :close-on-content-click="false"
-                  :return-value="dates"
+                  v-model="releaseStartDateMenu"
                   transition="scale-transition"
                   offset-y
                   min-width="auto"
                 >
-                  <template v-slot:activator="{ on, attrs }">
+                  <template v-slot:activator="{ on }">
                     <v-text-field
-                      v-model="dateRangeText"
-                      label="請 選 擇 時 間 區 間"
-                      prepend-icon="mdi-calendar"
+                      v-model="releaseStartDate"
+                      append-icon="mdi-calendar"
+                      placeholder="上架時間(起)"
+                      color="accent"
+                      outlined
+                      dense
                       readonly
-                      v-bind="attrs"
+                      hide-details   
+                      :clearable="true"
                       v-on="on"
                     />
                   </template>
                   <v-date-picker
-                    v-model="dates"
-                    no-title
-                    range
-                    @input="dateMenu = dates.length < 2 ? true :false"
-                  >
-                    <v-spacer />
-                  </v-date-picker>
+                    v-model="releaseStartDate"
+                    scrollable
+                  />
+                </v-menu>
+              </v-col>
+              <v-col cols="1" md="3">
+                <v-menu
+                  v-model="releaseEndDateMenu"
+                  transition="scale-transition"
+                  offset-y
+                  min-width="auto"
+                >
+                  <template v-slot:activator="{ on }">
+                    <v-text-field
+                      v-model="releaseEndDate"
+                      append-icon="mdi-calendar"
+                      placeholder="上架時間(迄)"
+                      color="accent"
+                      outlined
+                      dense
+                      readonly
+                      hide-details   
+                      :clearable="true"
+                      v-on="on"
+                    />
+                  </template>
+                  <v-date-picker
+                    v-model="releaseEndDate"
+                    scrollable
+                  />
                 </v-menu>
               </v-col>
             </v-row>
@@ -325,7 +345,10 @@
         fileDesc: '',
         uploadType: '',
         uploadData: '',
-        dates: [],
+        releaseStartDateMenu: false,
+        releaseStartDate: '',
+        releaseEndDateMenu: false,
+        releaseEndDate: '',
         dateMenu: false,
         formData: {
           filename: '',
@@ -346,7 +369,7 @@
             width: '5%'
           },
           {
-            text: '撥放順序',
+            text: '播放順序',
             value: 'action',
             sortable: false,
             align: 'center',

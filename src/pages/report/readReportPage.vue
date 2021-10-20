@@ -10,7 +10,7 @@
             </v-col>
             <v-col cols="3" class="d-flex">
               <v-menu
-                v-model="startDate"
+                v-model="openStartDate"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -30,13 +30,13 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="before7"
-                  @input="startDate = false"
+                  v-model="startDate"
+                  @input="openStartDate = false"
                 />
               </v-menu>
               <div class="mt-1">~</div>
               <v-menu
-                v-model="endDate"
+                v-model="openEndDate"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -56,8 +56,8 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="date"
-                  @input="endDate = false"
+                  v-model="endDate"
+                  @input="openEndDate = false"
                 />
               </v-menu>
             </v-col>
@@ -99,10 +99,28 @@
             class="elevation-1"
             disable-sort
             @page-count="dataListPageCount = $event"
-          >
-            <template v-slot:item.signOff="{ item }">
-              <!-- <v-btn v-if="item.signOff" color="success">{{ signOffText }}</v-btn> -->
-              <v-tooltip v-if="item.signOff" top>
+          >            
+            <template v-slot:item.readMgmtSignDate="{ item }">              
+              <v-tooltip v-if="!item.readMgmtSignDate" style="color: gray;" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-account-check-outline'" />
+                  </v-btn>
+                </template>
+                <span>簽核</span>
+              </v-tooltip>                
+              <span v-else>{{ item.readMgmtSignDate }}</span>
+            </template>
+
+            <template v-slot:item.leaderSignDate="{ item }">                            
+              <span v-if="!item.readMgmtSignDate && !item.leaderSignDate">未簽核</span>  
+              <v-tooltip v-else-if="!item.leaderSignDate" style="color: gray;" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -116,16 +134,28 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else style="color: gray;">已簽核</span>
+              <span v-else>{{ item.leaderSignDate }}</span>
             </template>
-            <template v-slot:item.signOffDate1="{ item }">
-              <span v-if="!item.signOffDate1" style="color: gray;">未簽核</span>
-              <span v-else>{{ item.signOffDate1 }}</span>
+
+            <template v-slot:item.managerSignDate="{ item }">                            
+              <span v-if="!item.leaderSignDate && !item.managerSignDate">未簽核</span>  
+              <v-tooltip v-else-if="!item.managerSignDate" style="color: gray;" top>
+                <template v-slot:activator="{ on }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="success"
+                    v-on="on"
+                  >
+                    <v-icon v-text="'mdi-account-check-outline'" />
+                  </v-btn>
+                </template>
+                <span>簽核</span>
+              </v-tooltip>
+              <span v-else>{{ item.managerSignDate }}</span>
             </template>
-            <template v-slot:item.signOffDate2="{ item }">
-              <span v-if="!item.signOffDate2" style="color: gray;">未簽核</span>
-              <span v-else>{{ item.signOffDate2 }}</span>
-            </template>
+
             <template v-slot:item.download="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">

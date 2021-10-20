@@ -3,7 +3,9 @@
 export default {
     name: 'Form',
     props: {
-        restrictMode: String
+        restrictMode: String,
+        // signPreviewImgSrc:String,
+        // certificateList: Array,
     },
     mounted() {
         this.init();

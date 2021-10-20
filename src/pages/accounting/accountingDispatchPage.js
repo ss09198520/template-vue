@@ -14,12 +14,9 @@ export default {
       // 派工設定title
       dispatchHeaders: [
         { text: '班別', value: 'className', align: 'center' },
-        { text: '核算員', value: 'accounting', align: 'center' },
-        { text: '核算員姓名', value: 'accountingName', align: 'center' },
-        { text: '檢算員', value: 'calculate', align: 'center' },
-        { text: '檢算員姓名', value: 'calculateName', align: 'center' },
-        { text: '設定人員', value: 'settingUser', align: 'center' },
-        { text: '設定人員姓名', value: 'settingUserName', align: 'center' },
+        { text: '核算員', value: 'accounting', align: 'center' },      
+        { text: '檢算員', value: 'calculate', align: 'center' },       
+        { text: '設定人員', value: 'settingUser', align: 'center' },       
         { text: '設定日期', value: 'settingDate', align: 'center' },
         { text: '狀態操作', value: 'edit', align: 'center' }
       ],

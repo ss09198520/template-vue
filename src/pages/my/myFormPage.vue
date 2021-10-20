@@ -64,7 +64,7 @@
       </template>
       <!-- 狀態操作 -->
       <template v-slot:item.action="{ item }">   
-        <div v-if="item.status !== '核算中'">
+        <div>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn

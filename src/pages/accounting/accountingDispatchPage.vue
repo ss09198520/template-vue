@@ -36,6 +36,19 @@
             disable-sort
             @page-count="dispatchListPageCount = $event"
           >
+            <!-- 核算員號碼+姓名 -->
+            <template v-slot:item.accounting="{ item }">
+              {{ item.accounting }} &nbsp; {{ item.accountingName }}
+            </template>
+            <!-- 檢算員號碼+姓名 -->
+            <template v-slot:item.calculate="{ item }">
+              {{ item.calculate }} &nbsp; {{ item.calculateName }}
+            </template>
+            <!-- 設定人員號碼+姓名 -->
+            <template v-slot:item.settingUser="{ item }">
+              {{ item.settingUser }} &nbsp; {{ item.settingUserName }}
+            </template>
+            <!-- 修改派工按鈕 -->
             <template v-slot:item.edit="{ item }">              
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
@@ -50,7 +63,8 @@
                   </v-btn>
                 </template>
                 <span>修改派工</span>
-              </v-tooltip>              
+              </v-tooltip>
+              <!-- 刪除派工按鈕 -->
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn

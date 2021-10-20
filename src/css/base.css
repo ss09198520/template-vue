@@ -231,3 +231,10 @@ body {
       border-color: #E98B2A;
   }
 /* 核算區-未分派區設定用 end*/
+
+/* 隱藏數字 input 箭頭 */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}

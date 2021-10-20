@@ -60,16 +60,8 @@
                 <v-row>
                   <v-col v-for="(certificate, index) in certificateList" :key="certificate.id" cols="3" class="mb-2">
                     <v-row>
-                      <v-col cols="12" class="d-center">
-                        <h3 v-if="!certificate.isAdditional">{{ certificate.name }}</h3>
-                        <v-text-field
-                          v-else
-                          v-model="certificate.name"
-                          :disabled="mode != 'edit'"
-                          dense
-                          hide-details
-                          class="h3 t-center"
-                        />
+                      <v-col cols="12" style="text-align: center;">
+                        <h3>{{ certificate.name }}</h3>
                       </v-col>
                     </v-row>
                     <v-row>
@@ -139,16 +131,16 @@
                       </v-col>
                     </v-row>
                   </v-col>
-                  <v-col v-if="mode == 'edit'" cols="3" class="add-attachment-area">
-                    <v-row class="h-100">
-                      <v-col cols="12" class="h-100 d-center">
+                  <v-col v-if="mode == 'edit'" cols="3" class="add-attachment-area d-center">
+                    <v-row>
+                      <v-col cols="12" class="d-center">
                         <v-btn
                           class="mx-2"
                           fab
                           dark
                           depressed
                           color="primary"
-                          @click="addCertificate()"
+                          @click="openNewCertificateModal()"
                         >
                           <v-icon dark>
                             mdi-plus
@@ -175,13 +167,7 @@
                   <v-col v-for="(attachment, index) in attachmentList" :key="attachment.id" cols="3" class="mb-2">                    
                     <v-row>
                       <v-col cols="12" style="text-align: center;">
-                        <v-text-field
-                          v-model="attachment.name"
-                          :disabled="mode != 'edit'"
-                          dense
-                          hide-details
-                          class="h3 t-center"
-                        />
+                        <h3>{{ attachment.name }}</h3>
                       </v-col>
                     </v-row>
                     <v-row>
@@ -195,10 +181,10 @@
                             {{ attachment.file.name }}
                           </div>
                           <div v-else-if="mode == 'viewMyRead' || mode == 'viewMyForm'">
-                            <span>附件一檔名</span>
+                            <span>附件檔名</span>
                           </div>
                           <div v-else class="not-scan-area">
-                            <span>尚未上傳一</span>
+                            <span>尚未上傳</span>
                           </div>
                         </div>
                       </v-col> 
@@ -271,9 +257,9 @@
                       </v-col>
                     </v-row>
                   </v-col>
-                  <v-col cols="3" class="add-attachment-area">
-                    <v-row class="h-100">
-                      <v-col cols="12" class="h-100 d-center">
+                  <v-col cols="3" class="add-attachment-area d-center">
+                    <v-row>
+                      <v-col cols="12" class="d-center">
                         <v-btn
                           v-if="mode == 'edit'"
                           class="mx-2"
@@ -281,7 +267,7 @@
                           dark
                           depressed
                           color="primary"
-                          @click="addAttachment()"
+                          @click="openNewAttachmentModal()"
                         >
                           <v-icon dark>
                             mdi-plus
@@ -604,10 +590,11 @@
     <!-- 檢視圖片 modal -->
     <v-dialog
       v-model="viewImageDialog"
+      transition="dialog-bottom-transition"
       width="70vw"
     >
       <v-card>
-        <v-card-title class="text-h5 lighten-2">
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">
           {{ viewImageTitle }}
         </v-card-title>
         
@@ -623,6 +610,243 @@
             @click="viewImageDialog = false"
           >
             關閉
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 新增證件 modal -->
+    <v-dialog 
+      v-model="newCertificateModal" 
+      transition="dialog-bottom-transition"
+      width="50vw"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">
+          請選擇證件類別
+        </v-card-title>
+        <v-card-text>
+          <v-row class="ma-3">
+            <v-chip
+              v-if="newCertificateType === 0"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>本人身分證正面</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(0)">
+              <span>本人身分證正面</span>
+            </v-chip>
+            <v-chip
+              v-if="newCertificateType === 1"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>本人身分證反面</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(1)">
+              <span>本人身分證反面</span>
+            </v-chip>
+            <v-chip
+              v-if="newCertificateType === 2"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>現役軍人眷屬身分證正面</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(2)">
+              <span>現役軍人眷屬身分證正面</span>
+            </v-chip>
+            <v-chip
+              v-if="newCertificateType === 3"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>現役軍人眷屬身分證反面</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(3)">
+              <span>現役軍人眷屬身分證反面</span>
+            </v-chip>
+          </v-row>
+          <v-row class="ma-3">
+            <v-chip
+              v-if="newCertificateType === 4"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>其他證件:&emsp;</span>
+              <v-text-field v-model="otherCertificate" class="chip-text-field" placeholder="請輸入證件類別" />
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(4)">
+              <span>其他證件</span>
+            </v-chip>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            @click="newCertificateModal = false"
+          >
+            &emsp;關閉&emsp;
+          </v-btn>
+          <v-btn
+            color="success"
+            @click="addCertificate()"
+          >
+            &emsp;新增&emsp;
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 新增附件 modal -->
+    <v-dialog 
+      v-model="newAttachmentModal" 
+      transition="dialog-bottom-transition"
+      width="50vw"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">
+          請選擇附件類別
+        </v-card-title>
+        <v-card-text>
+          <v-row class="ma-3">
+            <v-chip
+              v-if="newAttachmentType === 0"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>農業動力用電主管機關證明文件</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(0)">
+              <span>農業動力用電主管機關證明文件</span>
+            </v-chip>
+            <v-chip
+              v-if="newAttachmentType === 1"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>電氣技術人員執照</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(1)">
+              <span>電氣技術人員執照</span>
+            </v-chip>
+            <v-chip
+              v-if="newAttachmentType === 2"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>門牌整編證明</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(2)">
+              <span>門牌整編證明</span>
+            </v-chip>
+          </v-row>
+          <v-row class="ma-3">
+            <v-chip
+              v-if="newAttachmentType === 3"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>扣繳代繳帳號資料或中獎證明</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(3)">
+              <span>扣繳代繳帳號資料或中獎證明</span>
+            </v-chip>
+            <v-chip
+              v-if="newAttachmentType === 4"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>戶口名簿</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(4)">
+              <span>戶口名簿</span>
+            </v-chip>
+            <v-chip
+              v-if="newAttachmentType === 5"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>抄表事故聯絡單</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(5)">
+              <span>抄表事故聯絡單</span>
+            </v-chip>
+            <v-chip
+              v-if="newAttachmentType === 6"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>切結書</span>
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(6)">
+              <span>切結書</span>
+            </v-chip>
+          </v-row>
+          <v-row class="ma-3">
+            <v-chip
+              v-if="newAttachmentType === 7"
+              label 
+              x-large 
+              class="ma-2" 
+              color="success"
+              text-color="white"
+            >
+              <span>其他佐證文件:&emsp;</span>
+              <v-text-field v-model="otherAttachment" class="chip-text-field" placeholder="請輸入附件類別" />
+            </v-chip>
+            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(7)">
+              <span>其他佐證文件</span>
+            </v-chip>
+          </v-row>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            @click="newAttachmentModal = false"
+          >
+            &emsp;關閉&emsp;
+          </v-btn>
+          <v-btn
+            color="success"
+            @click="addAttachment()"
+          >
+            &emsp;新增&emsp;
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -700,5 +924,14 @@
     }
     .add-attachment-area{
         min-height: 30vh;
+    }
+    .chip-text-field >>> .v-text-field__slot input{
+        color: white !important;
+        font-size: 18px;
+        margin-top: 5px !important;
+    }
+    .chip-text-field >>> .v-text-field__slot input::placeholder{
+        color: white !important;
+        opacity: 0.8;
     }
 </style>

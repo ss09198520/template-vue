@@ -72,11 +72,12 @@ export default {
             hasAuth:false,            
             subAuthList:[ 
                 { text: '我的表單',value:'1',hasAuth:true},
-                { text: '我的退件區',value:'2',hasAuth:false}, 
-                { text: '調閱申請',value:'3',hasAuth:false},
-                { text: '我的調閱區',value:'4',hasAuth:false},
-                { text: '請假清單',value:'5',hasAuth:true}, 
-                { text: '請假申請',value:'6',hasAuth:true}, 
+                { text: '我的退件區-無紙化案件',value:'2',hasAuth:false},
+                { text: '我的退件區-多媒體',value:'3',hasAuth:false}, 
+                { text: '調閱申請',value:'4',hasAuth:false},
+                { text: '我的調閱區',value:'5',hasAuth:false},
+                { text: '請假清單',value:'6',hasAuth:true}, 
+                { text: '請假申請',value:'7',hasAuth:true}, 
             ]
           },
 
@@ -89,6 +90,16 @@ export default {
                   { text: '多媒體-節目單',value:'14',hasAuth:false,type:2},
                   { text: '多媒體-滿意度問卷',value:'14',hasAuth:false,type:2}, 
             ]},
+
+            { text: '核算區',
+            hasAuth:false,            
+            subAuthList:[ 
+                { text: '核算派工設定',value:'1',hasAuth:true},
+                { text: '待核算',value:'2',hasAuth:false},
+                { text: '待歸檔',value:'3',hasAuth:false}, 
+                { text: '未分派區',value:'4',hasAuth:false},
+            ]
+          },
 
             { text: '多媒體區',
             hasAuth:false,            

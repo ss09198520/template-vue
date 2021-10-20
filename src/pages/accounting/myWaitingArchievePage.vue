@@ -77,8 +77,9 @@
               <span>查詢</span>
             </v-tooltip>
           </v-col>
-        </v-row>  
-        <hr class="mt-10 mb-10">
+        </v-row> 
+        <span class="annotation">※提醒&nbsp; 08:00 – 13:00 內送件，4小時內可以執行「退回核算」; 13:00 之後送件，17:00 前可以執行「退回核算」</span>
+        <hr>
       </div>
       <div v-if="hasShowList" class="ml-10">    
         <v-data-table

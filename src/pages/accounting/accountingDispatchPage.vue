@@ -103,7 +103,8 @@
           <div class="ml-10">
             <div class="font-18px font-bold">
               <v-row align="center" class="mt-5">          
-                <v-col cols="2">       
+                <v-col cols="2">
+                  <span v-if="dialogType==='add'" class="red--text">*</span>       
                   班別
                 </v-col>   
                 <v-col cols="6">
@@ -114,6 +115,7 @@
                       hide-details                                         
                       dense
                       placeholder="請輸入班別"
+                      @blur="checkRequired()"
                     />
                   </div>
                   <div v-if="dialogType!=='add'">
@@ -123,7 +125,8 @@
                 </v-col>
               </v-row>
               <v-row align="center">
-                <v-col cols="2">       
+                <v-col cols="2">
+                  <span v-if="dialogType==='add'" class="red--text">*</span>          
                   核算員
                 </v-col>         
                 <v-col cols="6">
@@ -139,6 +142,7 @@
                       item-text="empName"
                       :return-object="true"
                       @change="change('accounting')"
+                      @blur="checkRequired()"
                     />
                   </div>
                   <div v-if="dialogType!=='add'">
@@ -148,7 +152,8 @@
                 </v-col>
               </v-row>
               <v-row align="center">
-                <v-col cols="2">       
+                <v-col cols="2">
+                  <span v-if="dialogType==='add'" class="red--text">*</span>        
                   檢算員
                 </v-col>         
                 <v-col cols="6">
@@ -163,6 +168,7 @@
                       item-text="empName"
                       :return-object="true"
                       @change="change('calculate')"
+                      @blur="checkRequired()"
                     />
                   </div>
                   <div v-if="dialogType!=='add'">
@@ -173,6 +179,7 @@
               </v-row>
               <v-row align="center">
                 <v-col cols="12">
+                  <span class="red--text">*</span>       
                   登記單分派班別設定：
                 </v-col>
               </v-row>
@@ -180,7 +187,7 @@
                 <span class="red--text font-12px ml-4">{{ errorMsg.classType }}</span>
               </v-row>
               <v-radio-group v-model="dispatchInfo.dispatchType">
-                <v-radio label="不論契約種類，皆以電號設定分派班別。" />
+                <v-radio label="不論契約種類，皆以電號設定分派班別。" @click="changeDispatchType('non')" />
                 <span class="red--text font-12px ml-4">{{ errorMsg.electricNum }}</span>
                 <v-row v-for="(electricNum, index) in dispatchInfo.electricNumList" :key="index" style="margin: 0 10px 10px 0;" align="center">
                   <div style="height: 10px; width: 15px;" />
@@ -192,7 +199,7 @@
                       hide-details                                         
                       dense
                       :disabled="dispatchInfo.dispatchType !== 0"
-                      @blur="checkElectric(electricNum,'electricNumList','start')"
+                      @blur="checkElectric(electricNum,'electricNum','electricNumList','start')"
                     />
                   </v-col>
                   <span :class="dispatchInfo.dispatchType !== 1? '':'disable-text'">~</span>
@@ -203,7 +210,7 @@
                       hide-details                                         
                       dense
                       :disabled="dispatchInfo.dispatchType !== 0"
-                      @blur="checkElectric(electricNum,'electricNumList','end')"
+                      @blur="checkElectric(electricNum,'electricNum','electricNumList','end')"
                     />
                   </v-col>
                   <v-col v-if="dispatchInfo.dispatchType == 0 && dispatchInfo.electricNumList.length > 1" cols="1">
@@ -231,7 +238,9 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-                <v-radio label="依契約種類設定分派班別：" />
+                <v-radio label="依契約種類設定分派班別：" @click="changeDispatchType()" />
+                <span class="red--text font-12px ml-4">{{ errorMsg.contractType }}</span>
+                
                 <!-- 包制 -->
                 <v-row style="margin: 10px;" align="center">
                   <v-col style="padding-top: 0;">
@@ -258,7 +267,7 @@
                           hide-details                                         
                           dense
                           :disabled="dispatchInfo.dispatchType !== 1 || !dispatchInfo.usePackage"
-                          @blur="checkElectric(packageNum,'packageNumList','start')"
+                          @blur="checkElectric(packageNum,'packageNum','packageNumList','start')"
                         />
                       </v-col>
                       <span :class="dispatchInfo.dispatchType !== 0 && dispatchInfo.usePackage ? '':'disable-text'">~</span>
@@ -269,10 +278,10 @@
                           hide-details                                         
                           dense
                           :disabled="dispatchInfo.dispatchType !== 1 || !dispatchInfo.usePackage"
-                          @blur="checkElectric(packageNum,'packageNumList','end')"
+                          @blur="checkElectric(packageNum,'packageNum','packageNumList','end')"
                         />
                       </v-col>
-                      <v-col v-if="dispatchInfo.dispatchType == 1 && dispatchInfo.packageNumList.length > 1" cols="1">
+                      <v-col v-if="dispatchInfo.dispatchType == 1 && dispatchInfo.usePackage && dispatchInfo.packageNumList.length > 1" cols="1">
                         <v-btn
                           :disabled="dispatchInfo.dispatchType !== 1"
                           class="ma-2"
@@ -321,7 +330,7 @@
                           hide-details                                         
                           dense
                           :disabled="dispatchInfo.dispatchType !== 1 || !dispatchInfo.useHighVoltage"
-                          @blur="checkElectric(highVoltageNum,'highVoltageNumList','start')"
+                          @blur="checkElectric(highVoltageNum,'highVoltageNum','highVoltageNumList','start')"
                         />
                       </v-col>
                       <span :class="dispatchInfo.dispatchType !== 0 && dispatchInfo.useHighVoltage ? '':'disable-text'">~</span>
@@ -332,7 +341,7 @@
                           hide-details                                         
                           dense
                           :disabled="dispatchInfo.dispatchType !== 1 || !dispatchInfo.useHighVoltage"
-                          @blur="checkElectric(highVoltageNum,'highVoltageNumList','end')"
+                          @blur="checkElectric(highVoltageNum,'highVoltageNum','highVoltageNumList','end')"
                         />
                       </v-col>
                       <v-col v-if="dispatchInfo.dispatchType == 1 && dispatchInfo.highVoltageNumList.length > 1 && dispatchInfo.useHighVoltage" cols="1">
@@ -372,6 +381,7 @@
                           :disabled="dispatchInfo.dispatchType !== 1" 
                         />
                         <span style="margin-left: 10px; width: 40px;" :class="dispatchInfo.dispatchType!==0? '':'disable-text'">表制 </span>                 
+                        <span class="red--text font-12px ml-4">{{ errorMsg.meterType != null? errorMsg.meterType: errorMsg.meterElectricNum != null? errorMsg.meterElectricNum: errorMsg.meterCompute != null? errorMsg.meterCompute : null }}</span>
                       </v-row>
                       <v-row v-for="(meterElectricNum, index) in dispatchInfo.meterElectricNumList" :key="index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
                         <div v-if="index == 0">

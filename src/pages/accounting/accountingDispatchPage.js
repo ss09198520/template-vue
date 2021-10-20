@@ -91,13 +91,16 @@ export default {
         accounting:null,
         calculate: null,
         classType: null,
+        contractType: null,
         electricNum:null,
         packageNum:null,
         highVoltageNum: null,
         meterType:null,
         meterElectricNum: null,
         meterCompute: null,
-      }
+      },
+      requiredArray:[],  //必填欄位
+      formatArray:[],  //格式錯誤欄位 
      
     }
   },
@@ -136,6 +139,20 @@ export default {
           {start: '', end: ''},
         ],
       };
+
+      this.errorMsg = {
+        className:null,
+        accounting:null,
+        calculate: null,
+        classType: null,
+        contractType: null,
+        electricNum:null,
+        packageNum:null,
+        highVoltageNum: null,
+        meterType:null,
+        meterElectricNum: null,
+        meterCompute: null,
+      },
 
       this.accounting = null;
       this.calculate = null;
@@ -295,8 +312,8 @@ export default {
           type:'H',
           status:'ACTIVE',
           computeDate:'',
-          electricNumStart:'07140000300',
-          electricNumEnd:'07140000399',
+          electricNumStart:'07140000400',
+          electricNumEnd:'07140000499',
         },
         {
           seq:'1',
@@ -377,6 +394,7 @@ export default {
      * 
      */
 
+    // 將選擇的核算員/檢算員整理到dispatchInfo中
     change(type){
         if(type === 'accounting'){
           this.dispatchInfo.accounting = this[type].empNo;
@@ -387,24 +405,23 @@ export default {
         }
     },
 
+    // 整理取出的資料
     sortDispatchData(dispatchList){
-
-      let electricNumList = [];
-      let packageNumList = [];
-      let highVoltageNumList = [];
-      let meterElectricNumList = [];
-      let computeDateList = [];
-      let hasPackage = false;
-      let hasHighVoltage = false;
-      let hasMeter = false;
-      let meterType = null;
-
+      let electricNumList = [];         // 不論契約種類 電號範圍清單
+      let packageNumList = [];          // 契約種類-包制 電號範圍清單
+      let highVoltageNumList = [];      // 契約種類-高壓 電號範圍清單
+      let meterElectricNumList = [];    // 契約種類-表制 電號範圍清單
+      let computeDateList = [];         // 契約種類-表制 計算日清單
+      let hasPackage = false;           // 是否有契約種類-包制的資料 
+      let hasHighVoltage = false;       // 是否有契約種類-高壓的資料 
+      let hasMeter = false;             // 是否有契約種類-表制的資料 
+      let meterType = null;             // 在契約種類-表制中是否有選擇電號(0)還是計算日(1) 
 
       // 判斷為契約種類還是無限定，V無限定/H高壓/P包制/F表制
       if(dispatchList[0].type === 'V'){
-        this.dispatchInfo.dispatchType = 0;
+        this.dispatchInfo.dispatchType = 0;  //不論契約種類
       } else {
-        this.dispatchInfo.dispatchType = 1;
+        this.dispatchInfo.dispatchType = 1;  //有契約種類
       }
 
       // 判斷是哪種電號及計算日
@@ -449,31 +466,11 @@ export default {
         }
       }
 
-      // 判斷哪些電號沒有值，塞預設
-      if(electricNumList.length === 0){
-        electricNumList.push({
-          start:null,
-          end:null
-        })
-      } 
-      if(highVoltageNumList.length === 0){
-        highVoltageNumList.push({
-          start:null,
-          end:null
-        })
-      }
-      if(packageNumList.length === 0){
-        packageNumList.push({
-          start:null,
-          end:null
-        })
-      } 
-      if(meterElectricNumList.length === 0){
-        meterElectricNumList.push({
-          start:null,
-          end:null
-        })
-      }
+      // 判斷哪些電號沒有值，塞預設值     
+      this.defaultList(electricNumList);
+      this.defaultList(highVoltageNumList);
+      this.defaultList(packageNumList);
+      this.defaultList(meterElectricNumList);
 
       // 將整理好的資料放回去
       this.dispatchInfo.className = dispatchList[0].className;
@@ -494,6 +491,16 @@ export default {
       
     },
 
+    // 沒有值的電號清單塞預設值
+    defaultList(dataList){
+      if(dataList.length === 0){
+        dataList.push({
+          start:null,
+          end:null
+        })
+      } 
+    },
+
     // 整理Input資料
     /**
      * 1.契約種類有分為兩類:純電號or契約種類 包制,高壓,表制，只能二選一設定
@@ -501,20 +508,24 @@ export default {
      * 3.表制又分為電號/計算日，只能二選一設定 
      * 
      */
-    setInputVal(actionType){      
-      
-      // 驗證電號格式，若失敗直接return
-      if(!this.checkElectric()){
-        return;
-      }
-
+    setInputVal(actionType){
+      let isValid = true;
       let dispatchList = [];
 
+
+      // 驗證必填欄位是否為空值
+      if(!this.checkRequired()){        
+        isValid = false;
+      }
+
+      // 將電號整理並放到dispatchList中      
       // 無契約種類-純電號
       if(this.dispatchInfo.dispatchType === 0 && this.dispatchInfo.electricNumList.length > 0) {
           for(let i in this.dispatchInfo.electricNumList){
+            // 判斷電號起訖號是否都有值
             if(!ValidateUtil.isEmpty(this.dispatchInfo.electricNumList[i].start) 
               && !ValidateUtil.isEmpty(this.dispatchInfo.electricNumList[i].end)){
+                // 將資料加到dispatchList中
                 dispatchList.push({
                   className : this.dispatchInfo.className,
                   accounting : this.dispatchInfo.accounting,
@@ -532,8 +543,10 @@ export default {
          // 包制
         if(this.dispatchInfo.usePackage && this.dispatchInfo.packageNumList.length > 0) {
           for(let i in this.dispatchInfo.packageNumList){
+            // 判斷電號起訖號是否都有值
             if(!ValidateUtil.isEmpty(this.dispatchInfo.packageNumList[i].start) 
               && !ValidateUtil.isEmpty(this.dispatchInfo.packageNumList[i].end)){
+                // 將資料加到dispatchList中
                 dispatchList.push({
                   className : this.dispatchInfo.className,
                   accounting : this.dispatchInfo.accounting,
@@ -551,8 +564,10 @@ export default {
         // 高壓
         if(this.dispatchInfo.useHighVoltage && this.dispatchInfo.highVoltageNumList.length > 0) {
           for(let i in this.dispatchInfo.highVoltageNumList){
+            // 判斷電號起訖號是否都有值
             if(!ValidateUtil.isEmpty(this.dispatchInfo.highVoltageNumList[i].start) 
               && !ValidateUtil.isEmpty(this.dispatchInfo.highVoltageNumList[i].end)){
+                // 將資料加到dispatchList中
                 dispatchList.push({
                   className : this.dispatchInfo.className,
                   accounting : this.dispatchInfo.accounting,
@@ -571,8 +586,10 @@ export default {
         if(this.dispatchInfo.useMeter){
           if(this.dispatchInfo.meterType === 0 && this.dispatchInfo.meterElectricNumList.length > 0) {
               for(let i in this.dispatchInfo.meterElectricNumList){
+                // 判斷電號起訖號是否都有值
                 if(!ValidateUtil.isEmpty(this.dispatchInfo.meterElectricNumList[i].start) 
                   && !ValidateUtil.isEmpty(this.dispatchInfo.meterElectricNumList[i].end)){
+                    // 將資料加到dispatchList中
                     dispatchList.push({
                       className : this.dispatchInfo.className,
                       accounting : this.dispatchInfo.accounting,
@@ -587,7 +604,8 @@ export default {
             }
           // 表制-選擇設定計算日
           } else if(this.dispatchInfo.meterType === 1 && this.dispatchInfo.computeDateList.length > 0){
-              for(let i in this.dispatchInfo.computeDateList){            
+              for(let i in this.dispatchInfo.computeDateList){   
+                // 將資料加到dispatchList中         
                   dispatchList.push({
                     className : this.dispatchInfo.className,
                     accounting : this.dispatchInfo.accounting,
@@ -602,8 +620,14 @@ export default {
           }        
         }
 
-        // 驗證電號是否重複
-        if(this.checkElectricRange(dispatchList)){
+        // 驗證電號是否重複        
+        if(!this.checkElectricRange(dispatchList)){
+          isValid = false;          
+        }
+
+
+        // 最後判斷驗證是否都通過，再決定要打修改還是新增的Action
+        if(isValid){
             // 打後端Action，判斷是修改還是新增
             if(actionType === 'edit'){
               // 打修改派工設定的action
@@ -612,9 +636,9 @@ export default {
               // 打新增派工設定的action
               this.createDispatch(dispatchList);
             }
-        }
-
-        
+        } else {
+          MessageService.showCheckInfo(this.requiredArray,this.formatArray);
+        }       
 
     },
 
@@ -629,13 +653,194 @@ export default {
      * 
      */
 
-    // 驗證電號
-     checkElectric(selectItem,listName,type){
+    // 驗證是否空值
+    checkRequired(){
+      let checkEmpty = true;
+      this.requiredArray = [];
+      this.formatArray = [];
+
+      // 確認班別
+      if(ValidateUtil.isEmpty(this.dispatchInfo.className)){
+        this.errorMsg.className = '請輸入班別';
+        this.requiredArray.push('班別');
+        checkEmpty = false;
+      } else {
+        this.errorMsg.className = null;
+      }
+
+      // 確認核算員
+      if(ValidateUtil.isEmpty(this.dispatchInfo.accounting)){
+        this.errorMsg.accounting = '請選擇核算員';
+        this.requiredArray.push('核算員');
+        checkEmpty = false;
+      } else {
+        this.errorMsg.accounting = null;
+      }
+
+      // 確認檢算員
+      if(ValidateUtil.isEmpty(this.dispatchInfo.calculate)){
+        this.errorMsg.calculate = '請選擇檢算員';
+        this.requiredArray.push('減算員');
+        checkEmpty = false;
+      } else {
+        this.errorMsg.calculate = null;
+      }
+
+      let checkElectric = true;
+
+      // 確認是否有選擇契約種類
+      if(ValidateUtil.isEmpty(this.dispatchInfo.dispatchType)){
+        this.errorMsg.classType = '請選擇分派班別設定';
+        this.requiredArray.push('分派班別');
+        checkEmpty = false;
+      } else {
+        this.errorMsg.classType = null;
+      }
+
+      // 選擇不限契約種類，是否有選擇電號
+      if(this.dispatchInfo.dispatchType == 0 && this.dispatchInfo.electricNumList.length >= 1){
+        for(let i in this.dispatchInfo.electricNumList){
+          if(ValidateUtil.isEmpty(this.dispatchInfo.electricNumList[i].start) 
+            || ValidateUtil.isEmpty(this.dispatchInfo.electricNumList[i].end)){
+              checkElectric = false;
+              break;
+            }
+          }          
+          // 只要有一組電號範圍起訖號未填
+          if(!checkElectric){
+            this.errorMsg.electricNum = '電號範圍設定不完全';
+            this.requiredArray.push('電號');
+            checkEmpty = false;
+          } else {
+            this.errorMsg.electricNum = null;
+          }
+      } else {
+        this.errorMsg.electricNum = null;
+      }
+
+      // 選擇契約種類是否有選擇電號
+        if(this.dispatchInfo.dispatchType == 1 
+          && !this.dispatchInfo.usePackage 
+          && !this.dispatchInfo.useHighVoltage 
+          && !this.dispatchInfo.useMeter){
+            
+            this.errorMsg.contractType = '請選擇契約種類';
+            this.requiredArray.push('契約種類');
+            checkEmpty = false;
+        } else {
+            this.errorMsg.contractType = null;
+        }
+
+        //選擇包制，是否有輸入電號範圍
+        checkElectric = true;
+        
+        if(this.dispatchInfo.usePackage && this.dispatchInfo.packageNumList.length > 0){
+          for(let i in this.dispatchInfo.packageNumList){
+            if(ValidateUtil.isEmpty(this.dispatchInfo.packageNumList[i].start) 
+              || ValidateUtil.isEmpty(this.dispatchInfo.packageNumList[i].end)){
+                checkElectric = false;
+                break;
+              }
+          }
+          if(!checkElectric){
+            this.errorMsg.packageNum = '請輸入包制電號設定範圍';
+            this.requiredArray.push('包制電號');
+            checkEmpty = false;
+          } else {
+            this.errorMsg.packageNum = null;
+          }
+        } else {
+          this.errorMsg.packageNum = null;
+        }
+        
+
+         //選擇高壓，是否有輸入電號範圍
+         checkElectric = true;
+
+         if(this.dispatchInfo.useHighVoltage && this.dispatchInfo.highVoltageNumList.length > 0){
+            for(let i in this.dispatchInfo.highVoltageNumList){
+              if(ValidateUtil.isEmpty(this.dispatchInfo.highVoltageNumList[i].start) 
+                || ValidateUtil.isEmpty(this.dispatchInfo.highVoltageNumList[i].end)){
+                  checkElectric = false;
+                  break;
+                }
+            }
+
+            if(!checkElectric){
+              this.errorMsg.highVoltageNum = '請輸入高壓電號設定範圍';
+              this.requiredArray.push('高壓電號');
+              checkEmpty = false;
+            } else {
+              this.errorMsg.highVoltageNum = null;
+            }
+        } else {
+          this.errorMsg.highVoltageNum = null;
+        }
+
+        
+        if(this.dispatchInfo.useMeter && ValidateUtil.isEmpty(this.dispatchInfo.meterType)){
+          this.errorMsg.meterType = '請選擇電號或計算日';
+          this.requiredArray.push('表制');
+          checkEmpty = false;
+        } else {
+          this.errorMsg.meterType = null;
+        }
+
+
+         //選擇表制，是否有輸入電號範圍
+         checkElectric = true;
+         
+         if(this.dispatchInfo.useMeter && this.dispatchInfo.meterType == 0 && this.dispatchInfo.meterElectricNumList.length > 0){
+            for(let i in this.dispatchInfo.meterElectricNumList){
+              if(ValidateUtil.isEmpty(this.dispatchInfo.meterElectricNumList[i].start) 
+                || ValidateUtil.isEmpty(this.dispatchInfo.meterElectricNumList[i].end)){
+                  checkElectric = false;
+                  break;
+                }
+            }
+
+            if(!checkElectric) {
+              this.errorMsg.meterElectricNum = '請輸入表制電號設定範圍';
+              this.requiredArray.push('表制-電號');
+              checkEmpty = false;
+            } else {
+              this.errorMsg.meterElectricNum = null;
+            }
+
+         } else {
+          this.errorMsg.meterElectricNum = null;
+         }
+
+        if (this.dispatchInfo.useMeter && this.dispatchInfo.meterType == 1 && this.dispatchInfo.computeDateList.length < 1) {
+          this.errorMsg.meterCompute = '請選擇計算日';
+          this.requiredArray.push('表制-計算日');
+          checkEmpty = false; 
+        }  else {
+          this.errorMsg.meterCompute = null;
+        }
+
+
+        return checkEmpty;
+
+    },
+
+
+    /* 驗證電號 selectItem:選到的電號,item:類型,listName:清單名稱,type:起號還是迄號*/
+     checkElectric(selectItem,item,listName,type){
+
+       this.checkRequired();
+
+       let selectIndex = null;
+
        // 取出是第幾筆的電號資料
-      let selectIndex = this.dispatchInfo[listName].indexOf(selectItem);
+      if(!ValidateUtil.isEmpty(selectItem)){
+        selectIndex = this.dispatchInfo[listName].indexOf(selectItem);
+      }
 
       // 驗證電號格式
       if(!ValidateUtil.validateEletricNums(selectItem[type])){
+        console.log(selectItem[type]);
+        
         return;
       }
 
@@ -643,7 +848,8 @@ export default {
       if(!ValidateUtil.isEmpty(this.dispatchInfo[listName][selectIndex].start) 
           && !ValidateUtil.isEmpty(this.dispatchInfo[listName][selectIndex].end) ){
             if(parseInt(this.dispatchInfo[listName][selectIndex].start) > parseInt(this.dispatchInfo[listName][selectIndex].end) ){
-              console.log('電號範圍錯誤');
+              this.errorMsg[item] = '電號範圍錯誤';
+              this.formatArray.push('電號範圍');
               return;
             }
           }
@@ -667,16 +873,38 @@ export default {
             if(dispatchList.indexOf(dispatchList[i]) !== eletric.indexOf(eletric[index])){
                 if(parseInt(dispatchList[i].electricNumStart) <= parseInt(eletric[index].end)
                   && parseInt(dispatchList[i].electricNumEnd) >= parseInt(eletric[index].start)){
-                    electricRange = false;
-                    console.log('重複電號範圍')
+                    electricRange = false;                       
                     break; 
                   }
-            }          
+            }
+            if(!electricRange) {
+              break; 
+            }  
           }
       }
-      return electricRange;     
-    }
 
+      // 若有電號區間重複則顯示錯誤訊息
+      if(!electricRange) {
+        this.errorMsg.classType = '電號範圍區間重複';
+        this.formatArray.push('電號範圍');
+      }  
+
+      return electricRange;     
+    },
+
+    // 修改不論契約種類or依契約種類設定選項，會將另一邊的錯誤訊息清空
+    changeDispatchType(type){
+      if(type === 'non') {
+          this.errorMsg.contractType = null;
+          this.errorMsg.packageNum = null;
+          this.errorMsg.highVoltageNum = null;
+          this.errorMsg.meterType= null;
+          this.errorMsg.meterElectricNum = null;
+          this.errorMsg.meterCompute = null;
+      } else {
+        this.errorMsg.electricNum = null
+      }
+    }
 
     /**
      * 驗證 end

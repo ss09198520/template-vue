@@ -28,10 +28,23 @@ export default{
             leaveListPageCount:0,
             leaveListPage:1,
             deleteLeaveModel:false, // 控制刪除請假視窗的開關
+            editModel: false,       // 控制修改代理申請視窗開關
             selectIndex:null,
-            selectOne: null,
+            selectOne: {},
             alertModel: false,
             sysDate: new Date(),
+            selectAgent:{},
+            agentOpt:[
+                {empNo:'015212001', empName:'王大維',type:'mgmt',dept:'業務組'},
+                {empNo:'015213001', empName:'林文琪',type:'mgmt',dept:'東山服務所'},
+                {empNo:'015214001', empName:'張佑臻',type:'mgmt',dept:'大里服務中心'},
+                {empNo:'1050331-002', empName:'張芊芊',type:'mgmt',dept:'大里服務中心'},
+                
+            ],
+            isCancel: false, // 判斷是刪除or修改提醒
+            alertMsg: null,  // 提醒訊息內容 
+            
+
         }
     },
     methods:{
@@ -44,14 +57,29 @@ export default{
             this.selectOne = item;
             
         },
-        submit(){
-            if (this.selectIndex > -1) {
-                this.leaveList.splice(this.selectIndex, 1);
-              }
-            MessageService.showSuccess("刪除代理申請紀錄");
-            this.deleteLeaveModel = false;
-            if(this.selectOne.dataSource == '差假管理系統'){
-                this.alertModel = true;
+        openEditModel(item){
+            console.log(item);
+            this.selectOne = item;
+            this.selectAgent.empNo = item.agent;
+            this.selectAgent.empName = item.agentName;
+            this.editModel = true;
+        },
+        submit(type){
+            if(type === 'edit') {
+                // 比對是否有修改代理人，若有則更新資料打後端
+                this.updateAgent();             
+
+            } else {
+                if (this.selectIndex > -1) {
+                    this.leaveList.splice(this.selectIndex, 1);
+                  }
+                MessageService.showSuccess("刪除代理申請紀錄");
+                this.deleteLeaveModel = false;
+                if(this.selectOne.dataSource == '差假管理系統'){
+                    this.alertModel = true;
+                    this.isCancel = true;
+                    this.alertMsg = '已成功刪除請假紀錄，請記得到差假管理系統辦理銷假，謝謝';
+                }
             }
         },
         search(){
@@ -65,6 +93,50 @@ export default{
                 { seq:6, empNo: '1050331-003', empName: '江舒語', startDate:'2021-09-29 08:00',endDate:'2021-09-29 12:00', agent:'1050331-002', agentName:'張芊芊', dataSource:'差假管理系統'},
                 { seq:7, empNo: '1050331-003', empName: '江舒語', startDate:'2021-11-28 08:00',endDate:'2021-11-28 17:00', agent:'1050331-002', agentName:'張芊芊', dataSource:'差假管理系統'},
             ];
-        }
+        },
+
+        /**
+         *           
+         * Ajax start
+         * 
+         **/
+
+        // Action: 依條件查詢請代理請假清單
+        queryLeaveList(){
+         
+        },
+
+        // Action: 修改代理申請
+        updateAgent(){
+
+        this.editModel = false;
+        
+        // 後端回傳值判斷是否在同一個時間超過兩個人都給同一人代理? 若為true 則跳提醒視窗
+         // 模擬後端資料
+         let isDuplicate = true;
+         
+         // 若同一個時間超過兩個人都給同一人代理
+         if(isDuplicate){
+             this.alertModel = true;
+             this.isCancel = false;
+             this.alertMsg = '該員工已代理超過兩位員工的請假申請';
+         }
+         
+
+        },
+
+        // Action: 刪除代理申請
+        deleteAgentApply(){
+
+        },
+
+
+         /**
+         *           
+         * Ajax start
+         * 
+         **/
+
+
     }  
 }

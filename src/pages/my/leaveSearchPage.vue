@@ -392,6 +392,40 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <!-- 提醒 -->
+     <v-dialog
+      v-model="alertOverTwoTiers"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          提醒
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="alertOverTwoTiers = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px red--text">
+          <v-row class="mt-6 ml-1 font-bold">
+            目前所選擇的代理人請假，建議改選其他代理人
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="primary"            
+            @click="alertOverTwoTiers = false"
+          >
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 <script src="./leaveSearchPage.js"></script>

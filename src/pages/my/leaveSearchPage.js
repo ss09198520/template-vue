@@ -42,7 +42,8 @@ export default{
                 
             ],
             isCancel: false, // 判斷是刪除or修改提醒
-            alertMsg: null,  // 提醒訊息內容 
+            alertMsg: null,  // 提醒訊息內容
+            alertOverTwoTiers: false,
             
 
         }
@@ -83,16 +84,8 @@ export default{
             }
         },
         search(){
-            this.leaveList = [
-                //台中區處
-                { seq:1, empNo: '1050330-001', empName: '梁朝偉', startDate:'2021-09-10 08:00',endDate:'2021-09-11 17:00', agent:'1050331-001', agentName:'蔡政揚', dataSource:'差假管理系統'},
-                { seq:2, empNo: '1050330-002', empName: '王曉花', startDate:'2021-09-10 08:00',endDate:'2021-09-11 17:00', agent:'1050330-002', agentName:'王曉花', dataSource:'差假管理系統'},
-                { seq:3, empNo: '1050330-003', empName: '林美美', startDate:'2021-09-11 08:00',endDate:'2021-09-12 17:00', agent:'1050330-001', agentName:'梁朝偉', dataSource:'人工設定'},
-                { seq:4, empNo: '1050331-001', empName: '蔡政揚', startDate:'2021-09-14 08:00',endDate:'2021-09-14 17:00', agent:'1050330-001', agentName:'梁朝偉', dataSource:'差假管理系統'},
-                { seq:5, empNo: '1050331-002', empName: '張芊芊', startDate:'2021-09-12 08:00',endDate:'2021-09-12 17:00', agent:'1050331-003', agentName:'江舒語', dataSource:'人工設定'},
-                { seq:6, empNo: '1050331-003', empName: '江舒語', startDate:'2021-09-29 08:00',endDate:'2021-09-29 12:00', agent:'1050331-002', agentName:'張芊芊', dataSource:'差假管理系統'},
-                { seq:7, empNo: '1050331-003', empName: '江舒語', startDate:'2021-11-28 08:00',endDate:'2021-11-28 17:00', agent:'1050331-002', agentName:'張芊芊', dataSource:'差假管理系統'},
-            ];
+            // 查詢請假清單
+            this.queryLeaveList();
         },
 
         /**
@@ -103,27 +96,45 @@ export default{
 
         // Action: 依條件查詢請代理請假清單
         queryLeaveList(){
-         
+         // 模擬資料
+         let leaveList = [
+                //台中區處
+                { seq:1, empNo: '1050330-001', empName: '梁朝偉', startDate:'2021-09-10 08:00',endDate:'2021-09-11 17:00', agent:'1050331-001', agentName:'蔡政揚', dataSource:'差假管理系統'},
+                { seq:2, empNo: '1050330-002', empName: '王曉花', startDate:'2021-09-10 08:00',endDate:'2021-09-11 17:00', agent:'1050330-002', agentName:'王曉花', dataSource:'差假管理系統'},
+                { seq:3, empNo: '1050330-003', empName: '林美美', startDate:'2021-09-11 08:00',endDate:'2021-09-12 17:00', agent:'1050330-001', agentName:'梁朝偉', dataSource:'人工設定'},
+                { seq:4, empNo: '1050331-001', empName: '蔡政揚', startDate:'2021-09-14 08:00',endDate:'2021-09-14 17:00', agent:'1050330-001', agentName:'梁朝偉', dataSource:'差假管理系統'},
+                { seq:5, empNo: '1050331-002', empName: '張芊芊', startDate:'2021-09-12 08:00',endDate:'2021-09-12 17:00', agent:'1050331-003', agentName:'江舒語', dataSource:'人工設定'},
+                { seq:6, empNo: '1050331-003', empName: '江舒語', startDate:'2021-09-29 08:00',endDate:'2021-09-29 12:00', agent:'1050331-002', agentName:'張芊芊', dataSource:'差假管理系統'},
+                { seq:7, empNo: '1050331-003', empName: '江舒語', startDate:'2021-11-28 08:00',endDate:'2021-11-28 17:00', agent:'1050331-002', agentName:'張芊芊', dataSource:'差假管理系統'},
+            ];
+         this.leaveList = leaveList;
         },
 
         // Action: 修改代理申請
         updateAgent(){
-
-        this.editModel = false;
         
-        // 後端回傳值判斷是否在同一個時間超過兩個人都給同一人代理? 若為true 則跳提醒視窗
-         // 模擬後端資料
-         let isDuplicate = true;
+            MessageService.showSuccess('修改代理申請');   // ajax成功 
+            this.editModel = false; // 關閉修改視窗
+            
+            // 後端回傳值判斷該員工是否在同一個時間代理超過兩位員工的請假申請? 若為true 則跳提醒視窗
+            // 模擬後端資料
+            let isDuplicate = true;        // 是否代理超過兩位員工
+            let isOverTwoTiers = true;     // 該員工是否代理超過兩層
          
-         // 若同一個時間超過兩個人都給同一人代理
-         if(isDuplicate){
-             this.alertModel = true;
-             this.isCancel = false;
-             this.alertMsg = '該員工已代理超過兩位員工的請假申請';
-         }
-         
+            
+            // 若同一個時間超過兩個人都給同一人代理
+            if(isDuplicate){
+                this.alertModel = true;
+                this.isCancel = false;
+                this.alertMsg = '該員工已代理超過兩位員工的請假申請';
+            }
+            // 若同一個時間員工代理超過兩層
+            if(isOverTwoTiers){
+                this.alertOverTwoTiers = true;
+            }         
 
         },
+
 
         // Action: 刪除代理申請
         deleteAgentApply(){

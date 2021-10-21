@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import VueSignaturePad from 'vue-signature-pad';
 
 Vue.use(Router)
+Vue.use(VueSignaturePad);
 
 /* Layout */
 import Layout from '@/layout'

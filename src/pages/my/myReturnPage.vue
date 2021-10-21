@@ -102,17 +102,17 @@
             <template v-slot:item.sendNumber="{ item }">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">        
-                  <a href="javascript:void(0)" style="text-decoration:underline;" @click="openFormHistory()" v-on="on">{{ item.sendNumber }}</a>
+                  <a href="javascript:void(0)" style="text-decoration:underline;" @click="openFormHistory(item)" v-on="on">{{ item.sendNumber }}</a>
                 </template>
                 <span>表單歷程</span>
               </v-tooltip>
             </template>
 
             <!-- 原受理人號碼+姓名 -->
-            <template v-slot:item.acceptUser="{ item }"> 
-              {{ item.acceptUser }}
+            <template v-slot:item.sender="{ item }"> 
+              {{ item.sender }}
               <br>
-              {{ item.acceptUserName }}
+              {{ item.senderName }}
             </template>
 
             <template v-slot:item.action="{ item }">

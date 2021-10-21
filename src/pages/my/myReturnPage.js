@@ -85,14 +85,30 @@ export default {
                 { text: '退件原因', value: 'reason', align: 'center' },
                 { text: '退件說明', value: 'desc', align: 'center' },  
                 { text: '送審項目', value: 'sendItem', align: 'center' },          
-                { text: '原受理人', value: 'acceptUser', align: 'center' },
+                { text: '送件人', value: 'sender', align: 'center' },
                 { text: '退件人', value: 'returner', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
             multimediFormList: [
-                { action: true, edit: true, cancel: true, sendNumber: 'M00001', returnDate: '2021-09-10 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '跑馬燈', acceptUser: '1050330001', acceptUserName: '林美美',returner:'甘仙文' },
-                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '影片、圖片錯誤', desc: '文字錯誤請重新修改', sendItem: '節目單', acceptUser: '1050330002', acceptUserName: '王曉花',returner:'駱文成' },
-                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '滿意度調查', acceptUser: '1050330003', acceptUserName: '李小凡',returner:'蔡又新' }
+                { action: true, 
+                  edit: true, 
+                  cancel: true, 
+                  sendNumber: 'M00001', 
+                  returnDate: '2021-09-10 15:00', 
+                  reason: '文字修改', 
+                  desc: '文字錯誤請重新修改', 
+                  sendItem: '跑馬燈', 
+                  sender: '1050330001', 
+                  senderName: '林美美',
+                  returner:'甘仙文',
+                  formHistoryList:[
+                    '2021-09-14 14:20:14 退件中 (0151230020 吳靜)',
+                    '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
+                    '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',    
+                  ],
+                },
+                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '影片、圖片錯誤', desc: '文字錯誤請重新修改', sendItem: '節目單', sender: '1050330002', senderName: '王曉花',returner:'駱文成',formHistoryList:[] },
+                { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '滿意度調查', sender: '1050330003', senderName: '李小凡',returner:'蔡又新',formHistoryList:[] }
             ],
             formListPage: 1,
             formListPageCount: 1,
@@ -157,6 +173,7 @@ export default {
         saveFile(){
           this.supplementModel = false;
         },
+        // 開啟表單歷程
         openFormHistory(item){
           this.formHistoryList = item.formHistoryList;
           this.formHistoryModel = true;

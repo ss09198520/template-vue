@@ -8,7 +8,6 @@ export default {
       FormPage
     },
     props: {
-    
     },
     beforeMount(){
         this.init();
@@ -48,7 +47,7 @@ export default {
                 {text:'大里服務中心',value:'2'},
                 {text:'東山服務所',value:'3'},
             ],
-            reason: null,
+            rejectReason: null,
             reasonOption:[
                 {text:'原因由台電提供_1',value:'1'},
                 {text:'原因由台電提供_2',value:'2'},
@@ -116,11 +115,16 @@ export default {
                 caseType: null            //代理件顯示
             },
             memo: null,
+            rejectDesc: null,
             errMsg:{
                 dispatchDate: null,
+                dept: null,
+                rejectReason: null,
+                rejectDesc: null,
             },
             requireArray:[],
             formatArray:[],
+            selectItem:{},
         }
     },
     methods: {
@@ -130,44 +134,52 @@ export default {
 
         // 點擊打開核算視窗
         accounting(item) {          
-          this.selectIndex = this.accoutingList.indexOf(item);
-          this.accountingDialog = true;
-          item.hasView = true;
+          this.selectIndex = this.accoutingList.indexOf(item); // 取出被選擇資料的index
+          this.selectItem = item; // 將選到的資料放進selectItem中
+          
 
-          // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄
+          // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄(Action)
           if(ValidateUtil.isEmpty(item.status)){
-              this.updateAccoutingStatus(item.seq);
+              this.updateAccoutingStatus(item.seq,this.selectIndex);
           }
+          // 查詢待核算案件資料(Action)
+          this.queryAccoutingData();
+          this.accountingDialog = true;
 
-          // 查詢待核算案件資料
         },
+        // 打開核算視窗
         checking(item){
             this.selectIndex = this.accoutingList.indexOf(item);
             this.checkingDialog = true;
         },
+        // 打開核算退件視窗
         returnOrder(){
             this.returnReasonModel = true;
         },
-        saveComments(){
+        // 核算成功
+        auditSubmit(memo){
+            this.memo = memo;
+            this.updateAccouting(); 
+        },
+        saveComments(memo){
+            this.memo = memo;
+            this.saveAccoutingMemo();
+
             this.accountingDialog = false;
         },
-        returnSubmit(){
-           if (this.selectIndex > -1) {
-                this.accoutingList.splice(this.selectIndex, 1);
-              }
-            this.returnReasonModel = false;
-            this.accountingDialog = false;
-            this.waitingCount = this.waitingCount -1;
-            MessageService.showSuccess("退件成功✓");
+        // 案件退件
+        returnSubmit(memo){
+          this.requireArray = [];
+          this.formatArray = [];
+          this.memo = memo;
+
+          if(!this.checkRejectVal()){
+              MessageService.showCheckInfo(this.requireArray,this.formatArray);
+          }  else {
+              this.updateAccouting('reject'); 
+          }
         },
-        checkSubmit(){
-           if (this.selectIndex > -1) {
-                this.accoutingList.splice(this.selectIndex, 1);
-              }
-            MessageService.showSuccess("核算成功✓");
-            this.accountingDialog = false;
-            this.waitingCount = this.waitingCount -1;
-        },
+        // 開啟備註視窗
         openComments(item){
             this.memo = item.memo;
             if(ValidateUtil.isEmpty(this.memo)){
@@ -176,25 +188,9 @@ export default {
                 this.commentsModel = true;
             }
 
-        },
+        },        
 
-        // 選擇派工日期區間
-        checkDate(){
-            this.formatArray = [];
-            if(!ValidateUtil.isEmpty(this.dispatchDate.start) && !ValidateUtil.isEmpty(this.dispatchDate.end)){
-                this.searchForm.dispatchStartDate = this.dispatchDate.start + ' 00:00:00';
-                this.searchForm.dispatchEndDate = this.dispatchDate.end + ' 23:59:59';
-                
-                if(!ValidateUtil.validateDateRange(this.searchForm.dispatchStartDate,this.searchForm.dispatchEndDate)){
-                    this.errMsg.dispatchDate = '日期範圍錯誤'
-                    this.formatArray.push('派工日期');
-                    
-                } else {
-                    this.errMsg.dispatchDate = null;
-                }
-            }
-        },
-
+        // 查詢資料
         search(){
             if(this.formatArray.length > 0) {
                 MessageService.showCheckInfo(this.requireArray,this.formatArray);
@@ -202,6 +198,19 @@ export default {
                 this.queryAccoutingList();
             }
         },  
+
+         // 判斷清單資料檢視註記狀態
+        setAccountInfo(accoutingList){
+            for(let i in accoutingList){
+                if(ValidateUtil.isEmpty(accoutingList[i].status)){
+                    accoutingList[i].hasView = false;
+                } else {
+                    accoutingList[i].hasView = true;
+                }
+            }
+            // 取出後端參數放回accoutingList
+            this.accoutingList = accoutingList;
+        },
 
         /**
          *  Ajax start 
@@ -237,19 +246,12 @@ export default {
             ];
             let numOfAccounting = '5';
 
-            // 判斷該案件核算員是否檢視過了
-            for(let i in accoutingList){
-                if(ValidateUtil.isEmpty(accoutingList[i].status)){
-                    accoutingList[i].hasView = false;
-                } else {
-                    accoutingList[i].hasView = true;
-                }
-            }
-
+            // 整理案件資料
+            this.setAccountInfo(accoutingList);
             // 取出後端參數
-            this.accoutingList = accoutingList;
             this.numOfAccounting = numOfAccounting;
         },
+
 
         // Action:依條件查詢待審核案件清單
         queryAccoutingList(){
@@ -264,26 +266,92 @@ export default {
             // dispatchEndDate: this.searchForm.dispatchEndDate,
             // contractType: this.searchForm.contractType,
             // caseType: this.searchForm.caseType,
+
+             // 模擬從後端取到的假資料
+            let accoutingList = [
+                { action: true,
+                  seq:1,
+                  formSeq:1, 
+                  acceptNum: 'A00028',
+                  isAgent:false,
+                  status:null,
+                  archieveNum:'000700',
+                  dispatchDate:'2021-09-10 10:00',
+                  electricNum:'91020122',
+                  custName:'利小凡',
+                  computeDate:'02',
+                  contractType:'表制',
+                  cumulativeDay:'3', 
+                  acceptDate: '2021-09-10 10:00',
+                  closeDate: '2021-09-10 16:00',  
+                  acceptItem: 'QA210  軍眷用電申請優待',
+                  memo:'測試待核算備註'
+                },
+                {action: true, seq:2, formSeq:2, acceptNum: 'A00615',isAgent:true,status:null,archieveNum:'000701',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'陳和千',computeDate:'05',contractType:'包制',cumulativeDay:'1', acceptDate: '2021-09-09 11:21', closeDate: '2021-09-09 15:21',  acceptItem: 'I0510  故障換表',memo:''},
+                {action: true, seq:3, formSeq:3, acceptNum: 'A00040',isAgent:false,status:null,archieveNum:'000702',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'黎維成',computeDate:'10',contractType:'表制',cumulativeDay:'4', acceptDate: '2021-09-07 15:36', closeDate: '2021-09-08 15:06', acceptItem: 'I0520  增加電表',memo:''},
+                {action: true, seq:4, formSeq:4, acceptNum: 'A00605',isAgent:true,status:'READ',sortarchieveNumNo:'000703',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'區立言',computeDate:'16',contractType:'高壓',cumulativeDay:'3', acceptDate: '2021-09-10 09:45', closeDate: '2021-09-15 10:50',  acceptItem: 'F3030  表燈非時間電價停用廢止',memo:''},
+                {action: true, seq:5, formSeq:5, acceptNum: 'A00619',isAgent:false,status:null,archieveNum:'000704',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'馮文卿',computeDate:'01',contractType:'表制',cumulativeDay:'2', acceptDate: '2021-09-10 13:44', closeDate: '2021-09-10 15:26',  acceptItem: 'I0510  故障換表',memo:''}
+            ];
+            let numOfAccounting = '5';
+
+            // 整理案件資料
+            this.setAccountInfo(accoutingList);
+            // 取出後端參數
+            this.numOfAccounting = numOfAccounting;
+
+            MessageService.showSuccess('依條件查詢待核算資料');
+
+
         },
 
         // Action:查詢待審核案件資料
         queryAccoutingData(){
-
+            // vin參數
+            // formSeq: this.selectItem.formSeq,
         },
 
         // Action:更新待審核案件檢視狀態
-        updateAccoutingStatus(){
-
+        updateAccoutingStatus(seq,index){
+            // vin參數
+            // seq: seq
+            console.log(seq);
+            this.accoutingList[index].hasView = true;
         },
 
         // Action:更新待審核備註
         saveAccoutingMemo(){
-
+            // vin參數
+            // seq: this.selectItem.seq,
+            // memo: this.memo,
         },
 
         // Action:更新案件審核狀態(成功/退件)
-        updateAccouting(){
+        updateAccouting(type){
+            // vin參數
+            // seq: this.selectItem.seq,
+            // formSeq: this.selectItem.formSeq,
+            // memo: this.memo,
+            // rejectToDept:this.department,
+            // rejectReason:this.rejectReason,
+            // rejectDesc:this.rejectDesc,
 
+
+            if(type === 'reject') {
+                if (this.selectIndex > -1) {
+                    this.accoutingList.splice(this.selectIndex, 1);
+                }
+                this.returnReasonModel = false;
+                this.accountingDialog = false;
+                this.waitingCount = this.waitingCount -1;
+                MessageService.showSuccess("案件退件");
+            } else {
+                if (this.selectIndex > -1) {
+                    this.accoutingList.splice(this.selectIndex, 1);
+                }
+                MessageService.showSuccess("案件核算");
+                this.accountingDialog = false;
+                this.waitingCount = this.waitingCount -1;
+            }
         },
 
 
@@ -298,6 +366,59 @@ export default {
          * 
          **/
 
+        // 驗證退件資料
+        checkRejectVal(){
+            let hasCheck = true;
+
+            if(ValidateUtil.isEmpty(this.department)){
+                this.errMsg.dept = "請選擇退件到的部門";
+                this.requireArray.push('退件部門');
+                hasCheck = false;
+            } else {
+                this.errMsg.dept = null
+            }
+
+            if(ValidateUtil.isEmpty(this.rejectReason)){
+                this.errMsg.rejectReason = "請選擇退件原因";
+                this.requireArray.push('退件原因');
+                hasCheck = false;
+            } else {
+                this.errMsg.rejectReason = null
+            }
+
+            if(ValidateUtil.isEmpty(this.rejectDesc)){
+                this.errMsg.rejectDesc = "請輸入退件說明";
+                this.requireArray.push('退件說明');
+                hasCheck = false;
+            } else if(!ValidateUtil.isEmpty(this.rejectDesc) && this.rejectDesc.length > 50){
+                this.formatArray.push('退件說明');
+                this.errMsg.rejectDesc = "已超過字數限制";
+                hasCheck = false;
+            } else {
+                this.errMsg.rejectDesc = null;
+            }
+
+
+            return hasCheck;
+
+        },
+
+        // 驗證派工日期區間
+        checkDate(){
+            this.formatArray = [];
+            if(!ValidateUtil.isEmpty(this.dispatchDate.start) && !ValidateUtil.isEmpty(this.dispatchDate.end)){
+                this.searchForm.dispatchStartDate = this.dispatchDate.start + ' 00:00:00';
+                this.searchForm.dispatchEndDate = this.dispatchDate.end + ' 23:59:59';
+                
+                if(!ValidateUtil.validateDateRange(this.searchForm.dispatchStartDate,this.searchForm.dispatchEndDate)){
+                    this.errMsg.dispatchDate = '日期範圍錯誤'
+                    this.formatArray.push('派工日期');
+                    
+                } else {
+                    this.errMsg.dispatchDate = null;
+                }
+            }
+        },
 
 
          /**

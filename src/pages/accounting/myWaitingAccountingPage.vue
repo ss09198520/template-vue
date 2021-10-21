@@ -368,7 +368,7 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <FormPage :restrict-mode="'audit'" @returnOrder="returnOrder()" @checkSubmit="checkSubmit()" @saveComments="saveComments()" />
+          <FormPage :restrict-mode="'audit'" @returnOrder="returnOrder($event)" @auditSubmit="auditSubmit($event)" @saveComments="saveComments($event)" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -418,6 +418,7 @@
         <v-card-text class="font-18px">
           <v-row class="mt-6 ml-1" align="center">
             <v-col cols="3">
+            <span class="red--text">*</span>
               退件部門
             </v-col>
             <v-col cols="7">
@@ -431,16 +432,19 @@
                 hide-details
                 dense
                 placeholder="請選擇退件部門"
+                @change="checkRejectVal()"
               />
+            <span class="red--text font-14px">{{errMsg.dept}}</span>
             </v-col>
           </v-row>
           <v-row class="mt-6 ml-1" align="center">
             <v-col cols="3">
+            <span class="red--text">*</span>
               退件原因
             </v-col>
             <v-col cols="7">
-              <v-select   
-                v-model="reason"
+              <v-select
+                v-model="rejectReason"
                 :items="reasonOption"
                 item-text="text"
                 :return-object="true"
@@ -448,22 +452,32 @@
                 hide-details
                 dense
                 placeholder="請選擇退件原因"
+                @change="checkRejectVal()"
               />
+              <span class="red--text font-14px">{{errMsg.rejectReason}}</span>
             </v-col>
           </v-row>
           <v-row class="ml-1" align="center">
             <v-col cols="3">
+            <span class="red--text">*</span>
               退件說明
             </v-col>
             <v-col cols="7">
-              <v-textarea            
+              <v-textarea
+                v-model="rejectDesc"            
                 color="#ADADAD"
                 outlined
                 name="input-7-4"
                 :no-resize="true"
                 placeholder="請輸入退件說明"
-                hide-details
+                auto-grow
+                counter="50"
+                @keyup="checkRejectVal()"
               />
+            </v-col>
+            <v-col cols="3"/>
+            <v-col style="margin-top:-15%">
+              <span class="red--text font-14px">{{errMsg.rejectDesc}}</span>
             </v-col>
           </v-row>
         </v-card-text>

@@ -514,10 +514,13 @@
                 <v-col cols="12" class="d-center">
                   <v-textarea
                     v-model="auditRemark"
+                    class="accouting-textarea"                   
                     outlined
                     placeholder="點選 [儲存備註並關閉]、[退件]、[核算通過] 都會進行儲存"
                     :no-resize="true"
-                    hide-details
+                    counter="50"
+                    auto-grow
+                    rows="4"
                   />
                 </v-col>
               </v-row>

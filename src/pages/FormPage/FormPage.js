@@ -166,13 +166,14 @@ export default {
         //     }
         // },
         retrunOrder(){
-            this.$emit("returnOrder");
+            this.$emit("returnOrder",this.auditRemark);
         },
         auditSubmit(){
-            this.$emit("checkSubmit");
+            this.$emit("auditSubmit",this.auditRemark);
         },
         saveComments(){
-            this.$emit("saveComments");
+            // 將待審核備註一併傳回給父層
+            this.$emit("saveComments",this.auditRemark);
         },
         saveFile(){
             this.$emit("saveFile");

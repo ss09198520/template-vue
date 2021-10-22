@@ -39,7 +39,7 @@
             <v-icon v-text="'mdi-text-box-search-outline'" />
           </v-btn>
         </template>
-        <span>只顯示受理件</span>
+        <span>只顯示代理件</span>
       </v-tooltip>    
     </div>
     <hr class="mt-6 mb-5 ml-3">          

@@ -34,7 +34,72 @@ export default{
             numberOfAccept: 4,
             numberOfAgent:1, 
             oriFormList:[], // 原始資料
-            formList: [                
+            formList: [],
+            selectIndex: null,
+            selectItem:{},
+            browserModel: false, // 瀏覽案件視窗開關
+            supplementModel: false, // 補件操作視窗開關
+            formHistoryModel: false, // 表單歷程視窗開關
+            formHistoryList:[],
+
+        }
+    },
+    methods: {
+        init(){            
+            this.queryFormInit();
+        },
+        action(type,item){
+            this.selectItem = item;
+            // 抓出選的是第幾筆
+            this.selectIndex = this.formList.indexOf(item);            
+            this.queryFormInfo();
+            if(type == 'browse'){
+                this.browserModel = true;
+            } else if(type == 'supplement'){
+                this.supplementModel = true;
+            }
+            
+        },
+        checkSubmit(){
+            this.browserModel = false;
+        },
+        orderRecord(item){
+            console.log(item);
+        },
+        saveFile(){
+            this.supplementModel = false;
+        },
+        // 開啟
+        openFormHistory(item){
+            this.formHistoryList = item.formHistoryList;
+            this.formHistoryModel = true;
+        },
+
+        // 顯示全部/只顯示受理件
+        display(item){
+            this.formList = [];
+            if(item === 'all'){
+                this.displayAll = true;
+                this.formList = JSON.parse(JSON.stringify(this.oriFormList));
+            } else {
+                this.displayAll = false;
+                for(let i in this.oriFormList){
+                    if(this.oriFormList[i].isAgent){
+                        this.formList.push(this.oriFormList[i]);
+                    }
+                }
+            }
+        },
+
+        /**
+         * 
+         * Ajax start 
+         * 
+         * */
+
+        // Action:頁面初始化
+        queryFormInit(){
+            let formList = [                
                 { 
                     seq:1,
                     acceptNum: 'A00024',
@@ -105,76 +170,33 @@ export default{
                         '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
                     ],
                 },
-            ],
-            selectIndex: null,
-            browserModel: false, // 瀏覽案件視窗開關
-            supplementModel: false, // 補件操作視窗開關
-            formHistoryModel: false, // 表單歷程視窗開關
-            formHistoryList:[],
+            ];
 
-        }
-    },
-    methods: {
-        init(){
+            let numberOfAccept = 4;
+            let numberOfAgent = 1;
+
+            this.formList = formList;
+            this.numberOfAccept = numberOfAccept;
+            this.numberOfAgent = numberOfAgent;
             // 從後端取得案件清單，先複製一份，先暫時放init，之後會移到ajax打後端後取得資料直接複製
             this.oriFormList = JSON.parse(JSON.stringify(this.formList));
         },
-        action(type,item){
-            // 抓出選的是第幾筆
-            this.selectIndex = this.formList.indexOf(item);            
-            if(type == 'browse'){
-                this.browserModel = true;
-            } else if(type == 'supplement'){
-                this.supplementModel = true;
-            }
+
+
+        // Action:取得表單資料
+        queryFormInfo(){
+            // Vin 參數
+            // seq: this.selectItem.seq,  // 表單流水號
+
+        },
+
+        // Action:儲存表單資料
+        updateFormInfo(){
+            // Vin 參數
+            // seq: this.selectItem.seq,  // 表單流水號
             
+            MessageService.showSuccess('資料補件');
         },
-        submit(){
-            MessageService.showSuccess("取消案件成功✓");
-            //刪除該筆資料
-            if (this.selectIndex > -1) {
-                this.formList.splice(this.selectIndex, 1);
-              }
-            this.deleteOrderModel = false;
-        },
-        checkSubmit(){
-            this.browserModel = false;
-        },
-        orderRecord(item){
-            console.log(item);
-        },
-        saveFile(){
-            this.supplementModel = false;
-        },
-        // 開啟
-        openFormHistory(item){
-            this.formHistoryList = item.formHistoryList;
-            this.formHistoryModel = true;
-        },
-
-        // 顯示全部/只顯示受理件
-        display(item){
-            this.formList = [];
-            if(item === 'all'){
-                this.displayAll = true;
-                this.formList = JSON.parse(JSON.stringify(this.oriFormList));
-            } else {
-                this.displayAll = false;
-                for(let i in this.oriFormList){
-                    if(this.oriFormList[i].status === '受理中'){
-                        this.formList.push(this.oriFormList[i]);
-                    }
-                }
-            }
-        },
-
-        /**
-         * 
-         * Ajax start 
-         * 
-         * */
-
-        //打Ajax 寫這裡↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 
 

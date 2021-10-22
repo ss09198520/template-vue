@@ -19,10 +19,12 @@ export default{
             popOut: false,
             //選擇的調閱對象
             readAudience: null,
-            //調閱對象清單-先放假資料
+            //調閱對象清單
             readAudienceList:[],
-            //調閱原因清單-先放假資料
+            oriReadAudienceList:[],
+            //調閱原因清單
             readReasonList:[],
+            oriReadReasonList:[],
             readFormHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
@@ -187,6 +189,9 @@ export default{
 
             this.readReasonList = readReasonList;
             this.readAudienceList = readAudienceList;
+            // 將資料存到另一個參數中，用於後續船到後端比對資料
+            this.oriReadReasonList = JSON.parse(JSON.stringify(this.readReasonList));
+            this.oriReadAudienceList = JSON.parse(JSON.stringify(this.readAudienceList));
         },
 
          // Action: 依條件查詢可調閱的案件清單
@@ -220,6 +225,8 @@ export default{
             // readEmpName: this.readEmpNum,
             // readReason: this.readReason,
             // otherReason: this.otherReason,
+            // oriReadReasonList = this.oriReadReasonList,      // 傳到後端與選擇到的資料比對
+            // oriReadAudienceList = this.oriReadAudienceList,  // 傳到後端與選擇到的資料比對
 
             MessageService.showSuccess('調閱申請');
             this.popOut = false;

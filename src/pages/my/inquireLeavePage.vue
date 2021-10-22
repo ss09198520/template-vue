@@ -11,7 +11,7 @@
             <v-select
               v-model="selectEmp"
               outlined
-              :items="empOpt"
+              :items="empList"
               dense
               hide-details
               placeholder="請選擇員工"
@@ -38,7 +38,7 @@
             <v-select
               v-model="selectAgent"
               outlined
-              :items="agentOpt"
+              :items="agentList"
               hide-details=""
               :return-object="true"
               dense

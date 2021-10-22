@@ -12,14 +12,9 @@ export default {
    
     data() {
         return {
-            empOpt : [
-                {empNo:'015212001', empName:'王大維',type:'mgmt',dept:'業務組'},
-                {empNo:'015213001', empName:'林文琪',type:'mgmt',dept:'東山服務所'},
-                {empNo:'015214001', empName:'張佑臻',type:'mgmt',dept:'大里服務中心'},
-                {empNo:'015214020', empName:'許家騏',type:'emp',dept:'大里服務中心'},
-                {empNo:'015214021', empName:'連映菲',type:'emp',dept:'大里服務中心'},                
-            ],
-            agentOpt:[],               
+            empList: [],
+            oriEmpList:[], // 備份的員工清單
+            agentList:[],               
             startDateMenu: false,
             startDate: '',
             endDateMenu: false,
@@ -30,10 +25,10 @@ export default {
             endMin:null,
             hourOption:[],
             minOption:[],
-            finalStartDate:null,
-            finalEndDate: null,
+            leaveStartDate:null,
+            leaveEndDate: null,
             sysDate: new Date().toISOString().slice(0, 10),
-            // 員工請假資料先放假資料
+            // 員工請假資料
             empInfo:{
                 status:'請假中',
                 agent:'1050334015',
@@ -59,6 +54,7 @@ export default {
     methods: {
         init(){
             this.defaultDate();
+            this.queryLeaveInit();
         },
 
         // 預設日期
@@ -83,26 +79,26 @@ export default {
         },
         changeStartDate(){
             if(this.startDate != '' && this.startHour != '' && this.startMin != ''){
-                this.finalStartDate = this.startDate +' '+ this.startHour +':'+ this.startMin+':00'; // 組合開始日期
+                this.leaveStartDate = this.startDate +' '+ this.startHour +':'+ this.startMin+':00'; // 組合開始日期
             }
         },
         changeEndDate(){
             if(this.endDate != '' && this.endHour != '' && this.endMin != ''){
-                this.finalEndDate = this.endDate +' '+ this.endHour +':'+ this.endMin+':00'; // 組合開始日期
+                this.leaveEndDate = this.endDate +' '+ this.endHour +':'+ this.endMin+':00'; // 組合開始日期
             }
         },
         // 更改請假人時，將對應到的代理人帶入
         changeEmp(){
-            this.agentOpt = [];
-            for(let i in this.empOpt){
-                if(this.selectEmp.type === this.empOpt[i].type && this.empOpt[i].empNo !== this.selectEmp.empNo){
-                    this.agentOpt.push({
-                        empNo:this.empOpt[i].empNo,
-                        empName:this.empOpt[i].empName,
-                        type:this.empOpt[i].type,
-                        dept:this.empOpt[i].dept,
-                    })
-                }                
+            this.agentList = [];
+            for(let i in this.empList){
+                if(this.selectEmp.isMgmt === this.empList[i].isMgmt && this.empList[i].empNo !== this.selectEmp.empNo){                        
+                    this.agentList.push({                            
+                        empNo:this.empList[i].empNo,                        
+                        empName:this.empList[i].empName,
+                        isMgmt:this.empList[i].isMgmt,
+                        dept:this.empList[i].dept,
+                    })            
+                } 
             }
 
             // 驗證員工
@@ -110,10 +106,15 @@ export default {
         },
 
         submit(){
-            if(this.validInput()){
-                MessageService.showSuccess('申請請假代理');
+            this.requiredArray = [];
+            this.formatArray = [];
+
+            if(!this.validInput()){
+                MessageService.showCheckInfo(this.requiredArray,this.formatArray);
+            } else {
+                this.createLeave();
                 this.resetVal();
-            } 
+            }
         },
 
         // 驗證請假人
@@ -147,17 +148,17 @@ export default {
         // 驗證日期範圍
         checkDate(){
             let hasCheck = true;
-            let startDate = new Date(this.finalStartDate);
+            let startDate = new Date(this.leaveStartDate);
             let sysDate = new Date();
 
             // 代理日期起訖日是否有值
-            if(ValidateUtil.isEmpty(this.finalStartDate) || ValidateUtil.isEmpty(this.finalEndDate)){
+            if(ValidateUtil.isEmpty(this.leaveStartDate) || ValidateUtil.isEmpty(this.leaveEndDate)){
                 hasCheck = false;
                 this.requiredArray.push('請假起迄日期');
                 this.errMsg.selectDate = "請選擇請假日期範圍";
 
             // 代理日期起訖日有值，是否符合日期範圍及日期格式驗證
-            } else if(!ValidateUtil.validateDateRange(this.finalStartDate,this.finalEndDate)){
+            } else if(!ValidateUtil.validateDateRange(this.leaveStartDate,this.leaveEndDate)){
                 hasCheck = false;
                 this.formatArray.push('請假起迄日期範圍');
                 this.errMsg.selectDate = "請重新確認請假日期範圍";
@@ -175,8 +176,6 @@ export default {
         // 最後驗證
         validInput(){            
             let hasCheck = true;
-            this.requiredArray = [];
-            this.formatArray = [];
             
             // 驗證請假人
             if(!this.checkEmp()){
@@ -191,10 +190,6 @@ export default {
                 hasCheck = false;
             }
 
-            if(!hasCheck){
-                MessageService.showCheckInfo(this.requiredArray,this.formatArray);                
-            } 
-
             return hasCheck;
         },
 
@@ -202,14 +197,72 @@ export default {
         resetVal(){
             this.selectEmp = null;
             this.selectAgent = null;
-            this.finalStartDate = null;
-            this.finalEndDate = null;
+            this.leaveStartDate = null;
+            this.leaveEndDate = null;
             this.startDate = null;
             this.startHour = null;
             this.startMin = null;
             this.endDate = null;
             this.endHour = null;
             this.endMin = null;
-        }
+        },
+
+        /** 
+         * 
+         * Ajax start
+         * 
+        */
+
+        // Action: 頁面初始化
+        queryLeaveInit(){
+            // 先放Mock資料-員工清單
+            let  empList = [
+                {empNo:'015212001', empName:'王大維',isMgmt:true,dept:'業務組'},
+                {empNo:'015213001', empName:'林文琪',isMgmt:true,dept:'東山服務所'},
+                {empNo:'015214001', empName:'張佑臻',isMgmt:true,dept:'大里服務中心'},
+                {empNo:'015214020', empName:'許家騏',isMgmt:false,dept:'大里服務中心'},
+                {empNo:'015214021', empName:'連映菲',isMgmt:false,dept:'大里服務中心'},                
+            ];
+
+            // 先放Mock資料-操作人目前狀態
+            let empInfo = {
+                status:'請假中',
+                agent:'1050334015',
+                agentName:'王大明',
+                nextLeaveStartDate:'2021-10-12 08:00',
+                nextLeaveEndDate:'2021-10-12 18:00',
+                nextAgent:'1050334018',
+                nextAgentName:'趙元智',
+            };
+
+            this.empList = empList;
+            this.empInfo = empInfo;
+            this.oriEmpList = JSON.parse(JSON.stringify(this.empList));
+
+
+        },
+
+        // Action: 申請請假代理
+        createLeave(){
+            // vin
+            // empNo: this.selectEmp.empNo,
+            // empName: this.selectEmp.empNo,
+            // agent: this.selectAgent.agent,
+            // agentName: this.selectAgent.agentName,
+            // startDate: this.leaveStartDate,
+            // endDate: this.leaveEndDate,
+            // oriEmpList: this.oriEmpList,
+
+            MessageService.showSuccess('申請請假代理');
+
+
+        },
+
+
+        /** 
+         * 
+         * Ajax end
+         * 
+        */
     }
 }

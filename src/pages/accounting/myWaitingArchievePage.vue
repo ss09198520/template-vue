@@ -7,7 +7,7 @@
             <div class="text-center block-title fw-6 mb-2">待歸檔</div>
           </div>
           <div>
-            <div class="block-content"><span class="block-number">{{ waitingCount }}</span>件</div>
+            <div class="block-content"><span class="block-number">{{ numOfArchieve }}</span>件</div>
           </div>
         </div>
       </div>
@@ -21,6 +21,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="acceptNum"
               outlined
               hide-details                                         
               dense
@@ -34,7 +35,9 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="electricNum"
+              type="number"                      
               outlined
               hide-details
               dense
@@ -50,6 +53,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="archieveNum"
               outlined
               hide-details                                         
               dense
@@ -81,10 +85,10 @@
         <span class="annotation">※提醒&nbsp; 08:00 – 13:00 內送件，4小時內可以執行「退回核算」; 13:00 之後送件，17:00 前可以執行「退回核算」</span>
         <hr>
       </div>
-      <div  class="ml-10">    
+      <div class="ml-10">    
         <v-data-table
           :headers="headers"
-          :items="itemList"
+          :items="archieveList"
           :page.sync="dataListPage"
           :items-per-page="10"
           hide-default-footer
@@ -102,7 +106,7 @@
                   fab
                   small                
                   v-on="on"
-                  @click="returnToAccounting()"
+                  @click="returnToAccounting(item)"
                 >
                   <v-icon>mdi-account-arrow-left-outline</v-icon>
                 </v-btn>
@@ -154,7 +158,7 @@
           </v-btn>
           <v-btn              
             color="success"            
-            @click="returnModel = false"
+            @click="returnForm()"
           >
             確定
           </v-btn>

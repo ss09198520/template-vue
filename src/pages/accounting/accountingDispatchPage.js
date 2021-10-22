@@ -29,17 +29,15 @@ export default {
       dialogType: 'add',
       dialogTitle: '新增派工',
       // 核算員下拉選單
-      accountingList:[
-        {empNo:'105012121', empName:'李小凡'},
-        {empNo:'105012122', empName:'葉星辰'},
-        {empNo:'105012123', empName:'王大明'},
-      ],
+      accountingList:[],
+      oriAccoutingList:[],
       // 檢算員下拉選單
       calculateList:[
         {empNo:'105012124', empName:'連家齊'},
         {empNo:'105012125', empName:'甄文君'},
         {empNo:'105012126', empName:'君令偉'},
       ],
+      oriCalculateList:[],
       // 新增/修改 Modal 內容
       dispatchInfo: {
         // 班別
@@ -253,7 +251,26 @@ export default {
             settingDate: '2021-09-11 10:57:13', 
           }
       ];
+
+      let  accountingList = [
+        {empNo:'105012121', empName:'李小凡'},
+        {empNo:'105012122', empName:'葉星辰'},
+        {empNo:'105012123', empName:'王大明'},
+      ];
+
+      let calculateList = [
+        {empNo:'105012124', empName:'連家齊'},
+        {empNo:'105012125', empName:'甄文君'},
+        {empNo:'105012126', empName:'君令偉'},
+      ];
+
       this.dispatchList = dispatchList;
+      this.accountingList = accountingList;
+      this.calculateList = calculateList;
+      this.oriAccoutingList = JSON.parse(JSON.stringify(accountingList));
+      this.oriCalculateList = JSON.parse(JSON.stringify(calculateList));
+
+
     },
 
     // Action:查詢派工設定
@@ -354,16 +371,30 @@ export default {
 
      // Action:修改派工設定
      updateDispatch(dispatchList){
-      console.log(dispatchList);
+       // vin:
+       // dispatchList = dispatchList,
+       // oriAccoutingList = this.oriAccoutingList, 
+       // oriCalculateList = this.oriCalculateList,
+      
+      
+      
+       console.log(dispatchList);
        // 關閉 dialog
        this.dialog = false;
+       MessageService.showSuccess('修改派工設定');
     },
 
      // Action:新增派工設定
      createDispatch(dispatchList){
+       // vin:
+       // dispatchList = dispatchList,
+       // oriAccoutingList = this.oriAccoutingList,
+       // oriCalculateList = this.oriCalculateList,
+
       console.log(dispatchList);
        // 關閉 dialog
        this.dialog = false;
+       MessageService.showSuccess('新增派工設定');
 
     },
 

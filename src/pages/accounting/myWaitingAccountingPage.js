@@ -42,34 +42,19 @@ export default {
             selectIndex: null,
             hasShowList:false,
             department:null,
-            departmentOption:[
-                {text:'核算課',value:'1'},
-                {text:'大里服務中心',value:'2'},
-                {text:'東山服務所',value:'3'},
-            ],
+            deptList:[],
             rejectReason: null,
-            reasonOption:[
-                {text:'原因由台電提供_1',value:'1'},
-                {text:'原因由台電提供_2',value:'2'},
-                {text:'原因由台電提供_3',value:'3'},
-                {text:'原因由台電提供_4',value:'4'},
-                {text:'原因由台電提供_5',value:'5'},
-                {text:'原因由台電提供_6',value:'6'},
-                {text:'原因由台電提供_7',value:'7'},
-                {text:'原因由台電提供_8',value:'8'},
-                {text:'原因由台電提供_9',value:'9'},
-                {text:'原因由台電提供_10',value:'10'},
-            ],
+            reasonList:[],
             computeDateOption:[
-                {text:'01',value:'1'},
-                {text:'02',value:'2'},
-                {text:'03',value:'3'},
-                {text:'04',value:'4'},
-                {text:'05',value:'5'},
-                {text:'06',value:'6'},
-                {text:'07',value:'7'},
-                {text:'08',value:'8'},
-                {text:'09',value:'9'},
+                {text:'01',value:'01'},
+                {text:'02',value:'02'},
+                {text:'03',value:'03'},
+                {text:'04',value:'04'},
+                {text:'05',value:'05'},
+                {text:'06',value:'06'},
+                {text:'07',value:'07'},
+                {text:'08',value:'08'},
+                {text:'09',value:'09'},
                 {text:'10',value:'10'},
                 {text:'11',value:'11'},
                 {text:'12',value:'12'},
@@ -129,6 +114,7 @@ export default {
     },
     methods: {
         init(){
+            this.queryInitOption();
             this.queryAccoutingInit();
         },
 
@@ -217,7 +203,7 @@ export default {
          * 
          **/
 
-        // Action:依條件查詢待審核案件
+        // Action:頁面初始化
         queryAccoutingInit(){
             // 模擬從後端取到的假資料
             let accoutingList = [
@@ -250,6 +236,33 @@ export default {
             this.setAccountInfo(accoutingList);
             // 取出後端參數
             this.numOfAccounting = numOfAccounting;
+        },
+
+        // 取得退件視窗的下拉選單清單
+        queryInitOption(){
+            // 取得退件原因清單
+            let reasonList = [
+                {codeName:'原因由台電提供_1',code:'1'},
+                {codeName:'原因由台電提供_2',code:'2'},
+                {codeName:'原因由台電提供_3',code:'3'},
+                {codeName:'原因由台電提供_4',code:'4'},
+                {codeName:'原因由台電提供_5',code:'5'},
+                {codeName:'原因由台電提供_6',code:'6'},
+                {codeName:'原因由台電提供_7',code:'7'},
+                {codeName:'原因由台電提供_8',code:'8'},
+                {codeName:'原因由台電提供_9',code:'9'},
+                {codeName:'原因由台電提供_10',code:'10'},
+            ];
+
+            // 取得部門清單
+            let deptList = [
+                {deptName:'核算課',deptNum:'1'},
+                {deptName:'大里服務中心',deptNum:'2'},
+                {deptName:'東山服務所',deptNum:'3'},
+            ];
+
+            this.reasonList = reasonList;
+            this.deptList = deptList;
         },
 
 

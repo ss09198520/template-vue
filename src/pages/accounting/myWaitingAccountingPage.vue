@@ -418,14 +418,14 @@
         <v-card-text class="font-18px">
           <v-row class="mt-6 ml-1" align="center">
             <v-col cols="3">
-            <span class="red--text">*</span>
+              <span class="red--text">*</span>
               退件部門
             </v-col>
             <v-col cols="7">
               <v-select   
                 v-model="department"
-                :items="departmentOption"
-                item-text="text"
+                :items="deptList"
+                item-text="deptName"
                 :return-object="true"            
                 color="#ADADAD"
                 outlined
@@ -434,19 +434,19 @@
                 placeholder="請選擇退件部門"
                 @change="checkRejectVal()"
               />
-            <span class="red--text font-14px">{{errMsg.dept}}</span>
+              <span class="red--text font-14px">{{ errMsg.dept }}</span>
             </v-col>
           </v-row>
           <v-row class="mt-6 ml-1" align="center">
             <v-col cols="3">
-            <span class="red--text">*</span>
+              <span class="red--text">*</span>
               退件原因
             </v-col>
             <v-col cols="7">
               <v-select
                 v-model="rejectReason"
-                :items="reasonOption"
-                item-text="text"
+                :items="reasonList"
+                item-text="codeName"
                 :return-object="true"
                 outlined
                 hide-details
@@ -454,12 +454,12 @@
                 placeholder="請選擇退件原因"
                 @change="checkRejectVal()"
               />
-              <span class="red--text font-14px">{{errMsg.rejectReason}}</span>
+              <span class="red--text font-14px">{{ errMsg.rejectReason }}</span>
             </v-col>
           </v-row>
           <v-row class="ml-1" align="center">
             <v-col cols="3">
-            <span class="red--text">*</span>
+              <span class="red--text">*</span>
               退件說明
             </v-col>
             <v-col cols="7">
@@ -475,9 +475,9 @@
                 @keyup="checkRejectVal()"
               />
             </v-col>
-            <v-col cols="3"/>
+            <v-col cols="3" />
             <v-col style="margin-top:-15%">
-              <span class="red--text font-14px">{{errMsg.rejectDesc}}</span>
+              <span class="red--text font-14px">{{ errMsg.rejectDesc }}</span>
             </v-col>
           </v-row>
         </v-card-text>

@@ -13,6 +13,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="acceptNum"
               outlined
               hide-details                                         
               dense
@@ -26,7 +27,8 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="electricNum"                       
               outlined
               hide-details
               dense
@@ -42,6 +44,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="custName"   
               outlined
               hide-details                                         
               dense              
@@ -55,7 +58,8 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="archieveNum"                           
               outlined
               hide-details
               dense
@@ -73,7 +77,7 @@
           >
             <v-select
               v-model="contractType"
-              :items="contractTypeOption"
+              :items="contractTypeList"
               item-text="text"
               :return-object="true"
               outlined
@@ -336,7 +340,7 @@
               <v-col cols="9">
                 <v-select
                   v-model="readAudience"                
-                  :items="readAudienceOpt"
+                  :items="readAudienceList"
                   outlined
                   hide-details
                   dense
@@ -360,7 +364,7 @@
               <v-col cols="9">
                 <v-select
                   v-model="readReason"                
-                  :items="readReasonOpt"
+                  :items="readReasonList"
                   outlined
                   hide-details
                   dense

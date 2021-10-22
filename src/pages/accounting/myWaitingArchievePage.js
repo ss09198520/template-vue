@@ -45,5 +45,30 @@ export default {
             console.log("每日跑批次給NCPS前退回核算");
             this.returnModel = true;
         },
+
+        /** 
+         *  Ajax Start
+         * 
+         * 
+        */
+
+        // 查詢初始化
+        queryArchieveInit(){
+
+        },
+
+        // 依條件查詢待歸檔清單
+        queryArchieveList(){
+            
+        }
+        
+
+
+
+        /** 
+         *  Ajax End
+         * 
+         * 
+        */
     }
 }

@@ -2,6 +2,9 @@ import MessageService from "@/assets/services/message.service";
 import ValidateUtil from "@/assets/services/validateUtil";
 
 export default{
+    beforeMount(){
+        this.init();
+    },
     data(){
         return{
             //點選查詢才顯示下方清單
@@ -17,42 +20,9 @@ export default{
             //選擇的調閱對象
             readAudience: null,
             //調閱對象清單-先放假資料
-            readAudienceOpt:[
-                // { empNo: '', empName: '自己', empDivision:'', empGroup:'',empSection:'',character:'',settingStyle:'',memo:'',edit:false, isSelected:false},
-                // { empNo: '1050330-001', empName: '梁朝偉', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門主管',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
-                // { empNo: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
-                // { empNo: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
-                // { empNo: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門主管',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
-                // { empNo: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
-                // { empNo: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
-                
-                // { empNo: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門主管,服務中心主辦',settingStyle:'自動抓取',memo:'',edit:false, isSelected:false},
-                // { empNo: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門',settingStyle:'自動抓取',memo:'',edit:false, isSelected:true},
-                
-                { empNo: '', empName: '自己',},
-                { empNo: '1050330-001', empName: '梁朝偉'},
-                { empNo: '1050330-002', empName: '王曉花'},
-                { empNo: '1050330-003', empName: '林美美'},
-                { empNo: '1050331-001', empName: '蔡政揚'},
-                { empNo: '1050331-002', empName: '張芊芊'},
-                { empNo: '1050331-003', empName: '江舒語'},                
-                { empNo: '1050320-001', empName: '陳大天'},
-                { empNo: '1050320-002', empName: '何欣惠'},
-            
-            ],
+            readAudienceList:[],
             //調閱原因清單-先放假資料
-            readReasonOpt:[
-                {readReason:'確認換表指數及內容', reasonCode:'REASON01'},
-                {readReason:'確認設備容量', reasonCode:'REASON02'},
-                {readReason:'確認是否須拆除外線', reasonCode:'REASON03'},
-                {readReason:'確認用電地址', reasonCode:'REASON04'},
-                {readReason:'確認中抄指數', reasonCode:'REASON05'},
-                {readReason:'前用戶異議單獨過戶', reasonCode:'REASON06'},
-                {readReason:'電表報損確認賠償費用', reasonCode:'REASON07'},
-                {readReason:'新增設案件抽查', reasonCode:'REASON08'},
-                {readReason:'現場用電用途查核', reasonCode:'REASON09'},
-                {readReason:'完工結算', reasonCode:'REASON10'},
-            ],
+            readReasonList:[],
             readFormHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
@@ -64,13 +34,7 @@ export default{
                 { text: '受理項目', value: 'acceptItem', align: 'center' },                
                 { text: '狀態操作', value: 'mani', align: 'center' }
             ],
-            readFormList: [                
-                { mani: true, seq:1 ,acceptNum: 'A00024',custName:'吳小花',contractType:'高壓',archieveNum:'000300', electricNum: '7140000123', acceptDate:'2021-09-10 10:00', achieveDate:'2021-09-15 10:00',  acceptItem:'QA210軍眷用電申請優待'},
-                { mani: true, seq:2 ,acceptNum: 'A00615',custName:'虞小寒',contractType:'包制',archieveNum:'000301', electricNum: '7140000456', acceptDate:'2021-09-09 11:21', achieveDate:'2021-09-15 11:21',  acceptItem:'I0510故障換表'},
-                { mani: true, seq:3 ,acceptNum: 'A00040',custName:'孔維祥',contractType:'表制',archieveNum:'000302', electricNum: '7140000789', acceptDate:'2021-09-07 15:36', achieveDate:'2021-09-15 15:36',  acceptItem:'I0520增加電表'},
-                { mani: true, seq:4 ,acceptNum: 'A00605',custName:'文易席',contractType:'高壓',archieveNum:'000303', electricNum: '7140000888', acceptDate:'2021-09-10 09:45', achieveDate:'2021-09-15 09:45',  acceptItem:'F3030表燈非時間電價停用廢止'},
-                { mani: true, seq:5 ,acceptNum: 'A00619',custName:'許慧貞',contractType:'包制',archieveNum:'000304', electricNum: '7140000999', acceptDate:'2021-09-10 13:44', achieveDate:'2021-09-15 13:44',  acceptItem:'I0510故障換表'},
-            ],
+            readFormList: [],
             //日曆起(受理日期)
             menu1: false,
             // date1: '',
@@ -94,14 +58,14 @@ export default{
             archieveStartDate: null,
             archieveEndDate: null,
             contractType:null,
-            contractTypeOption:[
+            contractTypeList:[
                 {text:'表制', value:'1'},
                 {text:'高壓', value:'2'},
                 {text:'包制', value:'3'},
             ],
             otherReason: null, //其他原因
             selectForm:{}, // 選擇要調閱的案件資料
-            readNum: '71023133', //調閱編號
+            readNum: null, //調閱編號
             readDate:this.formatDateTime(new Date()),
             readReason: null,
             memo:null,
@@ -116,9 +80,18 @@ export default{
             },
             requiredArray : [],
             formatArray : [],
+            acceptNum: null,
+            electricNum: null,
+            custName: null,
+            archieveNum: null,
+
         }
     },
     methods:{
+        init(){
+            this.queryInquireReadInit();
+        },
+
         // 依條件查詢
         search(){
             // 先驗證條件參數
@@ -126,6 +99,7 @@ export default{
                 return;
             } else {
                 this.display = true;
+                this.queryInquireReadList();
                 // 打後端取資料
             }
 
@@ -182,6 +156,96 @@ export default{
          * 
          **/
 
+        // Action: 頁面初始化-取得下拉選單(操作角色為核算課長/調閱管理員)
+        queryInquireReadInit(){
+            // 模擬假資料
+            let readAudienceList = [                
+                { empNo: '', empName: '自己',},
+                { empNo: '1050330-001', empName: '梁朝偉'},
+                { empNo: '1050330-002', empName: '王曉花'},
+                { empNo: '1050330-003', empName: '林美美'},
+                { empNo: '1050331-001', empName: '蔡政揚'},
+                { empNo: '1050331-002', empName: '張芊芊'},
+                { empNo: '1050331-003', empName: '江舒語'},                
+                { empNo: '1050320-001', empName: '陳大天'},
+                { empNo: '1050320-002', empName: '何欣惠'},
+            
+            ];
+
+            let readReasonList = [
+                {readReason:'確認換表指數及內容', reasonCode:'REASON01'},
+                {readReason:'確認設備容量', reasonCode:'REASON02'},
+                {readReason:'確認是否須拆除外線', reasonCode:'REASON03'},
+                {readReason:'確認用電地址', reasonCode:'REASON04'},
+                {readReason:'確認中抄指數', reasonCode:'REASON05'},
+                {readReason:'前用戶異議單獨過戶', reasonCode:'REASON06'},
+                {readReason:'電表報損確認賠償費用', reasonCode:'REASON07'},
+                {readReason:'新增設案件抽查', reasonCode:'REASON08'},
+                {readReason:'現場用電用途查核', reasonCode:'REASON09'},
+                {readReason:'完工結算', reasonCode:'REASON10'},
+            ]
+
+            this.readReasonList = readReasonList;
+            this.readAudienceList = readAudienceList;
+        },
+
+         // Action: 依條件查詢可調閱的案件清單
+        queryInquireReadList(){
+            // Vin參數
+            // acceptNum:this.acceptNum,
+            // electricNum: this.electricNum,
+            // custName: this.custName,
+            // archieveNum: this.archieveNum,
+            // acceptStartDate: this.acceptStartDate,
+            // acceptEndDate: this.acceptEndDate,
+            // archieveStartDate: this.archieveStartDate,
+            // archieveEndDate: this.archieveEndDate,
+
+            let readFormList = [
+                { mani: true, seq:1 ,acceptNum: 'A00024',custName:'吳小花',contractType:'高壓',archieveNum:'000300', electricNum: '7140000123', acceptDate:'2021-09-10 10:00', achieveDate:'2021-09-15 10:00',  acceptItem:'QA210軍眷用電申請優待'},
+                { mani: true, seq:2 ,acceptNum: 'A00615',custName:'虞小寒',contractType:'包制',archieveNum:'000301', electricNum: '7140000456', acceptDate:'2021-09-09 11:21', achieveDate:'2021-09-15 11:21',  acceptItem:'I0510故障換表'},
+                { mani: true, seq:3 ,acceptNum: 'A00040',custName:'孔維祥',contractType:'表制',archieveNum:'000302', electricNum: '7140000789', acceptDate:'2021-09-07 15:36', achieveDate:'2021-09-15 15:36',  acceptItem:'I0520增加電表'},
+                { mani: true, seq:4 ,acceptNum: 'A00605',custName:'文易席',contractType:'高壓',archieveNum:'000303', electricNum: '7140000888', acceptDate:'2021-09-10 09:45', achieveDate:'2021-09-15 09:45',  acceptItem:'F3030表燈非時間電價停用廢止'},
+                { mani: true, seq:5 ,acceptNum: 'A00619',custName:'許慧貞',contractType:'包制',archieveNum:'000304', electricNum: '7140000999', acceptDate:'2021-09-10 13:44', achieveDate:'2021-09-15 13:44',  acceptItem:'I0510故障換表'},
+            ]
+
+            this.readFormList = readFormList;
+        },
+
+        // Action:調閱申請(核算課長/調閱管理員)
+        createReadApply(){
+            // Vin參數
+            // formSeq: this.formSeq,
+            // readEmpNum: this.readEmpNum,
+            // readEmpName: this.readEmpNum,
+            // readReason: this.readReason,
+            // otherReason: this.otherReason,
+
+            MessageService.showSuccess('調閱申請');
+            this.popOut = false;
+            this.resetVal();
+        },
+
+        // Action:開啟調閱申請視窗取得調閱編號(TPES)
+        queryReadNum(){
+            // 模擬放假資料
+            let readNum = '71023133';
+            this.readNum = readNum;
+        },
+
+        // Action:調閱申請(其他TPES使用者)
+        createOtherReadApply(){
+            // Vin參數
+            // formSeq: this.formSeq,
+            // readDate: this.readDate,
+            // readNum: this.readNum,
+            // readReason: this.readNum,
+            // memo: this.memo,
+
+            MessageService.showSuccess('調閱申請');
+            this.popOut = false;
+            this.resetVal();
+        },
 
         /**
          * Ajax end 

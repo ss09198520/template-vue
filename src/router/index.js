@@ -222,6 +222,18 @@ export const constantRoutes = [
         name: 'Satisfaction-Report-Weekly',
         component: () => import('@/views/satisfaction/reportWeek'),
         meta: { title: '滿意度個人摘要(週)', icon: 'mdi-clipboard-search  ' }
+      },
+      {
+        path: 'satisfyReport/reportDynamicRegion',
+        name: 'Satisfaction-Report-Monthly',
+        component: () => import('@/views/satisfaction/reportDynamicRegion'),
+        meta: { title: '滿意度區處報表(自訂查詢區間)', icon: 'mdi-clipboard-search' }
+      },
+      {
+        path: 't-satisfyReport/reportDynamicPersonal',
+        name: 'Satisfaction-Report-Weekly',
+        component: () => import('@/views/satisfaction/reportDynamicPersonal'),
+        meta: { title: '滿意度個人動態查詢(自訂區間與%數)', icon: 'mdi-clipboard-search  ' }
       }
     ]
   },

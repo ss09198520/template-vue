@@ -13,22 +13,24 @@ export default {
         return {
              //預設簽核顯示範圍按鈕
              displayAll: true,
+             //控制清單示全部or待簽核
+             waitToSign: '待簽核',
              sealSignListHeaders:[
-                { text: '受理號碼', value: 'orderId', align: 'center' },
-                { text: '戶名', value: 'accntName', align: 'center' },
-                { text: '電號', value: 'electNum', align: 'center' },
+                { text: '受理號碼', value: 'acceptNum', align: 'center' },
+                { text: '戶名', value: 'custName', align: 'center' },
+                { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
-                { text: '受理日期', value: 'orderDate', align: 'center' },
-                { text: '計算日', value: 'calDate', align: 'center' },
-                { text: '案件狀態', value: 'inquireStatus', align: 'center' },
-                { text: '受理項目', value: 'orderItems', align: 'center' },                                                                            
+                { text: '受理日期', value: 'acceptDate', align: 'center' },
+                { text: '計算日', value: 'computeDate', align: 'center' },
+                { text: '案件狀態', value: 'sealStatus', align: 'center' },
+                { text: '受理項目', value: 'acceptItem', align: 'center' },                                                                            
                 { text: '專用章檔案下載', value: 'download', align: 'center' },    
                 { text: '狀態操作', value: 'mani', align: 'center' }
              ],
              sealSignList:[
-                 {status:false,inquireStatus:'待簽核',orderId:'A00349',orderDate: '2021-09-10 10:00',electNum:'7140000123',orderType:'APR0370',orderItems:'QA210軍眷用電申請優待', accntName:'劉艷艷', contractType:'包制', calDate:'01'},
-                 {status:false,inquireStatus:'待簽核',orderId:'A00389',orderDate: '2021-09-08 10:00',electNum:'7140000128',orderType:'APR0200',orderItems:'I0510故障換表', accntName:'陳艷均', contractType:'包制', calDate:'12'},
-                 {status:true,inquireStatus:'套印完成',orderId:'A00389',orderDate: '2021-09-08 10:00',electNum:'7140000128',orderType:'APR0200',orderItems:'I0510故障換表', accntName:'連文彥', contractType:'包制', calDate:'10'},
+                 {status:false, sealStatus:'待簽核', acceptNum:'A00349', acceptDate: '2021-09-10 10:00', electricNum:'7140000123', acceptItem:'QA210軍眷用電申請優待', custName:'劉艷艷', contractType:'包制', computeDate:'01', seq:'流水號', formSeq:'主表流水號'},
+                 {status:false, sealStatus:'待簽核', acceptNum:'A00389', acceptDate: '2021-09-08 10:00', electricNum:'7140000128', acceptItem:'I0510故障換表', custName:'陳艷均', contractType:'包制', computeDate:'12', seq:'流水號', formSeq:'主表流水號'},
+                 {status:true, sealStatus:'套印完成', acceptNum:'A00389', acceptDate: '2021-09-08 10:00', electricNum:'7140000128', acceptItem:'I0510故障換表', custName:'連文彥', contractType:'包制', computeDate:'10', seq:'流水號', formSeq:'主表流水號'},
                 ],
              sealSignListPageCount:0,
              sealSignListPage:1,
@@ -37,6 +39,16 @@ export default {
         }
     },
     methods: {
+        display(){
+            this.displayAll = true;
+            this.waitToSign = '';
+        },        
+
+        displayWaitToSign(){
+            this.displayAll = false;
+            this.waitToSign = '待簽核';
+        },
+        
         sign(item){
             console.log(item);
             let index = this.sealSignList.indexOf(item);

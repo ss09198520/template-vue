@@ -9,7 +9,7 @@
             <div class="text-center block-title fw-6 mb-2">待核算</div>
           </div>
           <div>
-            <div class="block-content"><span class="block-number">{{ waitingCount }}</span>件</div>
+            <div class="block-content"><span class="block-number">{{ numOfAccounting }}</span>件</div>
           </div>
         </div>
       </div>
@@ -22,6 +22,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="searchForm.acceptNum"
               outlined
               hide-details                                         
               dense
@@ -35,11 +36,45 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="searchForm.electricNum"
+              type="number"                     
               outlined
               hide-details
               dense
               placeholder="請輸入電號"
+            />
+          </v-col>     
+        </v-row>
+        <v-row align="center">
+          <v-col cols="1">
+            戶名       
+          </v-col>          
+          <v-col
+            cols="3"
+          >            
+            <v-text-field
+              v-model="searchForm.custName"
+              outlined
+              hide-details
+              dense
+              placeholder="請輸入戶名"
+            />
+          </v-col>
+          <v-col cols="1" />
+          <v-col cols="1">
+            待核算累積日數
+          </v-col>                                             
+          <v-col
+            cols="3"
+          >
+            <v-text-field
+              v-model="searchForm.cumulativeDay"
+              type="number" 
+              outlined
+              hide-details
+              dense
+              placeholder="請輸入待核算累積日數"
             />
           </v-col>     
         </v-row>
@@ -51,8 +86,8 @@
             cols="3"
           >
             <v-select
-              v-model="calDate"
-              :items="calDateOption"
+              v-model="searchForm.computeDate"
+              :items="computeDateOption"
               item-text="text"
               :return-object="true"
               outlined
@@ -62,6 +97,7 @@
               :clearable="true"
               class="my-auto"
               color="#ADADAD"
+              placeholder="請選擇計算日"
             />
           </v-col>
           <v-col cols="1" />
@@ -71,7 +107,8 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="searchForm.archieveNum"                       
               outlined
               hide-details
               dense
@@ -81,13 +118,103 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
+            派工日期區間
+          </v-col>
+          <v-col            
+            cols="3"
+            class="d-flex"
+          >
+            <v-menu
+              v-model="menu1"
+              :close-on-content-click="false"              
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="dispatchDate.start"                  
+                  append-icon="mdi-calendar"
+                  readonly
+                  dense
+                  outlined
+                  hide-details
+                  v-bind="attrs"
+                  clearable
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="dispatchDate.start"
+                @input="menu1 = false"
+                @change="checkDate()"
+              />
+            </v-menu>          
+            <div style="margin:auto 0;">~</div>          
+            <v-menu
+              v-model="menu2"
+              :close-on-content-click="false"              
+              transition="scale-transition"
+              offset-y
+              min-width="auto"
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-text-field
+                  v-model="dispatchDate.end"                  
+                  append-icon="mdi-calendar"
+                  readonly
+                  outlined
+                  dense
+                  hide-details
+                  v-bind="attrs"
+                  clearable
+                  v-on="on"
+                />
+              </template>
+              <v-date-picker
+                v-model="dispatchDate.end"
+                @input="menu2 = false"
+                @change="checkDate()"
+              />
+            </v-menu>
+          </v-col>
+          <v-col cols="1" />
+          <v-col cols="1">
+            契約種類
+          </v-col>                                             
+          <v-col
+            cols="3"
+          >
+            <v-select
+              v-model="searchForm.contractType"
+              :items="contractTypeOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense
+              :clearable="true"
+              class="my-auto"
+              color="#ADADAD"
+              placeholder="請選擇契約種類"
+            />
+          </v-col>
+          <v-col cols="3" />
+          <v-col v-if="errMsg.dispatchDate !== null" cols="1" />
+          <v-col v-if="errMsg.dispatchDate !== null" cols="3" style="margin-top:-25px">
+            <span class="red--text font-14px">{{ errMsg.dispatchDate }}</span>
+          </v-col> 
+        </v-row>
+        <v-row align="center">
+          <v-col cols="1">
             代理件顯示       
           </v-col>          
           <v-col
             cols="3"
           >
             <v-select
-              v-model="agentCase"
+              v-model="searchForm.caseType"
               :items="agentCaseOption"
               item-text="text"
               :return-object="true"
@@ -113,7 +240,7 @@
                   small
                   color="primary"
                   v-on="on"
-                  @click="hasShowList = true"
+                  @click="search()"
                 >
                   <v-icon v-text="'mdi-magnify'" />
                 </v-btn>
@@ -123,23 +250,23 @@
           </v-col>
         </v-row>  
         <hr class="mt-10 mb-10">
-        <v-row v-if="hasShowList" class="mt-10">
+        <v-row class="mt-10">
           <v-col cols="12">    
             <v-data-table
-              :headers="headers"
-              :items="itemList"
-              :page.sync="dataListPage"
+              :headers="accoutingHeaders"
+              :items="accoutingList"
+              :page.sync="accoutingListPage"
               :items-per-page="10"
-              disable-sort
+
               class="elevation-1"
               no-data-text="查無資料"
               hide-default-footer
-              @page-count="dataListPageCount = $event"
+              @page-count="accoutingListPageCount = $event"
             >
-
-              <template v-slot:item.agentCase="{ item }"> 
+              <!-- 是否為代理件 -->
+              <template v-slot:item.isAgent="{ item }"> 
                 <div             
-                  v-if="item.agentCase"
+                  v-if="item.isAgent"
                   class="ma-2"
                   icon
                 >
@@ -148,6 +275,7 @@
                   </v-icon>
                 </div>       
               </template>
+              <!-- 操作狀態 -->
               <template v-slot:item.action="{ item }">              
                 <v-tooltip v-if="User=='auditer'" top>
                   <template v-slot:activator="{ on }">
@@ -180,6 +308,7 @@
                   <span>瀏覽案件</span>
                 </v-tooltip>
               </template>
+              <!-- 檢視註記 -->
               <template v-slot:item.hasView="{ item }">              
                 <v-checkbox 
                   v-model="item.hasView" 
@@ -189,7 +318,8 @@
                   disabled
                 />
               </template>
-              <template v-slot:item.comments="{ item }">              
+              <!-- 備註按鈕 -->
+              <template v-slot:item.memo="{ item }">              
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn
@@ -209,15 +339,16 @@
             <!-- 選頁 -->
             <div class="mt-2">
               <v-pagination
-                v-model="dataListPage"
+                v-model="accoutingListPage"
                 color="#2F59C4"
-                :length="dataListPageCount"
+                :length="accoutingListPageCount"
               />
             </div>
           </v-col>
         </v-row>
       </div>
     </v-container>
+    <!-- 核算視窗 -->
     <v-dialog
       v-model="accountingDialog"
       max-width="1200px"
@@ -237,11 +368,11 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <FormPage :restrict-mode="'audit'" @returnOrder="returnOrder()" @checkSubmit="checkSubmit()" @saveComments="saveComments()" />
+          <FormPage :restrict-mode="'audit'" @returnOrder="returnOrder($event)" @auditSubmit="auditSubmit($event)" @saveComments="saveComments($event)" />
         </v-card-text>
       </v-card>
     </v-dialog>
-
+    <!-- 瀏覽視窗 -->
     <v-dialog
       v-model="checkingDialog"
       max-width="1200px"
@@ -265,7 +396,7 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-
+    <!-- 退件視窗 -->   
     <v-dialog
       v-model="returnReasonModel"
       max-width="600"
@@ -287,52 +418,66 @@
         <v-card-text class="font-18px">
           <v-row class="mt-6 ml-1" align="center">
             <v-col cols="3">
+              <span class="red--text">*</span>
               退件部門
             </v-col>
             <v-col cols="7">
               <v-select   
                 v-model="department"
-                :items="departmentOption"
-                item-text="text"
+                :items="deptList"
+                item-text="deptName"
                 :return-object="true"            
                 color="#ADADAD"
                 outlined
                 hide-details
                 dense
                 placeholder="請選擇退件部門"
+                @change="checkRejectVal()"
               />
+              <span class="red--text font-14px">{{ errMsg.dept }}</span>
             </v-col>
           </v-row>
           <v-row class="mt-6 ml-1" align="center">
             <v-col cols="3">
+              <span class="red--text">*</span>
               退件原因
             </v-col>
             <v-col cols="7">
-              <v-select   
-                v-model="reason"
-                :items="reasonOption"
-                item-text="text"
+              <v-select
+                v-model="rejectReason"
+                :items="reasonList"
+                item-text="codeName"
                 :return-object="true"
                 outlined
                 hide-details
                 dense
                 placeholder="請選擇退件原因"
+                @change="checkRejectVal()"
               />
+              <span class="red--text font-14px">{{ errMsg.rejectReason }}</span>
             </v-col>
           </v-row>
           <v-row class="ml-1" align="center">
             <v-col cols="3">
+              <span class="red--text">*</span>
               退件說明
             </v-col>
             <v-col cols="7">
-              <v-textarea            
+              <v-textarea
+                v-model="rejectDesc"            
                 color="#ADADAD"
                 outlined
                 name="input-7-4"
                 :no-resize="true"
                 placeholder="請輸入退件說明"
-                hide-details
+                auto-grow
+                counter="50"
+                @keyup="checkRejectVal()"
               />
+            </v-col>
+            <v-col cols="3" />
+            <v-col style="margin-top:-15%">
+              <span class="red--text font-14px">{{ errMsg.rejectDesc }}</span>
             </v-col>
           </v-row>
         </v-card-text>
@@ -373,7 +518,7 @@
         </v-card-title>
         <v-card-text class="font-18px">
           <v-row class="mt-10">
-            測試備註
+            {{ memo }}
           </v-row>
         </v-card-text>
         <v-card-actions class="d-end mt-5">

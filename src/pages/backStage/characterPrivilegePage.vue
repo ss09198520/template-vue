@@ -60,8 +60,8 @@
           class="font-bold"          
         >                
           <v-select  
-            v-model="character"
-            :items="characterOption" 
+            v-model="role"
+            :items="roleOption" 
             color="#ADADAD"
             outlined
             hide-details
@@ -125,10 +125,10 @@
           :page.sync="empListPage"
           @page-count="empListPageCount = $event"
         >
-          <template v-slot:item.character="{ item }">
+          <template v-slot:item.role="{ item }">
             <!--隱藏被選擇的欄位 -->
             <div v-if="!item.edit" class="d-flex">
-              <div style="width:250px; margin: auto; text-overflow: ellipsis; overflow: hidden; white-space:nowrap;">{{ item.character }}</div>              
+              <div style="width:250px; margin: auto; text-overflow: ellipsis; overflow: hidden; white-space:nowrap;">{{ item.role }}</div>              
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -136,7 +136,7 @@
                     fab
                     small
                     color="success"
-                    @click="modifyCharacter(item)"
+                    @click="modifyrole(item)"
                     v-on="on"
                   >
                     <v-icon v-text="'mdi-pencil'" />
@@ -146,12 +146,12 @@
               </v-tooltip>
             </div> 
                           
-            <div v-if="openSelectBox == item.empId" class="d-flex">
+            <div v-if="openSelectBox == item.empNo" class="d-flex">
               <v-select
-                v-model="character"
+                v-model="role"
                 style="width:min-content; margin:auto;"
                 multiple
-                :items="characterOption"
+                :items="roleOption"
                 item-text="text"
                 item-value="value"
                 return-object        
@@ -161,7 +161,7 @@
                   <span
                     v-if="index === maxDisplay"
                     class="grey--text caption"
-                  >(..還有{{ character.length - maxDisplay }}項)</span>
+                  >(..還有{{ role.length - maxDisplay }}項)</span>
                 </template>
               </v-select>
               <v-btn class="mt-3" color="success" @click="submit(item)">&emsp;送出&emsp;</v-btn>
@@ -205,8 +205,8 @@
               </div>                                      
               <v-col cols="4">
                 <v-select
-                  v-model="setCharacter"                
-                  :items="characterOption"
+                  v-model="setrole"                
+                  :items="roleOption"
                   outlined
                   hide-details
                   dense
@@ -275,7 +275,7 @@
 
           <hr class="mt-5 ml-3">
           <v-chip
-            v-for="(title, index) in modCharacterTitle"
+            v-for="(title, index) in modroleTitle"
             :key="index"
             close
             @click:close="cancelMod(title)"
@@ -288,7 +288,7 @@
               <v-btn color="primary" style="margin:5px 0;" @click="selectAll('add')">全選</v-btn>
               <v-col style="border:2px solid green; height:260px; overflow-y:scroll; border-radius:5px;">
                 <div v-for="(item, index) in mockChar" :key="index">
-                  <v-btn v-if="!item.isSelected" style="margin: 2px;" @click="toSelected(item)">{{ item.empId }}{{ item.empName }}</v-btn>
+                  <v-btn v-if="!item.isSelected" style="margin: 2px;" @click="toSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>
                 </div>                            
               </v-col>
             </v-col>
@@ -296,7 +296,7 @@
               <v-btn color="primary" style="margin:5px 0;" @click="selectAll('clear')">清空</v-btn>
               <v-col style="border:2px solid green; height:260px;overflow-y:scroll; border-radius:5px;">
                 <div v-for="(item, index) in mockChar" :key="index">
-                  <v-btn v-if="item.isSelected" style="margin: 2px;" @click="toNotSelected(item)">{{ item.empId }}{{ item.empName }}</v-btn>
+                  <v-btn v-if="item.isSelected" style="margin: 2px;" @click="toNotSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>
                 </div> 
               </v-col>
             </v-col>                        

@@ -1,5 +1,6 @@
 import FormPage from '@/pages/FormPage/FormPage.vue';
 import MessageService from "@/assets/services/message.service";
+import ValidateUtil from '@/assets/services/validateUtil';
 
 export default {
     name: 'MyWaitingAccounting',
@@ -7,73 +8,53 @@ export default {
       FormPage
     },
     props: {
-    
+    },
+    beforeMount(){
+        this.init();
     },
     data() {
         return {
             User: 'auditer',
-            waitingCount: 5,
-            headers: [
-                { text: '受理號碼', value: 'acceptNumber', align: 'center' },
-                { text: '受理日期', value: 'acceptDate', align: 'center' },
-                { text: '結案日期', value: 'completeDate', align: 'center' },
-                { text: '戶名', value: 'accntName', align: 'center' },
-                { text: '受理項目', value: 'acceptItem', align: 'center' },
-                { text: '計算日', value: 'calDate', align: 'center' },
-                { text: '電號', value: 'electricNo', align: 'center' },
-                { text: '待核算累積日數', value: 'accumulatedDate', align: 'center' },
-                { text: '派工日期', value: 'dispatchDate', align: 'center' },
-                { text: '契約種類', value: 'contractType', align: 'center' },
-                { text: '整理號碼', value: 'sortNo', align: 'center' },
-                { text: '檢視註記', value: 'hasView', align: 'center' },
-                { text: '代理件', value: 'agentCase', align: 'center' },
-                { text: '備註', value: 'comments', align: 'center' },
-                { text: '狀態操作', value: 'action', align: 'center' }
+            numOfAccounting: null,
+            accoutingHeaders: [
+                { text: '受理號碼', value: 'acceptNum', align: 'center',width:'10%' },
+                { text: '受理日期', value: 'acceptDate', align: 'center',width:'10%'  },
+                { text: '結案日期', value: 'closeDate', align: 'center',width:'10%'  },
+                { text: '戶名', value: 'custName', align: 'center',sortable:false,width:'5%'  },
+                { text: '受理項目', value: 'acceptItem', align: 'center',width:'10%'  },
+                { text: '計算日', value: 'computeDate', align: 'center',width:'5%' },
+                { text: '電號', value: 'electricNum', align: 'center',width:'5%'  },
+                { text: '待核算累積日數', value: 'cumulativeDay', align: 'center',width:'5%'  },
+                { text: '派工日期', value: 'dispatchDate', align: 'center',width:'10%'  },
+                { text: '契約種類', value: 'contractType', align: 'center',width:'10%' },
+                { text: '整理號碼', value: 'archieveNum', align: 'center',width:'10%' },
+                { text: '檢視註記', value: 'hasView', align: 'center',width:'5%'},
+                { text: '代理件', value: 'isAgent', align: 'center',width:'5%' },
+                { text: '備註', value: 'memo', align: 'center',sortable:false,width:'2%' },
+                { text: '狀態操作', value: 'action', align: 'center',sortable:false,width:'2%' }
             ],
-            itemList: [
-                {action: true, acceptNumber: 'A00028',agentCase:false,hasView:false,sortNo:'000700',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'利小凡',calDate:'02',contractType:'表制',accumulatedDate:'3', acceptDate: '2021-09-10 10:00', completeDate: '2021-09-10 16:00',  acceptItem: 'QA210  軍眷用電申請優待'},
-                {action: true, acceptNumber: 'A00615',agentCase:true,hasView:false,sortNo:'000701',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'陳和千',calDate:'05',contractType:'包制',accumulatedDate:'1', acceptDate: '2021-09-09 11:21', completeDate: '2021-09-09 15:21',  acceptItem: 'I0510  故障換表'},
-                {action: true, acceptNumber: 'A00040',agentCase:false,hasView:false,sortNo:'000702',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'黎維成',calDate:'10',contractType:'表制',accumulatedDate:'4', acceptDate: '2021-09-07 15:36', completeDate: '2021-09-08 15:06', acceptItem: 'I0520  增加電表'},
-                {action: true, acceptNumber: 'A00605',agentCase:true,hasView:false,sortNo:'000703',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'區立言',calDate:'16',contractType:'高壓',accumulatedDate:'3', acceptDate: '2021-09-10 09:45', completeDate: '2021-09-15 10:50',  acceptItem: 'F3030  表燈非時間電價停用廢止'},
-                {action: true, acceptNumber: 'A00619',agentCase:false,hasView:false,sortNo:'000704',dispatchDate:'2021-09-10 10:00',electricNo:'91020122',accntName:'馮文卿',calDate:'01',contractType:'表制',accumulatedDate:'2', acceptDate: '2021-09-10 13:44', completeDate: '2021-09-10 15:26',  acceptItem: 'I0510  故障換表'}
-            ],
-            dataListPage: 1,
-            dataListPageCount: 1,
+            accoutingList: [],
+            accoutingListPage: 1,
+            accoutingListPageCount: 1,
             accountingDialog: false,
             checkingDialog: false,
             returnReasonModel: false,
             selectIndex: null,
             hasShowList:false,
             department:null,
-            departmentOption:[
-                {text:'核算課',value:'1'},
-                {text:'大里服務中心',value:'2'},
-                {text:'東山服務所',value:'3'},
-            ],
-            reason: null,
-            reasonOption:[
-                {text:'原因由台電提供_1',value:'1'},
-                {text:'原因由台電提供_2',value:'2'},
-                {text:'原因由台電提供_3',value:'3'},
-                {text:'原因由台電提供_4',value:'4'},
-                {text:'原因由台電提供_5',value:'5'},
-                {text:'原因由台電提供_6',value:'6'},
-                {text:'原因由台電提供_7',value:'7'},
-                {text:'原因由台電提供_8',value:'8'},
-                {text:'原因由台電提供_9',value:'9'},
-                {text:'原因由台電提供_10',value:'10'},
-            ],
-            calDate:null,
-            calDateOption:[
-                {text:'01',value:'1'},
-                {text:'02',value:'2'},
-                {text:'03',value:'3'},
-                {text:'04',value:'4'},
-                {text:'05',value:'5'},
-                {text:'06',value:'6'},
-                {text:'07',value:'7'},
-                {text:'08',value:'8'},
-                {text:'09',value:'9'},
+            deptList:[],
+            rejectReason: null,
+            reasonList:[],
+            computeDateOption:[
+                {text:'01',value:'01'},
+                {text:'02',value:'02'},
+                {text:'03',value:'03'},
+                {text:'04',value:'04'},
+                {text:'05',value:'05'},
+                {text:'06',value:'06'},
+                {text:'07',value:'07'},
+                {text:'08',value:'08'},
+                {text:'09',value:'09'},
                 {text:'10',value:'10'},
                 {text:'11',value:'11'},
                 {text:'12',value:'12'},
@@ -90,45 +71,373 @@ export default {
             ],
 
             commentsModel:false,
+            contractTypeOption:[
+                {text:'表制', value:'1'},
+                {text:'高壓', value:'2'},
+                {text:'包制', value:'3'},
+            ],
+            contractType:null,
+            
+             //日曆起(受理日期)
+             menu1: false,
+             menu2:false,
+             dispatchDate:{
+                start: null,
+                end:null,
+             },
+
+            // 依條件查詢的資料
+            searchForm:{
+                acceptNum: null,          //受理號碼
+                electricNum: null,        //電號
+                custName: null,           //戶名
+                cumulativeDay: null,      //待核算累積日數
+                computeDate: null,        //計算日
+                archieveNum: null,        //整理號碼
+                dispatchStartDate: null,  //派工日期開始
+                dispatchEndDate: null,    //派工日期結束
+                contractType: null,       //契約種類
+                caseType: null            //代理件顯示
+            },
+            memo: null,
+            rejectDesc: null,
+            errMsg:{
+                dispatchDate: null,
+                dept: null,
+                rejectReason: null,
+                rejectDesc: null,
+            },
+            requireArray:[],
+            formatArray:[],
+            selectItem:{},
         }
     },
     methods: {
-        accounting(item) {
-          this.selectIndex = this.itemList.indexOf(item);
-          this.accountingDialog = true;
-          item.hasView = true;
+        init(){
+            this.queryInitOption();
+            this.queryAccoutingInit();
         },
+
+        // 點擊打開核算視窗
+        accounting(item) {          
+          this.selectIndex = this.accoutingList.indexOf(item); // 取出被選擇資料的index
+          this.selectItem = item; // 將選到的資料放進selectItem中
+          
+
+          // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄(Action)
+          if(ValidateUtil.isEmpty(item.status)){
+              this.updateAccoutingStatus(item.seq,this.selectIndex);
+          }
+          // 查詢待核算案件資料(Action)
+          this.queryAccoutingData();
+          this.accountingDialog = true;
+
+        },
+        // 打開核算視窗
         checking(item){
-            this.selectIndex = this.itemList.indexOf(item);
+            this.selectIndex = this.accoutingList.indexOf(item);
             this.checkingDialog = true;
         },
+        // 打開核算退件視窗
         returnOrder(){
             this.returnReasonModel = true;
         },
-        saveComments(){
-            this.accountingDialog = false;
+        // 核算成功
+        auditSubmit(memo){
+            this.memo = memo;
+            this.updateAccouting(); 
         },
-        returnSubmit(){
-           if (this.selectIndex > -1) {
-                this.itemList.splice(this.selectIndex, 1);
-              }
-            this.returnReasonModel = false;
-            this.accountingDialog = false;
-            this.waitingCount = this.waitingCount -1;
-            MessageService.showSuccess("退件成功✓");
-        },
-        checkSubmit(){
-           if (this.selectIndex > -1) {
-                this.itemList.splice(this.selectIndex, 1);
-              }
-            MessageService.showSuccess("核算成功✓");
-            this.accountingDialog = false;
-            this.waitingCount = this.waitingCount -1;
-        },
-        openComments(item){
-            console.log(item);
-            this.commentsModel = true;
+        saveComments(memo){
+            this.memo = memo;
+            this.saveAccoutingMemo();
 
-        }
+            this.accountingDialog = false;
+        },
+        // 案件退件
+        returnSubmit(memo){
+          this.requireArray = [];
+          this.formatArray = [];
+          this.memo = memo;
+
+          if(!this.checkRejectVal()){
+              MessageService.showCheckInfo(this.requireArray,this.formatArray);
+          }  else {
+              this.updateAccouting('reject'); 
+          }
+        },
+        // 開啟備註視窗
+        openComments(item){
+            this.memo = item.memo;
+            if(ValidateUtil.isEmpty(this.memo)){
+                MessageService.showInfo('該筆案件尚未填寫核算備註');
+            } else {
+                this.commentsModel = true;
+            }
+
+        },        
+
+        // 查詢資料
+        search(){
+            if(this.formatArray.length > 0) {
+                MessageService.showCheckInfo(this.requireArray,this.formatArray);
+            } else {
+                this.queryAccoutingList();
+            }
+        },  
+
+         // 判斷清單資料檢視註記狀態
+        setAccountInfo(accoutingList){
+            for(let i in accoutingList){
+                if(ValidateUtil.isEmpty(accoutingList[i].status)){
+                    accoutingList[i].hasView = false;
+                } else {
+                    accoutingList[i].hasView = true;
+                }
+            }
+            // 取出後端參數放回accoutingList
+            this.accoutingList = accoutingList;
+        },
+
+        /**
+         *  Ajax start 
+         * 
+         **/
+
+        // Action:頁面初始化
+        queryAccoutingInit(){
+            // 模擬從後端取到的假資料
+            let accoutingList = [
+                { action: true,
+                  seq:1,
+                  formSeq:1, 
+                  acceptNum: 'A00028',
+                  isAgent:false,
+                  status:null,
+                  archieveNum:'000700',
+                  dispatchDate:'2021-09-10 10:00',
+                  electricNum:'91020122',
+                  custName:'利小凡',
+                  computeDate:'02',
+                  contractType:'表制',
+                  cumulativeDay:'3', 
+                  acceptDate: '2021-09-10 10:00',
+                  closeDate: '2021-09-10 16:00',  
+                  acceptItem: 'QA210  軍眷用電申請優待',
+                  memo:'測試待核算備註'
+                },
+                {action: true, seq:2, formSeq:2, acceptNum: 'A00615',isAgent:true,status:null,archieveNum:'000701',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'陳和千',computeDate:'05',contractType:'包制',cumulativeDay:'1', acceptDate: '2021-09-09 11:21', closeDate: '2021-09-09 15:21',  acceptItem: 'I0510  故障換表',memo:''},
+                {action: true, seq:3, formSeq:3, acceptNum: 'A00040',isAgent:false,status:null,archieveNum:'000702',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'黎維成',computeDate:'10',contractType:'表制',cumulativeDay:'4', acceptDate: '2021-09-07 15:36', closeDate: '2021-09-08 15:06', acceptItem: 'I0520  增加電表',memo:''},
+                {action: true, seq:4, formSeq:4, acceptNum: 'A00605',isAgent:true,status:'READ',sortarchieveNumNo:'000703',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'區立言',computeDate:'16',contractType:'高壓',cumulativeDay:'3', acceptDate: '2021-09-10 09:45', closeDate: '2021-09-15 10:50',  acceptItem: 'F3030  表燈非時間電價停用廢止',memo:''},
+                {action: true, seq:5, formSeq:5, acceptNum: 'A00619',isAgent:false,status:null,archieveNum:'000704',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'馮文卿',computeDate:'01',contractType:'表制',cumulativeDay:'2', acceptDate: '2021-09-10 13:44', closeDate: '2021-09-10 15:26',  acceptItem: 'I0510  故障換表',memo:''}
+            ];
+            let numOfAccounting = '5';
+
+            // 整理案件資料
+            this.setAccountInfo(accoutingList);
+            // 取出後端參數
+            this.numOfAccounting = numOfAccounting;
+        },
+
+        // 取得退件視窗的下拉選單清單
+        queryInitOption(){
+            // 取得退件原因清單
+            let reasonList = [
+                {codeName:'原因由台電提供_1',code:'1'},
+                {codeName:'原因由台電提供_2',code:'2'},
+                {codeName:'原因由台電提供_3',code:'3'},
+                {codeName:'原因由台電提供_4',code:'4'},
+                {codeName:'原因由台電提供_5',code:'5'},
+                {codeName:'原因由台電提供_6',code:'6'},
+                {codeName:'原因由台電提供_7',code:'7'},
+                {codeName:'原因由台電提供_8',code:'8'},
+                {codeName:'原因由台電提供_9',code:'9'},
+                {codeName:'原因由台電提供_10',code:'10'},
+            ];
+
+            // 取得部門清單
+            let deptList = [
+                {deptName:'核算課',deptNum:'1'},
+                {deptName:'大里服務中心',deptNum:'2'},
+                {deptName:'東山服務所',deptNum:'3'},
+            ];
+
+            this.reasonList = reasonList;
+            this.deptList = deptList;
+        },
+
+
+        // Action:依條件查詢待審核案件清單
+        queryAccoutingList(){
+            // vin參數
+            // acceptNum: this.searchForm.acceptNum,
+            // electricNum: this.searchForm.electricNum,
+            // custName: this.searchForm.custName,
+            // cumulativeDay: this.searchForm.cumulativeDay,
+            // computeDate: this.searchForm.computeDate,
+            // archieveNum: this.searchForm.archieveNum,
+            // dispatchStartDate: this.searchForm.dispatchStartDate,
+            // dispatchEndDate: this.searchForm.dispatchEndDate,
+            // contractType: this.searchForm.contractType,
+            // caseType: this.searchForm.caseType,
+
+             // 模擬從後端取到的假資料
+            let accoutingList = [
+                { action: true,
+                  seq:1,
+                  formSeq:1, 
+                  acceptNum: 'A00028',
+                  isAgent:false,
+                  status:null,
+                  archieveNum:'000700',
+                  dispatchDate:'2021-09-10 10:00',
+                  electricNum:'91020122',
+                  custName:'利小凡',
+                  computeDate:'02',
+                  contractType:'表制',
+                  cumulativeDay:'3', 
+                  acceptDate: '2021-09-10 10:00',
+                  closeDate: '2021-09-10 16:00',  
+                  acceptItem: 'QA210  軍眷用電申請優待',
+                  memo:'測試待核算備註'
+                },
+                {action: true, seq:2, formSeq:2, acceptNum: 'A00615',isAgent:true,status:null,archieveNum:'000701',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'陳和千',computeDate:'05',contractType:'包制',cumulativeDay:'1', acceptDate: '2021-09-09 11:21', closeDate: '2021-09-09 15:21',  acceptItem: 'I0510  故障換表',memo:''},
+                {action: true, seq:3, formSeq:3, acceptNum: 'A00040',isAgent:false,status:null,archieveNum:'000702',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'黎維成',computeDate:'10',contractType:'表制',cumulativeDay:'4', acceptDate: '2021-09-07 15:36', closeDate: '2021-09-08 15:06', acceptItem: 'I0520  增加電表',memo:''},
+                {action: true, seq:4, formSeq:4, acceptNum: 'A00605',isAgent:true,status:'READ',sortarchieveNumNo:'000703',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'區立言',computeDate:'16',contractType:'高壓',cumulativeDay:'3', acceptDate: '2021-09-10 09:45', closeDate: '2021-09-15 10:50',  acceptItem: 'F3030  表燈非時間電價停用廢止',memo:''},
+                {action: true, seq:5, formSeq:5, acceptNum: 'A00619',isAgent:false,status:null,archieveNum:'000704',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'馮文卿',computeDate:'01',contractType:'表制',cumulativeDay:'2', acceptDate: '2021-09-10 13:44', closeDate: '2021-09-10 15:26',  acceptItem: 'I0510  故障換表',memo:''}
+            ];
+            let numOfAccounting = '5';
+
+            // 整理案件資料
+            this.setAccountInfo(accoutingList);
+            // 取出後端參數
+            this.numOfAccounting = numOfAccounting;
+
+            MessageService.showSuccess('依條件查詢待核算資料');
+
+
+        },
+
+        // Action:查詢待審核案件資料
+        queryAccoutingData(){
+            // vin參數
+            // formSeq: this.selectItem.formSeq,
+        },
+
+        // Action:更新待審核案件檢視狀態
+        updateAccoutingStatus(seq,index){
+            // vin參數
+            // seq: seq
+            console.log(seq);
+            this.accoutingList[index].hasView = true;
+        },
+
+        // Action:更新待審核備註
+        saveAccoutingMemo(){
+            // vin參數
+            // seq: this.selectItem.seq,
+            // memo: this.memo,
+        },
+
+        // Action:更新案件審核狀態(成功/退件)
+        updateAccouting(type){
+            // vin參數
+            // seq: this.selectItem.seq,
+            // formSeq: this.selectItem.formSeq,
+            // memo: this.memo,
+            // rejectToDept:this.department,
+            // rejectReason:this.rejectReason,
+            // rejectDesc:this.rejectDesc,
+
+
+            if(type === 'reject') {
+                if (this.selectIndex > -1) {
+                    this.accoutingList.splice(this.selectIndex, 1);
+                }
+                this.returnReasonModel = false;
+                this.accountingDialog = false;
+                this.waitingCount = this.waitingCount -1;
+                MessageService.showSuccess("案件退件");
+            } else {
+                if (this.selectIndex > -1) {
+                    this.accoutingList.splice(this.selectIndex, 1);
+                }
+                MessageService.showSuccess("案件核算");
+                this.accountingDialog = false;
+                this.waitingCount = this.waitingCount -1;
+            }
+        },
+
+
+        /**
+         *  Ajax end 
+         * 
+         **/
+
+
+         /**
+         *  驗證 start 
+         * 
+         **/
+
+        // 驗證退件資料
+        checkRejectVal(){
+            let hasCheck = true;
+
+            if(ValidateUtil.isEmpty(this.department)){
+                this.errMsg.dept = "請選擇退件到的部門";
+                this.requireArray.push('退件部門');
+                hasCheck = false;
+            } else {
+                this.errMsg.dept = null
+            }
+
+            if(ValidateUtil.isEmpty(this.rejectReason)){
+                this.errMsg.rejectReason = "請選擇退件原因";
+                this.requireArray.push('退件原因');
+                hasCheck = false;
+            } else {
+                this.errMsg.rejectReason = null
+            }
+
+            if(ValidateUtil.isEmpty(this.rejectDesc)){
+                this.errMsg.rejectDesc = "請輸入退件說明";
+                this.requireArray.push('退件說明');
+                hasCheck = false;
+            } else if(!ValidateUtil.isEmpty(this.rejectDesc) && this.rejectDesc.length > 50){
+                this.formatArray.push('退件說明');
+                this.errMsg.rejectDesc = "已超過字數限制";
+                hasCheck = false;
+            } else {
+                this.errMsg.rejectDesc = null;
+            }
+
+
+            return hasCheck;
+
+        },
+
+        // 驗證派工日期區間
+        checkDate(){
+            this.formatArray = [];
+            if(!ValidateUtil.isEmpty(this.dispatchDate.start) && !ValidateUtil.isEmpty(this.dispatchDate.end)){
+                this.searchForm.dispatchStartDate = this.dispatchDate.start + ' 00:00:00';
+                this.searchForm.dispatchEndDate = this.dispatchDate.end + ' 23:59:59';
+                
+                if(!ValidateUtil.validateDateRange(this.searchForm.dispatchStartDate,this.searchForm.dispatchEndDate)){
+                    this.errMsg.dispatchDate = '日期範圍錯誤'
+                    this.formatArray.push('派工日期');
+                    
+                } else {
+                    this.errMsg.dispatchDate = null;
+                }
+            }
+        },
+
+
+         /**
+         *  驗證 end 
+         * 
+         **/
+
     }
 }

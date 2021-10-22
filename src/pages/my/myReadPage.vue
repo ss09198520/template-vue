@@ -4,11 +4,11 @@
       <div class="d-flex">
         <div class="ml-9 font-bold">
           <h2 class="font-bold">調閱中</h2>
-          <span style="font-size:96px;">2</span><span style="font-size:30px;">件</span>
+          <span style="font-size:96px;">{{ numOfRead }}</span><span style="font-size:30px;">件</span>
         </div>
         <div class="ml-9 font-bold">
           <h2 class="font-bold">申請中</h2>
-          <span style="font-size:96px;">1</span><span style="font-size:30px;">件</span>
+          <span style="font-size:96px;">{{ numOfReadApply }}</span><span style="font-size:30px;">件</span>
         </div>            
       </div>
                   
@@ -21,6 +21,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="acceptNum"
               outlined
               hide-details                                         
               dense
@@ -34,7 +35,9 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="electricNum"
+              type="number"                   
               outlined
               hide-details
               dense
@@ -50,6 +53,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="archieveNum"
               outlined
               hide-details                                         
               dense
@@ -73,19 +77,22 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="date1"                  
+                  v-model="readDate.start"                  
                   append-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
                   outlined
                   dense
                   hide-details                  
+                  :clearable="true"
                   v-on="on"
+                  @click:clear="resetDate('readDate','start')"
                 />
               </template>
               <v-date-picker
-                v-model="date1"
+                v-model="readDate.start"
                 @input="menu1 = false"
+                @change="checkDate()"
               />
             </v-menu>          
             <div style="margin:auto 0;">~</div>          
@@ -98,22 +105,29 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="date2"                  
+                  v-model="readDate.end"                  
                   append-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
                   outlined
                   dense
                   hide-details
+                  :clearable="true"
                   v-on="on"
+                  @click:clear="resetDate('readDate','end')"
                 />
               </template>
               <v-date-picker
-                v-model="date2"
+                v-model="readDate.end"
                 @input="menu2 = false"
+                @change="checkDate()"
               />
             </v-menu>
-          </v-col>     
+          </v-col>
+          <v-col cols="6" />
+          <v-col style="margin-top:-1%">   
+            <span class="red--text font-14px">{{ errMsg }}</span>
+          </v-col>
         </v-row>
         <v-row>
           <v-col cols="11" />
@@ -126,7 +140,7 @@
                   fab
                   small
                   color="primary"
-                  @click="displayList = true"
+                  @click="search()"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-magnify'" />
@@ -138,22 +152,35 @@
         </v-row>    
       </div>
       <hr class="mt-6">
-      <div v-if="displayList == true">
+      <div>
         <v-row class="ma-7">
           <v-col>
             <v-data-table
-              :headers="empListHeaders"
-              :items="empMockList"
+              :headers="formListHeaders"
+              :items="formList"
               :items-per-page="10"
               no-data-text="查無資料"              
               disable-sort
               hide-default-footer
               class="elevation-1"
-              :page.sync="orderListPage"
-              @page-count="orderListPageCount = $event"
+              :page.sync="formListPage"
+              @page-count="formListPageCount = $event"
             >
-              <template v-slot:item.mani="{ item }">   
-                <div v-if="item.mani==true">
+              <!-- 調閱狀態欄位 -->
+              <template v-slot:item.status="{ item }">                                                        
+                <div v-if="item.status === '通過' && new Date(item.validDate) > sysDate">
+                  有效日至{{ item.validDate }}
+                </div>
+                <div v-else-if="item.status === '通過' && new Date(item.validDate) < sysDate">
+                  已逾期
+                </div>
+                <div v-else>
+                  {{ item.status }}
+                </div>
+
+              </template>
+              <template v-slot:item.action="{ item }">   
+                <div v-if="item.status === '通過' && new Date(item.validDate) > sysDate">
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-btn
@@ -190,9 +217,9 @@
         <!-- 選頁 -->
         <div class="mt-2">
           <v-pagination
-            v-model="orderListPage"
+            v-model="formListPage"
             color="#2F59C4"
-            :length="orderListPageCount"
+            :length="formListPageCount"
           />
         </div>
       </div>
@@ -221,7 +248,7 @@
           <v-card-actions class="d-end mt-5">
             <v-btn              
               color="primary"            
-              @click="checkSubmit()"
+              @click="browserModel = false"
             >
               &emsp;關閉&emsp;
             </v-btn>

@@ -135,6 +135,7 @@
                 link
                 dense
                 ripple
+                @click="logout()"
               >
                 <v-list-item-icon>
                   <v-icon>mdi-logout</v-icon>
@@ -150,6 +151,7 @@
                 link
                 dense
                 ripple
+                @click="login()"
               >
                 <v-list-item-icon>
                   <v-icon>mdi-login</v-icon>
@@ -161,10 +163,63 @@
         </v-card>
       </v-menu>
     </v-toolbar-items>
+    <v-dialog
+      v-model="loginDialog"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          請輸入帳號密碼
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="loginDialog = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            帳號
+            <v-text-field 
+              v-model="account"
+              dense
+              outlined
+            />
+          </v-row>
+          <v-row class="mt-6 ml-1 font-bold">
+            密碼
+            <v-text-field 
+              v-model="password"
+              dense
+              outlined
+            />
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="normal"            
+            @click="loginDialog = false"
+          >
+            &emsp;取消&emsp;
+          </v-btn>
+          <v-btn              
+            color="primary"            
+            @click="confirmLogin()"
+          >
+            &emsp;登入&emsp;
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app-bar>
 </template>
 
 <script>
+import AjaxService from '@/assets/services/ajax.service'
   import { mapGetters } from 'vuex'
   export default {
     // data() {
@@ -181,7 +236,10 @@
         menuValue2: false,
         menuValue3: false,
         // TODO: 測試用，之後應會刪除
-        isLogin: true,
+        isLogin: false,
+        loginDialog: false,
+        account: '',
+        password: '',
         data: {
           type: 1,
           seeAllLink: '/',
@@ -339,6 +397,27 @@
           this.responsive = false
         }
       },
+      login(){
+        this.loginDialog = true;
+      },
+      confirmLogin(){
+        let loginUrl = "/login?username=" + this.account + "&password=" + this.password;
+        AjaxService.post(loginUrl, {}, (response) => {
+          console.log(response);
+          if(response.rtnCode == 200){
+            this.loginDialog = false;
+            this.isLogin = true;
+          }
+        });
+      },
+      logout(){
+        AjaxService.post("/logout", {}, (response) => {
+          console.log(response);
+          if(response.rtnCode == 200){
+            this.isLogin = false;
+          }
+        });
+      }
     },
   }
 </script>

@@ -3,15 +3,11 @@
     <div class="d-flex">
       <div class="ma-4 font-bold">
         <h2 class="font-bold">受理中</h2>
-        <span style="font-size:96px;">2</span><span style="font-size:30px;">件</span>
-      </div>
-      <div class="ma-4 font-bold">
-        <h2 class="font-bold">核算中</h2>
-        <span style="font-size:96px;">2</span><span style="font-size:30px;">件</span>
+        <span style="font-size:96px;">{{ numberOfAccept }}</span><span style="font-size:30px;">件</span>
       </div>
       <div class="ma-4 font-bold">
         <h2 class="font-bold">代理件</h2>
-        <span style="font-size:96px;">1</span><span style="font-size:30px;">件</span>
+        <span style="font-size:96px;">{{ numberOfAgent }}</span><span style="font-size:30px;">件</span>
       </div>      
     </div>
     <div>
@@ -22,7 +18,7 @@
             fab
             small
             :class="{'primary': displayAll}"
-            @click="displayAll = true"
+            @click="display('all')"
             v-on="on"
           >
             <v-icon v-text="'mdi-text-box-multiple-outline'" />
@@ -37,38 +33,38 @@
             fab
             small
             :class="{'primary': !displayAll}"
-            @click="displayAll = false"
+            @click="display()"
             v-on="on"
           >
             <v-icon v-text="'mdi-text-box-search-outline'" />
           </v-btn>
         </template>
-        <span>只顯示受理件</span>
+        <span>只顯示代理件</span>
       </v-tooltip>    
     </div>
     <hr class="mt-6 mb-5 ml-3">          
     <v-data-table
-      :headers="empListHeaders"
-      :items="empMockList"
+      :headers="formListHeaders"
+      :items="formList"
       :items-per-page="10"
       no-data-text="查無資料"
       hide-default-footer
       class="elevation-1 ml-4"
-      :page.sync="orderListPage"
-      @page-count="orderListPageCount = $event"
+      :page.sync="formListPage"
+      @page-count="formListPageCount = $event"
     >
       <!-- 受理編號 -->
-      <template v-slot:item.orderId="{ item }">   
+      <template v-slot:item.acceptNum="{ item }">   
         <v-tooltip top>
           <template v-slot:activator="{ on }">        
-            <a href="javascript:void(0)" style="text-decoration:underline;" v-on="on" @click="openFormRecord()">{{ item.orderId }}</a>
+            <a href="javascript:void(0)" style="text-decoration:underline;" v-on="on" @click="openFormHistory(item)">{{ item.acceptNum }}</a>
           </template>
           <span>表單歷程</span>
         </v-tooltip>
       </template>
       <!-- 狀態操作 -->
-      <template v-slot:item.mani="{ item }">   
-        <div v-if="item.mani==true">
+      <template v-slot:item.action="{ item }">   
+        <div>
           <v-tooltip top>
             <template v-slot:activator="{ on }">
               <v-btn
@@ -102,10 +98,10 @@
           </v-tooltip>
         </div>                                                                               
       </template>
-
-      <template v-slot:item.proxyEvent="{ item }">                                                        
+      <!--是否為代理案件 -->
+      <template v-slot:item.isAgent="{ item }">                                                        
         <div             
-          v-if="item.proxyEvent == true"
+          v-if="item.isAgent"
           class="ma-2"
           icon
         >
@@ -117,9 +113,9 @@
     </v-data-table>                 
     <div class="mt-2">
       <v-pagination
-        v-model="orderListPage"
+        v-model="formListPage"
         color="#2F59C4"
-        :length="orderListPageCount"
+        :length="formListPageCount"
       />
     </div>
     <!-- 瀏覽案件 -->
@@ -174,13 +170,13 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <form-page restrict-mode="edit" />
+          <form-page restrict-mode="edit" @saveFile="saveFile()" />
         </v-card-text>
       </v-card>
     </v-dialog>
     <!-- 表單歷程視窗 -->
     <v-dialog
-      v-model="formRecordModel"
+      v-model="formHistoryModel"
       max-width="700px"
     >
       <v-card>
@@ -192,22 +188,22 @@
             icon
             small
             text
-            @click="formRecordModel = false"
+            @click="formHistoryModel = false"
           >
             <v-icon> mdi-close </v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text class="mt-10 font-22px">
           <div>
-            <v-row v-for="(item,index) in formRecordList" :key="index" class="mt-5">
-              {{ item.record }}
+            <v-row v-for="(item,index) in formHistoryList" :key="index" class="mt-5">
+              {{ item }}
             </v-row>
           </div>
         </v-card-text>
         <v-card-actions class="d-end mt-5">
           <v-btn              
             color="primary"
-            @click="formRecordModel = false"
+            @click="formHistoryModel = false"
           >
             確認
           </v-btn>

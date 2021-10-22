@@ -73,8 +73,8 @@
             { text: '甲安服務所', value: '27'},
         ],
         //角色別
-        character: [],
-        characterOption: [
+        role: [],
+        roleOption: [
             { text: '主辦業務計畫員', value: 'AUTH01'},
             { text: '受理部門', value: 'AUTH02'},
             { text: '服務中心主辦', value: 'AUTH03'},
@@ -92,14 +92,14 @@
         ],
         //員工清單項目名稱
         empListHeaders: [
-            { text: '編號', value: 'empId', align: 'center' },
+            { text: '姓名代號', value: 'empNo', align: 'center' },
             { text: '姓名', value: 'empName', align: 'center' },
             { text: '單位', value: 'empDivision', align: 'center' },
             { text: '組別', value: 'empGroup', align: 'center' },
             { text: '課別', value: 'empSection', align: 'center' },
             { text: '資料來源', value: 'settingStyle', align: 'center' },
             { text: '備註', value: 'memo', align: 'center' },
-            { text: '角色', value: 'character', align: 'center',width:'25' }
+            { text: '角色', value: 'role', align: 'center',width:'25' }
         ],
         //員工清單
         empList: [
@@ -107,66 +107,66 @@
         ],
         empMockList: [
             //台中區處
-            { empId: '1050330-001', empName: '', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
-            { empId: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
+            { empNo: '1050330-001', empName: '', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
+            { empNo: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
             
-            { empId: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',role:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
             
-            { empId: '1050403-001', empName: '黃昕怡', empDivision:'台中區處', empGroup:'電費組',empSection:'核算課',character:'核算課長',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1050403-002', empName: '簡芷蕾', empDivision:'台中區處', empGroup:'電費組',empSection:'核算課',character:'核算員,調閱管理員',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1050403-003', empName: '趙燁', empDivision:'台中區處', empGroup:'電費組',empSection:'核算課',character:'核算員,主辦業務計畫員',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1050403-001', empName: '黃昕怡', empDivision:'台中區處', empGroup:'電費組',empSection:'核算課',role:'核算課長',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1050403-002', empName: '簡芷蕾', empDivision:'台中區處', empGroup:'電費組',empSection:'核算課',role:'核算員,調閱管理員',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1050403-003', empName: '趙燁', empDivision:'台中區處', empGroup:'電費組',empSection:'核算課',role:'核算員,主辦業務計畫員',settingStyle:'人事資訊系統',memo:'',edit:false},
             //豐原分處
-            { empId: '1052331-001', empName: '葉慶華', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'東勢服務所',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1052331-002', empName: '王曉花', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'東勢服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1052331-003', empName: '林美美', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'東勢服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1052332-001', empName: '蔡政揚', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'后里服務所',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1052332-002', empName: '張芊芊', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'后里服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1052332-003', empName: '江舒語', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'后里服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1052331-001', empName: '葉慶華', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'東勢服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1052331-002', empName: '王曉花', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'東勢服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1052331-003', empName: '林美美', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'東勢服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1052332-001', empName: '蔡政揚', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'后里服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1052332-002', empName: '張芊芊', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'后里服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1052332-003', empName: '江舒語', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'后里服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
 
-            { empId: '1052320-001', empName: '陳大天', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'服務中心',character:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '1052320-002', empName: '何欣惠', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'服務中心',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1052320-001', empName: '陳大天', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'服務中心',role:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '1052320-002', empName: '何欣惠', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'服務中心',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
             //業務處
-            { empId: '0071702-001', empName: '李騰鴻', empDivision:'業務處', empGroup:'行銷組',empSection:'銷售作業課',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '0071702-002', empName: '沈欺霜', empDivision:'業務處', empGroup:'行銷組',empSection:'銷售作業課',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '0071702-003', empName: '楊振甫', empDivision:'業務處', empGroup:'行銷組',empSection:'銷售作業課',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '0071700-001', empName: '牧青羽', empDivision:'業務處', empGroup:'行銷組',empSection:'',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empId: '0071700-002', empName: '王美玲', empDivision:'業務處', empGroup:'行銷組',empSection:'',character:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
-            { empId: '0071700-003', empName: '蕭彥辰', empDivision:'業務處', empGroup:'行銷組',empSection:'',character:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
+            { empNo: '0071702-001', empName: '李騰鴻', empDivision:'業務處', empGroup:'行銷組',empSection:'銷售作業課',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '0071702-002', empName: '沈欺霜', empDivision:'業務處', empGroup:'行銷組',empSection:'銷售作業課',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '0071702-003', empName: '楊振甫', empDivision:'業務處', empGroup:'行銷組',empSection:'銷售作業課',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '0071700-001', empName: '牧青羽', empDivision:'業務處', empGroup:'行銷組',empSection:'',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
+            { empNo: '0071700-002', empName: '王美玲', empDivision:'業務處', empGroup:'行銷組',empSection:'',role:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
+            { empNo: '0071700-003', empName: '蕭彥辰', empDivision:'業務處', empGroup:'行銷組',empSection:'',role:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
         ],
         //控制上一筆點選修改是否編輯中
         selectEmp:null,
         //mock的角色清單
         mockChar:[
-            { empId: '1050330-001', empName: '', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
-            { empId: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
-            { empId: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
-            { empId: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
-            { empId: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
-            { empId: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
+            { empNo: '1050330-001', empName: '', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
+            { empNo: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
+            { empNo: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
+            { empNo: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
+            { empNo: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
+            { empNo: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
             
-            { empId: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
-            { empId: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
+            { empNo: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',role:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
+            { empNo: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
         ],
         //比對mock的角色清單
         oriMockChar:[
-            { empId: '1050330-001', empName: '', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
-            { empId: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
-            { empId: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
-            { empId: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
-            { empId: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
-            { empId: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
+            { empNo: '1050330-001', empName: '', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
+            { empNo: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
+            { empNo: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
+            { empNo: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
+            { empNo: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
+            { empNo: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
             
-            { empId: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
-            { empId: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',character:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
+            { empNo: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',role:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:false},
+            { empNo: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false, isSelected:true},
         ],
-        modCharacterTitle:[],
+        modroleTitle:[],
         //批次選擇的角色
-        setCharacter: '',
+        setrole: '',
       }
     },
     beforeMount(){
@@ -302,41 +302,41 @@
                 }
             }
         },
-        modifyCharacter(item){ 
+        modifyrole(item){ 
             if(this.selectEmp == null){
                 this.selectEmp = item;
             }            
             this.selectEmp.edit = false;            
-            this.character = [];                                  
+            this.role = [];                                  
             item.edit = true;
-            this.openSelectBox = item.empId;            
-            let tempCharacter = item.character.split(",");                        
-            for(let i = 0; i < this.characterOption.length; i++){
-                for(let j = 0; j < tempCharacter.length; j++){
-                    if(this.characterOption[i].text == tempCharacter[j]){
-                        this.character.push(this.characterOption[i]);                        
+            this.openSelectBox = item.empNo;            
+            let temprole = item.role.split(",");                        
+            for(let i = 0; i < this.roleOption.length; i++){
+                for(let j = 0; j < temprole.length; j++){
+                    if(this.roleOption[i].text == temprole[j]){
+                        this.role.push(this.roleOption[i]);                        
                     }
                 }                               
             }                    
             this.selectEmp = item;       
         },
         submit(item){                       
-            item.character = "";              
+            item.role = "";              
             let num = 0;            
-            console.log(this.character);
-            for(let i = 0; i < this.characterOption.length; i++){
-                for(let j = 0; j < this.character.length; j++){  
-                    if(this.characterOption[i].value == this.character[j].value){
+            console.log(this.role);
+            for(let i = 0; i < this.roleOption.length; i++){
+                for(let j = 0; j < this.role.length; j++){  
+                    if(this.roleOption[i].value == this.role[j].value){
                         if(num > 0){
-                            item.character += ',' + this.characterOption[i].text;
+                            item.role += ',' + this.roleOption[i].text;
                         }else{
-                            item.character += this.characterOption[i].text;
+                            item.role += this.roleOption[i].text;
                         }                                    
                         num++;
                     }                                                                                          
                 }  
             }                                                                         
-            this.character = [];
+            this.role = [];
             this.openSelectBox = '';
             item.edit = false;
             
@@ -350,29 +350,29 @@
             //build a copy item and compare to the original one                                    
             item.isSelected = true;                              
             for(let i = 0; i < this.mockChar.length; i++){
-                if(this.mockChar[i].empId == item.empId && this.mockChar[i].isSelected != this.oriMockChar[i].isSelected){                                                                  
+                if(this.mockChar[i].empNo == item.empNo && this.mockChar[i].isSelected != this.oriMockChar[i].isSelected){                                                                  
                     let checkTitleExist = false; 
-                    for(let j = 0; j < this.modCharacterTitle.length; j++){
-                        if(this.modCharacterTitle[j] == this.setCharacter.text){
+                    for(let j = 0; j < this.modroleTitle.length; j++){
+                        if(this.modroleTitle[j] == this.setrole.text){
                             checkTitleExist = true;
                         }
                     }
                     if(!checkTitleExist){
-                        this.modCharacterTitle.push(this.setCharacter.text);
+                        this.modroleTitle.push(this.setrole.text);
                     }                
                 }                
             }
         },
         cancelMod(title){
             console.log(title);
-            for(let i = 0; i < this.modCharacterTitle.length; i++){
-                if(this.modCharacterTitle[i] == title){
-                    this.modCharacterTitle.splice(i, 1);                                           
+            for(let i = 0; i < this.modroleTitle.length; i++){
+                if(this.modroleTitle[i] == title){
+                    this.modroleTitle.splice(i, 1);                                           
                 }
             }
             for(let j = 0; j < this.mockChar.length; j++){
                 for(let k = 0; k < this.oriMockChar.length; k++){
-                    if(this.oriMockChar[k].empId == this.mockChar[j].empId && this.oriMockChar[k].isSelected != this.mockChar[j].isSelected){
+                    if(this.oriMockChar[k].empNo == this.mockChar[j].empNo && this.oriMockChar[k].isSelected != this.mockChar[j].isSelected){
                         let select = this.mockChar[j].isSelected;
                         this.mockChar[j].isSelected = !select;
                     }
@@ -384,15 +384,15 @@
         toNotSelected(item){
             item.isSelected = false;
             for(let i = 0; i < this.mockChar.length; i++){
-                if(this.mockChar[i].empId == item.empId && this.mockChar[i].isSelected != this.oriMockChar[i].isSelected){                                                                    
+                if(this.mockChar[i].empNo == item.empNo && this.mockChar[i].isSelected != this.oriMockChar[i].isSelected){                                                                    
                     let checkTitleExist = false;
-                    for(let j = 0; j < this.modCharacterTitle.length; j++){
-                        if(this.modCharacterTitle[j] == this.setCharacter.text){
+                    for(let j = 0; j < this.modroleTitle.length; j++){
+                        if(this.modroleTitle[j] == this.setrole.text){
                             checkTitleExist = true;
                         }
                     }
                     if(!checkTitleExist){
-                        this.modCharacterTitle.push(this.setCharacter.text);
+                        this.modroleTitle.push(this.setrole.text);
                     }                       
                 }                
             }
@@ -403,26 +403,26 @@
                     item.isSelected = true;
                 }
                 let checkTitleExist = false;
-                for(let j = 0; j < this.modCharacterTitle.length; j++){
-                    if(this.modCharacterTitle[j] == this.setCharacter.text){
+                for(let j = 0; j < this.modroleTitle.length; j++){
+                    if(this.modroleTitle[j] == this.setrole.text){
                         checkTitleExist = true;
                     }
                 }
                 if(!checkTitleExist){
-                    this.modCharacterTitle.push(this.setCharacter.text);
+                    this.modroleTitle.push(this.setrole.text);
                 }
             } else{
                 for(let item of this.mockChar){
                     item.isSelected = false;
                 }
                 let checkTitleExist = false;
-                for(let j = 0; j < this.modCharacterTitle.length; j++){
-                    if(this.modCharacterTitle[j] == this.setCharacter.text){
+                for(let j = 0; j < this.modroleTitle.length; j++){
+                    if(this.modroleTitle[j] == this.setrole.text){
                         checkTitleExist = true;
                     }
                 }
                 if(!checkTitleExist){
-                    this.modCharacterTitle.push(this.setCharacter.text);
+                    this.modroleTitle.push(this.setrole.text);
                 }
             }
         },

@@ -13,6 +13,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="acceptNum"
               outlined
               hide-details                                         
               dense
@@ -26,7 +27,8 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="electricNum"                       
               outlined
               hide-details
               dense
@@ -42,6 +44,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="custName"   
               outlined
               hide-details                                         
               dense              
@@ -55,7 +58,8 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="archieveNum"                           
               outlined
               hide-details
               dense
@@ -73,7 +77,7 @@
           >
             <v-select
               v-model="contractType"
-              :items="contractTypeOption"
+              :items="contractTypeList"
               item-text="text"
               :return-object="true"
               outlined
@@ -102,19 +106,22 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="date1"                  
+                  v-model="acceptDate.start"                  
                   append-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
                   outlined
                   dense
                   hide-details                  
+                  clearable
+                  @click:clear="resetDate('acceptDate','start')"
                   v-on="on"
                 />
               </template>
               <v-date-picker
-                v-model="date1"
+                v-model="acceptDate.start"
                 @input="menu1 = false"
+                @change="checkDate()"
               />
             </v-menu>          
             <div style="margin:auto 0;">~</div>          
@@ -127,19 +134,22 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="date2"                  
+                  v-model="acceptDate.end"                  
                   append-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
                   outlined
                   dense
                   hide-details
+                  clearable
+                  @click:clear="resetDate('acceptDate','end')"
                   v-on="on"
                 />
               </template>
               <v-date-picker
-                v-model="date2"
+                v-model="acceptDate.end"
                 @input="menu2 = false"
+                @change="checkDate()"
               />
             </v-menu>
           </v-col>
@@ -161,19 +171,22 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="date3"                  
+                  v-model="archieveDate.start"                  
                   append-icon="mdi-calendar"
                   readonly
                   dense
                   outlined
                   hide-details
                   v-bind="attrs"
+                  clearable
+                  @click:clear="resetDate('archieveDate','start')"
                   v-on="on"
                 />
               </template>
               <v-date-picker
-                v-model="date3"
+                v-model="archieveDate.start"
                 @input="menu3 = false"
+                @change="checkDate()"
               />
             </v-menu>          
             <div style="margin:auto 0;">~</div>          
@@ -186,21 +199,34 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="date4"                  
+                  v-model="archieveDate.end"                  
                   append-icon="mdi-calendar"
                   readonly
                   outlined
                   dense
                   hide-details
                   v-bind="attrs"
+                  clearable
+                  @click:clear="resetDate('archieveDate','end')"
                   v-on="on"
                 />
               </template>
               <v-date-picker
-                v-model="date4"
+                v-model="archieveDate.end"
                 @input="menu4 = false"
+                @change="checkDate()"
               />
             </v-menu>
+          </v-col>
+          <v-col cols="2" />
+          <v-col cols="3" style="margin-top:-25px">
+            <span class="red--text font-14px">{{ errMsg.acceptDate }}</span>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="1" />
+          <v-col cols="3" style="margin-top:-25px">
+            <span class="red--text font-14px">{{ errMsg.archieveDate }}</span>
           </v-col>
         </v-row>
              
@@ -215,7 +241,7 @@
                   fab
                   small
                   color="primary"
-                  @click="display = true"
+                  @click="search()"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-magnify'" />
@@ -230,15 +256,15 @@
           <v-row>
             <v-col>
               <v-data-table
-                :headers="empListHeaders"
-                :items="empMockList"
+                :headers="readFormHeaders"
+                :items="readFormList"
                 :items-per-page="10"
                 no-data-text="查無資料"              
                 disable-sort
                 hide-default-footer
                 class="elevation-1"
-                :page.sync="applyListPage"
-                @page-count="applyListPageCount = $event"
+                :page.sync="readFormListPage"
+                @page-count="readFormListPageCount = $event"
               >
                 <template v-slot:item.mani="{ item }">   
                   <div v-if="item.mani==true">
@@ -249,7 +275,7 @@
                           fab
                           small
                           color="success"
-                          @click="search(item)"
+                          @click="applyRead(item)"
                           v-on="on"
                         >
                           <v-icon v-text="'mdi-eye-plus'" />
@@ -278,9 +304,9 @@
           <!-- 選頁 -->
           <div class="mt-2">
             <v-pagination
-              v-model="applyListPage"
+              v-model="readFormListPage"
               color="#2F59C4"
-              :length="applyListPageCount"
+              :length="readFormListPageCount"
             />
           </div>
         </div>           
@@ -313,14 +339,15 @@
               <v-col cols="2">調閱對象</v-col>
               <v-col cols="9">
                 <v-select
-                  v-model="setMember"                
-                  :items="memberOption"
+                  v-model="readAudience"                
+                  :items="readAudienceList"
                   outlined
                   hide-details
                   dense
                   placeholder="請選擇調閱對象"
                   return-object 
-                  item-text="empName"              
+                  item-text="empName"
+                  @change="checkReadAudience()"
                 />
                 <!-- <v-text-field
                   v-model="setMember"                           
@@ -329,33 +356,45 @@
                   dense
                   placeholder="請輸入調閱對象"
                 /> -->
+                <span v-if="errMsg.readAudience" class="red--text">{{ errMsg.readAudience }}</span>
               </v-col>
             </v-row>
             <v-row align="center">
               <v-col cols="2">調閱事由</v-col>
               <v-col cols="9">
                 <v-select
-                  v-model="setReason"                
-                  :items="reasonOption"
+                  v-model="readReason"                
+                  :items="readReasonList"
                   outlined
                   hide-details
                   dense
                   placeholder="請選擇調閱事由"
                   return-object
+                  item-text="readReason"
+                  @change="checkReadReason('mgmn')"
                 />
+                <span class="red--text"> {{ errMsg.readReason }}</span>
               </v-col>
             </v-row>
             <v-row align="center">
               <v-col cols="2">其他事由</v-col>
               <v-col cols="9">
                 <v-textarea
+                  v-model="otherReason"
                   outlined                  
                   value=""
                   auto-grow
                   counter="50"
+                  @keyup="checkOtherReason()"
                 />
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="2" />
+              <v-col cols="" style="margin-top:-9%">
+                <span class="red--text"> {{ errMsg.otherReason }}</span>
+              </v-col>
+            </v-row>    
           </v-card-text>
 
           <v-divider />
@@ -488,15 +527,15 @@
           <v-row>                    
             <v-col>
               <v-data-table
-                :headers="empListHeaders"
-                :items="empMockList"
+                :headers="readFormHeaders"
+                :items="readFormList"
                 :items-per-page="10"
                 no-data-text="查無資料"              
                 disable-sort
                 hide-default-footer
                 class="elevation-1"
-                :page.sync="applyListPage"
-                @page-count="applyListPageCount = $event"
+                :page.sync="readFormListPage"
+                @page-count="readFormListPageCount = $event"
               >
                 <template v-slot:item.mani="{ item }">   
                   <div v-if="item.mani==true">
@@ -507,7 +546,7 @@
                           fab
                           small
                           color="success"
-                          @click="search(item)"
+                          @click="applyRead(item)"
                           v-on="on"
                         >
                           <v-icon v-text="'mdi-eye-plus'" />
@@ -536,9 +575,9 @@
           <!-- 選頁 -->
           <div class="mt-2">
             <v-pagination
-              v-model="applyListPage"
+              v-model="readFormListPage"
               color="#2F59C4"
-              :length="applyListPageCount"
+              :length="readFormListPageCount"
             />
           </div>
         </div>                                       
@@ -567,58 +606,74 @@
           <v-card-text>
             <v-row class="mt-3">
               <v-col cols="2">調閱日期</v-col>
-              <v-col cols="3">
-                2021-09-10 13:45
+              <v-col>
+                {{ readDate }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">調閱編號</v-col>
               <v-col cols="3">
-                7110000001
+                {{ readNum }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">受理號碼</v-col>
               <v-col cols="3">
-                A00040
+                {{ selectForm.acceptNum }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">電號</v-col>
               <v-col cols="3">
-                7140000123
+                {{ selectForm.electricNum }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="2">整理號碼</v-col>
               <v-col cols="3">
-                000300
+                {{ selectForm.archieveNum }}
               </v-col>
             </v-row>
             <v-row>
-              <v-col cols="2">調閱事由</v-col>
+              <v-col cols="2"><span class="red--text">*</span>調閱事由</v-col>
               <v-col cols="9">
                 <v-textarea
+                  v-model="readReason"
                   outlined
                   value=""
                   rows="4"
                   auto-grow
                   counter="50"
+                  @keyup="checkReadReason()"
                 />
+              </v-col>               
+            </v-row>
+            <v-row v-if="errMsg.readReason != null" style="margin-top:-9%">
+              <v-col cols="2" />
+              <v-col cols="">
+                <span class="red--text"> {{ errMsg.readReason }}</span>
               </v-col>
-            </v-row>            
+            </v-row>    
             <v-row>
               <v-col cols="2">備註</v-col>
               <v-col cols="9">
                 <v-textarea
+                  v-model="memo"
                   outlined
                   value=""
                   rows="4"
                   counter="50"
                   auto-grow
+                  @keyup="checkMemo()"
                 />
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="2" />
+              <v-col cols="" style="margin-top:-9%">
+                <span class="red--text"> {{ errMsg.memo }}</span>
+              </v-col>
+            </v-row>    
           </v-card-text>
 
           <v-divider />

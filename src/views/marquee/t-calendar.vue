@@ -90,20 +90,36 @@
       </v-btn>
       <hr class="mt-3">
       <v-row>
-        <v-col cols="12" md="12" class="mt-0 mb-0">
-          <v-list-item-avatar
+        <v-col
+          v-for="selfColors in selfColor"
+          :key="selfColors.text"
+          cols="12" 
+          md="12"
+          class="pt-2 pb-0"
+        >
+          <v-list-item-avatar           
             tile
-            size="30"
-            color="indigo"
+            size="20"
+            :color="selfColors.value"
+            class="ml-0 mt-1"
           />
-          區處
-          <v-list-item-avatar
-            tile
-            size="30"
-            color="blue"
-          />
-          業務處
+          <span class="font-weight-bold mr-3"> {{ selfColors.text }}</span>          
         </v-col>
+        <!-- <v-col
+          v-for="selfColors in selfColor"
+          :key="selfColors.text"
+          cols="12" 
+          md="12"
+          class="pt-2 pb-0"
+        >
+          <v-list-item-avatar           
+            tile
+            size="20"
+            :color="selfColors.value"
+            class="ml-0 mt-1"
+          />
+          <span class="font-weight-bold mr-3"> 業務處-{{ selfColors.text }}</span>          
+        </v-col> -->
       </v-row>
     </v-flex>
     <v-flex
@@ -114,7 +130,7 @@
       <v-toolbar-title v-if="$refs.calendar" class="d-flex justify-center font-weight-bold">
         {{ $refs.calendar.title }}
       </v-toolbar-title>
-      <v-sheet height="700">
+      <v-sheet height="1050">
         <v-calendar
           ref="calendar"
           v-model="start"
@@ -124,7 +140,16 @@
           :event-overlap-mode="mode"
           :events="events"
           @change="getEvents(status)"
-        />
+        >
+          <template v-slot:activator="{ on }">
+            <div
+              v-if="!event.timed"
+              class="my-event"
+              v-on="on"
+              v-html="event.category"
+            />
+          </template>
+        </v-calendar>
       </v-sheet>
     </v-flex>
   </v-layout>
@@ -147,9 +172,20 @@
       weekdays: weekdaysDefault,
       status:'請選擇',
       statusOptions: ['請選擇','上架','下架','未上架:審核中','未上架:審核完成','未上架:退件'],
-      colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-      names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
-      category: '日光節約時間',
+      selfColor: [
+        { text: '上架', value: 'indigo' },
+        { text: '下架', value: 'grey' },
+        { text: '未上架:退件', value: 'red' },
+        { text: '未上架:審核中', value: 'lime' },
+        { text: '未上架:審核完成', value: 'light-green' },
+      ],
+   /*   OtherColor: [
+       { text: '上架', value: 'indigo darken-3' },
+        { text: '下架', value: 'grey darken-3' },
+        { text: '未上架:退件', value: 'red darken-3' },
+        { text: '未上架:審核中', value: 'lime darken-3' },
+        { text: '未上架:審核完成', value: 'light-green darken-3' }, 
+      ],*/
       color: 'amber',
     }),
 
@@ -181,105 +217,265 @@
       getEvents (status) {
         const events = []
         events.push( 
-                  {
-                      name: '省電教學-1',
-                      category: '日光節約時間',
+                  {   name: '省電教學-1',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
                       status:'下架',
-                      start: '2021-09-01', // new Date(`${start.date}T00:00:00`),
-                      end: '2021-09-03', // new Date(`${end.date}T23:59:59`),
-                      color: 'blue',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-09-28', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-09-28', // new Date(`${end.date}T23:59:59`),
                       timed: false,
                     },
-                    {
-                      name: '省電教學-1',
-                      category: '日光節約時間',
+                                      {   name: '省電教學-2',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
                       status:'下架',
-                      start: '2021-09-01', // new Date(`${start.date}T00:00:00`),
-                      end: '2021-09-03', // new Date(`${end.date}T23:59:59`),
-                      color: 'indigo',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-09-29', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-09-29', // new Date(`${end.date}T23:59:59`),
                       timed: false,
-                    },   
+                    },
+                     {   name: '省電教學-3',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'下架',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-09-28', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-01', // new Date(`${end.date}T23:59:59`),
+                      timed: false,
+                    },
+                                                          {   name: '省電教學-4',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'下架',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-09-28', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-15', // new Date(`${end.date}T23:59:59`),
+                      timed: false,
+                    },
+                      {   name: '省電教學-5',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'下架',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-09-28', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-01', // new Date(`${end.date}T23:59:59`),
+                      timed: false,
+                    },
+                      {   name: '省電教學-6',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'下架',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-09-28', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-01', // new Date(`${end.date}T23:59:59`),
+                      timed: false,
+                    },
+                     {   name: '省電教學-1',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'下架',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-09-28', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-01', // new Date(`${end.date}T23:59:59`),
+                      timed: false,
+                    },
+                     {   name: '省電教學-1',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'下架',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-09-28', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-01', // new Date(`${end.date}T23:59:59`),
+                      timed: false,
+                    },
                     {
                       name: '省電教學0',
-                      category: '日光節約時間',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
                       status:'下架',
-                      start: '2021-10-1', // new Date(`${start.date}T00:00:00`),
-                      end: '2021-10-03', // new Date(`${end.date}T23:59:59`),
-                      color: 'blue',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-10-02', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-05', // new Date(`${end.date}T23:59:59`),
+                      timed: false,
+                    },
+                     {
+                      name: '省電教學1',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'上架',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
+                      start: '2021-10-06', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-12', // new Date(`${end.date}T23:59:59`),
                       timed: false,
                     },
                     {
-                      name: '省電教學0',
-                      category: '日光節約時間',
-                      status:'下架',
-                      start: '2021-10-01', // new Date(`${start.date}T00:00:00`),
-                      end: '2021-10-03', // new Date(`${end.date}T23:59:59`),
-                      color: 'indigo',
-                      timed: false,
-                    },          
-                    {
-                      name: '省電教學1',
-                      category: '日光節約時間',
-                      status:'上架',
-                      start: '2021-10-04', // new Date(`${start.date}T00:00:00`),
-                      end: '2021-10-09', // new Date(`${end.date}T23:59:59`),
-                      color: 'blue',
-                      timed: false,
-                    },
-                    {
-                      name: '省電教學1',
-                      category: '日光節約時間',
-                      status:'上架',
-                      start: '2021-10-04', // new Date(`${start.date}T00:00:00`),
-                      end: '2021-10-09', // new Date(`${end.date}T23:59:59`),
-                      color: 'indigo',
-                      timed: false,
-                    },{
                       name: '省電教學2',
-                      category: '關閉日光節約',
-                      status:'未上架:審核完成',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'未上架',
+                      signStatus:'審核完成',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                      
                       start: '2021-10-13', // new Date(`${start.date}T00:00:00`),
                       end: '2021-10-16', // new Date(`${end.date}T23:59:59`),
-                      color: 'blue',
+                      timed: false,
+                    },
+                    {
+                      name: '省電教學3',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'未上架',
+                      signStatus:'審核中',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                     
+                      start: '2021-10-17', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-19', // new Date(`${end.date}T23:59:59`),
+                      timed: false,
+                    },
+                    {
+                      name: '省電教學3',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'未上架',
+                      signStatus:'審核中',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                     
+                      start: '2021-10-20', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-23', // new Date(`${end.date}T23:59:59`),
+                      timed: false,
+                    },     
+                     {
+                      name: '省電教學3',
+                      type: '一般',
+                      detail: '日光節約時間',
+                      content: '純文字',
+                      memo:'備註',
+                      region:'區處',
+                      status:'未上架',
+                      signStatus:'退件',
+                      curlevel:'等級',
+                      fainlevel:'最後簽核狀態',
+                      htmlcontent:'quill',                     
+                      start: '2021-10-24', // new Date(`${start.date}T00:00:00`),
+                      end: '2021-10-29', // new Date(`${end.date}T23:59:59`),
                       timed: false,
                     },                    
-                    {
-                      name: '省電教學2',
-                      category: '關閉日光節約',
-                      status:'未上架:審核完成',
-                      start: '2021-10-13', // new Date(`${start.date}T00:00:00`),
-                      end: '2021-10-16', // new Date(`${end.date}T23:59:59`),
-                      color: 'indigo',
-                      timed: false,
-                    },
-                    {
-                      name: '省電教學3',
-                      category: '關閉日光節約',
-                      status:'未上架:審核中',
-                      start: '2021-10-20', // new Date(`${start.date}T00:00:00`),
-                      end: '2021-10-28', // new Date(`${end.date}T23:59:59`),
-                      color: 'indigo',
-                      timed: false,
-                    },
-                    {
-                      name: '省電教學3',
-                      category: '關閉日光節約',
-                      status:'未上架:審核中',
-                      start: '2021-10-20', // new Date(`${start.date}T00:00:00`),
-                      end: '2021-10-28', // new Date(`${end.date}T23:59:59`),
-                      color: 'blue',
-                      timed: false,
-                    },
-                    
         )
 
-        this.events = events.filter(function (el) {
-          console.log(el.status == status)
+        let statusArray = status.split(':');
+        console.log('-----------------statusArray-----------------');
+        console.log(statusArray);
+
+        let eventTemp =  events.filter(function (el) {
           if(status == "請選擇")
            return el.status !== status
-          else
+          else if (status == "上架" || status == "下架")
             return el.status == status
+          else if (statusArray[0] == "未上架" && (statusArray[1] == "退件" ||statusArray[1] == "審核中"|| statusArray[1] == "審核完成"))
+            return el.status == statusArray[0] &&  el.signStatus == statusArray[1];
         });
+
+        console.log('-----------------eventTemp-----------------');
+        console.log(eventTemp);
+
+                console.log('-----------------eventTemp[1]-----------------');
+        //console.log(Object.assign(eventTemp[1], {color: "blue"}));
+
+
+        for(let i=0; i< eventTemp.length; i++){
+            if(eventTemp[i].region == "區處"){
+                if(eventTemp[i].status == "上架"){
+                  Object.assign(eventTemp[i], {color: 'indigo'});                
+                }else if (eventTemp[i].status == "下架"){
+                   Object.assign(eventTemp[i], {color: 'grey darken-1'});                   
+                }else if(eventTemp[i].status == "未上架" && eventTemp[i].signStatus=="退件"){
+                  Object.assign(eventTemp[i], {color: 'red darken-4'});                    
+                }else if(eventTemp[i].status == "未上架" && eventTemp[i].signStatus=="審核中"){
+                   Object.assign(eventTemp[i], {color: 'lime darken-3'});
+                }else if(eventTemp[i].status == "未上架" && eventTemp[i].signStatus=="審核完成"){                    
+                    Object.assign(eventTemp[i], {color: 'light-green darken-3'});
+                }
+
+            }
+
+        }
+        console.log('-----------------eventTemp-----------------');
+        console.log(eventTemp);
+        
+       this.events =eventTemp;
 
         console.log("this.events")
         console.log(this.events) 
@@ -362,4 +558,8 @@
     text-overflow: ellipsis;
     overflow: hidden;
   }
+
+  .v-application--is-ltr .v-list-item__avatar:first-child {
+    margin-right: 0px;
+}
 </style>

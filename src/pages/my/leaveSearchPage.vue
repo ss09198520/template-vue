@@ -12,6 +12,7 @@
               cols="3"
             >
               <v-text-field
+                v-model="empNo"
                 outlined
                 hide-details                                         
                 dense
@@ -25,7 +26,8 @@
             <v-col
               cols="3"
             >
-              <v-text-field                           
+              <v-text-field
+                v-model="empName"                 
                 outlined
                 hide-details
                 dense
@@ -40,7 +42,8 @@
             <v-col
               cols="3"
             >
-              <v-text-field                           
+              <v-text-field
+                v-model="agent"   
                 outlined
                 hide-details
                 dense
@@ -54,7 +57,8 @@
             <v-col
               cols="3"
             >
-              <v-text-field                           
+              <v-text-field
+                v-model="agentName"                            
                 outlined
                 hide-details
                 dense
@@ -64,8 +68,6 @@
           </v-row>
           <v-row align="center" />
           <v-row align="center">
-           
-            
             <v-col cols="1">
               日期區間
             </v-col>
@@ -82,7 +84,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="date1"
+                    v-model="leaveDate.start"
                     append-icon="mdi-calendar"
                     outlined
                     readonly
@@ -92,11 +94,13 @@
                     style="width:100%"
                     :clearable="true"
                     v-on="on"
+                    @click:clear="resetDate('leaveDate','start')"
                   />
                 </template>
                 <v-date-picker
-                  v-model="date1"
+                  v-model="leaveDate.start"
                   @input="menu1 = false"
+                  @change="checkDate()"
                 />
               </v-menu>
               <div class="mt-1">~</div>
@@ -109,7 +113,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="date2"
+                    v-model="leaveDate.end"
                     append-icon="mdi-calendar"
                     outlined
                     readonly
@@ -119,11 +123,13 @@
                     style="width:100%"
                     :clearable="true"
                     v-on="on"
+                    @click:clear="resetDate('leaveDate','end')"
                   />
                 </template>
                 <v-date-picker
-                  v-model="date2"
+                  v-model="leaveDate.end"
                   @input="menu2 = false"
+                  @change="checkDate()"
                 />
               </v-menu>
             </v-col>
@@ -135,8 +141,8 @@
               cols="3"
             >             
               <v-select
-                v-model="leaveWay"
-                :items="leaveWayOption"
+                v-model="dataSource"
+                :items="dataSourceList"
                 item-text="text"
                 :return-object="true"
                 outlined
@@ -149,6 +155,9 @@
                 color="#ADADAD"
               />
             </v-col>
+            <v-col cols="3" />
+            <v-col cols="1" />
+            <span class="red--text font-14px ml-3">{{ errMsg }}</span>
           </v-row>
         
           <v-row>
@@ -332,19 +341,19 @@
           <v-row class="mt-3">
             <v-col cols="2">姓名代號</v-col>
             <v-col>
-              {{ selectOne.empNo }}
+              {{ selectItem.empNo }}
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="2">員工姓名</v-col>
             <v-col>
-              {{ selectOne.empName }}
+              {{ selectItem.empName }}
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="2">休假期間</v-col>
             <v-col>
-              {{ selectOne.startDate }} ~ {{ selectOne.endDate }}
+              {{ selectItem.startDate }} ~ {{ selectItem.endDate }}
             </v-col>
           </v-row>
           <v-row align="center" class="mb-3">
@@ -353,7 +362,7 @@
               <v-select
                 v-model="selectAgent"
                 outlined
-                :items="agentOpt"
+                :items="agentList"
                 hide-details
                 :return-object="true"
                 dense
@@ -393,7 +402,7 @@
       </v-card>
     </v-dialog>
     <!-- 提醒 -->
-     <v-dialog
+    <v-dialog
       v-model="alertOverTwoTiers"
       max-width="500"
     >

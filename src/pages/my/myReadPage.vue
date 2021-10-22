@@ -21,6 +21,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="acceptNum"
               outlined
               hide-details                                         
               dense
@@ -34,7 +35,9 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="electricNum"
+              type="number"                   
               outlined
               hide-details
               dense
@@ -50,6 +53,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="archieveNum"
               outlined
               hide-details                                         
               dense
@@ -73,7 +77,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="date1"                  
+                  v-model="readDate.start"                  
                   append-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
@@ -82,11 +86,13 @@
                   hide-details                  
                   :clearable="true"
                   v-on="on"
+                  @click:clear="resetDate('readDate','start')"
                 />
               </template>
               <v-date-picker
-                v-model="date1"
+                v-model="readDate.start"
                 @input="menu1 = false"
+                @change="checkDate()"
               />
             </v-menu>          
             <div style="margin:auto 0;">~</div>          
@@ -99,7 +105,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="date2"                  
+                  v-model="readDate.end"                  
                   append-icon="mdi-calendar"
                   readonly
                   v-bind="attrs"
@@ -108,14 +114,20 @@
                   hide-details
                   :clearable="true"
                   v-on="on"
+                  @click:clear="resetDate('readDate','end')"
                 />
               </template>
               <v-date-picker
-                v-model="date2"
+                v-model="readDate.end"
                 @input="menu2 = false"
+                @change="checkDate()"
               />
             </v-menu>
-          </v-col>     
+          </v-col>
+          <v-col cols="6" />
+          <v-col style="margin-top:-1%">   
+            <span class="red--text font-14px">{{ errMsg }}</span>
+          </v-col>
         </v-row>
         <v-row>
           <v-col cols="11" />
@@ -128,7 +140,7 @@
                   fab
                   small
                   color="primary"
-                  @click="displayList = true"
+                  @click="search()"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-magnify'" />
@@ -236,7 +248,7 @@
           <v-card-actions class="d-end mt-5">
             <v-btn              
               color="primary"            
-              @click="checkSubmit()"
+              @click="browserModel = false"
             >
               &emsp;關閉&emsp;
             </v-btn>

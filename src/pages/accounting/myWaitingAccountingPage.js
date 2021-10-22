@@ -43,8 +43,10 @@ export default {
             hasShowList:false,
             department:null,
             deptList:[],
+            oriDeptList:[],
             rejectReason: null,
             reasonList:[],
+            oriReasonList:[],
             computeDateOption:[
                 {text:'01',value:'01'},
                 {text:'02',value:'02'},
@@ -347,6 +349,8 @@ export default {
             // rejectToDept:this.department,
             // rejectReason:this.rejectReason,
             // rejectDesc:this.rejectDesc,
+            // oriDeptList: this.oriDeptList,
+            // oriReasonList: this.oriReasonList,
 
 
             if(type === 'reject') {

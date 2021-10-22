@@ -1,4 +1,5 @@
 import MessageService from "@/assets/services/message.service";
+import ValidateUtil from "@/assets/services/validateUtil";
 
 
 export default {
@@ -8,104 +9,181 @@ export default {
     },
     beforeMount() {
         this.init();
-      },
+    },
     data() {
         return {
-            waitingCount: 4,
+            numOfUndispatch: 4,
             unDispatchHeaders: [
-                { text: '受理號碼', value: 'acceptNumber', align: 'center' },
-                { text: '整理號碼', value: 'sortNumber', align: 'center' },
-                { text: '戶名', value: 'accntName', align: 'center' },
+                { text: '受理號碼', value: 'acceptNum', align: 'center' },
+                { text: '整理號碼', value: 'archieveNum', align: 'center' },
+                { text: '戶名', value: 'custName', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
-                { text: '電號', value: 'electricNo', align: 'center' },
-                { text: '計算日', value: 'countDate', align: 'center' },
+                { text: '電號', value: 'electricNum', align: 'center' },
+                { text: '計算日', value: 'computeDate', align: 'center' },
                 { text: '受理日期', value: 'acceptDate', align: 'center' },
-                { text: '結案日期', value: 'completeDate', align: 'center' },
+                { text: '結案日期', value: 'colseDate', align: 'center' },
                 { text: '受理項目', value: 'acceptItem', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
-            unDispatchList: [
-                {action: true, acceptNumber: 'A00028',sortNumber: '000201', accntName: '許小花',contractType:'包制',electricNo:'0120123223', countDate: '01', acceptDate: '2021-09-10 10:00', completeDate: '2021-09-10 16:00', category: 'APR0370', acceptItem: 'QA210  軍眷用電申請優待'},
-                {action: true, acceptNumber: 'A00040',sortNumber: '000202', accntName: '陳文生',contractType:'高壓',electricNo:'012012321',countDate: '05', acceptDate: '2021-09-07 15:36', completeDate: '2021-09-08 15:06', category: 'APR0200', acceptItem: 'I0520  增加電表'},
-                {action: true, acceptNumber: 'A00605',sortNumber: '000203', accntName: '連瑜千',contractType:'表制',electricNo:'0120123222',countDate: '10', acceptDate: '2021-09-10 09:45', completeDate: '2021-09-15 10:50', category: 'APR0160', acceptItem: 'F3030  表燈非時間電價停用廢止'},
-                {action: true, acceptNumber: 'A00619',sortNumber: '000204', accntName: '辰文興',contractType:'包制',electricNo:'0120123225',countDate: '12', acceptDate: '2021-09-10 13:44', completeDate: '2021-09-10 15:26', category: 'APR0200', acceptItem: 'I0510  故障換表'}
-            ],
+            unDispatchList: [],
             // 頁數
             unDispatchListPageCount:1,
             unDispatchListPage:1,
 
             dispatchModel: false,
 
-            classType:null,
-            classTypeOption:[
-                { text: '班別1', value: '1'},
-                { text: '班別2', value: '2'},
-                { text: '班別3', value: '3'},
-                { text: '班別4', value: '4'},
-                { text: '班別5', value: '5'},
-                { text: '班別6', value: '6'},
-                { text: '班別7', value: '7'},
-                { text: '班別8', value: '8'},
-                { text: '班別9', value: '9'},
-                { text: '班別10', value: '10'},
-
-
-            ],
+            className:null,
+            classList:[],
             selectEmp:null,
-            empListOption:[
-                { text: '吳小花', value: '1'},
-                { text: '王霏霏', value: '2'},
-                { text: '王小林', value: '3'},
-                { text: '林小飛', value: '4'},
-                { text: '林旺成', value: '5'},
-                { text: '徐彥豔', value: '6'},
-                { text: '羅徐生', value: '7'},
-                { text: '連靜菲', value: '8'},
-                { text: '潘麗麗', value: '9'},
-                { text: '陳小慶', value: '10'},
-            ],
+            accountingList:[],
             selectIndex: null,
             //操作者角色
             User: 'manager',
+            formSeq: null,
+            seq: null,
+            requiredArray:[],
+            errMsg: null,
 
         }
     },
     methods: {
         init(){
-            
+            this.queryUndispatchInit();
+            this.queryUndispatchOption();
         },
         // 判斷點擊哪個按鈕
         action(actionType,item){
-            this.selectIndex = this.unDispatchList.indexOf(item);
-            if(actionType == 'takeAway'){
-                if (this.selectIndex > -1) {
-                    this.unDispatchList.splice(this.selectIndex, 1);
-                    this.waitingCount = this.waitingCount -1;
-                  }
-                MessageService.showSuccess("案件認領成功✓");
-            } else{
-                this.classType = null;
+            this.selectIndex = this.unDispatchList.indexOf(item); // 取出第幾筆
+            this.formSeq = item.formSeq;
+            this.seq = item.seq;
+
+            if(actionType === 'dispatch'){
+                this.className = null;
                 this.selectEmp = null;
                 this.dispatchModel = true;
+            } else {
+                this.updateUndispatch(actionType);
             }
         },
-       
+       // 送出分派案件
         submit(){
-            if (this.selectIndex > -1) {
-                this.unDispatchList.splice(this.selectIndex, 1);
-                this.waitingCount = this.waitingCount -1;
-              }
-            MessageService.showSuccess("案件分派成功✓");
-            this.dispatchModel = false;
+            this.requiredArray = [];
+            if(!this.validVal()){
+                MessageService.showCheckInfo(this.requiredArray,null);
+                return;
+            } else {
+                this.updateUndispatch('dispatch');
+            } 
         },
 
         // 分派視窗-二則一選擇即可，若點選另一個則將原本的選擇的清掉
         change(type){
-            if(type == 'classType'){
+            if(type == 'className'){
                 this.selectEmp = null;
             } else {
-                this.classType = null;
+                this.className = null;
             }
+        },
+
+        /** 
+         * 
+         * Ajax Start
+         * 
+        */
+
+        // Action:頁面初始化
+        queryUndispatchInit(){
+            // 取得未分派清單資料
+           let unDispatchList = [
+                {seq:1 ,formSeq: 1, action: true, acceptNum: 'A00028',archieveNum: '000201', custName: '許小花',contractType:'包制',electricNum:'0120123223', countDate: '01', computeDate: '2021-09-10 10:00', colseDate: '2021-09-10 16:00', acceptItem: 'QA210  軍眷用電申請優待'},
+                {seq:2, formSeq: 2, action: true, acceptNum: 'A00040',archieveNum: '000202', custName: '陳文生',contractType:'高壓',electricNum:'012012321',countDate: '05', computeDate: '2021-09-07 15:36', colseDate: '2021-09-08 15:06', acceptItem: 'I0520  增加電表'},
+                {seq:3, formSeq: 3, action: true, acceptNum: 'A00605',archieveNum: '000203', custName: '連瑜千',contractType:'表制',electricNum:'0120123222',countDate: '10', computeDate: '2021-09-10 09:45', colseDate: '2021-09-15 10:50', acceptItem: 'F3030  表燈非時間電價停用廢止'},
+                {seq:4, formSeq: 4, action: true, acceptNum: 'A00619',archieveNum: '000204', custName: '辰文興',contractType:'包制',electricNum:'0120123225',countDate: '12', computeDate: '2021-09-10 13:44', colseDate: '2021-09-10 15:26', acceptItem: 'I0510  故障換表'}
+            ];
+
+            this.unDispatchList = unDispatchList;
+        },
+
+        // Action: 取得下拉選單 (操作人為核算課長)
+        queryUndispatchOption(){
+           // 取得班別資料
+           let classList = ['班別1','班別2','班別3','班別4','班別5','班別6','班別7'];
+           // 取得有設定班別的核算員清單
+           let accountingList = [
+            { empName: '吳小花', empNo: '1000111'},
+            { empName: '王霏霏', empNo: '1000112'},
+            { empName: '王小林', empNo: '1000114'},
+            { empName: '林小飛', empNo: '1000135'},
+            { empName: '林旺成', empNo: '1000113'},
+            { empName: '徐彥豔', empNo: '1000116'},
+            { empName: '羅徐生', empNo: '1000117'},
+            { empName: '連靜菲', empNo: '1000118'},
+            { empName: '潘麗麗', empNo: '1000119'},
+            { empName: '陳小慶', empNo: '1000132'},
+        ];
+           this.accountingList = accountingList;
+           this.classList = classList;
+        },
+
+        // Action: 分派(操作人為核算課長)/認領案件(核算課員)
+        updateUndispatch(actionType){
+            // Vin參數
+            // seq: this.seq  // 待核算table的流水號
+            // className: this.className,
+            // accouting: this.selectEmp.empNo,
+
+            // 如為分派案件
+            if(actionType === 'dispatch'){
+                if (this.selectIndex > -1) {
+                    this.unDispatchList.splice(this.selectIndex, 1);
+                    this.numOfUndispatch = this.numOfUndispatch -1;
+                }
+                this.dispatchModel = false;
+                MessageService.showSuccess("案件分派");
+
+            // 如為認領案件
+            } else {
+                if (this.selectIndex > -1) {
+                    this.unDispatchList.splice(this.selectIndex, 1);
+                    this.numOfUndispatch = this.numOfUndispatch -1;
+                }
+                MessageService.showSuccess("案件認領");
+            }
+            
+
+        },
+        
+
+        /* 
+         * 
+         * Ajax End
+         * 
+        */
+
+
+        /** 
+         * 
+         * 驗證 Start
+         * 
+        */
+        validVal(){
+            let isValid = true;
+
+            if(ValidateUtil.isEmpty(this.className) && ValidateUtil.isEmpty(this.selectEmp)){
+                this.errMsg = '請選擇班別或核算員';
+                this.requiredArray.push('班別或核算員');
+                isValid = false;
+            } else {
+                this.errMsg = null;
+            }
+
+            return isValid;
         }
+
+        /* 
+         * 
+         * 驗證 End
+         * 
+        */
     }
 }

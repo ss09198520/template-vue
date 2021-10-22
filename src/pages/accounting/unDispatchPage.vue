@@ -9,7 +9,7 @@
             <div class="text-center block-title fw-6 mb-2">未分派</div>
           </div>
           <div>
-            <div class="block-content"><span class="block-number">{{ waitingCount }}</span>件</div>
+            <div class="block-content"><span class="block-number">{{ numOfUndispatch }}</span>件</div>
           </div>
         </div>
       </div>
@@ -90,17 +90,17 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="font-18px">
-          
-            <v-row class="mt-6 ml-1" align="center">
+            <v-row class="mt-6 ml-4 font-14px">
+              <span class="red--text">{{ errMsg }}</span>
+            </v-row>          
+            <v-row class="mt-3 ml-1" align="center">
               <v-col cols="3">
                 選擇班別
               </v-col>
               <v-col cols="7">
                 <v-select
-                  v-model="classType"
-                  :items="classTypeOption"
-                  item-text="text"
-                  :return-object="true"
+                  v-model="className"
+                  :items="classList"
                   outlined
                   hide-details
                   single-line
@@ -108,7 +108,7 @@
                   :clearable="true"
                   class="my-auto"
                   color="#ADADAD"
-                  @change="change('classType')"
+                  @change="change('className');validVal()"
                 />
               </v-col>
             </v-row>
@@ -124,8 +124,8 @@
               <v-col cols="7">
                 <v-select
                   v-model="selectEmp"
-                  :items="empListOption"
-                  item-text="text"
+                  :items="accountingList"
+                  item-text="empName"
                   :return-object="true"
                   outlined
                   hide-details
@@ -134,7 +134,7 @@
                   dense
                   class="my-auto"
                   color="#ADADAD"
-                  @change="change('selectEmp')"
+                  @change="change('selectEmp');validVal()"
                 />
               </v-col>
             </v-row>

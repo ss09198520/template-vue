@@ -60,6 +60,22 @@
                 hide-details
               />
             </v-col>
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2">
+              上架狀態
+            </v-col>
+            <v-col cols="3" class="ml-2">
+              <v-select
+                :items="['上架','未上架','下架']"
+                class="font-bold"
+                color="accent"
+                item-color="accent"
+                placeholder="上架狀態"
+                dense
+                outlined
+                hide-details
+              />
+            </v-col>
           </v-row>
           <v-row
             class="d-flex justify-start"
@@ -132,7 +148,7 @@
             </v-col>
             <v-col 
               cols="3"   
-              class="d-flex"
+              class="d-flex ml-2"
             >
               <v-menu
                 v-model="sunsetDateStartMenu"
@@ -304,6 +320,21 @@
               </template>
               <span>編輯</span>
             </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="error"
+                  @click="action('deleteMultiMedia',item)"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-delete'" />
+                </v-btn>
+              </template>
+              <span>刪除</span>
+            </v-tooltip>
           </template>
           <template v-slot:[`item.returnInfo`]="{ item }">
             <v-tooltip v-if="item.returnInfo" top>
@@ -384,7 +415,7 @@
           //日曆 end
         headerCRUD: [
           {
-            text: '節目名稱',
+            text: '節目標題',
             value: 'name',
           },
           {
@@ -393,14 +424,14 @@
             align: 'center',
           },
           {
-            text: '單位',
-            value: 'division',
-            align: 'center',
-          },
-          {
             text: '狀態',
             value: 'signoff',
             sortable: false,
+            align: 'center',
+          },
+          {
+            text: '上架人員名稱',
+            value: 'division',
             align: 'center',
           },
           {
@@ -443,7 +474,7 @@
             id: 1,
             scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
-            division:'業務處',
+            division:'王大明',
             ondate: '2021-09-15',
             offdate: '2021-10-30',
             active: true,
@@ -454,7 +485,7 @@
             id: 2,
             scp_id: '預設',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/footer',
-            division:'業務處',
+            division:'王大明',
             ondate: '2021-12-21',
             offdate: '2022-01-30',
             active: false,
@@ -470,7 +501,7 @@
             id: 4,
             scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'業務處',
+            division:'葉星辰',
             ondate: '2021-10-21',
             offdate: '2021-10-30',
             active: false,
@@ -486,7 +517,7 @@
             id: 5,
             scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
-            division:'業務處',
+            division:'王大明',
             ondate: '2021-11-11',
             offdate: '2021-12-24',
             active: false,
@@ -497,7 +528,7 @@
             id: 6,
             scp_id: '一般',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'業務處',
+            division:'趙元智',
             ondate: '2021-12-21',
             offdate: '2022-04-30',
             active: false,

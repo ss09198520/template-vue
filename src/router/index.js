@@ -69,6 +69,13 @@ export const constantRoutes = [
     hidden: true
   },
   {
+    path: '/satisfaction/preview',
+    name: 'Satisfaction-Preview',
+    component: () => import('@/views/satisfaction/preview'),
+    hidden: true,
+    meta: { title: '問卷預覽', icon: 'mdi-pencil-box-multiple-outline' },
+  },
+  {
     path: '/',
     component: Layout,
     hidden: true,

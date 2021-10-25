@@ -99,7 +99,7 @@
                 <span> 查詢 </span>
               </v-tooltip>
             </v-col>
-                 <v-col cols="3" class="ml-2" color="red">
+            <v-col cols="3" class="ml-2" color="red">
               * 查詢區間於6個月內
             </v-col>
           </v-row>

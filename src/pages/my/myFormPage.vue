@@ -101,13 +101,24 @@
       <!--是否為代理案件 -->
       <template v-slot:item.isAgent="{ item }">                                                        
         <div             
-          v-if="item.isAgent"
+          v-if="item.isAgent === 'Y'"
           class="ma-2"
           icon
         >
           <v-icon>
             mdi-check-bold
           </v-icon>
+        </div>                         
+      </template>
+
+      <!--代理件所有人 -->
+      <template v-slot:item.agentAcceptUser="{ item }">                                                        
+        <div             
+          v-if="item.isAgent === 'Y'"
+          class="ma-2"
+          icon
+        >
+          {{ item.acceptUser }} {{ item.acceptUserName }}
         </div>                         
       </template>
     </v-data-table>                 

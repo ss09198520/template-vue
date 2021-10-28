@@ -69,13 +69,6 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/satisfaction/preview',
-    name: 'Satisfaction-Preview',
-    component: () => import('@/views/satisfaction/preview'),
-    hidden: true,
-    meta: { title: '問卷預覽', icon: 'mdi-pencil-box-multiple-outline' },
-  },
-  {
     path: '/',
     component: Layout,
     hidden: true,
@@ -87,6 +80,13 @@ export const constantRoutes = [
       meta: { title: '首頁', icon: 'mdi-cloud-upload', },
       }
     ]
+  },
+  {
+    path: '/satisfaction/answer',
+    name: 'Satisfaction-Answer',
+    component: () => import('@/views/satisfaction/answer'),
+    hidden: true,
+    meta: { title: '客戶填答問卷頁面', icon: 'mdi-pencil-box-multiple-outline' },
   },
   {
     path: "/myWorkSpace",
@@ -234,13 +234,13 @@ export const constantRoutes = [
       },
       {
         path: 'satisfyReport/reportDynamicRegion',
-        name: 'Satisfaction-Report-Monthly',
+        name: 'Satisfaction-Report-Dynamic-RegionMonthly',
         component: () => import('@/views/satisfaction/reportDynamicRegion'),
         meta: { title: '滿意度區處報表(自訂查詢區間)', icon: 'mdi-clipboard-search' }
       },
       {
         path: 't-satisfyReport/reportDynamicPersonal',
-        name: 'Satisfaction-Report-Weekly',
+        name: 'Satisfaction-Report-Dynamic-PersonalWeekly',
         component: () => import('@/views/satisfaction/reportDynamicPersonal'),
         meta: { title: '滿意度個人動態查詢(自訂區間與%數)', icon: 'mdi-clipboard-search  ' }
       }
@@ -283,6 +283,22 @@ export const constantRoutes = [
         name: 'Satisfaction-list',
         component: () => import('@/views/satisfaction/list'),
         meta: { title: '問卷查詢', icon: 'mdi-clipboard-text-search' }
+      },
+    ]
+  },
+  {
+    path: '/media/preview',
+    component: Layout,
+    name: 'PreviewPages',
+    hidden: true,
+    meta: { title: '多媒體預覽頁面', icon: 'mdi-clipboard-text-multiple' },
+    children: [
+      {
+        path: 'questionnaire/:id(\\d+)',
+        component: () => import('@/views/satisfaction/preview'),
+        name: 'Satisfaction-preview',
+        hidden: true,
+        meta: { title: '問卷預覽', icon: 'mdi-pencil-box-multiple-outline' },
       },
     ]
   },

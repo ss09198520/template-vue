@@ -26,7 +26,7 @@
             <v-expansion-panel-content>
               <v-row>
                 <v-col cols="6" class="d-center">
-                  <v-btn depressed color="primary" class="big-btn">
+                  <v-btn depressed color="primary" class="big-btn" @click="openFormSignPage()">
                     <span class="pt-3">
                       <v-icon dark size="7vh">
                         mdi-file-document-outline

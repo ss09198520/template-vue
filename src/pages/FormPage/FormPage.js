@@ -30,8 +30,6 @@ export default {
             panel: [0, 1, 2, 3],
             imgSrcPrefix: "data:image/jpeg;base64,",
             formSeq: null,          // 表單流水號
-            empNo: null,            // 登入者身分
-            region: null,           // 區處
             acceptNum: null,        // 受理編號
             formType: null,         // 登記單代碼
             apitCod: null,          // 申請項目編號
@@ -43,6 +41,11 @@ export default {
             electricNum: null,      // 電號
             computeDate: null,      // 計算日
             acceptDept: null,       // 受理部門
+            acceptDeptName: null,   // 受理部門名稱
+            acceptUser: null,       // 受理人員
+            acceptUserName: null,   // 受理人員姓名
+            acceptDate: null,       // 受理日期
+            acceptItem: null,       // 受理項目
             isUpdate: null,         // 修正件
             isAddAttachment: null,  // 補附件操作
             isAffidavit: null,      // 切結註記
@@ -52,8 +55,8 @@ export default {
             certificateNo: 1,
             attachmentList: [],
             //Mock的prototype
-            attachmentListMockBefore: [{id: '1',name:'證明函(未套印)'}],
-            attachmentListMockAfter: [{id: '1',name:'證明函(未套印)'},{id: '2',name:'證明函(套印完成)'}],
+            attachmentListMockBefore: [{id: '1',fileName:'證明函(未套印)'}],
+            attachmentListMockAfter: [{id: '1',fileName:'證明函(未套印)'},{id: '2',fileName:'證明函(套印完成)'}],
             attachmentNo: 1,
             selectedAttachment: null,
             viewImageDialog: false,
@@ -89,8 +92,6 @@ export default {
             }
 
             if(!ValidateUtil.isEmpty(formInf)){
-                this.empNo = formInf.empNo;
-                this.region = formInf.region;
                 this.acceptNum = formInf.acceptNum;
                 this.formType = formInf.formType;
                 this.apitCod = formInf.apitCod;
@@ -102,6 +103,11 @@ export default {
                 this.electricNum = formInf.electricNum;
                 this.computeDate = formInf.computeDate;
                 this.acceptDept = formInf.acceptDept;
+                this.acceptDeptName = formInf.acceptDeptName;
+                this.acceptUser = formInf.acceptUser;
+                this.acceptUserName = formInf.acceptUserName;
+                this.acceptDate = formInf.acceptDate;
+                this.acceptItem = formInf.acceptItem;
                 this.isUpdate = formInf.isUpdate;
                 this.isAddAttachment = formInf.isAddAttachment;
                 this.isAffidavit = formInf.isAffidavit;
@@ -110,8 +116,6 @@ export default {
         },
         formInit(){
             let param = {
-                empNo: this.empNo,
-                region: this.region,
                 acceptNum: this.acceptNum,
                 formType: this.formType,
                 apitCod: this.apitCod,
@@ -123,6 +127,11 @@ export default {
                 electricNum: this.electricNum,
                 computeDate: this.computeDate,
                 acceptDept: this.acceptDept,
+                acceptDeptName: this.acceptDeptName,
+                acceptUser: this.acceptUser,
+                acceptUserName: this.acceptUserName,
+                acceptDate: this.acceptDate,
+                acceptItem: this.acceptItem,
                 isUpdate: this.isUpdate,
                 isAddAttachment: this.isAddAttachment,
                 isAffidavit: this.isAffidavit,
@@ -132,8 +141,8 @@ export default {
             AjaxService.post("/tpesForm/init", param, 
             (response) => {
                 // 驗證是否成功
-                if (!response.restData.resultMessage.success) {              
-                    MessageService.showError(response.restData.resultMessage.message,'表單初始化');
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.message,'表單初始化');
                     return;
                 }
 
@@ -174,6 +183,10 @@ export default {
                 }
             }
         },
+        openFormSignPage(){
+            let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
+            window.open("/#/imageEditor", '表單及簽名', config);
+        },
         cleanCertificateImg(certificate) {
             certificate.imgSrc = null;
         },
@@ -195,7 +208,7 @@ export default {
             this.certificateList.push({
                 id: this.certificateNo,
                 // 4: 其他證件，須由使用者輸入證件類別
-                name: this.newCertificateType === 4 ? this.otherCertificate : this.certificateOptions[this.newCertificateType],
+                fileName: this.newCertificateType === 4 ? this.otherCertificate : this.certificateOptions[this.newCertificateType],
                 fileNo: "",
                 imgSrc: "",
                 isAdditional: false,
@@ -215,7 +228,7 @@ export default {
             this.attachmentList.push({
                 id: this.attachmentNo,
                 // 7: 其他佐證文件，須由使用者輸入附件類別
-                name: this.newAttachmentType === 7 ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType],
+                fileName: this.newAttachmentType === 7 ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType],
                 fileNo: "",
                 imgSrc: "",
                 file: null,

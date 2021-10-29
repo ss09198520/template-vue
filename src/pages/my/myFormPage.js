@@ -100,32 +100,32 @@ export default{
          * */
 
         // Action:頁面初始化
-        queryFormInit(){          
+        queryFormInit(){             
             AjaxService.post('/tpesForm/queryMyFormInit',{},
             (response) => {
                 // 驗證是否成功
-                if (!response.resultMessage.success) {              
+                if (!response.restData.success) {              
                     MessageService.showError(response.resultMessage.returnMessage,'查詢我的表單初始資料');
                     return;
                 }
-                 // 驗證formList是否有資料
-                if(ValidateUtil.isEmpty(response.formList) || response.formList.length < 1 ){
+                // 驗證formList是否有資料
+                if(ValidateUtil.isEmpty(response.restData.formList) || response.restData.formList.length < 1 ){
                     MessageService.showInfo('查無相關資料');
                     return;
                 }
 
                 // 將取得的資料放進前端參數中
-                this.formList = response.formList;
-                this.numberOfAccept = response.numberOfAccept;
-                this.numberOfAgent = response.numberOfAgent;
+                this.formList = response.restData.formList;
+                this.numberOfAccept = response.restData.numberOfAccept;
+                this.numberOfAgent = response.restData.numberOfAgent;
                 // 從後端取得案件清單，先複製一份，先暫時放init，之後會移到ajax打後端後取得資料直接複製
-                this.oriFormList = JSON.parse(JSON.stringify(response.formList));
+                this.oriFormList = JSON.parse(JSON.stringify(response.restData.formList));
 
             },
             // eslint-disable-next-line no-unused-vars
-            (response) => {
+            (response) => {                
                 MessageService.showSystemError();
-            });     
+            });
           
         },
 

@@ -145,7 +145,7 @@ export default {
             this.returnReasonModel = true;
         },
         // 核算成功
-        auditSubmit(memo){
+        accountingSubmit(memo){
             this.memo = memo;
             this.updateAccouting(); 
         },

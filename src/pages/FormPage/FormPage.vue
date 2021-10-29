@@ -31,12 +31,12 @@
                       <v-icon dark size="7vh">
                         mdi-file-document-outline
                       </v-icon><br>
-                      <div v-if="mode==='audit' || mode=='viewSealSignOffAfter'" class="big-btn-text mt-2">檢視表單</div>
-                      <div v-else class="big-btn-text mt-2">開啟表單</div>
+                      <div v-if="mode==='accounting' || mode=='viewSealSignOffAfter'" class="big-btn-text mt-2">檢視表單</div>
+                      <div v-else class="big-btn-text mt-2">開啟表單及簽名</div>
                     </span>
                   </v-btn>
                 </v-col>
-                <v-col v-if="mode!=='audit' || mode=='viewSealSignOffAfter'" cols="6">
+                <v-col v-if="mode!=='accounting' || mode=='viewSealSignOffAfter'" cols="6">
                   <div class="sign-preview-area">
                     <span>簽名預覽</span>
                     <img v-if="signPreviewImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + signPreviewImgSrc">
@@ -61,13 +61,13 @@
                   <v-col v-for="(certificate, index) in certificateList" :key="certificate.id" cols="3" class="mb-2">
                     <v-row>
                       <v-col cols="12" style="text-align: center;">
-                        <h3>{{ certificate.name }}</h3>
+                        <h3>{{ certificate.fileName }}</h3>
                       </v-col>
                     </v-row>
                     <v-row>
                       <v-col cols="12">
                         <div class="img-area d-center">
-                          <img v-if="certificate.imgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + certificate.imgSrc">
+                          <img v-if="certificate.imgSrc" style="width: 100%; max-height: 100%" :src="certificate.imgSrc">
                           <div v-else class="not-scan-area">
                             <span>尚未掃描</span>
                           </div>
@@ -106,8 +106,8 @@
                           </v-icon>
                         </v-btn>
                       </v-col>
-                      <v-col v-if="mode == 'audit' || mode=='viewSealSignOffAfter'" cols="12" class="t-center">
-                        <v-btn depressed color="normal" @click="viewImage(certificate)">
+                      <v-col v-if="mode == 'accounting' || mode=='viewSealSignOffAfter'" cols="12" class="t-center">
+                        <v-btn depressed color="normal" :disabled="!certificate.imgSrc" @click="viewImage(certificate)">
                           檢視
                           <v-icon
                             right
@@ -155,7 +155,7 @@
                   <v-col v-for="(attachment, index) in attachmentList" :key="attachment.id" cols="3" class="mb-2">                    
                     <v-row>
                       <v-col cols="12" style="text-align: center;">
-                        <h3>{{ attachment.name }}</h3>
+                        <h3>{{ attachment.fileName }}</h3>
                       </v-col>
                     </v-row>
                     <v-row>
@@ -220,7 +220,7 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row v-if="mode == 'audit' || mode=='viewSealSignOffAfter' || mode == 'viewMyRead' || mode == 'viewMyForm'">
+                    <v-row v-if="mode == 'accounting' || mode=='viewSealSignOffAfter' || mode == 'viewMyRead' || mode == 'viewMyForm'">
                       <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="viewImage(attachment)">
                           檢視
@@ -337,7 +337,7 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row v-if="mode == 'audit' || mode=='viewSealSignOffAfter'">
+                    <v-row v-if="mode == 'accounting' || mode=='viewSealSignOffAfter'">
                       <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="viewImage(attachment)">
                           檢視
@@ -454,7 +454,7 @@
                         >
                       </v-col>
                     </v-row>
-                    <v-row v-if="mode == 'audit' || mode=='viewSealSignOffAfter'">
+                    <v-row v-if="mode == 'accounting' || mode=='viewSealSignOffAfter'">
                       <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="viewImage(attachment)">
                           檢視
@@ -503,7 +503,7 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
 
-          <v-expansion-panel v-if="mode == 'audit'">
+          <v-expansion-panel v-if="mode == 'accounting'">
             <v-expansion-panel-header class="panel-header mb-3">
               <v-col cols="12">
                 <h2>核算備註區</h2>
@@ -513,7 +513,7 @@
               <v-row>
                 <v-col cols="12" class="d-center">
                   <v-textarea
-                    v-model="auditRemark"
+                    v-model="accountingMemo"
                     class="accouting-textarea"                   
                     outlined
                     placeholder="點選 [儲存備註並關閉]、[退件]、[核算通過] 都會進行儲存"
@@ -542,7 +542,7 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-row v-if="mode == 'audit'">
+      <v-row v-if="mode == 'accounting'">
         <v-col cols="12" class="t-right">
           <v-btn depressed large color="#E98B2A" @click="saveComments()">
             <span style="font-size: 18px; color: white">儲存備註並關閉</span>
@@ -564,7 +564,7 @@
               mdi-close
             </v-icon>
           </v-btn>
-          <v-btn depressed large color="success" class="ml-3" @click="auditSubmit()">
+          <v-btn depressed large color="success" class="ml-3" @click="accountingSubmit()">
             <span style="font-size: 18px">核算通過</span>
             <v-icon
               right

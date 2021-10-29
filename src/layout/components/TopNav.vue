@@ -404,7 +404,7 @@ import AjaxService from '@/assets/services/ajax.service'
         let loginUrl = "/login?username=" + this.account + "&password=" + this.password;
         AjaxService.post(loginUrl, {}, (response) => {
           console.log(response);
-          if(response.rtnCode == 200){
+          if(response.restData.code == 200){
             this.loginDialog = false;
             this.isLogin = true;
           }
@@ -413,7 +413,7 @@ import AjaxService from '@/assets/services/ajax.service'
       logout(){
         AjaxService.post("/logout", {}, (response) => {
           console.log(response);
-          if(response.rtnCode == 200){
+          if(response.restData.code == 200){
             this.isLogin = false;
           }
         });

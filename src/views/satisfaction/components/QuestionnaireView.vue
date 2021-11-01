@@ -2,7 +2,7 @@
   <v-container>
     <v-row class="justify-center">
       <v-col>
-        <v-form ref="form" v-model="valid" lazy-validation>
+        <v-form ref="questionnaireForm" v-model="valid" lazy-validation>
           <v-row align="center">
             <v-col class="form-create-wrap font-weight-bold">
               <v-col class="wrap">
@@ -21,6 +21,7 @@
                               <v-col class="q-item q-title-wrap">
                                 <div class="q-title">
                                   <v-col class="li">
+                                    第 {{ idx+1 }} 題 
                                     <div class="q-area font-weight-bold">
                                       {{ question.title }}
                                     </div>
@@ -32,6 +33,7 @@
                                   <v-radio-group
                                     v-model="userAnswers[idx]"
                                     :rules="[rules.checkSelected(question.required)]"
+                                    :disabled="isView"
                                     row
                                   >
                                     <v-radio
@@ -39,6 +41,7 @@
                                       :key="idx1"
                                       :label="answer.label"
                                       :value="answer.value"
+                                      @change="setAnswerValue(question.questionId , answer.answerId ,answer.value)"
                                     />
                                   </v-radio-group>
                                 </div>
@@ -60,8 +63,7 @@
                                 下一題 <v-icon v-text="'mdi-chevron-right'" />
                               </v-btn>
                               <v-btn
-                                v-if="idx === questionnaire.questions.length - 1 "
-                                :disabled="!valid"
+                                v-if="idx === questionnaire.questions.length - 1 && !isView"
                                 class="mr-1"
                                 depressed
                                 color="success"
@@ -77,31 +79,14 @@
                   </v-col>
                 </v-col>
               </v-col>
-              <v-col class="d-flex justify-center">
+              <v-col v-if="!isView" class="d-flex justify-center">
                 <v-btn
-                  :disabled="!valid"
                   class="mr-1"
                   depressed
                   color="success"
-                  @click="nextStep"
+                  @click="submit"
                 >
                   提交問卷 <v-icon v-text="'mdi-clipboard-text-multiple'" />
-                </v-btn>
-                <v-btn
-                  class="mr-1"
-                  color="accent"
-                  depressed
-                  @click="validate"
-                >
-                  驗證
-                </v-btn>
-                <v-btn
-                  color="warning"
-                  class="mr-1"
-                  depressed
-                  @click="reset"
-                >
-                  重置表單
                 </v-btn>
               </v-col>
             </v-col>
@@ -115,13 +100,21 @@
 <script>
   import MessageService from "@/assets/services/message.service";
   import AjaxService from "@/assets/services/ajax.service";
-  import { fetchQuestionnaire , fetchActiveQuestionnaire } from '@/api/questionnaire'
+  import { fetchEditQuestionnaire , fetchActiveQuestionnaire , submitQuestionnaireAnswer} from '@/api/questionnaire'
 
+  const defaultForm = {
+    questionnaireId: '',
+    questionnaireName: '',
+    acceptNum: '',
+    questions: [{
+      questionId: '',
+    }]
+  }
   export default {
     components: {
     },
     props: {
-      isEdit: {
+      isView: {
         type: Boolean,
         default: false
       }
@@ -129,6 +122,7 @@
     data () {
       return {
         userAnswers: [],
+        postForm: Object.assign({}, defaultForm),
         stepEl: 0,
         valid: false,
         rules: {
@@ -145,19 +139,11 @@
         return this.stepEl
       }
     },
-    // created() {
-    //   if (this.isEdit) {
-    //     const id = this.$route.params && this.$route.params.id
-    //     this.fetchActiveQuestionnaire(id)
-    //   }
-    // },
     mounted() { //initial data
-      if (this.isEdit) {
-        this.fetchActiveQuestionnaire()
-      } else {
+      if (this.isView) {
         const id = this.$route.params && this.$route.params.id
-        console.log(id)
-        // this.fetchActiveQuestionnaire(id)
+        this.fetchQuestionnaire(id)
+      } else {
         this.fetchActiveQuestionnaire()
       }
     },
@@ -172,6 +158,13 @@
         if (classList.contains('el-icon-delete') || classList.contains('icon-copy') || this.focusIndex === i) return
         this.focusIndex = i
       },
+      setAnswerValue (questionId,answerId,answerValue) {
+        console.log('question.questionId:' , questionId , 'answer.answerId:' , answerId , 'answer.value:' , answerValue)
+        const question = this.postForm.questions.find((value) => value.questionId===questionId)
+        question.userAnswerId = answerId
+        question.userAnswerValue = answerValue
+      },
+
       nextStep () {
         this.stepEl = this.stepEl + 1
       },
@@ -179,7 +172,9 @@
         this.stepEl = this.stepEl - 1
       },
       submit() {
-        if (this.$refs.form.validate()) {
+        const postData = { questionnaire : this.postForm}
+        if (this.$refs.questionnaireForm.validate()) {
+          submitQuestionnaireAnswer(postData)
           MessageService.showSuccess('作答成功' + "✓")
         }else{
           this.$nextTick(() => {
@@ -195,21 +190,6 @@
       reset () {
         this.$refs.form.reset()
       },
-      validate() {
-        if (this.$refs.form.validate()) {
-          MessageService.showSuccess('作答成功' + "✓")
-        }else{
-          this.$nextTick(() => {
-            this.$el.querySelector(".q-li-focus").classList.remove('q-li-focus');
-            const el = this.$el.querySelector(".error--text:first-of-type").parentElement.closest("#items");
-            el.classList.add('q-li-focus')
-            // this.$vuetify.goTo(el);
-            this.stepEl = Number(el.dataset.step)
-            return;
-          });
-        }
-      },
-
 
       /**
        * 
@@ -221,10 +201,13 @@
       async fetchActiveQuestionnaire() {
         const data = await fetchActiveQuestionnaire()
         this.questionnaire = data.restData.questionnaire
+        
+        Object.keys(this.questionnaire).filter(key => key in this.postForm).forEach(key => this.postForm[key] = this.questionnaire[key]);
+        console.log('this.postForm',this.postForm)
         this.$nextTick(() => {this.stepEl = 1});
       },
       async fetchQuestionnaire(id) {
-        const data = await fetchQuestionnaire(id)
+        const data = await fetchEditQuestionnaire(id)
         this.questionnaire = data.restData.questionnaire
         this.$nextTick(() => {this.stepEl = 1});
       },

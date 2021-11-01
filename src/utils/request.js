@@ -3,7 +3,7 @@ import MessageService from '@/assets/services/message.service.js';
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   headers: { 'Content-Type': 'application/json' }, //body content type
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout

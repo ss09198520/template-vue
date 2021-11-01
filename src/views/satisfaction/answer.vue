@@ -1,5 +1,5 @@
 <template>
-  <questionnaire-view :is-edit="true" />
+  <questionnaire-view :is-view="false" />
 </template>
 
 <script>

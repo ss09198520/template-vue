@@ -7,10 +7,17 @@ export function fetchActiveQuestionnaire() {
   })
 }
 
-export function fetchQuestionnaire(id) {
+export function fetchEditQuestionnaire(id) {
   return request({
-    url: '/questionnaire/v1/active',
+    url: `/questionnaire/v1/fetch/${id}`,
     method: 'get',
-    params: { id }
+  })
+}
+
+export function submitQuestionnaireAnswer(data) {
+  return request({
+    url: '/questionnaire/v1/submitAnswer',
+    method: 'post',
+    data
   })
 }

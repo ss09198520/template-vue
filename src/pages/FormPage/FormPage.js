@@ -317,7 +317,7 @@ export default {
             reader.readAsDataURL(this.selectedAttachment.file);
         },
         viewImage(image){
-            this.viewImageTitle = image.name;
+            this.viewImageTitle = image.fileName;
             if(image.imgSrc.indexOf("data:image") > -1){
                 this.viewImageSrc = image.imgSrc;
             }

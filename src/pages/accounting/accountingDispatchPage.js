@@ -278,99 +278,40 @@ export default {
       });
     },
 
-    // Action:查詢派工設定
-     queryDispatch(item){
-      // 查詢選取的派工資訊-先放Mock資料
-      let dispatchList = [
-        { 
-          seq:'1',
-          className:'1',
-          accounting: '1050434019', 
-          accountingName: '王大明', 
-          calculate: '1050434017',
-          calculateName: '葉星辰',
-          type:'P',
-          status:'ACTIVE',
-          computeDate:'',
-          electricNumStart:'07140000000',
-          electricNumEnd:'07140000099',
-        },
-        {
-          seq:'1',
-          className:'1',
-          accounting: '1050434019', 
-          accountingName: '王大明', 
-          calculate: '1050434017',
-          calculateName: '葉星辰',
-          type:'P',
-          status:'ACTIVE',
-          computeDate:'',
-          electricNumStart:'07140000200',
-          electricNumEnd:'07140000299',
-        },
-        {
-          seq:'1',
-          className:'1',
-          accounting: '1050434019', 
-          accountingName: '王大明', 
-          calculate: '1050434017',
-          calculateName: '葉星辰',
-          type:'H',
-          status:'ACTIVE',
-          computeDate:'',
-          electricNumStart:'07140000300',
-          electricNumEnd:'07140000399',
-        },
-        {
-          seq:'1',
-          className:'1',
-          accounting: '1050434019', 
-          accountingName: '王大明', 
-          calculate: '1050434017',
-          calculateName: '葉星辰',
-          type:'H',
-          status:'ACTIVE',
-          computeDate:'',
-          electricNumStart:'07140000400',
-          electricNumEnd:'07140000499',
-        },
-        {
-          seq:'1',
-          className:'1',
-          accounting: '1050434019', 
-          accountingName: '王大明', 
-          calculate: '1050434017',
-          calculateName: '葉星辰',
-          type:'F',
-          status:'ACTIVE',
-          computeDate:'01',
-          electricNumStart:'',
-          electricNumEnd:'',
-        },
-        {
-          seq:'1',
-          className:'1',
-          accounting: '1050434019', 
-          accountingName: '王大明', 
-          calculate: '1050434017',
-          calculateName: '葉星辰',
-          type:'F',
-          status:'ACTIVE',
-          computeDate:'15',
-          electricNumStart:'',
-          electricNumEnd:'',
-        },
-      ];
+    // Action:依核算員編號查詢啟用的核算派工設定資料
+    queryDispatchByAccounting(item){
+      AjaxService.post('/accountingDispatch/queryDispatchByAccounting',
+      {
+        accounting:item.accounting,
+      },
+      (response) => {
+          // 驗證是否成功
+          if (!response.restData.success) {              
+              MessageService.showError(response.restData.returnMessage,'依核算員編號查詢啟用的核算派工設定資料');
+              return;
+          }
 
-      // 整理資料
-      this.sortDispatchData(dispatchList);
-          
-      // 記下這次修改的 item
-      this.editIndex = this.dispatchList.indexOf(item);
-      // 切換 dialog 模式
-      this.changeDialog('edit');
-      // 打開 dialog
-      this.dialog = true;
+          // 驗證formList是否有資料
+          if(ValidateUtil.isEmpty(response.restData.dispatchList) || response.restData.dispatchList.length < 1 ){
+            MessageService.showInfo('查無相關資料');
+            return;
+        }
+            // 整理資料
+            this.sortDispatchData(response.restData.dispatchList);
+                
+            // 記下這次修改的 item
+            this.editIndex = this.dispatchList.indexOf(item);
+            // 切換 dialog 模式
+            this.changeDialog('edit');
+            // 打開 dialog
+            this.dialog = true;
+
+      },
+      // eslint-disable-next-line no-unused-vars
+      (response) => {                
+          MessageService.showSystemError();
+      });
+
 
      },
 

@@ -57,7 +57,7 @@
                     fab
                     small                
                     v-on="on"
-                    @click="queryDispatch(item)"
+                    @click="queryDispatchByAccounting(item)"
                   >
                     <v-icon>mdi-account-edit-outline</v-icon>
                   </v-btn>

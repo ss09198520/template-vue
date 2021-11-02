@@ -96,7 +96,7 @@
                         </v-btn>
                       </v-col>
                       <v-col v-if="mode == 'edit'" cols="6" class="t-center">
-                        <v-btn depressed color="primary">
+                        <v-btn depressed color="primary" @click="scanCertificate(certificate)">
                           掃描
                           <v-icon
                             right
@@ -162,11 +162,11 @@
                       <v-col>
                         <div class="img-area d-center">
                           <img v-if="attachment.imgSrc" style="width: 100%; max-height: 100%" :src="attachment.imgSrc">
-                          <div v-else-if="attachment.file" class="t-center">
+                          <div v-else-if="attachment.base64" class="t-center">
                             <v-icon x-large class="mb-2">
                               mdi-file-document-outline
                             </v-icon><br>
-                            {{ attachment.file.name }}
+                            {{ attachment.originalFileName }}
                           </div>
                           <div v-else-if="mode == 'viewMyRead' || mode == 'viewMyForm'">
                             <span>附件檔名</span>
@@ -181,7 +181,7 @@
                     <v-row>
                       <v-col cols="12" class="d-center">
                         <v-checkbox 
-                          v-model="attachment.useStamp" 
+                          v-model="attachment.needSeal" 
                           :disabled="mode != 'edit' || mode == 'view'"
                           class="mt-0" 
                           label="套印專用章" 
@@ -233,7 +233,7 @@
                         </v-btn>
                       </v-col>
                       <v-col v-else cols="12" class="t-center mt-3">
-                        <v-btn depressed color="primary" :disabled="!attachment.file">
+                        <v-btn depressed color="primary" :disabled="!attachment.base64">
                           下載
                           <v-icon
                             right
@@ -282,11 +282,11 @@
                       <v-col>
                         <div class="img-area d-center">
                           <img v-if="attachment.imgSrc" style="width: 100%; max-height: 100%" :src="attachment.imgSrc">
-                          <div v-else-if="attachment.file" class="t-center">
+                          <div v-else-if="attachment.base64" class="t-center">
                             <v-icon x-large class="mb-2">
                               mdi-file-document-outline
                             </v-icon><br>
-                            {{ attachment.file.name }}
+                            {{ attachment.originalFileName }}
                           </div>
                           <div v-else class="not-scan-area">
                             <span>證明函檔案</span>
@@ -298,7 +298,7 @@
                     <!-- <v-row>
                       <v-col cols="12" class="d-center">
                         <v-checkbox 
-                          v-model="attachment.useStamp" 
+                          v-model="attachment.needSeal" 
                           :disabled="mode != 'edit'"
                           class="mt-0" 
                           label="套印專用章" 
@@ -350,7 +350,7 @@
                         </v-btn>
                       </v-col>
                       <v-col v-else cols="12" class="t-center">
-                        <v-btn depressed color="primary" :disabled="!attachment.file">
+                        <v-btn depressed color="primary" :disabled="!attachment.base64">
                           下載
                           <v-icon
                             right
@@ -399,11 +399,11 @@
                       <v-col>
                         <div class="img-area d-center">
                           <img v-if="attachment.imgSrc" style="width: 100%; max-height: 100%" :src="attachment.imgSrc">
-                          <div v-else-if="attachment.file" class="t-center">
+                          <div v-else-if="attachment.base64" class="t-center">
                             <v-icon x-large class="mb-2">
                               mdi-file-document-outline
                             </v-icon><br>
-                            {{ attachment.file.name }}
+                            {{ attachment.originalFileName }}
                           </div>
                           <div v-else class="not-scan-area">
                             <span>證明函檔案</span>
@@ -415,7 +415,7 @@
                     <!-- <v-row>
                       <v-col cols="12" class="d-center">
                         <v-checkbox 
-                          v-model="attachment.useStamp" 
+                          v-model="attachment.needSeal" 
                           :disabled="mode != 'edit'"
                           class="mt-0" 
                           label="套印專用章" 
@@ -467,7 +467,7 @@
                         </v-btn>
                       </v-col>
                       <v-col v-else cols="12" class="t-center">
-                        <v-btn depressed color="primary" :disabled="!attachment.file">
+                        <v-btn depressed color="primary" :disabled="!attachment.base64">
                           下載
                           <v-icon
                             right
@@ -530,7 +530,7 @@
       </v-row>
       <v-row v-if="mode == 'edit'">
         <v-col cols="12" class="t-right">
-          <v-btn depressed large color="success" @click="saveFile()">
+          <v-btn depressed large color="success" @click="save()">
             <span style="font-size: 18px">儲存</span>
             <v-icon
               right

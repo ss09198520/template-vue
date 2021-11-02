@@ -52,8 +52,10 @@ export default {
             uploadNo: null,     // 證件編號
             signPreviewImgSrc: "",
             certificateList: [],
+            oriCertificateList: [],
             certificateNo: 1,
             attachmentList: [],
+            oriAttachmentList: [],
             //Mock的prototype
             attachmentListMockBefore: [{id: '1',fileName:'證明函(未套印)'}],
             attachmentListMockAfter: [{id: '1',fileName:'證明函(未套印)'},{id: '2',fileName:'證明函(套印完成)'}],
@@ -146,10 +148,10 @@ export default {
                     return;
                 }
 
+                this.formSeq = response.restData.formSeq;
                 // 整理證件及附件
                 this.setCertificateList(response.restData.certificateList);
                 this.setAttachmentList(response.restData.attachmentList);
-                
             },
             (error) => {
                 MessageService.showSystemError();
@@ -157,30 +159,48 @@ export default {
             });
         },
         setCertificateList(certificateList){
+            this.certificateList = [];
+            this.oriCertificateList = [];
+
             if(!ValidateUtil.isEmpty(certificateList)){
                 for (let certificate of certificateList) {
                     this.certificateList.push({
                         id: this.certificateNo,
                         fileName: certificate.fileName,
+                        originalFileName: certificate.originalFileName,
                         fileNo: certificate.fileNo,
+                        filePath: certificate.filePath,
                         imgSrc: certificate.imgSrc,
                         isAdditional: false,
+                        hasEdit: false,
                     });
                     this.certificateNo++;
                 }
+
+                this.oriCertificateList = Array.from(this.certificateList);
             }
         },
         setAttachmentList(attachmentList){
+            this.attachmentList = [];
+            this.oriAttachmentList = [];
+
             if(!ValidateUtil.isEmpty(attachmentList)){
                 for (let attachment of attachmentList) {
                     this.attachmentList.push({
                         id: this.attachmentNo,
                         fileName: attachment.fileName,
+                        originalFileName: attachment.originalFileName,
                         fileNo: attachment.fileNo,
-                        imgSrc: attachment.imgSrc
+                        filePath: attachment.filePath,
+                        imgSrc: attachment.imgSrc,
+                        base64: attachment.base64,
+                        hasEdit: false,
+                        needSeal: false,
                     });
                     this.attachmentNo++;
                 }
+
+                this.oriAttachmentList = Array.from(this.attachmentList);
             }
         },
         openFormSignPage(){
@@ -205,16 +225,30 @@ export default {
             this.newCertificateType = index;
         },
         addCertificate(){
+            let fileName = this.newCertificateType === 4 ? this.otherCertificate : this.certificateOptions[this.newCertificateType];
+            
+            if(!ValidateUtil.isEmpty(this.certificateList)){
+                for(let certificate of this.certificateList){
+                    if(fileName == certificate.fileName){
+                        MessageService.showInfo("不可加入已有相同名稱的證件");
+                        return;
+                    }
+                }
+            }
+
             this.certificateList.push({
                 id: this.certificateNo,
                 // 4: 其他證件，須由使用者輸入證件類別
-                fileName: this.newCertificateType === 4 ? this.otherCertificate : this.certificateOptions[this.newCertificateType],
-                fileNo: "",
-                imgSrc: "",
-                isAdditional: false,
+                fileName: fileName,
+                fileNo: null,
+                imgSrc: null,
+                isAdditional: true,
             });
             this.certificateNo ++;
             this.newCertificateModal = false;
+        },
+        scanCertificate(certificate){
+            certificate.hasEdit = true;
         },
         openNewAttachmentModal(){
             this.newAttachmentModal = true;
@@ -225,14 +259,25 @@ export default {
             this.newAttachmentType = index;
         },
         addAttachment(){
+            let fileName = this.newAttachmentType === 7 ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType];
+            
+            if(!ValidateUtil.isEmpty(this.attachmentList)){
+                for(let attachment of this.attachmentList){
+                    if(fileName == attachment.fileName){
+                        MessageService.showInfo("不可加入已有相同名稱的附件");
+                        return;
+                    }
+                }
+            }
+
             this.attachmentList.push({
                 id: this.attachmentNo,
                 // 7: 其他佐證文件，須由使用者輸入附件類別
-                fileName: this.newAttachmentType === 7 ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType],
-                fileNo: "",
-                imgSrc: "",
+                fileName: fileName,
+                fileNo: null,
+                imgSrc: null,
                 file: null,
-                useStamp: false,
+                needSeal: false,
                 isSelecting: false
             });
             this.attachmentNo++;
@@ -241,22 +286,26 @@ export default {
         uploadFile(attachment, index) {
             this.selectedAttachment = attachment;
             this.selectedAttachment.isSelecting = true
+            this.selectedAttachment.hasEdit = true;
             window.addEventListener('focus', () => {
                 this.selectedAttachment.isSelecting = false
-            }, { once: true })
+            }, { once: true });
       
-            this.$refs.uploaders[index].click()
+            this.$refs.uploaders[index].click();
         },
         onFileChanged(e) {
             this.selectedAttachment.file = e.target.files[0];
+            // 取出檔案名稱
+            this.selectedAttachment.originalFileName = this.selectedAttachment.file.name;
             
-            if(this.selectedAttachment.file.type.indexOf("image") > -1){
-                let reader = new FileReader();
-                reader.onload = (e) =>{
+            let reader = new FileReader();
+            reader.onload = (e) =>{
+                this.selectedAttachment.base64 = e.target.result;
+                if(this.selectedAttachment.file.type.indexOf("image") > -1){
                     this.selectedAttachment.imgSrc = e.target.result;
-                };
-                reader.readAsDataURL(this.selectedAttachment.file);
-            }
+                }
+            };
+            reader.readAsDataURL(this.selectedAttachment.file);
         },
         viewImage(image){
             this.viewImageTitle = image.name;
@@ -272,12 +321,162 @@ export default {
             this.showModeSelect = false;
             setTimeout(() => this.showModeSelect = true, 5000);
         },
-        // save(){
-        //     if(this.restrictMode){
-        //         //當點擊儲存按鈕，則使用EventBus通知可關閉
-        //         EventBus.publish('saveFile');
-        //     }
-        // },
+        save(){
+            let vin = this.setSaveFormVin();
+
+            AjaxService.post("/tpesForm/save", vin, 
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.message,'儲存表單');
+                    return;
+                }
+
+                MessageService.showSuccess("儲存成功");
+                // 重新查詢一次
+                this.formInit();
+            },
+            (error) => {
+                MessageService.showSystemError();
+                console.log(error);
+            });
+
+            if(this.restrictMode){
+                //當點擊儲存按鈕，則通知父層可關閉
+                this.$emit("saveFile");
+            }
+        },
+        setSaveFormVin(){
+            let addFileList = [];
+            let modifyFileList = [];
+            let deleteFileList = [];
+
+            // 整理有變更的證件及附件
+            // 新增/修改 證件
+            if(!ValidateUtil.isEmpty(this.certificateList)){
+                for(let certificate of this.certificateList){
+                    // 新增
+                    if(ValidateUtil.isEmpty(certificate.fileNo) && !ValidateUtil.isEmpty(certificate.base64)){
+                        addFileList.push({
+                            category: "CERTIFICATE",
+                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileName: certificate.fileName,
+                            originalFileName: certificate.fileName,
+                            fileExt: this.getFileExt(certificate.fileName),
+                            base64: certificate.base64.split(",")[1],
+                            formSeq: this.formSeq
+                        });
+                    }
+                    // 修改
+                    else if(certificate.hasEdit && !ValidateUtil.isEmpty(certificate.base64)){
+                        modifyFileList.push({
+                            fileNo: certificate.fileNo,
+                            category: "CERTIFICATE",
+                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileName: certificate.fileName,
+                            originalFileName: certificate.fileName,
+                            fileExt: this.getFileExt(certificate.fileName),
+                            base64: certificate.base64.split(",")[1],
+                            formSeq: this.formSeq
+                        });
+                    }
+                }
+            }
+            // 刪除證件 (相同的 fileNo 還存在就不刪，其餘皆刪)
+            if(!ValidateUtil.isEmpty(this.oriCertificateList)){
+                for(let oriCertificate of this.oriCertificateList){
+                    let isDelete = true;
+                    if(!ValidateUtil.isEmpty(this.certificateList)){
+                        for(let certificate of this.certificateList){
+                            if(!ValidateUtil.isEmpty(oriCertificate.fileNo) && oriCertificate.fileNo == certificate.fileNo){
+                                isDelete = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if(isDelete){
+                        deleteFileList.push({
+                            fileNo: oriCertificate.fileNo,
+                            fileName: oriCertificate.fileName,
+                            filePath: oriCertificate.filePath
+                        });
+                    }
+                }
+            }
+
+            // 新增/修改 附件
+            if(!ValidateUtil.isEmpty(this.attachmentList)){
+                for(let attachment of this.attachmentList){
+                    // 新增
+                    if(ValidateUtil.isEmpty(attachment.fileNo) && !ValidateUtil.isEmpty(attachment.base64)){
+                        addFileList.push({
+                            category: "ATTACHMENT",
+                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileName: attachment.fileName,
+                            originalFileName: attachment.originalFileName,
+                            fileExt: this.getFileExt(attachment.originalFileName),
+                            base64: attachment.base64.split(",")[1],
+                            formSeq: this.formSeq,
+                            needSeal: attachment.needSeal
+                        });
+                    }
+                    // 修改
+                    else if(attachment.hasEdit && !ValidateUtil.isEmpty(attachment.base64)){
+                        modifyFileList.push({
+                            fileNo: attachment.fileNo,
+                            category: "ATTACHMENT",
+                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileName: attachment.fileName,
+                            originalFileName: attachment.originalFileName,
+                            fileExt: this.getFileExt(attachment.originalFileName),
+                            base64: attachment.base64.split(",")[1],
+                            formSeq: this.formSeq
+                        });
+                    }
+                }
+            }
+            // 刪除附件 (相同的 fileNo 還存在就不刪，其餘皆刪)
+            if(!ValidateUtil.isEmpty(this.oriAttachmentList)){
+                for(let oriAttachment of this.oriAttachmentList){
+                    let isDelete = true;
+                    if(!ValidateUtil.isEmpty(this.attachmentList)){
+                        for(let attachment of this.attachmentList){
+                            if(!ValidateUtil.isEmpty(oriAttachment.fileNo) && oriAttachment.fileNo == attachment.fileNo){
+                                isDelete = false;
+                                break;
+                            }
+                        }
+                    }
+
+                    if(isDelete){
+                        deleteFileList.push({
+                            fileNo: oriAttachment.fileNo,
+                            fileName: oriAttachment.fileName,
+                            filePath: oriAttachment.filePath
+                        });
+                    }
+                }
+            }
+
+            let vin = {
+                acceptNum: this.acceptNum,
+                formSeq: this.formSeq,
+                addFileList: addFileList,
+                modifyFileList: modifyFileList,
+                deleteFileList: deleteFileList,
+            };
+
+            return vin;
+        },
+        getFileExt(fileName){
+            let fileExt = null;
+            if(!ValidateUtil.isEmpty(fileName)){
+                let fileNameArr = fileName.split('.');
+                fileExt = "." + fileNameArr[fileNameArr.length - 1];
+            }
+            return fileExt;
+        },
         retrunOrder(){
             this.$emit("returnOrder",this.accountingMemo);
         },
@@ -287,9 +486,6 @@ export default {
         saveComments(){
             // 將待審核備註一併傳回給父層
             this.$emit("saveComments",this.accountingMemo);
-        },
-        saveFile(){
-            this.$emit("saveFile");
         }
     }
 }

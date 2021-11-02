@@ -73,7 +73,9 @@ export default {
             newCertificateModal: false,
             newAttachmentModal: false,
             otherCertificate: '',
-            otherAttachment: ''
+            otherAttachment: '',
+            isBlocking: false,
+            blockingMsg: null,
         }
     },
     methods: {
@@ -117,6 +119,13 @@ export default {
             }
         },
         formInit(){
+            // 驗證是否有受理編號，若無直接擋件
+            if(ValidateUtil.isEmpty(this.acceptNum)){
+                this.isBlocking = true;
+                this.blockingMsg = "查無受理編號";
+                return;
+            }
+            
             let param = {
                 acceptNum: this.acceptNum,
                 formType: this.formType,

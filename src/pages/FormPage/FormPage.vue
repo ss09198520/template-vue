@@ -1,5 +1,9 @@
 <template>
   <v-app>
+    <!-- 擋件區 -->
+    <div v-if="isBlocking" class="blocking-area">
+      <span class="blocking-text" v-html="blockingMsg" />
+    </div>
     <v-container>
       <v-row>
         <v-col v-show="showModeSelect" cols="3">
@@ -924,5 +928,26 @@
     .chip-text-field >>> .v-text-field__slot input::placeholder{
         color: white !important;
         opacity: 0.8;
+    }
+    .blocking-area{
+        background-color: black;
+        opacity: 0.8;
+        font-size: 32px;
+        z-index: 999;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        left: 0px;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .blocking-text{
+        font-size: 60px;
+        font-weight: bold;
+        color: white;
+        text-align: center;
     }
 </style>

@@ -1,5 +1,6 @@
 import MessageService from "@/assets/services/message.service";
 import ValidateUtil from "@/assets/services/validateUtil";
+import AjaxService from "@/assets/services/ajax.service";
 
 export default {
   name: 'MyWaiting',
@@ -17,7 +18,7 @@ export default {
         { text: '核算員', value: 'accounting', align: 'center' },      
         { text: '檢算員', value: 'calculate', align: 'center' },       
         { text: '設定人員', value: 'settingUser', align: 'center' },       
-        { text: '設定日期', value: 'settingDate', align: 'center' },
+        { text: '設定日期', value: 'createDate', align: 'center' },
         { text: '狀態操作', value: 'edit', align: 'center' }
       ],
       // 派工設定清單
@@ -101,7 +102,8 @@ export default {
   },
   methods: {
     init(){
-      this.queryInit();
+      this.queryAccountingDispatchInfo();
+      this.queryAccountingDispatchOption();
     },
     // 開啟新增派工 dialog
     newDispatch(){
@@ -227,50 +229,53 @@ export default {
      */
 
 
-    // Action:初始化
-    queryInit(){
-      let dispatchList = [        
-          { 
-            className: '1', 
-            accounting: '1050434018', 
-            accountingName: '王大明', 
-            calculate: '1050434017',
-            calculateName: '葉星辰',
-            settingUser: '1050334016', 
-            settingUserName: '李小凡', 
-            settingDate: '2021-09-11 10:55:31', 
-          },
-          { 
-            className: '2', 
-            accounting: '1050434019', 
-            accountingName: '李阿貴', 
-            calculate: '1050434017',
-            calculateName: '葉星辰',
-            settingUser: '1050334016', 
-            settingUserName: '李小凡', 
-            settingDate: '2021-09-11 10:57:13', 
+    // Action:查詢全部啟用中的核算派工資料
+    queryAccountingDispatchInfo(){
+      AjaxService.post('/accountingDispatch/queryAccountingDispatchInfo',{},
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.returnMessage,'查詢全部啟用中的核算派工資料');
+                    return;
+                }
+                // 驗證formList是否有資料
+                if(ValidateUtil.isEmpty(response.restData.dispatchList) || response.restData.dispatchList.length < 1 ){
+                    MessageService.showInfo('查無相關資料');
+                    return;
+                }
+
+                // 將取得的資料放進前端參數中
+                this.dispatchList = response.restData.dispatchList;
+
+            },
+            // eslint-disable-next-line no-unused-vars
+            (response) => {                
+                MessageService.showSystemError();
+            });
+          
+    },
+
+    // Action: 查詢核算員檢算員下拉選單
+    queryAccountingDispatchOption(){
+      AjaxService.post('/accountingDispatch/queryAccountingDispatchOption',{},
+      (response) => {
+          // 驗證是否成功
+          if (!response.restData.success) {              
+              MessageService.showError(response.restData.returnMessage,'查詢核算員檢算員下拉選單');
+              return;
           }
-      ];
 
-      let  accountingList = [
-        {empNo:'105012121', empName:'李小凡'},
-        {empNo:'105012122', empName:'葉星辰'},
-        {empNo:'105012123', empName:'王大明'},
-      ];
+          // 將取得的資料放進前端參數中
+          this.accountingList = response.restData.accountingList;
+          this.calculateList = response.restData.calculateList;
+          this.oriAccoutingList = JSON.parse(JSON.stringify(response.restData.accountingList));
+          this.oriCalculateList = JSON.parse(JSON.stringify(response.restData.calculateList));
 
-      let calculateList = [
-        {empNo:'105012124', empName:'連家齊'},
-        {empNo:'105012125', empName:'甄文君'},
-        {empNo:'105012126', empName:'君令偉'},
-      ];
-
-      this.dispatchList = dispatchList;
-      this.accountingList = accountingList;
-      this.calculateList = calculateList;
-      this.oriAccoutingList = JSON.parse(JSON.stringify(accountingList));
-      this.oriCalculateList = JSON.parse(JSON.stringify(calculateList));
-
-
+      },
+      // eslint-disable-next-line no-unused-vars
+      (response) => {                
+          MessageService.showSystemError();
+      });
     },
 
     // Action:查詢派工設定

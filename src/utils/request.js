@@ -72,22 +72,18 @@ service.interceptors.response.use(
       // Http error code 的處理
       switch (error.response.status) {
         case 404:
-          console.log('你要找的頁面不存在')
           // go to 404 page
+          MessageService.showError('你要找的頁面不存在');
           break
         case 500:
-          console.log('程式發生問題')
-          // go to 500 page
+          console.log('系統發生問題')
+          MessageService.showSystemError();
           break
         default:
           console.log(error.message)
+          MessageService.showSystemError();
       }
     }
-    // Message({
-    //   message: error.message,
-    //   type: 'error',
-    //   duration: 5 * 1000
-    // })
     return Promise.reject(error)
   }
 )

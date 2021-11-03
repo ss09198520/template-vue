@@ -7,6 +7,14 @@ export function fetchActiveQuestionnaire() {
   })
 }
 
+export function fetchQuestionnaireList(data) {
+  return request({
+    url: '/questionnaire/v1/list',
+    method: 'post',
+    data
+  })
+}
+
 export function fetchEditQuestionnaire(id) {
   return request({
     url: `/questionnaire/v1/fetch/${id}`,

@@ -99,11 +99,11 @@
 
 <script>
   import MessageService from "@/assets/services/message.service";
-  import AjaxService from "@/assets/services/ajax.service";
   import { fetchEditQuestionnaire , fetchActiveQuestionnaire , submitQuestionnaireAnswer} from '@/api/questionnaire'
+  import isEmpty from 'lodash/isEmpty'
 
   const defaultForm = {
-    questionnaireId: '',
+    questionnaireId: undefined,
     questionnaireName: '',
     acceptNum: '',
     questions: [{
@@ -171,11 +171,17 @@
       prevStep () {
         this.stepEl = this.stepEl - 1
       },
+      reset () {
+        this.$refs.form.reset()
+      },
+      // 送出問卷作答
       submit() {
-        const postData = { questionnaire : this.postForm}
+        //API post data 
+        this.postForm.acceptNum = this.$route.query.acceptNum
+        const postData = { questionnaireAnswer : this.postForm}
+
         if (this.$refs.questionnaireForm.validate()) {
-          submitQuestionnaireAnswer(postData)
-          MessageService.showSuccess('作答成功' + "✓")
+          this.submitForm(postData)
         }else{
           this.$nextTick(() => {
             this.$el.querySelector(".q-li-focus").classList.remove('q-li-focus');
@@ -187,8 +193,18 @@
           });
         }
       },
-      reset () {
-        this.$refs.form.reset()
+
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+      hasResult (questionnaire) {
+        // 驗證questionnaire是否有資料
+        if(isEmpty(questionnaire) || questionnaire.questions.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
+        }
+        return true
       },
 
       /**
@@ -196,51 +212,52 @@
        * Ajax start 
        * 
        **/
-
-      // Action:頁面初始化
+      
+      // Action:問卷作答頁面初始化
       async fetchActiveQuestionnaire() {
         const data = await fetchActiveQuestionnaire()
-        this.questionnaire = data.restData.questionnaire
-        
-        Object.keys(this.questionnaire).filter(key => key in this.postForm).forEach(key => this.postForm[key] = this.questionnaire[key]);
-        console.log('this.postForm',this.postForm)
-        this.$nextTick(() => {this.stepEl = 1});
-      },
-      async fetchQuestionnaire(id) {
-        const data = await fetchEditQuestionnaire(id)
-        this.questionnaire = data.restData.questionnaire
-        this.$nextTick(() => {this.stepEl = 1});
+        // 驗證是否成功
+        if (!data.restData.success) {              
+            MessageService.showError(data.restData.returnMessage,'查詢問卷上架資料');
+            return;
+        }
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.questionnaire)){
+          this.questionnaire = data.restData.questionnaire
+          //填答時先將固定回傳資料Assign 進 postForm
+          Object.keys(this.questionnaire).filter(key => key in this.postForm).forEach(key => this.postForm[key] = this.questionnaire[key]);
+          this.$nextTick(() => {this.stepEl = 1});
+        }
       },
       
-
-      // Action:頁面初始化
-      initData(){          
-        AjaxService.get('http://localhost:8082/questionnaire/v1/active',{},
-        (response) => {
-            console.log(response)
-            // // 驗證是否成功
-            // if (!response.resultMessage.success) {              
-            //     MessageService.showError(response.resultMessage.returnMessage,'查詢我的表單初始資料');
-            //     return;
-            // }
-            //  // 驗證formList是否有資料
-            // if(ValidateUtil.isEmpty(response.formList) || response.formList.length < 1 ){
-            //     MessageService.showInfo('查無相關資料');
-            //     return;
-            // }
-
-            // 將取得的資料放進前端參數中
-            this.formList = response.formList;
-            this.numberOfAccept = response.numberOfAccept;
-            this.numberOfAgent = response.numberOfAgent;
-            // 從後端取得案件清單，先複製一份，先暫時放init，之後會移到ajax打後端後取得資料直接複製
-            this.oriFormList = JSON.parse(JSON.stringify(response.formList));
-        },
-        // eslint-disable-next-line no-unused-vars
-        (response) => {                
-            MessageService.showSystemError();
-        });     
+      //Action:問卷預覽頁面初始化
+      async fetchQuestionnaire(id) {
+        const data = await fetchEditQuestionnaire(id)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+            MessageService.showError(data.restData.returnMessage,'查詢問卷詳細資料');
+            return;
+        }
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.questionnaire)){
+          this.questionnaire = data.restData.questionnaire
+          this.hasResult(this.questionnaire)
+          this.$nextTick(() => {this.stepEl = 1});
+        }
       },
+
+      //Action:問卷預覽頁面初始化
+      async submitForm(postData) {
+        const data = await submitQuestionnaireAnswer(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+            MessageService.showError(data.restData.message,'送出問卷作答資料');
+            return;
+        }
+
+        MessageService.showSuccess('作答成功' + "✓")
+      },
+      
     }
   }
 </script>

@@ -35,12 +35,12 @@
                       <v-icon dark size="7vh">
                         mdi-file-document-outline
                       </v-icon><br>
-                      <div v-if="formPageMode==='accounting' || formPageMode=='viewSealSignOffAfter'" class="big-btn-text mt-2">檢視表單</div>
+                      <div v-if="formPageMode==='accounting' || formPageMode=='view'" class="big-btn-text mt-2">檢視表單</div>
                       <div v-else class="big-btn-text mt-2">開啟表單及簽名</div>
                     </span>
                   </v-btn>
                 </v-col>
-                <v-col v-if="formPageMode!=='accounting' || formPageMode=='viewSealSignOffAfter'" cols="6">
+                <v-col v-if="formPageMode!=='accounting' || formPageMode=='view'" cols="6">
                   <div class="sign-preview-area">
                     <span>簽名預覽</span>
                     <img v-if="signPreviewImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + signPreviewImgSrc">
@@ -110,7 +110,7 @@
                           </v-icon>
                         </v-btn>
                       </v-col>
-                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='viewSealSignOffAfter'" cols="12" class="t-center">
+                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view'" cols="12" class="t-center">
                         <v-btn depressed color="normal" :disabled="!certificate.imgSrc" @click="viewImage(certificate)">
                           檢視
                           <v-icon

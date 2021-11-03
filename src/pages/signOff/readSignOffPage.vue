@@ -50,7 +50,7 @@
             @page-count="inquireListPageCount = $event"
           >
             <template v-slot:item.mani="{ item }">   
-              <div v-if="item.mani==true">
+              <div>
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn
@@ -104,7 +104,7 @@
                 申請調閱日期:
               </v-col>
               <v-col>
-                {{ selectedSign.applyDate }}
+                {{ selectedSign.readDateStr }}
               </v-col>
             </v-row>
             <v-row>
@@ -128,7 +128,7 @@
                 申請調閱人員:
               </v-col>
               <v-col>
-                {{ selectedSign.applierName }}
+                {{ selectedSign.applier }}
               </v-col>
             </v-row>
             <v-row>
@@ -196,30 +196,13 @@
             </v-btn>
           </v-card-title>
           <v-card-text class="font-18px">
-            <!-- <v-row class="mt-6 ml-1" align="center">
-              <v-col cols="3">
-                退件部門
-              </v-col>
-              <v-col cols="7">
-                <v-select   
-                  v-model="department"
-                  :items="departmentOption"
-                  item-text="text"
-                  :return-object="true"            
-                  color="#ADADAD"
-                  outlined
-                  hide-details
-                  dense
-                  placeholder="請選擇退件部門"
-                />
-              </v-col>
-            </v-row> -->
             <v-row class="mt-6 ml-1" align="center">
               <v-col cols="3">
                 退件原因
               </v-col>
               <v-col cols="7">
                 <v-text-field
+                  v-model="rejectReason"
                   outlined
                   hide-details                                         
                   dense
@@ -232,7 +215,8 @@
                 退件說明
               </v-col>
               <v-col cols="7">
-                <v-textarea            
+                <v-textarea   
+                  v-model="rejectDesc"         
                   color="#ADADAD"
                   outlined
                   name="input-7-4"

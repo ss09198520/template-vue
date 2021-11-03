@@ -185,7 +185,7 @@
                   fab
                   x-small
                   color="primary"
-                  @click="editItem(item)"
+                  @click="previewItem(item)"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-eye'" />
@@ -283,7 +283,7 @@
         //日曆 end
         headerCRUD: [
           {
-            text: '滿意度問卷名稱',
+            text: '滿意度問卷標題',
             value: 'name',
             width: '24%',
           },
@@ -346,7 +346,7 @@
           },
           {
             name: '公司形象滿意度調查',
-            id: 1,
+            id: 2,
             scp_id: '李小凡',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
             state:'審核中',
@@ -356,7 +356,7 @@
           },
           {
             name: '櫃台形象滿意度調查',
-            id: 1,
+            id: 3,
             scp_id: '李小凡',
             marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
             state:'退件',
@@ -406,6 +406,9 @@
           this.itemsCRUD.push(this.editedItem)
         }
         this.close()
+      },
+      previewItem(item) {
+        this.$router.push({path:`/media/preview/questionnaire/${item.id}`})
       },
       editItem(item) {
         this.editedIndex = this.itemsCRUD.indexOf(item)

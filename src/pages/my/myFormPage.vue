@@ -101,13 +101,24 @@
       <!--是否為代理案件 -->
       <template v-slot:item.isAgent="{ item }">                                                        
         <div             
-          v-if="item.isAgent"
+          v-if="item.isAgent === 'Y'"
           class="ma-2"
           icon
         >
           <v-icon>
             mdi-check-bold
           </v-icon>
+        </div>                         
+      </template>
+
+      <!--代理件所有人 -->
+      <template v-slot:item.agentAcceptUser="{ item }">                                                        
+        <div             
+          v-if="item.isAgent === 'Y'"
+          class="ma-2"
+          icon
+        >
+          {{ item.acceptUser }} {{ item.acceptUserName }}
         </div>                         
       </template>
     </v-data-table>                 
@@ -138,7 +149,7 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <form-page restrict-mode="viewMyForm" />
+          <form-page :key="formKey" restrict-mode="view" :form-param="formParam" />
         </v-card-text>
         <v-card-actions class="d-end mt-5">
           <v-btn              
@@ -170,7 +181,7 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <form-page restrict-mode="edit" @saveFile="saveFile()" />
+          <form-page :key="formKey" restrict-mode="edit" :form-param="formParam" @saveFile="saveFile()" />
         </v-card-text>
       </v-card>
     </v-dialog>

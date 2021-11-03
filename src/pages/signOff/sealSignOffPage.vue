@@ -131,10 +131,10 @@
           </v-card-title>
           <v-card-text>
             <div v-show="sealOffFinish">
-              <form-page restrict-mode="viewSealSignOffAfter" />
+              <form-page :key="formKey" restrict-mode="viewDownload" :form-param="formParam" />
             </div>
             <div v-show="!sealOffFinish">
-              <form-page restrict-mode="viewSealSignOffBefore" /> 
+              <form-page :key="formKey" restrict-mode="view" :form-param="formParam" /> 
             </div>         
           </v-card-text>
           <!-- <v-card-text>

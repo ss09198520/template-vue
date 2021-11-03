@@ -1,5 +1,7 @@
 import MessageService from "@/assets/services/message.service";
 import formPage from "../FormPage/FormPage.vue";
+import AjaxService from "@/assets/services/ajax.service";
+import ValidateUtil from "@/assets/services/validateUtil";
 
 export default {
     name: 'MyReturn',
@@ -21,7 +23,7 @@ export default {
                 { text: '契約種類', value: 'contractType', align: 'center',width:'10%' },
                 { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center',width:'10%'},
-                { text: '計算日', value: 'computedDate', align: 'center',width:'10%' },
+                { text: '計算日', value: 'computeDate', align: 'center',width:'10%' },
                 { text: '退件日期', value: 'rejectDate', align: 'center' },
                 { text: '退件原因', value: 'rejectReason', align: 'center',sortable: false,},
                 { text: '退件說明', value: 'rejectDesc', align: 'center',sortable: false, },  
@@ -62,11 +64,13 @@ export default {
             // 證件圖檔清單
             certificateList:[],
             selectItem:{},
+            formParam: {},
+            formKey: 0,
         }
     },
     methods: {
       init(){
-        this.queryReturnInit();
+        this.queryReturnForm();
         this.queryMediaReturnInit();
       },
         action(type,item){
@@ -101,6 +105,13 @@ export default {
         },
         browerOrder(item){
           this.selectItem = item;
+
+          // 帶入受理編號
+          this.formParam = {
+            acceptNum: item.acceptNum
+          };
+          this.formKey++;
+
           // 查詢案件資料
           this.queryRetrnInfo();
           
@@ -123,52 +134,30 @@ export default {
       */
 
       // Action: (無紙化案件)頁面初始化
-      queryReturnInit(){
-        // 模擬取回資料
-        let formList = [
-          {
-            seq:34,                  
-            acceptNum: 'A00028', 
-            contractType: "表制", 
-            electricNum:'0120123223', 
-            custName:"余文文",
-            computedDate: '01', 
-            rejectDate: '2021-09-10 15:00', 
-            rejectReason: '證件不清楚', 
-            rejectDesc: '現役軍人眷屬身分證圖片不清楚，須補證件', 
-            acceptItem: 'QA210  軍眷用電申請優待', 
-            acceptUser: '10510122201',
-            acceptUserName:'李小凡',
-            rejectUser:'陳麗杉',
-            formHistoryList:[
-              '2021-09-14 15:10:14 退件中 (0151230020 吳靜)',
-              '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
-              '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',    
-            ],
-          },
-          {
-            seq:34,                  
-            acceptNum: 'A00633', 
-            contractType: "包制", 
-            electricNum:'0120123222', 
-            custName:"陳詩宇", 
-            computedDate: '05', 
-            rejectDate: '2021-09-10 16:45', 
-            rejectReason: '佐證文件不足', 
-            rejectDesc: '須提供XXX佐證文件', 
-            acceptItem: 'F3030  表燈非時間電價停用廢止', 
-            acceptUser: '10510122201',
-            acceptUserName: '葉星辰',
-            rejectUser:'林雯雯',
-            formHistoryList:[
-              '2021-09-14 14:20:14 退件中 (0151230020 吳靜)',
-              '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
-              '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',    
-            ],
-          }
-        ];
+      queryReturnForm(){
+        AjaxService.post('/returnForm/queryReturnForm',{},
+        (response) => {
+            // 驗證是否成功
+            if (!response.restData.success) {              
+                MessageService.showError(response.resultMessage.returnMessage,'查詢我的退件資料');
+                return;
+            }
+             // 驗證formList是否有資料
+            if(ValidateUtil.isEmpty(response.restData.formList) || response.restData.formList.length < 1 ){
+                MessageService.showInfo('查無相關資料');
+                return;
+            }
 
-        this.formList = formList;
+            // 將取得的資料放進前端參數中
+            this.formList = response.restData.formList;
+            this.numberOfReject = response.restData.numberOfReject;
+
+        },
+        // eslint-disable-next-line no-unused-vars
+        (response) => {                
+            MessageService.showSystemError();
+        });
+
       },
 
 

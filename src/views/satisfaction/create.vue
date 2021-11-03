@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="font-bold">滿意度問卷設計</h2>
+    <h2 class="font-bold">滿意度問卷製作</h2>
     <v-row class="justify-center">
       <v-col
         class="ml-10"
@@ -9,7 +9,7 @@
         <fet-card
           full-width
           outlined
-          title="問 卷 設 計"
+          title="問 卷 製 作"
         >
           <v-row align="center">
             <div class="form-create-wrap font-weight-bold">

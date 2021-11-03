@@ -1,6 +1,8 @@
 
 import MessageService from "@/assets/services/message.service";
 import formPage from "../FormPage/FormPage.vue";
+import AjaxService from "@/assets/services/ajax.service";
+import ValidateUtil from "@/assets/services/validateUtil";
 
 export default{
     components: {
@@ -20,19 +22,19 @@ export default{
             formListHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
-                { text: '電號', value: 'eletricNum', align: 'center' },
+                { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
                 { text: '受理日期', value: 'acceptDate', align: 'center' },
-                { text: '計算日', value: 'computedDate', align: 'center' },
+                { text: '計算日', value: 'computeDate', align: 'center' },
                 { text: '案件狀態', value: 'status', align: 'center' },     
                 { text: '受理項目', value: 'acceptItem', align: 'center' },
                 { text: '代理案件', value: 'isAgent', align: 'center' },
-                { text: '代理件所有人', value: 'acceptUser', align: 'center' },
+                { text: '代理件所有人', value: 'agentAcceptUser', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
             // 先放假資料
-            numberOfAccept: 4,
-            numberOfAgent:1, 
+            numberOfAccept: 0,
+            numberOfAgent:0, 
             oriFormList:[], // 原始資料
             formList: [],
             selectIndex: null,
@@ -41,7 +43,8 @@ export default{
             supplementModel: false, // 補件操作視窗開關
             formHistoryModel: false, // 表單歷程視窗開關
             formHistoryList:[],
-
+            formParam: {},
+            formKey: 0,
         }
     },
     methods: {
@@ -53,6 +56,13 @@ export default{
             // 抓出選的是第幾筆
             this.selectIndex = this.formList.indexOf(item);            
             this.queryFormInfo();
+
+            // 帶入受理編號
+            this.formParam = {
+                acceptNum: item.acceptNum
+            };
+            this.formKey++;
+
             if(type == 'browse'){
                 this.browserModel = true;
             } else if(type == 'supplement'){
@@ -84,7 +94,7 @@ export default{
             } else {
                 this.displayAll = false;
                 for(let i in this.oriFormList){
-                    if(this.oriFormList[i].isAgent){
+                    if(this.oriFormList[i].isAgent === 'Y'){
                         this.formList.push(this.oriFormList[i]);
                     }
                 }
@@ -98,104 +108,79 @@ export default{
          * */
 
         // Action:頁面初始化
-        queryFormInit(){
-            let formList = [                
-                { 
-                    seq:1,
-                    acceptNum: 'A00024',
-                    custName: '劉艷艷',
-                    eletricNum:'000123',
-                    contractType:'包制',
-                    computedDate:'10', 
-                    acceptDate: '2021-09-10 10:00', 
-                    status:'受理中',
-                    acceptItem:'QA210軍眷用電申請優待',
-                    isAgent:true,acceptUser:'王大明',
-                    formHistoryList:[
-                        '2021-09-14 14:20:14 待歸檔 (0151230020 吳靜)',
-                        '2021-09-14 14:20:14 審核通過 (0151230020 吳靜)',
-                        '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
-                        '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
-                    ],
-                },
-                { 
-                    seq:12,
-                    acceptNum: 'A00615',
-                    custName: '劉齊民',
-                    eletricNum:'000123',
-                    contractType:'包制',
-                    computedDate:'12',
-                    acceptDate: '2021-09-09 11:21',
-                    status:'受理中',  
-                    acceptItem:'I0510故障換表', 
-                    isAgent:'',
-                    acceptUser:'',
-                    formHistoryList:[
-                        '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
-                        '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
-                    ],
-                },
-                {               
-                    seq:27,      
-                    acceptNum: 'A00605',
-                    custName: '王筱涵',
-                    eletricNum:'000123',
-                    contractType:'包制',
-                    computedDate:'10',
-                    acceptDate: '2021-09-10 09:45',
-                    status:'受理中',
-                    acceptItem:'F3030表燈非時間電價停用廢止', 
-                    isAgent:'',
-                    acceptUser:'',
-                    formHistoryList:[
-                        '2021-09-14 14:20:14 待歸檔 (0151230020 吳靜)',
-                        '2021-09-14 14:20:14 審核通過 (0151230020 吳靜)',
-                        '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
-                        '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
-                    ],
-                },
-                { 
-                    seq:34,
-                    acceptNum: 'A00619',
-                    custName: '連文彥',
-                    eletricNum:'000123',
-                    contractType:'包制',
-                    computedDate:'16',
-                    acceptDate: '2021-09-10 13:44',
-                    status:'受理中', 
-                    acceptItem:'I0510故障換表', 
-                    isAgent:'',
-                    acceptUser:'',
-                    formHistoryList:[
-                        '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',
-                    ],
-                },
-            ];
+        queryFormInit(){             
+            AjaxService.post('/tpesForm/queryMyFormInit',{},
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.resultMessage.returnMessage,'查詢我的表單初始資料');
+                    return;
+                }
+                // 驗證formList是否有資料
+                if(ValidateUtil.isEmpty(response.restData.formList) || response.restData.formList.length < 1 ){
+                    MessageService.showInfo('查無相關資料');
+                    return;
+                }
 
-            let numberOfAccept = 4;
-            let numberOfAgent = 1;
+                // 將取得的資料放進前端參數中
+                this.formList = response.restData.formList;
+                this.numberOfAccept = response.restData.numberOfAccept;
+                this.numberOfAgent = response.restData.numberOfAgent;
+                // 從後端取得案件清單，先複製一份，先暫時放init，之後會移到ajax打後端後取得資料直接複製
+                this.oriFormList = JSON.parse(JSON.stringify(response.restData.formList));
 
-            this.formList = formList;
-            this.numberOfAccept = numberOfAccept;
-            this.numberOfAgent = numberOfAgent;
-            // 從後端取得案件清單，先複製一份，先暫時放init，之後會移到ajax打後端後取得資料直接複製
-            this.oriFormList = JSON.parse(JSON.stringify(this.formList));
+            },
+            // eslint-disable-next-line no-unused-vars
+            (response) => {                
+                MessageService.showSystemError();
+            });
+          
         },
 
 
-        // Action:取得表單資料
+        // Action:取得表單檔案資料
         queryFormInfo(){
-            // Vin 參數
-            // seq: this.selectItem.seq,  // 表單流水號
+            // AjaxService.post('/tpesForm/queryMyFormInit',{
+            //     seq: this.selectItem.seq,  // 表單流水號
+            // },
+            // (response) => {
+            //     // 驗證是否成功
+            //     if (!response.resultMessage.success) {              
+            //         MessageService.showError(response.resultMessage.returnMessage,'取得表單檔案資料');
+            //         return;
+            //     }
+
+            //     // 將取得的資料放進前端參數中
+            
+            // },
+            // // eslint-disable-next-line no-unused-vars
+            // (response) => {                
+            //     MessageService.showSystemError();
+            // });
 
         },
 
-        // Action:儲存表單資料
+        // Action:儲存表單檔案資料
         updateFormInfo(){
-            // Vin 參數
-            // seq: this.selectItem.seq,  // 表單流水號
+            // AjaxService.post('/tpesForm/queryMyFormInit',{
+            //     // seq: this.selectItem.seq,  // 表單流水號
+            //     // 檔案資料
+            // },
+            // (response) => {
+            //     // 驗證是否成功
+            //     if (!response.resultMessage.success) {              
+            //         MessageService.showError(response.resultMessage.returnMessage,'儲存表單檔案資料');
+            //         return;
+            //     }
+
+            //     // 完成
+            //     MessageService.showSuccess('儲存表單檔案資料');
             
-            MessageService.showSuccess('資料補件');
+            // },
+            // // eslint-disable-next-line no-unused-vars
+            // (response) => {                
+            //     MessageService.showSystemError();
+            // });            
         },
 
 

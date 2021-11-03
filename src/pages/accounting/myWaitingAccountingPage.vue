@@ -368,7 +368,7 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <FormPage :restrict-mode="'audit'" @returnOrder="returnOrder($event)" @auditSubmit="auditSubmit($event)" @saveComments="saveComments($event)" />
+          <FormPage :restrict-mode="'accounting'" @returnOrder="returnOrder($event)" @accountingSubmit="accountingSubmit($event)" @saveComments="saveComments($event)" />
         </v-card-text>
       </v-card>
     </v-dialog>

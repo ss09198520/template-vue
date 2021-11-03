@@ -297,13 +297,12 @@ export default {
             alert: false,
             //
             signListHeaders: [
-                  { text: '簽核狀態', value: 'inquireStatus', align: 'center' },
                   // { text: '多媒體編號', value: 'orderId', align: 'center' },
                   { text: '內 容 名 稱', value: 'orderItems', align: 'center' },                
                   { text: '類型', value: 'category', align: 'center' },
                   { text: '申請人員', value: 'inquireName', align: 'center' },
                   { text: '申請人員單位', value: 'inquireUnit', align: 'center' },            
-                  { text: '送審日期', value: 'inquireDate', align: 'center' },
+                  { text: '申請送審日期', value: 'inquireDate', align: 'center' },
                   { text: '狀態操作', value: 'mani', align: 'center' },
               ],
               signList:[

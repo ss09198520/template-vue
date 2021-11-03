@@ -61,6 +61,22 @@
                 hide-details
               />
             </v-col>
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2">
+              上架狀態
+            </v-col>
+            <v-col cols="3" class="ml-2">
+              <v-select
+                :items="['上架','未上架','下架']"
+                class="font-bold"
+                color="accent"
+                item-color="accent"
+                placeholder="上架狀態"
+                dense
+                outlined
+                hide-details
+              />
+            </v-col>
           </v-row>
           <v-row
             class="d-flex justify-start"
@@ -132,8 +148,8 @@
               下 架 時 間
             </v-col>
             <v-col 
-              cols="3"   
-              class="d-flex"
+              cols="3"
+              class="d-flex ml-2"
             >
               <v-menu
                 v-model="sunsetDateStartMenu"
@@ -318,7 +334,7 @@
               </template>
               <span>編輯</span>
             </v-tooltip>
-            <!-- <v-tooltip top>
+            <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="ma-2"
@@ -332,7 +348,7 @@
                 </v-btn>
               </template>
               <span>刪除</span>
-            </v-tooltip> -->
+            </v-tooltip>
           </template>
           <template v-slot:[`item.returnInfo`]="{ item }">
             <v-tooltip v-if="item.returnInfo" top>

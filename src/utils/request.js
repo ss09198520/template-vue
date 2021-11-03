@@ -1,9 +1,9 @@
 import axios from 'axios'
-
+import MessageService from '@/assets/services/message.service.js';
 
 // create an axios instance
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   headers: { 'Content-Type': 'application/json' }, //body content type
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
@@ -43,14 +43,9 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-
     // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
-      // Message({
-      //   message: res.message || 'Error',
-      //   type: 'error',
-      //   duration: 5 * 1000
-      // })
+    if (res.rtnCode !== '00000') {
+      MessageService.showSystemError()
 
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       // if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
@@ -65,7 +60,7 @@ service.interceptors.response.use(
       //     })
       //   })
       // }
-      return Promise.reject(new Error(res.message || 'Error'))
+      return Promise.reject(new Error(res.rtnMsg || 'Error'))
       
     } else {
       return res

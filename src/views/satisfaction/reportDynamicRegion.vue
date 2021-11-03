@@ -84,34 +84,7 @@
                 <span>{{ searchText }}</span>
               </v-tooltip>
             </v-col>
-            <v-col v-if="isRegion==0" cols="4">
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-row
-                    align="center"
-                    justify="space-around"
-                  >
-                    <v-btn
-                      depressed
-                      color="primary"
-                      v-on="on"
-                    >
-                      查詢多區處 <v-icon v-text="'mdi-magnify'" />
-                    </v-btn>
-                    <v-btn
-                      depressed
-                      color="primary"
-                      v-on="on"
-                      class="mt-1"
-                    >
-                      查詢業務處彙總 <v-icon v-text="'mdi-magnify'" />
-                    </v-btn>
-                  </v-row>
-                </template>
-               
-              </v-tooltip>
-            </v-col>
-           <v-col cols="3" class="ml-2" color="red">
+            <v-col cols="3" class="ml-2" color="red">
               * 查詢區間於6個月內
             </v-col>
           </v-row>

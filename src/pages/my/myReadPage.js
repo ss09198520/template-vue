@@ -2,6 +2,7 @@
 import formPage from "../FormPage/FormPage.vue";
 import ValidateUtil from "@/assets/services/validateUtil";
 import MessageService from "@/assets/services/message.service";
+import AjaxService from "@/assets/services/ajax.service";
 
 export default{
     components: {
@@ -20,13 +21,13 @@ export default{
             formListPageCount: 0,
             formListHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
-                { text: '受理日期', value: 'acceptDate', align: 'center' },
-                { text: '歸檔日期', value: 'archieveDate', align: 'center' },
+                { text: '受理日期', value: 'acceptDateStr', align: 'center' },
+                { text: '歸檔日期', value: 'archieveDateStr', align: 'center' },
                 { text: '調閱狀態', value: 'status', align: 'center' },            
                 { text: '退件原因', value: 'rejectReason', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
-                { text: '整理號碼', value: 'archieveNum', align: 'center' },
+                { text: '整理號碼', value: 'archiveNum', align: 'center' },
                 { text: '受理項目', value: 'acceptItem', align: 'center' },                
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
@@ -47,20 +48,19 @@ export default{
             acceptNum: null,
             electricNum: null,
             archieveNum: null,
-            readStartDate: null,
-            readEndDate: null,
+            applyStartDate: null,
+            applyEndDate: null,
             selectItem:{},
             errMsg: null,
             formatArray:[], // 格式驗證
             formParam: {},
-            formKey: 0,
+            formKey: 0
         }
     },
     methods: {
         init(){
-            this.queryReadInit();
+            this.queryReadList();
         },
-
         // 依條件查詢資料
         search(){
             if(!this.checkDate()){
@@ -69,108 +69,41 @@ export default{
                 this.queryReadList();
             }
         },
-
-        browerOrder(item){
+        browserOrder(item){
             this.selectItem = item;
-
-            // 帶入受理編號
             this.formParam = {
                 acceptNum: item.acceptNum
             };
-            this.formKey++;
-
-            this.queryReadInfo();
             this.browserModel = true;
+            this.formKey ++;
         },
-
-        
         // 清空日期欄位 obj為哪種日期類別,name為開始日期or結束日期
         resetDate(obj,name){
             this[obj][name] = null;
             this.checkDate();
         },
-
-
-        /** 
-         * 
-         * Ajax Start
-         * 
-         * 
-        */
-
-        // Action:頁面初始化
-        queryReadInit(){
-            // 模擬取得資料
-            let  formList = [                
-                { seq:1, acceptNum: 'A00024', acceptDate: '2021-09-10 10:00', archieveDate:'2021-09-15 10:00', status:'通過', validDate: '2021-10-30', rejectReason:'', custName:'戶名一', contractType:'契約種類一', archieveNum:'04-41234567', acceptItem:'QA210軍眷用電申請優待'},
-                { seq:2, acceptNum: 'A00615', acceptDate: '2021-09-09 11:21', archieveDate:'2021-09-15 10:00', status:'通過',validDate: '2021-10-01', rejectReason:'', custName:'戶名二', contractType:'契約種類二', archieveNum:'04-41234568', acceptItem:'I0510故障換表'},
-                { seq:3, acceptNum: 'A00040', acceptDate: '2021-09-07 15:36', archieveDate:'2021-09-15 11:21', status:'退件',validDate: '', rejectReason:'無法增加', custName:'戶名三', contractType:'契約種類三', archieveNum:'04-41234569', acceptItem:'I0520增加電表'},
-                { seq:4, acceptNum: 'A00605', acceptDate: '2021-09-10 09:45', archieveDate:'2021-09-19 11:05', status:'通過',validDate: '2021-10-20', rejectReason:'', custName:'戶名四', contractType:'契約種類四', archieveNum:'04-41234570', acceptItem:'F3030表燈非時間電價停用廢止'},
-                { seq:5, acceptNum: 'A00619', acceptDate: '2021-09-10 13:44', archieveDate:'2021-09-19 11:05', status:'申請中',validDate: '', rejectReason:'', custName:'戶名五', contractType:'契約種類五', archieveNum:'04-41234571', acceptItem:'I0510故障換表'},
-            ];
-
-            let numOfRead = 2;
-            let numOfReadApply = 1;
-
-            this.formList = formList;
-            this.numOfRead = numOfRead;
-            this.numOfReadApply = numOfReadApply;
-        },
-
-
         // Action:依條件查詢調閱資料
         queryReadList(){
-            // vin 參數
-            // acceptNum: this.acceptNum,
-            // electricNum: this.electricNum,
-            // archieveNum: this.archieveNum,
-            // readStartDate: this.readStartDate,
-            // readEndDate: this.readEndDate,
 
-             // 模擬取得資料
-             let  formList = [                
-                { seq:1, acceptNum: 'A00024', acceptDate: '2021-09-10 10:00', archieveDate:'2021-09-15 10:00', status:'通過', validDate: '2021-10-30', rejectReason:'', custName:'戶名一', contractType:'契約種類一', archieveNum:'04-41234567', acceptItem:'QA210軍眷用電申請優待'},
-                { seq:2, acceptNum: 'A00615', acceptDate: '2021-09-09 11:21', archieveDate:'2021-09-15 10:00', status:'通過',validDate: '2021-10-01', rejectReason:'', custName:'戶名二', contractType:'契約種類二', archieveNum:'04-41234568', acceptItem:'I0510故障換表'},
-                { seq:3, acceptNum: 'A00040', acceptDate: '2021-09-07 15:36', archieveDate:'2021-09-15 11:21', status:'退件',validDate: '', rejectReason:'無法增加', custName:'戶名三', contractType:'契約種類三', archieveNum:'04-41234569', acceptItem:'I0520增加電表'},
-                { seq:4, acceptNum: 'A00605', acceptDate: '2021-09-10 09:45', archieveDate:'2021-09-19 11:05', status:'通過',validDate: '2021-10-20', rejectReason:'', custName:'戶名四', contractType:'契約種類四', archieveNum:'04-41234570', acceptItem:'F3030表燈非時間電價停用廢止'},
-                { seq:5, acceptNum: 'A00619', acceptDate: '2021-09-10 13:44', archieveDate:'2021-09-19 11:05', status:'申請中',validDate: '', rejectReason:'', custName:'戶名五', contractType:'契約種類五', archieveNum:'04-41234571', acceptItem:'I0510故障換表'},
-            ];
+            let param = {
+                acceptNum: this.acceptNum,
+                electricNum: this.electricNum,
+                archiveNum: this.archiveNum,
+                applyStartDate: this.applyStartDate,
+                applyEndDate: this.applyEndDate
+            };
 
-            let numOfRead = 2;
-            let numOfReadApply = 1;
-
-            this.formList = formList;
-            this.numOfRead = numOfRead;
-            this.numOfReadApply = numOfReadApply;
-
-        MessageService.showSuccess('查詢調閱清單');
-
-
+            AjaxService.post("/read/queryReadApply", param, (response) => {
+                if(response.restData.success) {
+                    MessageService.showSuccess('查詢調閱清單');
+                    this.formList = response.restData.applyList;
+                    this.numOfReadApply = response.restData.applyNum;
+                    this.numOfRead = response.restData.readNum;
+                }else{
+                    MessageService.showError(response.restData.message, '查詢調閱申請紀錄');
+                }
+            });
         },
-
-        // Action:取得案件資料
-        queryReadInfo(){
-            // vin 參數
-            // seq: this.selectItem.seq,
-        },
-
-
-        /** 
-         * 
-         * Ajax End
-         * 
-         * 
-        */
-
-
-        /** 
-         * 
-         * 驗證 Start
-         * 
-         * 
-        */
-        
-
         // 驗證請調閱日期區間
         checkDate(){
             this.formatArray = [];
@@ -178,10 +111,10 @@ export default{
 
             // 1-1判斷日期起迄日是否都有
             if(!ValidateUtil.isEmpty(this.readDate.start) && !ValidateUtil.isEmpty(this.readDate.end)){
-                this.readStartDate = this.readDate.start + ' 00:00:00';
-                this.readEndDate = this.readDate.end + ' 23:59:59';
+                this.applyStartDate = this.readDate.start + ' 00:00:00';
+                this.applyEndDate = this.readDate.end + ' 23:59:59';
                 
-                if(!ValidateUtil.validateDateRange(this.readStartDate,this.readEndDate)){
+                if(!ValidateUtil.validateDateRange(this.applyStartDate,this.applyEndDate)){
                     this.errMsg = '日期範圍錯誤'
                     this.formatArray.push('申請調閱日期');
                     hasCheck = false;
@@ -200,13 +133,6 @@ export default{
             }
 
             return hasCheck;
-        },
-
-        /** 
-         * 
-         * 驗證 End
-         * 
-         * 
-        */
-    },
+        }
+    }
 }

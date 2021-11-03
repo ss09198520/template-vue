@@ -1,5 +1,6 @@
 import MessageService from "@/assets/services/message.service";
 import ValidateUtil from "@/assets/services/validateUtil";
+import AjaxService from "@/assets/services/ajax.service";
 
 export default{
     beforeMount(){
@@ -30,9 +31,9 @@ export default{
                 { text: '戶名', value: 'custName', align: 'center' },
                 { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '契約種類', value: 'contractType', align: 'center' },
-                { text: '整理號碼', value: 'archieveNum', align: 'center' },
-                { text: '申請日期', value: 'acceptDate', align: 'center' },
-                { text: '歸檔日期', value: 'achieveDate', align: 'center' },            
+                { text: '整理號碼', value: 'archiveNum', align: 'center' },
+                { text: '申請日期', value: 'acceptDateStr', align: 'center' },
+                { text: '歸檔日期', value: 'achieveDateStr', align: 'center' },            
                 { text: '受理項目', value: 'acceptItem', align: 'center' },                
                 { text: '狀態操作', value: 'mani', align: 'center' }
             ],
@@ -53,12 +54,12 @@ export default{
             menu3: false,            
             //日曆迄(歸檔日期)
             menu4: false,
-            archieveDate:{
+            archiveDate:{
                 start: null,
                 end: null,
             },
-            archieveStartDate: null,
-            archieveEndDate: null,
+            archiveStartDate: null,
+            archiveEndDate: null,
             contractType:null,
             contractTypeList:[
                 {text:'表制', value:'1'},
@@ -71,29 +72,26 @@ export default{
             readDate:this.formatDateTime(new Date()),
             readReason: null,
             memo:null,
-            formSeq: null,
             errMsg:{
                 readAudience: null,
                 readReason:null,
                 memo:null,
                 otherReason:null,
                 acceptDate:null,
-                archieveDate:null,
+                archiveDate:null,
             },
             requiredArray : [],
             formatArray : [],
             acceptNum: null,
             electricNum: null,
             custName: null,
-            archieveNum: null,
-
+            archiveNum: null
         }
     },
     methods:{
         init(){
             this.queryInquireReadInit();
         },
-
         // 依條件查詢
         search(){
             // 先驗證條件參數
@@ -106,7 +104,6 @@ export default{
             }
 
         },
-
         // 點擊申請調閱按鈕
         applyRead(item){
             // 將輸入框資料清空
@@ -115,24 +112,60 @@ export default{
             // 判斷是否為TPESUser
             if(this.User === 'TPESUser'){
                 this.selectForm = item;
+                // 沒有調閱編號的話就從後端取一個
+                if(!this.readNum){
+                    this.queryReadNum();
+                }
             }
-            // 取出表單流水號
-            this.formSeq = item.seq;
+            // 取出表單受理編號
+            this.selectAcceptNum = item.acceptNum;
             // 打開視窗
             this.popOut = true;
+            // 重取一個調閱日期
+            this.readDate = this.formatDateTime(new Date());
         },
-
         // 送出申請調閱
         submit(){
             // 再次驗證資料
             if(this.validApplyVal()){
-                // 將資料送至後端放這裡
-                MessageService.showSuccess('調閱申請');
+                let param = {};
+                if(this.User == 'TPESUser'){
+                    param = {
+                        applyReason: this.readReason,
+                        applyDesc: this.memo,
+                        acceptNum: this.selectAcceptNum,
+                        reader: '',
+                        readerName: '',
+                        user: this.User,
+                        readNum: this.readNum
+                    };
+                }
+                else{
+                    param = {
+                        applyReason: this.readReason.readReason,
+                        applyDesc: this.otherReason,
+                        acceptNum: this.selectAcceptNum,
+                        reader: this.readAudience.empNo,
+                        readerName: this.readAudience.empName,
+                        user: this.User
+                    };
+                }
+
+                console.log(param);
+
+                AjaxService.post("/read/readApply", param, (response) => {
+                    if(response.restData.success){
+                        MessageService.showSuccess('調閱申請');
+                    }else{
+                        MessageService.showError(response.restData.message, '調閱申請');
+                    }
+                });
                 this.popOut = false;
+                // 使用完後把前端調閱編號清空，下次申請時才會再取一個
+                this.readNum = '';
                 this.resetVal();
             }
         },
-
         // 清空資料
         resetVal(){
             this.otherReason = null; 
@@ -145,129 +178,71 @@ export default{
             this.errMsg.memo =  null;
             this.errMsg.otherReason =  null;
         },
-
         // 清空日期欄位 obj為哪種日期類別,name為開始日期or結束日期
         resetDate(obj,name){
             this[obj][name] = null;
             this.checkDate();
         },
-
-
-        /**
-         * Ajax start 
-         * 
-         **/
-
         // Action: 頁面初始化-取得下拉選單(操作角色為核算課長/調閱管理員)
         queryInquireReadInit(){
-            // 模擬假資料
-            let readAudienceList = [                
-                { empNo: '', empName: '自己',},
-                { empNo: '1050330-001', empName: '梁朝偉'},
-                { empNo: '1050330-002', empName: '王曉花'},
-                { empNo: '1050330-003', empName: '林美美'},
-                { empNo: '1050331-001', empName: '蔡政揚'},
-                { empNo: '1050331-002', empName: '張芊芊'},
-                { empNo: '1050331-003', empName: '江舒語'},                
-                { empNo: '1050320-001', empName: '陳大天'},
-                { empNo: '1050320-002', empName: '何欣惠'},
-            
-            ];
+            AjaxService.post("/read/init", {}, (response) => {
+                if(response.restData.success){
+                    MessageService.showSuccess("初始化");
+                    let reasonList = response.restData.reasonList;
+                    if(reasonList){
+                        for(let i in reasonList){
+                            let reason = reasonList[i];
+                            this.readReasonList.push({reasonCode: reason.code, readReason: reason.codeValue});
+                        }
+                    }
+                    let readerList = response.restData.readerList;
+                    if(readerList){
+                        for(let i in readerList){
+                            let reader = readerList[i];
+                            this.readAudienceList.push({empNo: reader.empNo, empName: reader.name});
+                        }
+                    }
+                }else{
+                    MessageService.showError(response.restData.message, "初始化");
+                }
+            });
 
-            let readReasonList = [
-                {readReason:'確認換表指數及內容', reasonCode:'REASON01'},
-                {readReason:'確認設備容量', reasonCode:'REASON02'},
-                {readReason:'確認是否須拆除外線', reasonCode:'REASON03'},
-                {readReason:'確認用電地址', reasonCode:'REASON04'},
-                {readReason:'確認中抄指數', reasonCode:'REASON05'},
-                {readReason:'前用戶異議單獨過戶', reasonCode:'REASON06'},
-                {readReason:'電表報損確認賠償費用', reasonCode:'REASON07'},
-                {readReason:'新增設案件抽查', reasonCode:'REASON08'},
-                {readReason:'現場用電用途查核', reasonCode:'REASON09'},
-                {readReason:'完工結算', reasonCode:'REASON10'},
-            ]
-
-            this.readReasonList = readReasonList;
-            this.readAudienceList = readAudienceList;
-            // 將資料存到另一個參數中，用於後續船到後端比對資料
+            // 將資料存到另一個參數中，用於後續傳到後端比對資料
             this.oriReadReasonList = JSON.parse(JSON.stringify(this.readReasonList));
             this.oriReadAudienceList = JSON.parse(JSON.stringify(this.readAudienceList));
         },
 
          // Action: 依條件查詢可調閱的案件清單
         queryInquireReadList(){
-            // Vin參數
-            // acceptNum:this.acceptNum,
-            // electricNum: this.electricNum,
-            // custName: this.custName,
-            // archieveNum: this.archieveNum,
-            // acceptStartDate: this.acceptStartDate,
-            // acceptEndDate: this.acceptEndDate,
-            // archieveStartDate: this.archieveStartDate,
-            // archieveEndDate: this.archieveEndDate,
+            let param = {
+                acceptNum:this.acceptNum,
+                electricNum: this.electricNum,
+                custName: this.custName,
+                archiveNum: this.archiveNum,
+                acceptStartDate: this.acceptStartDate,
+                acceptEndDate: this.acceptEndDate,
+                archiveStartDate: this.archiveStartDate,
+                archiveEndDate: this.archiveEndDate
+            };
 
-            let readFormList = [
-                { mani: true, seq:1 ,acceptNum: 'A00024',custName:'吳小花',contractType:'高壓',archieveNum:'000300', electricNum: '7140000123', acceptDate:'2021-09-10 10:00', achieveDate:'2021-09-15 10:00',  acceptItem:'QA210軍眷用電申請優待'},
-                { mani: true, seq:2 ,acceptNum: 'A00615',custName:'虞小寒',contractType:'包制',archieveNum:'000301', electricNum: '7140000456', acceptDate:'2021-09-09 11:21', achieveDate:'2021-09-15 11:21',  acceptItem:'I0510故障換表'},
-                { mani: true, seq:3 ,acceptNum: 'A00040',custName:'孔維祥',contractType:'表制',archieveNum:'000302', electricNum: '7140000789', acceptDate:'2021-09-07 15:36', achieveDate:'2021-09-15 15:36',  acceptItem:'I0520增加電表'},
-                { mani: true, seq:4 ,acceptNum: 'A00605',custName:'文易席',contractType:'高壓',archieveNum:'000303', electricNum: '7140000888', acceptDate:'2021-09-10 09:45', achieveDate:'2021-09-15 09:45',  acceptItem:'F3030表燈非時間電價停用廢止'},
-                { mani: true, seq:5 ,acceptNum: 'A00619',custName:'許慧貞',contractType:'包制',archieveNum:'000304', electricNum: '7140000999', acceptDate:'2021-09-10 13:44', achieveDate:'2021-09-15 13:44',  acceptItem:'I0510故障換表'},
-            ]
-
-            this.readFormList = readFormList;
+            AjaxService.post("/tpesForm/queryForm", param, (response) => {
+                if(response.restData.success) {
+                    MessageService.showSuccess('查詢案件清單');
+                    this.readFormList = response.restData.formList;
+                }else{
+                    MessageService.showError(response.restData.message, '查詢案件清單');
+                }
+            });
         },
-
-        // Action:調閱申請(核算課長/調閱管理員)
-        createReadApply(){
-            // Vin參數
-            // formSeq: this.formSeq,
-            // readEmpNum: this.readEmpNum,
-            // readEmpName: this.readEmpNum,
-            // readReason: this.readReason,
-            // otherReason: this.otherReason,
-            // oriReadReasonList = this.oriReadReasonList,      // 傳到後端與選擇到的資料比對
-            // oriReadAudienceList = this.oriReadAudienceList,  // 傳到後端與選擇到的資料比對
-
-            MessageService.showSuccess('調閱申請');
-            this.popOut = false;
-            this.resetVal();
-        },
-
         // Action:開啟調閱申請視窗取得調閱編號(TPES)
         queryReadNum(){
-            // 模擬放假資料
-            let readNum = '71023133';
-            this.readNum = readNum;
+            AjaxService.post("/read/queryReadNum", {}, (response) => {
+                if(response.restData.success){
+                    this.readNum = response.restData.readNum;
+                }
+            });
         },
-
-        // Action:調閱申請(其他TPES使用者)
-        createOtherReadApply(){
-            // Vin參數
-            // formSeq: this.formSeq,
-            // readDate: this.readDate,
-            // readNum: this.readNum,
-            // readReason: this.readNum,
-            // memo: this.memo,
-
-            MessageService.showSuccess('調閱申請');
-            this.popOut = false;
-            this.resetVal();
-        },
-
-        /**
-         * Ajax end 
-         * 
-         **/
-
-
-        
-        /**
-         * Validate start 
-         * 
-         * */
-
         // 驗證日期格式
-
         // 依條件查詢清單送出前再次驗證
         validSearch(){
             let hasCheck = true;
@@ -284,7 +259,6 @@ export default{
 
             return hasCheck;
         },
-
         // 送出調閱申請前再次驗證
         validApplyVal(){
             let hasCheck = true;
@@ -316,7 +290,6 @@ export default{
             }
             return hasCheck;
         },
-
         checkDate(){
             let hasCheck = true;
             
@@ -346,34 +319,32 @@ export default{
             }
 
             // 2-1 判斷歸檔日期起迄日都有選擇 
-            if(!ValidateUtil.isEmpty(this.archieveDate.start) && !ValidateUtil.isEmpty(this.archieveDate.end)){
-                this.archieveStartDate = this.archieveDate.start +' 00:00:00';
-                this.archieveEndDate = this.archieveDate.end +' 23:59:59';
+            if(!ValidateUtil.isEmpty(this.archiveDate.start) && !ValidateUtil.isEmpty(this.archiveDate.end)){
+                this.archiveStartDate = this.archiveDate.start +' 00:00:00';
+                this.archiveEndDate = this.archiveDate.end +' 23:59:59';
 
                 //  驗證日期範圍格式是否正確
-                if(!ValidateUtil.validateDateRange(this.archieveStartDate,this.archieveEndDate)){
-                    this.errMsg.archieveDate = "歸檔日期選擇範圍錯誤";
+                if(!ValidateUtil.validateDateRange(this.archiveStartDate,this.archiveEndDate)){
+                    this.errMsg.archiveDate = "歸檔日期選擇範圍錯誤";
                     this.formatArray.push('歸檔日期區間');
                     hasCheck = false;    
                 } else {
-                    this.errMsg.archieveDate = null;
+                    this.errMsg.archiveDate = null;
                 }
             
              // 2-2 判斷歸檔日期起迄日只有其中一欄有選擇
-            } else if(!ValidateUtil.isEmpty(this.archieveDate.start) || !ValidateUtil.isEmpty(this.archieveDate.end)){
-                this.errMsg.archieveDate = "歸檔日期未選擇完整範圍";
+            } else if(!ValidateUtil.isEmpty(this.archiveDate.start) || !ValidateUtil.isEmpty(this.archiveDate.end)){
+                this.errMsg.archiveDate = "歸檔日期未選擇完整範圍";
                 this.formatArray.push('歸檔日期區間');   
                 hasCheck = false;
             
             // 2-3 判斷歸檔日期起迄日欄位皆未選擇
             } else {
-                this.errMsg.archieveDate = null;
+                this.errMsg.archiveDate = null;
             }
 
             return hasCheck;
         },
-
-
         // 驗證調閱對象
         checkReadAudience(){
             let hasCheck = true;
@@ -416,8 +387,7 @@ export default{
 
             return hasCheck;
         },
-
-         // 驗證其他事由
+        // 驗證其他事由
         checkOtherReason(){
             let hasCheck = true;
 
@@ -443,34 +413,11 @@ export default{
 
             return hasCheck;
         },
-
-        
-        /**
-         * Validate end 
-         * 
-         * */
-
-        
-
-
-
-        /**
-         * UI start 
-         * 
-         * */
-
         // 轉換日期格式為字串
         formatDateTime(date) {
             var moment = require('moment');
             moment().format();
             return moment(date).format('YYYY-MM-DD HH:mm:ss');
-        },
-        /**
-
-        * UI end 
-         * 
-         * */
-        
+        }
     }
-    
 }

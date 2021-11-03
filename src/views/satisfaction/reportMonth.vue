@@ -11,10 +11,10 @@
             class="d-flex justify-start"
             align="center"
           >
-            <v-col cols="1" class="ml-2 ">
+            <v-col cols="1" class="ml-2 mt-2 ">
               查詢月份
             </v-col>
-            <v-col cols="2" class="d-flex">
+            <v-col cols="2" class="d-flex mt-2 ">
               <v-menu
                 v-model="startDate"
                 :close-on-content-click="false"
@@ -42,11 +42,11 @@
                 />
               </v-menu>
             </v-col>
-            <v-col cols="1">
+            <v-col v-if="isRegion==1" cols="1">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
-                    class="ma-2"
+                    class="ma-3"
                     fab
                     small
                     color="primary"
@@ -55,7 +55,34 @@
                     <v-icon v-text="'mdi-magnify'" />
                   </v-btn>
                 </template>
-                <span> 查詢 </span>
+                <span>{{ searchText }}</span>
+              </v-tooltip>
+            </v-col>
+            <v-col v-if="isRegion==0" cols="4">
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-row
+                    align="center"
+                    justify="space-around"
+                  >
+                    <v-btn
+                      depressed
+                      color="primary"
+                      v-on="on"
+                    >
+                      查詢多區處 <v-icon v-text="'mdi-magnify'" />
+                    </v-btn>
+                    <v-btn
+                      depressed
+                      color="primary"
+                      v-on="on"
+                      class="mt-1"
+                    >
+                      查詢業務處彙總 <v-icon v-text="'mdi-magnify'" />
+                    </v-btn>
+                  </v-row>
+                </template>
+               
               </v-tooltip>
             </v-col>
           </v-row>
@@ -124,6 +151,7 @@
   export default {
     data() {
       return {
+        isRegion: 1, // 1區處、else業務處
         isShow: true,
         // menu: false,
         // date: new Date().toISOString().substr(0, 10),
@@ -143,11 +171,7 @@
         sunsetDateEnd: '',
         //日曆 end
         headerCRUD: [
-          {
-            text: '區處',
-            value: 'region',
-            align: 'center'
-          },
+         
           {
             text: '報表產出月份',
             value: 'readMonth',
@@ -168,8 +192,8 @@
           
         ],
         itemsCRUD: [
-          {signOff: false, readMonth: '2021/08', region: '台中', signOffDate1: '2021/09/01 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
-          {signOff: true, readMonth: '2021/09', region: '台中', signOffDate1: '2021/10/01 14:14:42', signOffDate2: '', signOffDate3: '', download: true}
+          {signOff: false, readMonth: '2021/08', signOffDate1: '2021/09/01 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
+          {signOff: true, readMonth: '2021/09',  signOffDate1: '2021/10/01 14:14:42', signOffDate2: '', signOffDate3: '', download: true}
         ],
         defaultItem: {
           name: '',

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="font-bold">滿意度個人動態查詢(自訂區間與%數)</h2>
+    <h2 class="font-bold">不滿意度個人動態查詢(自訂區間與%數)</h2>
     <v-row>
       <v-col
         class="ml-10 mt-10 font-18px"
@@ -189,6 +189,7 @@
   export default {
     data() {
       return {
+        isRegion: 1, // 1區處、else業務處
         isShow: false,
         // menu: false,
         // date: new Date().toISOString().substr(0, 10),

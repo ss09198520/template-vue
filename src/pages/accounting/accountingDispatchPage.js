@@ -663,7 +663,15 @@ export default {
 
     /*將已選擇的核算員移除，核算員不可重複設定 */ 
     filterAccounting(){
-     
+        for(let i in this.dispatchList){
+          for(let y in this.oriAccoutingList){
+            if(this.dispatchList[i].accounting === this.oriAccoutingList[y].empNo){
+              this.selectIndex = this.oriAccoutingList.indexOf(this.oriAccoutingList[y]);
+              this.accountingList.splice(this.selectIndex, 1);
+            }
+          }
+        }
+
     },
 
     /**

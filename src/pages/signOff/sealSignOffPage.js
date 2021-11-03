@@ -37,6 +37,7 @@ export default {
              browserModel: false, // 瀏覽案件視窗開關  
              sealOffFinish: false, //控制簽核前後瀏覽表單附件內容
              formParam: {},
+             formKey: 0,
         }
     },
     methods: {
@@ -65,6 +66,7 @@ export default {
             this.formParam = {
                 acceptNum: item.acceptNum
             };
+            this.formKey++;
 
             if(type=='delete'){
                 this.deleteOrderModel = true;

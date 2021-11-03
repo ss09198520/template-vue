@@ -243,7 +243,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <form-page restrict-mode="view" :form-param="formParam" />
+            <form-page :key="formKey" restrict-mode="view" :form-param="formParam" />
           </v-card-text>
           <v-card-actions class="d-end mt-5">
             <v-btn              

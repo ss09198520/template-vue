@@ -53,6 +53,7 @@ export default{
             errMsg: null,
             formatArray:[], // 格式驗證
             formParam: {},
+            formKey: 0,
         }
     },
     methods: {
@@ -76,6 +77,7 @@ export default{
             this.formParam = {
                 acceptNum: item.acceptNum
             };
+            this.formKey++;
 
             this.queryReadInfo();
             this.browserModel = true;

@@ -44,6 +44,7 @@ export default{
             formHistoryModel: false, // 表單歷程視窗開關
             formHistoryList:[],
             formParam: {},
+            formKey: 0,
         }
     },
     methods: {
@@ -60,6 +61,7 @@ export default{
             this.formParam = {
                 acceptNum: item.acceptNum
             };
+            this.formKey++;
 
             if(type == 'browse'){
                 this.browserModel = true;

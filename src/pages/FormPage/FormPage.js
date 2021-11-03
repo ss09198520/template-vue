@@ -1,4 +1,5 @@
 // import EventBus from "@/assets/services/eventBus";
+import moment from 'moment';
 import MessageService from "@/assets/services/message.service";
 import CommonService from "@/assets/services/common.service";
 import ValidateUtil from '@/assets/services/validateUtil';
@@ -310,8 +311,18 @@ export default {
             let reader = new FileReader();
             reader.onload = (e) =>{
                 this.selectedAttachment.base64 = e.target.result;
+                this.selectedAttachment.imgSrc = null;
+
+                // 圖片
                 if(this.selectedAttachment.file.type.indexOf("image") > -1){
+                    // 不套浮水印
                     this.selectedAttachment.imgSrc = e.target.result;
+
+                    // 套浮水印
+                    // this.addWaterMark(e.target.result).then(({data}) => {
+                    //     this.selectedAttachment.base64 = data;
+                    //     this.selectedAttachment.imgSrc = data;
+                    // });
                 }
             };
             reader.readAsDataURL(this.selectedAttachment.file);
@@ -342,18 +353,20 @@ export default {
                 }
 
                 MessageService.showSuccess("儲存成功");
-                // 重新查詢一次
-                this.formInit();
+
+                if(this.restrictMode){
+                    //當點擊儲存按鈕，則通知父層可關閉
+                    this.$emit("saveFile");
+                }
+                else{
+                    // 重新查詢一次
+                    this.formInit();
+                }
             },
             (error) => {
                 MessageService.showSystemError();
                 console.log(error);
             });
-
-            if(this.restrictMode){
-                //當點擊儲存按鈕，則通知父層可關閉
-                this.$emit("saveFile");
-            }
         },
         setSaveFormVin(){
             let addFileList = [];
@@ -495,6 +508,55 @@ export default {
         saveComments(){
             // 將待審核備註一併傳回給父層
             this.$emit("saveComments",this.accountingMemo);
-        }
+        },
+        addWaterMark(originImageSrc){
+            let originImage = new Image();
+
+            return new Promise((resolve, reject) => {
+                if(!originImageSrc) {
+                    reject({
+                      status: 'fail',
+                      message: '取得影像失敗'
+                    })
+                  }
+
+                originImage.onload = function() {
+                    let canvas = document.createElement('canvas');
+    
+                    canvas.width = originImage.width;
+                    canvas.height = originImage.height;
+    
+                    // 浮水印日期
+                    let dateString = moment(new Date).format('YYYY/MM/DD HH:mm:ss');
+                    let context = canvas.getContext("2d");
+                    context.drawImage(originImage, 0, 0);
+                    let imgData = context.getImageData(0,0,canvas.width,canvas.height);
+                    let waterMarkCanvas = document.createElement("canvas");
+                    //設定浮水印畫布的高跟寬
+                    waterMarkCanvas.width = canvas.width;
+                    waterMarkCanvas.height = canvas.height;
+                    let waterMarkContext = waterMarkCanvas.getContext("2d");
+                    waterMarkContext.putImageData(imgData, 0, 0);
+                    waterMarkContext.font = "30px Arial ";
+                    waterMarkContext.fillStyle = "#ff0000";
+                    waterMarkContext.fillText(dateString, waterMarkCanvas.width - 290, 30);
+                    waterMarkContext.fillText("台電申請專用", waterMarkCanvas.width - 200, 60);
+                    let waterMarkImage = waterMarkCanvas.toDataURL("image/jpeg");
+
+                    if(!waterMarkImage) {
+                        reject({
+                          status: 'fail',
+                          message: '取得影像失敗'
+                        })
+                    }
+                    resolve({
+                        status: 'success',
+                        data: waterMarkImage
+                    });
+                };
+    
+                originImage.src = originImageSrc;
+            });
+        },
     }
 }

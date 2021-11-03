@@ -43,7 +43,7 @@ export default{
             supplementModel: false, // 補件操作視窗開關
             formHistoryModel: false, // 表單歷程視窗開關
             formHistoryList:[],
-
+            formParam: {},
         }
     },
     methods: {
@@ -55,6 +55,12 @@ export default{
             // 抓出選的是第幾筆
             this.selectIndex = this.formList.indexOf(item);            
             this.queryFormInfo();
+
+            // 帶入受理編號
+            this.formParam = {
+                acceptNum: item.acceptNum
+            };
+
             if(type == 'browse'){
                 this.browserModel = true;
             } else if(type == 'supplement'){

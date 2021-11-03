@@ -149,7 +149,7 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <form-page restrict-mode="viewMyForm" />
+          <form-page restrict-mode="viewMyForm" :form-param="formParam" />
         </v-card-text>
         <v-card-actions class="d-end mt-5">
           <v-btn              
@@ -181,7 +181,7 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <form-page restrict-mode="edit" @saveFile="saveFile()" />
+          <form-page restrict-mode="edit" :form-param="formParam" @saveFile="saveFile()" />
         </v-card-text>
       </v-card>
     </v-dialog>

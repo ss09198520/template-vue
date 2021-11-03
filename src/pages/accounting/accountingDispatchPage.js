@@ -33,11 +33,7 @@ export default {
       accountingList:[],
       oriAccoutingList:[],
       // 檢算員下拉選單
-      calculateList:[
-        {empNo:'105012124', empName:'連家齊'},
-        {empNo:'105012125', empName:'甄文君'},
-        {empNo:'105012126', empName:'君令偉'},
-      ],
+      calculateList:[],
       oriCalculateList:[],
       // 新增/修改 Modal 內容
       dispatchInfo: {
@@ -270,6 +266,7 @@ export default {
           this.calculateList = response.restData.calculateList;
           this.oriAccoutingList = JSON.parse(JSON.stringify(response.restData.accountingList));
           this.oriCalculateList = JSON.parse(JSON.stringify(response.restData.calculateList));
+          this.filterAccounting();
 
       },
       // eslint-disable-next-line no-unused-vars
@@ -311,8 +308,6 @@ export default {
       (response) => {                
           MessageService.showSystemError();
       });
-
-
      },
 
      // Action:修改派工設定
@@ -345,13 +340,30 @@ export default {
     },
 
     // Action:刪除派工設定
-    removeDispatch(){
-      console.log(this.selectDispatch.accounting);
-      if (this.selectIndex > -1) {
-        this.dispatchList.splice(this.selectIndex, 1);
-      }
-      this.deleteDispatchModel = false;
-      MessageService.showSuccess("刪除派工成功✓");
+    deleteDispatch(){
+      AjaxService.post('/accountingDispatch/deleteDispatch',
+      {
+        accounting: this.selectDispatch.accounting,
+        className: this.selectDispatch.className,
+      },
+      (response) => {
+          // 驗證是否成功
+          if (!response.restData.success) {              
+              MessageService.showError(response.restData.returnMessage,'刪除派工設定');
+              return;
+          }
+
+        this.deleteDispatchModel = false;
+        MessageService.showSuccess("刪除派工設定");
+        this.queryAccountingDispatchInfo();
+        this.queryAccountingDispatchOption()
+
+      },
+      // eslint-disable-next-line no-unused-vars
+      (response) => {                
+          MessageService.showSystemError();
+      });
+
     },
 
      
@@ -614,6 +626,11 @@ export default {
           MessageService.showCheckInfo(this.requiredArray,this.formatArray);
         }       
 
+    },
+
+    /*將已選擇的核算員移除，核算員不可重複設定 */ 
+    filterAccounting(){
+     
     },
 
     /**

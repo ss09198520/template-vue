@@ -94,7 +94,7 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title>林珍妮</v-list-item-title>
+                  <v-list-item-title>{{userName}}</v-list-item-title>
                   <v-list-item-subtitle class="grey--text">
                     Founder of Vuetify.js
                   </v-list-item-subtitle>
@@ -219,7 +219,8 @@
 </template>
 
 <script>
-import AjaxService from '@/assets/services/ajax.service'
+import AjaxService from '@/assets/services/ajax.service';
+
   import { mapGetters } from 'vuex'
   export default {
     // data() {
@@ -240,6 +241,7 @@ import AjaxService from '@/assets/services/ajax.service'
         loginDialog: false,
         account: '',
         password: '',
+        userName: '',
         data: {
           type: 1,
           seeAllLink: '/',
@@ -407,6 +409,7 @@ import AjaxService from '@/assets/services/ajax.service'
           if(response.restData.code == 200){
             this.loginDialog = false;
             this.isLogin = true;
+            this.userName = response.restData.empName;
           }
         });
       },

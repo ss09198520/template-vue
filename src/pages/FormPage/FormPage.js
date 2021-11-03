@@ -1,4 +1,5 @@
 // import EventBus from "@/assets/services/eventBus";
+import moment from 'moment';
 import MessageService from "@/assets/services/message.service";
 import CommonService from "@/assets/services/common.service";
 import ValidateUtil from '@/assets/services/validateUtil';
@@ -8,7 +9,7 @@ export default {
     name: 'Form',
     props: {
         restrictMode: String,
-        formInf: Object,
+        formParam: Object,
         // signPreviewImgSrc:String,
         // certificateList: Array,
     },
@@ -21,12 +22,9 @@ export default {
                 {name: "新增/修改", value: "edit"},
                 {name: "核算", value: "accounting"},
                 {name: "檢視", value: "view"},
-                {name: "檢視我的表單", value: "viewMyForm"},
-                {name: "檢視我的調閱區", value: "viewMyRead"},
-                {name: "檢視專用章簽核(審核前)", value: "viewSealSignOffBefore"},
-                {name: "檢視專用章簽核(審核後)", value: "viewSealSignOffAfter"},
+                {name: "檢視 (可下載)", value: "viewDownload"},
             ],
-            mode: "edit",
+            formPageMode: "edit",
             panel: [0, 1, 2, 3],
             imgSrcPrefix: "data:image/jpeg;base64,",
             formSeq: null,          // 表單流水號
@@ -81,7 +79,7 @@ export default {
     methods: {
         init(){            
             if(this.restrictMode){
-                this.mode = this.restrictMode;
+                this.formPageMode = this.restrictMode;
                 this.showModeSelect = false;
             }
             this.getInitParam();
@@ -89,33 +87,35 @@ export default {
         },
         getInitParam(){
             // 從網址取得參數
-            let formInf = CommonService.getURLParamObject();
+            let formParam = CommonService.getURLParamObject();
             // 若無資料改從頁面參數取
-            if(ValidateUtil.isEmpty(formInf)){
-                formInf = this.formInf;
+            if(ValidateUtil.isEmpty(formParam)){
+                formParam = this.formParam;
             }
 
-            if(!ValidateUtil.isEmpty(formInf)){
-                this.acceptNum = formInf.acceptNum;
-                this.formType = formInf.formType;
-                this.apitCod = formInf.apitCod;
-                this.applyType = formInf.applyType;
-                this.uniformNum = formInf.uniformNum;
-                this.isAgent = formInf.isAgent;
-                this.custName = formInf.custName;
-                this.contractType = formInf.contractType;
-                this.electricNum = formInf.electricNum;
-                this.computeDate = formInf.computeDate;
-                this.acceptDept = formInf.acceptDept;
-                this.acceptDeptName = formInf.acceptDeptName;
-                this.acceptUser = formInf.acceptUser;
-                this.acceptUserName = formInf.acceptUserName;
-                this.acceptDate = formInf.acceptDate;
-                this.acceptItem = formInf.acceptItem;
-                this.isUpdate = formInf.isUpdate;
-                this.isAddAttachment = formInf.isAddAttachment;
-                this.isAffidavit = formInf.isAffidavit;
-                this.uploadNo = formInf.uploadNo;
+            if(!ValidateUtil.isEmpty(formParam)){
+                this.acceptNum = formParam.acceptNum;
+                this.formType = formParam.formType;
+                this.apitCod = formParam.apitCod;
+                this.applyType = formParam.applyType;
+                this.uniformNum = formParam.uniformNum;
+                this.isAgent = formParam.isAgent;
+                this.custName = formParam.custName;
+                this.contractType = formParam.contractType;
+                this.electricNum = formParam.electricNum;
+                this.computeDate = formParam.computeDate;
+                this.acceptDept = formParam.acceptDept;
+                this.acceptDeptName = formParam.acceptDeptName;
+                this.acceptUser = formParam.acceptUser;
+                this.acceptUserName = formParam.acceptUserName;
+                this.acceptDate = formParam.acceptDate;
+                this.acceptItem = formParam.acceptItem;
+                this.isUpdate = formParam.isUpdate;
+                this.isAddAttachment = formParam.isAddAttachment;
+                this.isAffidavit = formParam.isAffidavit;
+                this.uploadNo = formParam.uploadNo;
+                
+                this.formPageMode = ValidateUtil.isEmpty(formParam.formPageMode) ? this.formPageMode : formParam.formPageMode;
             }
         },
         formInit(){
@@ -147,6 +147,7 @@ export default {
                 isAddAttachment: this.isAddAttachment,
                 isAffidavit: this.isAffidavit,
                 uploadNo: this.uploadNo,
+                formPageMode: this.formPageMode,
             }
 
             AjaxService.post("/tpesForm/init", param, 
@@ -310,8 +311,18 @@ export default {
             let reader = new FileReader();
             reader.onload = (e) =>{
                 this.selectedAttachment.base64 = e.target.result;
+                this.selectedAttachment.imgSrc = null;
+
+                // 圖片
                 if(this.selectedAttachment.file.type.indexOf("image") > -1){
+                    // 不套浮水印
                     this.selectedAttachment.imgSrc = e.target.result;
+
+                    // 套浮水印
+                    // this.addWaterMark(e.target.result).then(({data}) => {
+                    //     this.selectedAttachment.base64 = data;
+                    //     this.selectedAttachment.imgSrc = data;
+                    // });
                 }
             };
             reader.readAsDataURL(this.selectedAttachment.file);
@@ -342,18 +353,20 @@ export default {
                 }
 
                 MessageService.showSuccess("儲存成功");
-                // 重新查詢一次
-                this.formInit();
+
+                if(this.restrictMode){
+                    //當點擊儲存按鈕，則通知父層可關閉
+                    this.$emit("saveFile");
+                }
+                else{
+                    // 重新查詢一次
+                    this.formInit();
+                }
             },
             (error) => {
                 MessageService.showSystemError();
                 console.log(error);
             });
-
-            if(this.restrictMode){
-                //當點擊儲存按鈕，則通知父層可關閉
-                this.$emit("saveFile");
-            }
         },
         setSaveFormVin(){
             let addFileList = [];
@@ -495,6 +508,55 @@ export default {
         saveComments(){
             // 將待審核備註一併傳回給父層
             this.$emit("saveComments",this.accountingMemo);
-        }
+        },
+        addWaterMark(originImageSrc){
+            let originImage = new Image();
+
+            return new Promise((resolve, reject) => {
+                if(!originImageSrc) {
+                    reject({
+                      status: 'fail',
+                      message: '取得影像失敗'
+                    })
+                  }
+
+                originImage.onload = function() {
+                    let canvas = document.createElement('canvas');
+    
+                    canvas.width = originImage.width;
+                    canvas.height = originImage.height;
+    
+                    // 浮水印日期
+                    let dateString = moment(new Date).format('YYYY/MM/DD HH:mm:ss');
+                    let context = canvas.getContext("2d");
+                    context.drawImage(originImage, 0, 0);
+                    let imgData = context.getImageData(0,0,canvas.width,canvas.height);
+                    let waterMarkCanvas = document.createElement("canvas");
+                    //設定浮水印畫布的高跟寬
+                    waterMarkCanvas.width = canvas.width;
+                    waterMarkCanvas.height = canvas.height;
+                    let waterMarkContext = waterMarkCanvas.getContext("2d");
+                    waterMarkContext.putImageData(imgData, 0, 0);
+                    waterMarkContext.font = "30px Arial ";
+                    waterMarkContext.fillStyle = "#ff0000";
+                    waterMarkContext.fillText(dateString, waterMarkCanvas.width - 290, 30);
+                    waterMarkContext.fillText("台電申請專用", waterMarkCanvas.width - 200, 60);
+                    let waterMarkImage = waterMarkCanvas.toDataURL("image/jpeg");
+
+                    if(!waterMarkImage) {
+                        reject({
+                          status: 'fail',
+                          message: '取得影像失敗'
+                        })
+                    }
+                    resolve({
+                        status: 'success',
+                        data: waterMarkImage
+                    });
+                };
+    
+                originImage.src = originImageSrc;
+            });
+        },
     }
 }

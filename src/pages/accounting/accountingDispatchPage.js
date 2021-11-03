@@ -33,11 +33,7 @@ export default {
       accountingList:[],
       oriAccoutingList:[],
       // 檢算員下拉選單
-      calculateList:[
-        {empNo:'105012124', empName:'連家齊'},
-        {empNo:'105012125', empName:'甄文君'},
-        {empNo:'105012126', empName:'君令偉'},
-      ],
+      calculateList:[],
       oriCalculateList:[],
       // 新增/修改 Modal 內容
       dispatchInfo: {
@@ -270,6 +266,7 @@ export default {
           this.calculateList = response.restData.calculateList;
           this.oriAccoutingList = JSON.parse(JSON.stringify(response.restData.accountingList));
           this.oriCalculateList = JSON.parse(JSON.stringify(response.restData.calculateList));
+          this.filterAccounting();
 
       },
       // eslint-disable-next-line no-unused-vars
@@ -311,47 +308,95 @@ export default {
       (response) => {                
           MessageService.showSystemError();
       });
-
-
      },
 
      // Action:修改派工設定
      updateDispatch(dispatchList){
-       // vin:
-       // dispatchList = dispatchList,
-       // oriAccoutingList = this.oriAccoutingList, 
-       // oriCalculateList = this.oriCalculateList,
+       AjaxService.post('/accountingDispatch/updateDispatch',
+       {
+          dispatchList : dispatchList,
+       },
+       (response) => {
+           // 驗證是否成功
+           if (!response.restData.success) {              
+               MessageService.showError(response.restData.returnMessage,'修改派工設定');
+               return;
+           }
+           // 驗證是否重複
+           if (!ValidateUtil.isEmpty(response.restData.message)) {              
+            MessageService.showError(response.restData.message,'修改派工設定');
+            return;
+           } 
+            // 關閉 dialog
+            this.dialog = false;
+            MessageService.showSuccess('修改派工設定');
+            this.queryAccountingDispatchInfo();
+            this.queryAccountingDispatchOption(); 
+       },
+       // eslint-disable-next-line no-unused-vars
+       (response) => {                
+           MessageService.showSystemError();
+       });
+
       
-      
-      
-       console.log(dispatchList);
-       // 關閉 dialog
-       this.dialog = false;
-       MessageService.showSuccess('修改派工設定');
     },
 
      // Action:新增派工設定
      createDispatch(dispatchList){
-       // vin:
-       // dispatchList = dispatchList,
-       // oriAccoutingList = this.oriAccoutingList,
-       // oriCalculateList = this.oriCalculateList,
-
-      console.log(dispatchList);
-       // 關閉 dialog
-       this.dialog = false;
-       MessageService.showSuccess('新增派工設定');
+       AjaxService.post('/accountingDispatch/insertDispatch',
+       {
+          dispatchList : dispatchList,
+       },
+       (response) => {
+           // 驗證是否成功
+           if (!response.restData.success) {              
+               MessageService.showError(response.restData.returnMessage,'新增派工設定');
+               return;
+           }
+           // 驗證是否重複
+           if (!ValidateUtil.isEmpty(response.restData.message)) {              
+            MessageService.showError(response.restData.message,'新增派工設定');
+            return;
+        }
+ 
+          // 關閉 dialog
+          this.dialog = false;
+          MessageService.showSuccess('新增派工設定');
+          this.queryAccountingDispatchInfo();
+          this.queryAccountingDispatchOption(); 
+       },
+       // eslint-disable-next-line no-unused-vars
+       (response) => {                
+           MessageService.showSystemError();
+       });
 
     },
 
     // Action:刪除派工設定
-    removeDispatch(){
-      console.log(this.selectDispatch.accounting);
-      if (this.selectIndex > -1) {
-        this.dispatchList.splice(this.selectIndex, 1);
-      }
-      this.deleteDispatchModel = false;
-      MessageService.showSuccess("刪除派工成功✓");
+    deleteDispatch(){
+      AjaxService.post('/accountingDispatch/deleteDispatch',
+      {
+        accounting: this.selectDispatch.accounting,
+        className: this.selectDispatch.className,
+      },
+      (response) => {
+          // 驗證是否成功
+          if (!response.restData.success) {              
+              MessageService.showError(response.restData.returnMessage,'刪除派工設定');
+              return;
+          }
+
+        this.deleteDispatchModel = false;
+        MessageService.showSuccess("刪除派工設定");
+        this.queryAccountingDispatchInfo();
+        this.queryAccountingDispatchOption()
+
+      },
+      // eslint-disable-next-line no-unused-vars
+      (response) => {                
+          MessageService.showSystemError();
+      });
+
     },
 
      
@@ -613,6 +658,19 @@ export default {
         } else {
           MessageService.showCheckInfo(this.requiredArray,this.formatArray);
         }       
+
+    },
+
+    /*將已選擇的核算員移除，核算員不可重複設定 */ 
+    filterAccounting(){
+        for(let i in this.dispatchList){
+          for(let y in this.oriAccoutingList){
+            if(this.dispatchList[i].accounting === this.oriAccoutingList[y].empNo){
+              this.selectIndex = this.oriAccoutingList.indexOf(this.oriAccoutingList[y]);
+              this.accountingList.splice(this.selectIndex, 1);
+            }
+          }
+        }
 
     },
 

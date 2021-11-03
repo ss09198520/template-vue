@@ -64,6 +64,8 @@ export default {
             // 證件圖檔清單
             certificateList:[],
             selectItem:{},
+            formParam: {},
+            formKey: 0,
         }
     },
     methods: {
@@ -103,6 +105,13 @@ export default {
         },
         browerOrder(item){
           this.selectItem = item;
+
+          // 帶入受理編號
+          this.formParam = {
+            acceptNum: item.acceptNum
+          };
+          this.formKey++;
+
           // 查詢案件資料
           this.queryRetrnInfo();
           

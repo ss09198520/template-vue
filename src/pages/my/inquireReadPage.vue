@@ -59,7 +59,7 @@
             cols="3"
           >
             <v-text-field
-              v-model="archieveNum"                           
+              v-model="archiveNum"                           
               outlined
               hide-details
               dense
@@ -171,7 +171,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="archieveDate.start"                  
+                  v-model="archiveDate.start"                  
                   append-icon="mdi-calendar"
                   readonly
                   dense
@@ -179,12 +179,12 @@
                   hide-details
                   v-bind="attrs"
                   clearable
-                  @click:clear="resetDate('archieveDate','start')"
+                  @click:clear="resetDate('archiveDate','start')"
                   v-on="on"
                 />
               </template>
               <v-date-picker
-                v-model="archieveDate.start"
+                v-model="archiveDate.start"
                 @input="menu3 = false"
                 @change="checkDate()"
               />
@@ -199,7 +199,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="archieveDate.end"                  
+                  v-model="archiveDate.end"                  
                   append-icon="mdi-calendar"
                   readonly
                   outlined
@@ -207,12 +207,12 @@
                   hide-details
                   v-bind="attrs"
                   clearable
-                  @click:clear="resetDate('archieveDate','end')"
+                  @click:clear="resetDate('archiveDate','end')"
                   v-on="on"
                 />
               </template>
               <v-date-picker
-                v-model="archieveDate.end"
+                v-model="archiveDate.end"
                 @input="menu4 = false"
                 @change="checkDate()"
               />
@@ -226,7 +226,7 @@
         <v-row>
           <v-col cols="1" />
           <v-col cols="3" style="margin-top:-25px">
-            <span class="red--text font-14px">{{ errMsg.archieveDate }}</span>
+            <span class="red--text font-14px">{{ errMsg.archiveDate }}</span>
           </v-col>
         </v-row>
              
@@ -267,7 +267,7 @@
                 @page-count="readFormListPageCount = $event"
               >
                 <template v-slot:item.mani="{ item }">   
-                  <div v-if="item.mani==true">
+                  <div>
                     <v-tooltip top>
                       <template v-slot:activator="{ on }">
                         <v-btn
@@ -284,19 +284,6 @@
                       <span>申請調閱</span>
                     </v-tooltip>                    
                   </div>                                                                               
-                </template>
-
-                <template v-slot:item.proxyEvent="{ item }">                                                        
-                  <div             
-                    v-if="item.proxyEvent == true"
-                    class="ma-2"
-                    icon
-                    @click="test(item)"
-                  >
-                    <v-icon>
-                      mdi-check-bold
-                    </v-icon>
-                  </div>                         
                 </template>
               </v-data-table>
             </v-col>
@@ -429,6 +416,7 @@
             cols="3"
           >
             <v-text-field
+              v-model="acceptNum"
               outlined
               hide-details                                         
               dense
@@ -442,7 +430,8 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="electricNum"                           
               outlined
               hide-details
               dense
@@ -457,7 +446,8 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="custName"                           
               outlined
               hide-details
               dense
@@ -471,7 +461,8 @@
           <v-col
             cols="3"
           >
-            <v-text-field                           
+            <v-text-field
+              v-model="archiveNum"                           
               outlined
               hide-details
               dense
@@ -488,7 +479,7 @@
           >
             <v-select
               v-model="contractType"
-              :items="contractTypeOption"
+              :items="contractTypeList"
               item-text="text"
               :return-object="true"
               outlined
@@ -512,7 +503,7 @@
                   fab
                   small
                   color="primary"
-                  @click="display = true"
+                  @click="search()"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-magnify'" />
@@ -538,7 +529,7 @@
                 @page-count="readFormListPageCount = $event"
               >
                 <template v-slot:item.mani="{ item }">   
-                  <div v-if="item.mani==true">
+                  <div>
                     <v-tooltip top>
                       <template v-slot:activator="{ on }">
                         <v-btn
@@ -555,19 +546,6 @@
                       <span>申請調閱</span>
                     </v-tooltip>              
                   </div>                                                                               
-                </template>
-
-                <template v-slot:item.proxyEvent="{ item }">                                                        
-                  <div             
-                    v-if="item.proxyEvent == true"
-                    class="ma-2"
-                    icon
-                    @click="test(item)"
-                  >
-                    <v-icon>
-                      mdi-check-bold
-                    </v-icon>
-                  </div>                         
                 </template>
               </v-data-table>
             </v-col>
@@ -631,7 +609,7 @@
             <v-row>
               <v-col cols="2">整理號碼</v-col>
               <v-col cols="3">
-                {{ selectForm.archieveNum }}
+                {{ selectForm.archiveNum }}
               </v-col>
             </v-row>
             <v-row>
@@ -658,7 +636,7 @@
               <v-col cols="2">備註</v-col>
               <v-col cols="9">
                 <v-textarea
-                  v-model="memo"
+                  v-model="otherReason"
                   outlined
                   value=""
                   rows="4"

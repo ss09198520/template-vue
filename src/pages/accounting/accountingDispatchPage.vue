@@ -96,7 +96,6 @@
     <v-dialog
       v-model="dialog"
       max-width="800px"
-      transition="dialog-bottom-transition"
       scrollable
     >
       <v-card>
@@ -532,7 +531,7 @@
           </v-btn>
           <v-btn              
             color="primary"            
-            @click="removeDispatch()"
+            @click="deleteDispatch()"
           >
             &emsp;確定&emsp;
           </v-btn>

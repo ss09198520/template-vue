@@ -168,19 +168,25 @@
             >
               <!-- 調閱狀態欄位 -->
               <template v-slot:item.status="{ item }">                                                        
-                <div v-if="item.status === '通過' && new Date(item.validDate) > sysDate">
-                  有效日至{{ item.validDate }}
+                <div v-if="(item.status === 'PASS' || item.status === 'CLOSE') && new Date(item.validDateStr) >= sysDate">
+                  有效日至{{ item.validDateStr }}
                 </div>
-                <div v-else-if="item.status === '通過' && new Date(item.validDate) < sysDate">
+                <div v-else-if="(item.status === 'PASS' || item.status === 'CLOSE') && new Date(item.validDateStr) < sysDate">
                   已逾期
                 </div>
-                <div v-else>
-                  {{ item.status }}
+                <div v-else-if="item.status === 'REJECT'">
+                  退件
                 </div>
-
+                <div v-else-if="item.status === 'WAIT'">
+                  待簽核
+                </div>
+                <div v-else-if="item.status === 'PROGRESS'">
+                  簽核中
+                </div>
+                <div v-else />
               </template>
               <template v-slot:item.action="{ item }">   
-                <div v-if="item.status === '通過' && new Date(item.validDate) > sysDate">
+                <div v-if="(item.status === 'PASS' || item.status === 'CLOSE') && new Date(item.validDateStr) > sysDate">
                   <v-tooltip top>
                     <template v-slot:activator="{ on }">
                       <v-btn
@@ -188,7 +194,7 @@
                         fab
                         small
                         color="primary"
-                        @click="browerOrder(item)"
+                        @click="browserOrder(item)"
                         v-on="on"
                       >
                         <v-icon v-text="'mdi-eye'" />
@@ -197,19 +203,6 @@
                     <span>瀏覽案件</span>
                   </v-tooltip>                 
                 </div>                                                                               
-              </template>
-
-              <template v-slot:item.proxyEvent="{ item }">                                                        
-                <div             
-                  v-if="item.proxyEvent == true"
-                  class="ma-2"
-                  icon
-                  @click="test(item)"
-                >
-                  <v-icon>
-                    mdi-check-bold
-                  </v-icon>
-                </div>                         
               </template>
             </v-data-table>
           </v-col>
@@ -243,7 +236,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <form-page restrict-mode="viewMyRead" />
+            <form-page :key="formKey" restrict-mode="viewDownload" :form-param="formParam" />
           </v-card-text>
           <v-card-actions class="d-end mt-5">
             <v-btn              

@@ -312,30 +312,63 @@ export default {
 
      // Action:修改派工設定
      updateDispatch(dispatchList){
-       // vin:
-       // dispatchList = dispatchList,
-       // oriAccoutingList = this.oriAccoutingList, 
-       // oriCalculateList = this.oriCalculateList,
+       AjaxService.post('/accountingDispatch/updateDispatch',
+       {
+          dispatchList : dispatchList,
+       },
+       (response) => {
+           // 驗證是否成功
+           if (!response.restData.success) {              
+               MessageService.showError(response.restData.returnMessage,'修改派工設定');
+               return;
+           }
+           // 驗證是否重複
+           if (!ValidateUtil.isEmpty(response.restData.message)) {              
+            MessageService.showError(response.restData.message,'修改派工設定');
+            return;
+           } 
+            // 關閉 dialog
+            this.dialog = false;
+            MessageService.showSuccess('修改派工設定');
+            this.queryAccountingDispatchInfo();
+            this.queryAccountingDispatchOption(); 
+       },
+       // eslint-disable-next-line no-unused-vars
+       (response) => {                
+           MessageService.showSystemError();
+       });
+
       
-      
-      
-       console.log(dispatchList);
-       // 關閉 dialog
-       this.dialog = false;
-       MessageService.showSuccess('修改派工設定');
     },
 
      // Action:新增派工設定
      createDispatch(dispatchList){
-       // vin:
-       // dispatchList = dispatchList,
-       // oriAccoutingList = this.oriAccoutingList,
-       // oriCalculateList = this.oriCalculateList,
-
-      console.log(dispatchList);
-       // 關閉 dialog
-       this.dialog = false;
-       MessageService.showSuccess('新增派工設定');
+       AjaxService.post('/accountingDispatch/insertDispatch',
+       {
+          dispatchList : dispatchList,
+       },
+       (response) => {
+           // 驗證是否成功
+           if (!response.restData.success) {              
+               MessageService.showError(response.restData.returnMessage,'新增派工設定');
+               return;
+           }
+           // 驗證是否重複
+           if (!ValidateUtil.isEmpty(response.restData.message)) {              
+            MessageService.showError(response.restData.message,'新增派工設定');
+            return;
+        }
+ 
+          // 關閉 dialog
+          this.dialog = false;
+          MessageService.showSuccess('新增派工設定');
+          this.queryAccountingDispatchInfo();
+          this.queryAccountingDispatchOption(); 
+       },
+       // eslint-disable-next-line no-unused-vars
+       (response) => {                
+           MessageService.showSystemError();
+       });
 
     },
 

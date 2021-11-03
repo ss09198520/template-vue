@@ -113,7 +113,7 @@ export default {
                 this.isAddAttachment = formParam.isAddAttachment;
                 this.isAffidavit = formParam.isAffidavit;
                 this.uploadNo = formParam.uploadNo;
-
+                
                 this.formPageMode = ValidateUtil.isEmpty(formParam.formPageMode) ? this.formPageMode : formParam.formPageMode;
             }
         },

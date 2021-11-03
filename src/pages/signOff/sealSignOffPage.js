@@ -35,7 +35,8 @@ export default {
              sealSignListPageCount:0,
              sealSignListPage:1,
              browserModel: false, // 瀏覽案件視窗開關  
-             sealOffFinish: false, //控制簽核前後瀏覽表單附件內容                   
+             sealOffFinish: false, //控制簽核前後瀏覽表單附件內容
+             formParam: {},
         }
     },
     methods: {
@@ -58,7 +59,13 @@ export default {
         },
         action(type,item){
             // 抓出選的是第幾筆                       
-            this.selectIndex = this.sealSignList.indexOf(item);            
+            this.selectIndex = this.sealSignList.indexOf(item);
+
+            // 帶入受理編號
+            this.formParam = {
+                acceptNum: item.acceptNum
+            };
+
             if(type=='delete'){
                 this.deleteOrderModel = true;
             } else if(type == 'browse'){

@@ -52,6 +52,7 @@ export default{
             selectItem:{},
             errMsg: null,
             formatArray:[], // 格式驗證
+            formParam: {},
         }
     },
     methods: {
@@ -70,6 +71,12 @@ export default{
 
         browerOrder(item){
             this.selectItem = item;
+
+            // 帶入受理編號
+            this.formParam = {
+                acceptNum: item.acceptNum
+            };
+
             this.queryReadInfo();
             this.browserModel = true;
         },

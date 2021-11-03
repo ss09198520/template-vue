@@ -217,7 +217,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <form-page restrict-mode="view" :sign-preview-img-src="signPreviewImgSrc" :certificate-list="certificateList" />
+            <form-page restrict-mode="view" :form-param="formParam" :sign-preview-img-src="signPreviewImgSrc" :certificate-list="certificateList" />
           </v-card-text>
           <v-card-actions class="d-end mt-5">
             <v-btn              

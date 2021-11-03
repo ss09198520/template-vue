@@ -103,6 +103,12 @@ export default {
         },
         browerOrder(item){
           this.selectItem = item;
+
+          // 帶入受理編號
+          this.formParam = {
+            acceptNum: item.acceptNum
+        };
+
           // 查詢案件資料
           this.queryRetrnInfo();
           

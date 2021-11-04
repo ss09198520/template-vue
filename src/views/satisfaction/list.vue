@@ -30,12 +30,13 @@
               狀 態
             </v-col>
             <v-col cols="3">
-              <v-select
+              <v-autocomplete
                 v-model="postForm.status"
                 :items="signStatusOption"
+                clearable
+                item-color="accent"
                 class="font-bold"
                 color="accent"
-                item-color="accent"
                 placeholder="狀態"
                 dense
                 outlined
@@ -138,7 +139,7 @@
             fab
             small
             color="accent"
-            @click="isShow = false"
+            @click="postForm={};questionnaires=[]"
             v-on="on"
           >
             <v-icon>mdi-refresh</v-icon>
@@ -173,7 +174,7 @@
                 <v-card-title class="justify-center">Are you sure?</v-card-title>
                 <v-card-text />
                 <v-card-actions class="justify-center">
-                  <v-btn color="error" depressed @click="remove" v-text="'Yes'" />
+                  <v-btn color="error" depressed v-text="'Yes'" />
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -229,12 +230,18 @@
             </v-tooltip>
           </template>
           <template v-slot:[`item.status`]="{ item }">
-            <v-icon
-              class="d-flex justify-center"
-              :color="item.status==='ACTIVE' ? 'green darken-2':''"
-            >
-              {{ item.status==='ACTIVE' ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
-            </v-icon>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="d-flex justify-center"
+                  :color="item.status==='ACTIVE' ? 'green darken-2':''"
+                  v-on="on"
+                >
+                  {{ statusOption.find(state => { return item.status===state.value }).icon }}
+                </v-icon>
+              </template>
+              {{ statusOption.find(state => { return item.status===state.value }).text }}
+            </v-tooltip>
           </template>
           <template v-slot:[`item.signStatus`]="{ item }">
             {{ signStatusOption.find(state => { return item.signStatus===state.value }).text }}
@@ -281,9 +288,15 @@
         releaseDateStartMenu: false,
         releaseDateEndMenu: false,
         //日曆 end
+        statusOption: [
+          { text: '上架中', value: 'ACTIVE' , icon: 'mdi-checkbox-marked-circle'},
+          { text: '未上架', value: 'WAIT' , icon : 'mdi-minus-circle'},
+          { text: '已下架', value: 'CLOSE', icon: 'mdi-minus-circle'},
+        ],
         signStatusOption: [
             { text: '暫存', value: 'DRAFT'},
             { text: '退件', value: 'REJECT'},
+            { text: '審核中', value: 'WAIT'},
             { text: '審核中', value: 'PROGRESS'},
             { text: '審核完成', value: 'PASS'},
         ],
@@ -303,61 +316,22 @@
           {text: '退件原因',value: 'rejectReason',align: 'center',},
         ],
         questionnaires: [],
-        defaultItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          state:'',
-          ondate: 0,
-          pages: 0,
-        },
         // CRUD
         dialog: false,
         alertDialog: false,
-        editedIndex: -1,
-        editedItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          state:'',
-          ondate: 0,
-          pages: 0,
-        },
       }
     },
     methods: {
-      close() {
-        this.dialog = false
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-        this.alertDialog = false
-      },
-      save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.itemsCRUD[this.editedIndex], this.editedItem)
-        } else {
-          this.itemsCRUD.push(this.editedItem)
-        }
-        this.close()
-      },
       previewItem(item) {
         this.$router.push({path:`/media/preview/questionnaire/${item.questionnaireId}`})
       },
       editItem(item) {
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-        this.editedItem = Object.assign({}, item)
+        this.editedIndex = this.questionnaires.indexOf(item)
+        // this.editedItem = Object.assign({}, item)
         this.$router.push({path:`${this.$route.matched[0].path}/create`})
       },
       viewSchedule() {
         this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
-      },
-      deleteItem(item) {
-        this.alertDialog = true
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-      },
-      remove() {
-        this.itemsCRUD.splice(this.editedIndex, 1)
-        this.close()
       },
       // 送出問卷查詢
       submitSearch() {
@@ -393,12 +367,28 @@
           MessageService.showError(data.restData.returnMessage,'查詢問卷上架資料');
             return;
         }
+        //查詢前清空資料
         this.questionnaires = Object.assign([])
         // 驗證是否有資料
         if(this.hasResult(data.restData.questionnaires)){
-          this.questionnaires = data.restData.questionnaires
-        }
+          
+          let tmpData = data.restData.questionnaires
+          
+          //處理退件資訊轉換
+          tmpData.forEach(element => {
+            if(element.signStatus==='REJECT'){
+              Object.assign(element, {rejectInfo: {
+                rejectManagerName: element.rejectUser,
+                rejectDate: element.rejectDate,
+                rejectReason: element.rejectReason,
+              }});
+            }
+          });
 
+          this.questionnaires =tmpData
+        }
+        
+        
       },
     }
   }

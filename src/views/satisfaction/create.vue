@@ -25,7 +25,7 @@
                       </v-col>
                       <v-col>
                         <v-textarea
-                          v-model="data.display_name"
+                          v-model="data.questionnaireName"
                           class="form-title"
                           color="accent"
                           placeholder="問卷標題"
@@ -42,7 +42,7 @@
                       </v-col>
                       <v-col>
                         <v-textarea 
-                          v-model="data.name.desc"
+                          v-model="data.memo"
                           color="accent"
                           placeholder="問卷描述"
                           counter="40"
@@ -63,7 +63,7 @@
                         >
                           <template v-slot:activator="{ on }">
                             <v-text-field
-                              v-model="releaseDateStart"
+                              v-model="postForm.releaseDateStart"
                               append-icon="mdi-calendar"
                               label="上架時間"
                               color="accent"
@@ -75,7 +75,7 @@
                             />
                           </template>
                           <v-date-picker
-                            v-model="releaseDateStart"
+                            v-model="postForm.releaseDateStart"
                             no-title
                             scrollable
                           />
@@ -103,54 +103,30 @@
                         />
                       </v-col>
                     </v-row>
-                    <!-- <textarea v-model="i.desc" placeholder="問卷說明" @focus="$autoText($event)" @input="$autoText($event)" /> -->
                     <div v-if="!data.question.length" class="add-list" color="primary">
                       <v-icon @click="addListFn" v-text="'mdi-plus'" />
                     </div>
                   </div>
-                  <div class="q-wrap">
-                    <draggable v-for="data, index in data.question" :key="index" v-model="data.question" :options="{group:'people'}" :move="onMove">
-                      <div id="items" class="q-li" :class="{'q-li-focus': focusIndex === index}" @click="focusItem($event, index)">
+                  <v-col class="q-wrap">
+                    <draggable v-for="data, index in data.question" :key="index" v-model="data.question" group="question" :move="onMove">
+                      <v-col id="items" class="q-li" :class="{'q-li-focus': focusIndex === index}" @click="focusItem($event, index)">
                         <div class="drap-area">
-                          <v-icon @click="addListFn" v-text="'mdi-drag-horizontal'" />
+                          <v-icon v-text="'mdi-drag-horizontal'" />
                         </div>
                         <div v-for="content, index1 in data.content" :key="index1" class="q-item-wrap">
                           <div class="q-item q-title-wrap">
                             <div class="q-title">
-                              <div class="li">
-                                <textarea v-model="content.title" class="q-area" placeholder="問題" @focus="$autoText($event)" @input="$autoText($event)" />
-                              </div>
+                              <v-text-field v-model="content.title" placeholder="問題名稱" />
                             </div>
-                            <!-- <el-select class="q-select" v-if="focusIndex === index" v-model="data.types" filterable placeholder="請選擇">
-                              <el-option
-                                v-for="item in selectOptions"
-                                :key="item"
-                                :label="item"
-                                :value="item">
-                              </el-option>
-                            </el-select> -->
                           </div>
-                          <div v-if="data.types === '下拉列表' || data.types === '單選題' || data.types === '多選題' || data.types === '優先級'" class="q-item">
+                          <div class="q-item">
                             <div v-for="item, i in content.answer" :key="i" class="q-radio">
-                              <div v-if="data.types === '下拉列表' || data.types === '優先級'" class="icon-radio">{{ i + 1 }}.</div>
-                              <div v-else class="icon-radio" :class="{'icon-cirle': data.types === '單選題', 'icon-square': data.types === '多選題'}" />
-                              <!-- <input v-model="item.description" class="radio-input"> -->
-                              <v-text-field
-                                v-model="item.description"
-                                color="accent"
-                                class="font-weight-bold"
-                                dense
-                                readonly
-                              />
+                              <div v-if="data.types === 'radio' || data.types === 'checkbox'" class="icon-radio" :class="{'icon-cirle': data.types === 'radio', 'icon-square': data.types === 'checkbox'}" />
+                              <div v-else class="icon-radio">{{ i + 1 }}.</div>
+                              {{ item.description }}
                               <i v-if="focusIndex === index" class="el-icon-close" @click="deleteRadioFn(index, index1, i)" />
                             </div>
-                            <!-- <div v-if="focusIndex === index" class="q-radio">
-                              <div v-if="data.types === '下拉列表' || data.types === '優先級'" class="icon-radio">{{ content.answer.length + 1 }}.</div>
-                              <div v-else class="icon-radio" :class="{'icon-cirle': data.types === '單選題', 'icon-square': data.types === '多選題'}" />
-                              <input v-model="addRadio" class="radio-add" @focus="addRadioFn(index, index1)">
-                            </div> -->
                           </div>
-                          <div v-if="data.types === '文本題'" class="q-item text-wrap">文本回答</div>
                           <div v-if="focusIndex === index" class="q-item option-wrap">
                             <ul class="option-list">
                               <li>
@@ -159,21 +135,12 @@
                               <li>
                                 <v-icon @click="deleteListFn(index)" v-text="'mdi-delete'" />
                               </li>
-                              <li class="mt-1">
-                                <!-- <v-switch 
-                                  v-model="data.is_required" 
-                                  color="red"
-                                  :label="`必填`" 
-                                /> -->
-                                <!-- <el-switch :width="40" on-color="#4ca2ae" v-model="data.is_required" on-text="" off-text="">
-                                </el-switch> -->
-                              </li>
                             </ul>
                           </div>
                         </div>
-                      </div>
+                      </v-col>
                     </draggable>
-                  </div>
+                  </v-col>
                 </div>
                 <!-- <v-btn v-if="data.question.length" class="primary form-sidebar" @click="addListFn">
                   <v-icon v-text="'mdi-plus'" />
@@ -215,28 +182,35 @@
 <script>
   import draggable from 'vuedraggable'
 
-  let lineEndOptions = Array.apply(null, Array(9)).map((item, i) => {
-    return i + 2
-  })
+  // let lineEndOptions = Array.apply(null, Array(9)).map((item, i) => {
+  //   return i + 2
+  // })
+  const defaultForm = {
+    questionnaireName: null, 
+    releaseDateStart: null, 
+    releaseDateEnd: null, 
+    status: null
+  }
 
-  let that
   export default {
     
-    components: {
-      draggable
-    },
+    components: { draggable },
 
     data () {
-      that = this
       return {
         auth: false,
         loading: false,
+        hideDatails: false,
+        //日曆
+        releaseDateStartMenu: false,
+        //日曆 end
+        postForm: Object.assign({}, defaultForm),
         // selectOptions: ['單選題', '多選題', '下拉列表', '線性量表', '矩陣量表', '優先級', '文本題'],
         type: 'a',
         types: ['a'],
         typeToLabel: {
-          a: '單選題',
-          b: '多選題',
+          a: 'radio',
+          b: 'checkbox',
           c: '下拉列表',
           d: '文本題',
         },
@@ -246,30 +220,21 @@
         // langCode: ['cn', 'en', 'kr', 'jp', 'fr', 'de', 'ru', 'sp', 'po', 'it', 'nl', 'id', 'tr', 'thai', 'zh', 'fa', 'ro', 'ar'],
         // langList: ['中文', '英語', '韓語', '日語', '法語', '德語', '俄語', '西班牙語', '葡萄牙語', '意大利語',
         //   '荷蘭語', '印度語', '土耳其語', '泰語', '繁體中文', '波斯語', '羅馬尼亞語', '阿拉伯語'],
-        defaultLang: '英語',
-        tabLang: '中文',
         editableTabs: ['中文'],
         addLangVisible: false,
-        defaultOption: '單選題',
+        defaultOption: 'radio',
         addRadio: '添加選項',
-        lineOptions: [0, 1],
-        lineEndOptions: lineEndOptions,
         langArray: [],
         data: {
-          display_name: '',
-          name: {
-            questionnaire_name: '',
-            desc: '',
-            language: 'cn'
-          },
+          questionnaireName: '',
+          memo: '',
           repeat_submit: false,
           question: [{
             question_id: 1,
-            types: '單選題',
+            types: 'radio',
             is_required: false,
             content: [
               {
-                language: 'cn',
                 title: '',
                 answer: [{
                   answer_id: 1,
@@ -287,13 +252,6 @@
                   answer_id: 5,
                   description: '非常不滿意'
                 }],
-                line_answer: {
-                  line_value: 1,
-                  line_end_value: 5,
-                  line_tag: '',
-                  line_end_tag: ''
-                },
-                text_answer: ''
               }
             ]}
           ]
@@ -304,7 +262,7 @@
     },
     methods: {
       onEnd () {
-        that.drag = false
+        this.drag = false
       },
       onMove ({relatedContext, draggedContext}) {
         let relatedIndex = relatedContext.index
@@ -315,37 +273,37 @@
       focusTitle (event) {
         let classList = event.target.classList
         if (classList.contains('add-list') || classList.contains('el-icon-plus')) return
-        that.focusIndex = 'title'
+        this.focusIndex = 'title'
       },
       focusItem (event, i) {
         let classList = event.target.classList
-        if (classList.contains('el-icon-delete') || classList.contains('icon-copy') || that.focusIndex === i) return
-        that.focusIndex = i
+        if (classList.contains('el-icon-delete') || classList.contains('icon-copy') || this.focusIndex === i) return
+        this.focusIndex = i
       },
       addRadioFn (i, j) {
-        let list = that.data.question[i].content[j].answer
-        that.addFormFn(list)
+        let list = this.data.question[i].content[j].answer
+        this.addFormFn(list)
       },
       deleteRadioFn (i, j, k) {
-        that.data.question[i].content[j].answer.splice(k, 1)
+        this.data.question[i].content[j].answer.splice(k, 1)
       },
       addFormFn (list) {
         let index = list.length ? parseInt(list[list.length - 1].description.substr(2)) + 1 : '1'
         let text = index ? '選項' + index : '選項1'
         list.push({answer_id: list.length + 1, description: text})
-        that.$nextTick(() => {
+        this.$nextTick(() => {
           let input = document.querySelectorAll('.radio-input')
           input[input.length - 1].focus()
         })
       },
       copyListFn (index) {
-        let data = JSON.parse(JSON.stringify(that.data.question[index]))
-        that.data.question.splice(index, 0, data)
-        that.focusIndex = that.data.question.length - 1
+        let data = JSON.parse(JSON.stringify(this.data.question[index]))
+        this.data.question.splice(index, 0, data)
+        this.focusIndex = this.data.question.length - 1
       },
       addListFn () {
-        let codeList = that.editableTabs.map((i) => {
-          return that.langCode[that.langList.indexOf(i)]
+        let codeList = this.editableTabs.map((i) => {
+          return this.langCode[this.langList.indexOf(i)]
         })
         let contentList = codeList.map((i) => {
           return {
@@ -376,64 +334,24 @@
             text_answer: ''
           }
         })
-        let list = {
-          question_id: that.data.question.length + 1,
-          types: '單選題',
+        let question = {
+          question_id: this.data.question.length + 1,
+          types: 'radio',
           is_required: false,
           content: contentList
         }
-        that.data.question.push(list)
-        that.focusIndex = that.data.question.length - 1
+        this.data.question.push(question)
+        this.focusIndex = this.data.question.length - 1
       },
       deleteListFn (i) {
-        that.data.question.splice(i, 1)
-        that.focusIndex = i === 0 && that.data.question.length > 0 ? i : i - 1
+        this.data.question.splice(i, 1)
+        this.focusIndex = i === 0 && this.data.question.length > 0 ? i : i - 1
       },
-      saveFn () {
+      // 送出問卷製作儲存
+      submit() {
+        //API post data 
+        // this.fetchQuestionnaireList(this.postForm)
       },
-      handleTabsEdit (targetName, action) {
-        if (action === 'add') {
-          that.addLangVisible = true
-        }
-        if (action === 'remove') {
-          that.$confirm('確定刪除語言: ' + targetName + '的問卷嗎？', {
-            title: ' ',
-            confirmButtonText: '確定',
-            cancelButtonText: '取消',
-            type: 'warning',
-            closeOnClickModal: false,
-            beforeClose: (action, instance, done) => {
-              let closeFn = () => {
-                instance.confirmButtonLoading = false
-                instance.confirmButtonText = '確定'
-              }
-              if (action === 'confirm') {
-                let tabs = that.editableTabs
-                let activeName = that.tabLang
-                if (activeName === targetName) {
-                  tabs.forEach((tab, index) => {
-                    if (tab === targetName) {
-                      let nextTab = tabs[index + 1] || tabs[index - 1]
-                      if (nextTab) {
-                        activeName = nextTab
-                      }
-                    }
-                  })
-                }
-                that.tabLang = activeName
-                that.editableTabs = tabs.filter(tab => tab !== targetName)
-                closeFn()
-                done()
-              } else {
-                closeFn()
-                done()
-              }
-            }
-          }).then(() => {
-          }).catch(() => {
-          })
-        }
-      }
     }
   }
 </script>
@@ -569,8 +487,8 @@
             margin-right: 15px;
           }
           .icon-cirle {
-            border: 2px solid lightgray;
             border-radius: 50%;
+            border: 2px solid lightgray;
           }
           .icon-square {
             border: 2px solid lightgray;

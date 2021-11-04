@@ -41,7 +41,7 @@
                                       :key="idx1"
                                       :label="answer.label"
                                       :value="answer.value"
-                                      @change="setAnswerValue(question.questionId , answer.answerId ,answer.value)"
+                                      @change="setAnswerValue(question.questionId , answer.answerId , answer.label ,answer.value)"
                                     />
                                   </v-radio-group>
                                 </div>
@@ -158,10 +158,11 @@
         if (classList.contains('el-icon-delete') || classList.contains('icon-copy') || this.focusIndex === i) return
         this.focusIndex = i
       },
-      setAnswerValue (questionId,answerId,answerValue) {
+      setAnswerValue (questionId,answerId,answerLabel,answerValue) {
         console.log('question.questionId:' , questionId , 'answer.answerId:' , answerId , 'answer.value:' , answerValue)
         const question = this.postForm.questions.find((value) => value.questionId===questionId)
         question.userAnswerId = answerId
+        question.userAnswerLabel = answerLabel
         question.userAnswerValue = answerValue
       },
 
@@ -229,7 +230,7 @@
           this.$nextTick(() => {this.stepEl = 1});
         }
       },
-      
+
       //Action:問卷預覽頁面初始化
       async fetchQuestionnaire(id) {
         const data = await fetchEditQuestionnaire(id)

@@ -68,7 +68,7 @@
                 />
               </v-menu>
             </v-col>
-            <v-col cols="1">
+             <v-col v-if="isRegion==1" cols="1">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -106,8 +106,7 @@
       <v-col cols="2" class="ml-2 ">
         查詢下載結果
       </v-col>
-      <v-col cols="8" class="ml-2 ">
-        業務處
+      <v-col cols="8" class="ml-2 ">        
         <v-btn      
           class="ml-3 ma-2"
           fab
@@ -118,7 +117,7 @@
           <v-icon v-text="'mdi-file-download-outline'" />
         </v-btn>
       </v-col>
-      <v-col cols="2" class="ml-2 ">
+     <!-- <v-col cols="2" class="ml-2 ">
         查詢下載結果
       </v-col>
       <v-col cols="6" class="ml-2 ">
@@ -132,7 +131,7 @@
         >
           <v-icon v-text="'mdi-file-download-outline'" />          
         </v-btn>
-      </v-col>
+      </v-col>-->
 
      
     </v-row>
@@ -189,6 +188,7 @@
   export default {
     data() {
       return {
+        isRegion: 0, // 1區處、else業務處
         isShow: false,
         // menu: false,
         // date: new Date().toISOString().substr(0, 10),

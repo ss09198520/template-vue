@@ -475,14 +475,14 @@
                       </v-row>
                       <v-row style="margin-top: 0;">
                         <div style="height: 10px;width: 140px;" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="!dispatchInfo.useMeter || dispatchInfo.meterType!==1" label="09" value="09" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="!dispatchInfo.useMeter || dispatchInfo.meterType!==1" label="10" value="10" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="!dispatchInfo.useMeter || dispatchInfo.meterType!==1" label="11" value="11" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="!dispatchInfo.useMeter || dispatchInfo.meterType!==1" label="12" value="12" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="!dispatchInfo.useMeter || dispatchInfo.meterType!==1" label="13" value="13" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="!dispatchInfo.useMeter || dispatchInfo.meterType!==1" label="14" value="14" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="!dispatchInfo.useMeter || dispatchInfo.meterType!==1" label="15" value="15" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="!dispatchInfo.useMeter || dispatchInfo.meterType!==1" label="16" value="16" class="meter-checkbox" />
+                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.meterType!==1" label="09" value="09" class="meter-checkbox" />
+                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.meterType!==1" label="10" value="10" class="meter-checkbox" />
+                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.meterType!==1" label="11" value="11" class="meter-checkbox" />
+                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.meterType!==1" label="12" value="12" class="meter-checkbox" />
+                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.meterType!==1" label="13" value="13" class="meter-checkbox" />
+                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.meterType!==1" label="14" value="14" class="meter-checkbox" />
+                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.meterType!==1" label="15" value="15" class="meter-checkbox" />
+                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.meterType!==1" label="16" value="16" class="meter-checkbox" />
                       </v-row>
                     </v-radio-group>
                   </v-col>

@@ -62,7 +62,7 @@
                               >
                                 下一題 <v-icon v-text="'mdi-chevron-right'" />
                               </v-btn>
-                              <v-btn
+                              <!-- <v-btn
                                 v-if="idx === questionnaire.questions.length - 1 && !isView"
                                 class="mr-1"
                                 depressed
@@ -70,7 +70,7 @@
                                 @click="submit"
                               >
                                 提交問卷 <v-icon v-text="'mdi-clipboard-text-multiple'" />
-                              </v-btn>
+                              </v-btn> -->
                             </v-stepper-content>
                           </div>
                         </div>

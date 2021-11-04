@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function initQuestionnaireAnswer(data) {
+  return request({
+    url: '/questionnaire/v1/init',
+    method: 'post',
+    data
+  })
+}
+
 export function fetchActiveQuestionnaire() {
   return request({
     url: '/questionnaire/v1/active',

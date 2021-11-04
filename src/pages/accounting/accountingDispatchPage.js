@@ -295,9 +295,6 @@ export default {
         }
             // 整理資料
             this.sortDispatchData(response.restData.dispatchList);
-                
-            // 記下這次修改的 item
-            this.editIndex = this.dispatchList.indexOf(item);
             // 切換 dialog 模式
             this.changeDialog('edit');
             // 打開 dialog
@@ -436,6 +433,7 @@ export default {
       let hasMeter = false;             // 是否有契約種類-表制的資料 
       let meterType = null;             // 在契約種類-表制中是否有選擇電號(0)還是計算日(1) 
 
+      debugger;
       // 判斷為契約種類還是無限定，V無限定/H高壓/P包制/F表制
       if(dispatchList[0].type === 'V'){
         this.dispatchInfo.dispatchType = 0;  //不論契約種類
@@ -469,7 +467,7 @@ export default {
         } else if(dispatchList[i].type === 'F'){
             hasMeter = true;
             // 類型為表制 > 計算日
-            if(dispatchList[i].computeDate.length > 0){
+            if(!ValidateUtil.isEmpty(dispatchList[i].computeDate)){
               meterType = 1;
               computeDateList.push(
                 dispatchList[i].computeDate
@@ -663,14 +661,17 @@ export default {
 
     /*將已選擇的核算員移除，核算員不可重複設定 */ 
     filterAccounting(){
+        let accountingList = JSON.parse(JSON.stringify(this.oriAccoutingList));
         for(let i in this.dispatchList){
-          for(let y in this.oriAccoutingList){
-            if(this.dispatchList[i].accounting === this.oriAccoutingList[y].empNo){
-              this.selectIndex = this.oriAccoutingList.indexOf(this.oriAccoutingList[y]);
-              this.accountingList.splice(this.selectIndex, 1);
+          for(let y in accountingList){
+            if(this.dispatchList[i].accounting === accountingList[y].empNo){
+              this.selectIndex = accountingList.indexOf(accountingList[y]);
+              accountingList.splice(this.selectIndex, 1);
             }
           }
         }
+
+        this.accountingList = accountingList;
 
     },
 

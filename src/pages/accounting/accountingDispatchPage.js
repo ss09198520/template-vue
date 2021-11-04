@@ -105,50 +105,8 @@ export default {
     newDispatch(){
       // 切換 dialog 模式
       this.changeDialog('add');
-
-      // 清空 dialog 內容
-      this.dispatchInfo = {
-        className: '',
-        accounting:'',
-        accountingName: '',
-        calculate:'',
-        calculateName:'',
-        // dispatchType: 0,
-        usePackage: false,
-        useHighVoltage: false,
-        useMeter: false,
-        // meterType: 0,
-        computeDateList: [],
-        electricNumList: [
-          {start: '', end: ''},
-        ],
-        packageNumList:[
-          {start: '', end: ''},
-        ],
-        highVoltageNumList:[
-          {start: '', end: ''},
-        ],
-        meterElectricNumList:[
-          {start: '', end: ''},
-        ],
-      };
-
-      this.errorMsg = {
-        className:null,
-        accounting:null,
-        calculate: null,
-        classType: null,
-        contractType: null,
-        electricNum:null,
-        packageNum:null,
-        highVoltageNum: null,
-        meterType:null,
-        meterElectricNum: null,
-        meterCompute: null,
-      },
-
-      this.accounting = null;
-      this.calculate = null;
+       // 先將視窗資料給預設設定
+       this.resetDialogData();
 
       // 打開 dialog
       this.dialog = true;
@@ -433,7 +391,9 @@ export default {
       let hasMeter = false;             // 是否有契約種類-表制的資料 
       let meterType = null;             // 在契約種類-表制中是否有選擇電號(0)還是計算日(1) 
 
-      debugger;
+      // 先將視窗資料給預設設定
+      this.resetDialogData();
+
       // 判斷為契約種類還是無限定，V無限定/H高壓/P包制/F表制
       if(dispatchList[0].type === 'V'){
         this.dispatchInfo.dispatchType = 0;  //不論契約種類
@@ -505,6 +465,7 @@ export default {
       this.dispatchInfo.useMeter = hasMeter;
       this.dispatchInfo.meterType = meterType;
 
+      console.log(this.dispatchInfo);
       
     },
 
@@ -673,6 +634,52 @@ export default {
 
         this.accountingList = accountingList;
 
+    },
+
+    // 清空 dialog 內容
+    resetDialogData(){
+      this.dispatchInfo = {
+        className: '',
+        accounting:'',
+        accountingName: '',
+        calculate:'',
+        calculateName:'',
+        dispatchType: null,
+        usePackage: false,
+        useHighVoltage: false,
+        useMeter: false,
+        meterType: null,
+        computeDateList: [],
+        electricNumList: [
+          {start: '', end: ''},
+        ],
+        packageNumList:[
+          {start: '', end: ''},
+        ],
+        highVoltageNumList:[
+          {start: '', end: ''},
+        ],
+        meterElectricNumList:[
+          {start: '', end: ''},
+        ],
+      };
+
+      this.errorMsg = {
+        className:null,
+        accounting:null,
+        calculate: null,
+        classType: null,
+        contractType: null,
+        electricNum:null,
+        packageNum:null,
+        highVoltageNum: null,
+        meterType:null,
+        meterElectricNum: null,
+        meterCompute: null,
+      },
+
+      this.accounting = null;
+      this.calculate = null;
     },
 
     /**
@@ -867,7 +874,7 @@ export default {
 
        // 取出是第幾筆的電號資料
       if(!ValidateUtil.isEmpty(selectItem)){
-        selectIndex = this.dispatchInfo[listName].indexOf(selectItem);
+        selectIndex = this.dispatchInfo[item].indexOf(selectItem);
       }
 
       // 驗證電號格式
@@ -937,7 +944,7 @@ export default {
       } else {
         this.errorMsg.electricNum = null
       }
-    }
+    },
 
     /**
      * 驗證 end

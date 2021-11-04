@@ -94,7 +94,7 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title>{{userName}}</v-list-item-title>
+                  <v-list-item-title>{{ userName }}</v-list-item-title>
                   <v-list-item-subtitle class="grey--text">
                     Founder of Vuetify.js
                   </v-list-item-subtitle>

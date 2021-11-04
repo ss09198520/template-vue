@@ -307,7 +307,8 @@ export default {
             this.selectedAttachment.file = e.target.files[0];
             // 取出檔案名稱
             this.selectedAttachment.originalFileName = this.selectedAttachment.file.name;
-            
+            this.$forceUpdate(); // 強制頁面刷新
+
             let reader = new FileReader();
             reader.onload = (e) =>{
                 this.selectedAttachment.base64 = e.target.result;
@@ -326,6 +327,24 @@ export default {
                 }
             };
             reader.readAsDataURL(this.selectedAttachment.file);
+        },
+        downloadFile(attachment){
+            AjaxService.postFile('/tpesForm/downloadFile',
+                {
+                    fileNo: attachment.fileNo
+                },
+                (response) => {
+                    // 驗證是否成功
+                    if (!response.success) {              
+                        MessageService.showError(response.message,'下載檔案');
+                        return;
+                    }
+                },
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
+                }
+            );
         },
         viewImage(image){
             this.viewImageTitle = image.fileName;

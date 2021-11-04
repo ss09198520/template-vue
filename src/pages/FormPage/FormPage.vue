@@ -166,7 +166,7 @@
                       <v-col>
                         <div class="img-area d-center">
                           <img v-if="attachment.imgSrc" style="width: 100%; max-height: 100%" :src="attachment.imgSrc">
-                          <div v-else-if="attachment.base64" class="t-center">
+                          <div v-else-if="attachment.originalFileName" class="t-center">
                             <v-icon x-large class="mb-2">
                               mdi-file-document-outline
                             </v-icon><br>
@@ -237,7 +237,7 @@
                         </v-btn>
                       </v-col>
                       <v-col v-else cols="12" class="t-center mt-3">
-                        <v-btn depressed color="primary" :disabled="!attachment.base64">
+                        <v-btn depressed color="primary" :disabled="!attachment.filePath" @click="downloadFile(attachment)">
                           下載
                           <v-icon
                             right

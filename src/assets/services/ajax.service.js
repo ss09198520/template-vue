@@ -68,7 +68,90 @@ const AjaxService = {
             }
           }
         });
+    },
+    async postFile(url, data, callBack, errorCallBack, noLoading) {
+      /*
+        1. handle success
+        2. handle error
+      */
+      if(!noLoading){
+        LoadingConfig.blockCount++; // 加上 ajax 計數器，平行呼叫時才擋得住畫面
+         
+        if(LoadingConfig.blockCount == 1){
+         EventBus.publish('toggleLoading', true); /* 開啟loading小圈圈 */
+         LoadingConfig.hasLoader = true;
+        }
+      }
+  
+      axios.post(`${url}`, data, {
+          responseType: 'arraybuffer'
+        })
+        .then((response) => {
+          // 1. 處理正常回傳
+          if (response && response.headers && response.data) {
+            // 認 Header 的 content-type，判斷要跳訊息還是要下載檔案
+            const contentType = response.headers['content-type'];
+            if (contentType) {
+              // 回傳這個表示要跳訊息
+              if (contentType.indexOf('json') !== -1) {
+                const text = Buffer.from(response.data).toString('utf8');
+                let jsonObj = JSON.parse(text);
+                callBack(jsonObj);
+              } else {
+                downloadFile(response);
+                callBack({
+                  success: true
+                });
+              }
+            }
+          }
+        }).catch((error) => {
+          // 2 呼叫後端失敗
+          if (errorCallBack) {
+            // 2.1 有給自定義要執行的 error call back 的 function
+            errorCallBack(error);
+          } else {
+            // 2.2 預設網路傳輸錯誤處理
+            MessageService.showError('Network Error', '請稍後再試');
+          }
+        // eslint-disable-next-line no-unused-vars
+        }).then((final) => {
+          if(!noLoading){
+            LoadingConfig.blockCount--;
+            if(LoadingConfig.blockCount <= 0){
+            // 3 關掉loading 小圈圈
+              LoadingConfig.blockCount = 0;
+              if(LoadingConfig.hasLoader){
+                EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+                LoadingConfig.hasLoader = false;
+              }
+            }
+          }
+        });
     }
   };
+
+  function downloadFile(response) {
+    let filename = new Date().toLocaleDateString();
+    // 取後端傳回的檔案名稱
+    const contentDisposition = response.headers['content-disposition'];
+    if (contentDisposition) {
+      if (contentDisposition.indexOf('filename=') !== -1) {
+        let filenameStr = contentDisposition.substring(contentDisposition.indexOf('filename='));
+        let filenameArr = filenameStr.split('=');
+        filename = decodeURI(filenameArr[1]);
+      }
+    }
+    
+    // 下載檔案
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename); //or any other extension
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  }
   
   export default AjaxService;

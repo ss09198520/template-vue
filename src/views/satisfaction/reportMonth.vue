@@ -73,10 +73,10 @@
                       查詢多區處 <v-icon v-text="'mdi-magnify'" />
                     </v-btn>
                     <v-btn
+                      class="mt-1"
                       depressed
                       color="primary"
                       v-on="on"
-                      class="mt-1"
                     >
                       查詢業務處彙總 <v-icon v-text="'mdi-magnify'" />
                     </v-btn>

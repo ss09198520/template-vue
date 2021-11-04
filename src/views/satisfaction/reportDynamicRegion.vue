@@ -68,7 +68,7 @@
                 />
               </v-menu>
             </v-col>
-             <v-col v-if="isRegion==1" cols="1">
+            <v-col v-if="isRegion==1" cols="1">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -117,21 +117,21 @@
           <v-icon v-text="'mdi-file-download-outline'" />
         </v-btn>
       </v-col>
-     <!-- <v-col cols="2" class="ml-2 ">
-        查詢下載結果
-      </v-col>
-      <v-col cols="6" class="ml-2 ">
-        區處 or 全區處
-        <v-btn
-          class="ma-2"
-          fab
-          small
-          color="primary"
-          v-on="on"
-        >
-          <v-icon v-text="'mdi-file-download-outline'" />          
-        </v-btn>
-      </v-col>-->
+      <!-- <v-col cols="2" class="ml-2 ">
+          查詢下載結果
+        </v-col>
+        <v-col cols="6" class="ml-2 ">
+          區處 or 全區處
+          <v-btn
+            class="ma-2"
+            fab
+            small
+            color="primary"
+            v-on="on"
+          >
+            <v-icon v-text="'mdi-file-download-outline'" />          
+          </v-btn>
+        </v-col>-->
 
      
     </v-row>

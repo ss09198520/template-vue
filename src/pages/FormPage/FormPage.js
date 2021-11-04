@@ -10,8 +10,6 @@ export default {
     props: {
         restrictMode: String,
         formParam: Object,
-        // signPreviewImgSrc:String,
-        // certificateList: Array,
     },
     mounted() {
         this.init();
@@ -23,6 +21,7 @@ export default {
                 {name: "核算", value: "accounting"},
                 {name: "檢視", value: "view"},
                 {name: "檢視 (可下載)", value: "viewDownload"},
+                {name: "取消", value: "cancel"},
             ],
             formPageMode: "edit",
             panel: [0, 1, 2, 3],
@@ -48,15 +47,13 @@ export default {
             isAddAttachment: null,  // 補附件操作
             isAffidavit: null,      // 切結註記
             uploadNo: null,     // 證件編號
-            signPreviewImgSrc: "",
+            signImgSrc: "",
+            cancelSignImgSrc: "",
             certificateList: [],
             oriCertificateList: [],
             certificateNo: 1,
             attachmentList: [],
             oriAttachmentList: [],
-            //Mock的prototype
-            attachmentListMockBefore: [{id: '1',fileName:'證明函(未套印)'}],
-            attachmentListMockAfter: [{id: '1',fileName:'證明函(未套印)'},{id: '2',fileName:'證明函(套印完成)'}],
             attachmentNo: 1,
             selectedAttachment: null,
             viewImageDialog: false,
@@ -205,7 +202,7 @@ export default {
                         imgSrc: attachment.imgSrc,
                         base64: attachment.base64,
                         hasEdit: false,
-                        needSeal: false,
+                        needSeal: attachment.needSeal,
                     });
                     this.attachmentNo++;
                 }
@@ -409,7 +406,7 @@ export default {
                         });
                     }
                     // 修改
-                    else if(certificate.hasEdit && !ValidateUtil.isEmpty(certificate.base64)){
+                    else if(certificate.hasEdit){
                         modifyFileList.push({
                             fileNo: certificate.fileNo,
                             category: "CERTIFICATE",
@@ -417,7 +414,7 @@ export default {
                             fileName: certificate.fileName,
                             originalFileName: certificate.fileName,
                             fileExt: this.getFileExt(certificate.fileName),
-                            base64: certificate.base64.split(",")[1],
+                            base64: ValidateUtil.isEmpty(certificate.base64) ? null : certificate.base64.split(",")[1],
                             formSeq: this.formSeq
                         });
                     }
@@ -459,11 +456,11 @@ export default {
                             fileExt: this.getFileExt(attachment.originalFileName),
                             base64: attachment.base64.split(",")[1],
                             formSeq: this.formSeq,
-                            needSeal: attachment.needSeal
+                            needSeal: attachment.needSeal,
                         });
                     }
                     // 修改
-                    else if(attachment.hasEdit && !ValidateUtil.isEmpty(attachment.base64)){
+                    else if(attachment.hasEdit){
                         modifyFileList.push({
                             fileNo: attachment.fileNo,
                             category: "ATTACHMENT",
@@ -471,8 +468,9 @@ export default {
                             fileName: attachment.fileName,
                             originalFileName: attachment.originalFileName,
                             fileExt: this.getFileExt(attachment.originalFileName),
-                            base64: attachment.base64.split(",")[1],
-                            formSeq: this.formSeq
+                            base64: ValidateUtil.isEmpty(attachment.base64) ? null : attachment.base64.split(",")[1],
+                            formSeq: this.formSeq,
+                            needSeal: attachment.needSeal,
                         });
                     }
                 }
@@ -518,15 +516,45 @@ export default {
             }
             return fileExt;
         },
+        checkIsWord(attachment){
+            let isWord = false;
+
+            if(attachment){
+                let fileExt = this.getFileExt(attachment.originalFileName);
+                isWord = (fileExt == ".doc" || fileExt == ".docx");
+            }
+
+            return isWord;
+        },
+        checkNeedSeal(needSealIndex, needSeal){
+            // 各案件只能有一個附件套印專用章
+            // 若勾選套印則取消勾選其餘附件
+            if(needSeal){
+                for(let index in this.attachmentList){
+                    if(index != needSealIndex){
+                        this.attachmentList[index].needSeal = false;
+                    }
+                }
+            }
+
+            this.attachmentList[needSealIndex].hasEdit = true;
+        },
         retrunOrder(){
-            this.$emit("returnOrder",this.accountingMemo);
+            this.$emit("returnOrder", this.accountingMemo);
         },
         accountingSubmit(){
-            this.$emit("accountingSubmit",this.accountingMemo);
+            this.$emit("accountingSubmit", this.accountingMemo);
         },
         saveComments(){
             // 將待審核備註一併傳回給父層
-            this.$emit("saveComments",this.accountingMemo);
+            this.$emit("saveComments", this.accountingMemo);
+        },
+        cancel(){
+            // 驗證是否已簽名
+            if(ValidateUtil.isEmpty(this.cancelSignImgSrc)){
+                MessageService.showInfo("尚未簽名", "提示");
+                return;
+            }
         },
         addWaterMark(originImageSrc){
             let originImage = new Image();

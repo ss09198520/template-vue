@@ -36,6 +36,7 @@
                         mdi-file-document-outline
                       </v-icon><br>
                       <div v-if="formPageMode==='accounting' || formPageMode=='view'" class="big-btn-text mt-2">檢視表單</div>
+                      <div v-else-if="formPageMode==='cancel'" class="big-btn-text mt-2">取消表單簽名</div>
                       <div v-else class="big-btn-text mt-2">開啟表單及簽名</div>
                     </span>
                   </v-btn>
@@ -43,7 +44,8 @@
                 <v-col v-if="formPageMode!=='accounting' || formPageMode=='view'" cols="6">
                   <div class="sign-preview-area">
                     <span>簽名預覽</span>
-                    <img v-if="signPreviewImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + signPreviewImgSrc">
+                    <img v-if="formPageMode==='cancel' && cancelSignImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + cancelSignImgSrc">
+                    <img v-else-if="formPageMode != 'cancel' && signImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + signImgSrc">
                     <div v-else class="not-scan-area">
                       <span>尚未簽名</span>
                     </div>
@@ -56,7 +58,9 @@
             <v-expansion-panel-header class="panel-header mb-3">
               <v-col cols="12">
                 <h2 v-if="formPageMode == 'edit'">新增/刪除 證件</h2>
-                <h2 v-else>證件</h2>
+                <h2 v-else>
+                  證件 <span v-if="formPageMode == 'cancel'" class="cancel-text">(若確定取消將在兩年後刪除)</span>
+                </h2>
               </v-col>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -150,7 +154,9 @@
             <v-expansion-panel-header class="panel-header mb-3">
               <v-col cols="12">
                 <h2 v-if="formPageMode == 'edit'">新增/刪除 附件</h2>
-                <h2 v-else>附件</h2>
+                <h2 v-else>
+                  附件 <span v-if="formPageMode == 'cancel'" class="cancel-text">(若確定取消將在兩年後刪除)</span>
+                </h2>
               </v-col>
             </v-expansion-panel-header>
             <v-expansion-panel-content>
@@ -166,7 +172,7 @@
                       <v-col>
                         <div class="img-area d-center">
                           <img v-if="attachment.imgSrc" style="width: 100%; max-height: 100%" :src="attachment.imgSrc">
-                          <div v-else-if="attachment.base64" class="t-center">
+                          <div v-else-if="attachment.originalFileName" class="t-center">
                             <v-icon x-large class="mb-2">
                               mdi-file-document-outline
                             </v-icon><br>
@@ -185,12 +191,14 @@
                     <v-row>
                       <v-col cols="12" class="d-center">
                         <v-checkbox 
+                          v-if="checkIsWord(attachment)"
                           v-model="attachment.needSeal" 
-                          :disabled="formPageMode != 'edit' || formPageMode == 'view'"
+                          :disabled="formPageMode != 'edit'"
                           class="mt-0" 
                           label="套印專用章" 
                           color="success" 
                           hide-details
+                          @change="checkNeedSeal(index, attachment.needSeal)"
                         />
                       </v-col>
                     </v-row>
@@ -237,7 +245,7 @@
                         </v-btn>
                       </v-col>
                       <v-col v-else cols="12" class="t-center mt-3">
-                        <v-btn depressed color="primary" :disabled="!attachment.base64">
+                        <v-btn depressed color="primary" :disabled="!attachment.filePath" @click="downloadFile(attachment)">
                           下載
                           <v-icon
                             right
@@ -342,6 +350,20 @@
               style="font-size: 24px"
             >
               mdi-check
+            </v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row v-if="formPageMode == 'cancel'">
+        <v-col cols="12" class="t-right">
+          <v-btn depressed large color="error" @click="cancel()">
+            <span style="font-size: 18px">確定取消</span>
+            <v-icon
+              right
+              dark
+              style="font-size: 24px"
+            >
+              mdi-close
             </v-icon>
           </v-btn>
         </v-col>
@@ -715,5 +737,9 @@
         font-weight: bold;
         color: white;
         text-align: center;
+    }
+
+    .cancel-text{
+      color: #db6154;
     }
 </style>

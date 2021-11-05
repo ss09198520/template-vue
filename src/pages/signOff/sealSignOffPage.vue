@@ -46,9 +46,17 @@
             hide-default-footer
             class="elevation-1"
             :page.sync="sealSignListPage"
-            :search="waitToSign"
             @page-count="sealSignListPageCount = $event"
           >
+            <template v-slot:item.sealStatus="{ item }">   
+              <div v-if="item.sealStatus === 'WAIT'">
+                待簽核
+              </div>  
+              <div v-else-if="item.sealStatus === 'PASS'">
+                簽核完畢
+              </div>    
+              <div v-else />                                                                   
+            </template> 
             <template v-slot:item.mani="{ item }">   
               <div>
                 <v-tooltip top>
@@ -66,14 +74,14 @@
                   </template>
                   <span>瀏覽表單</span>
                 </v-tooltip>
-                <v-tooltip v-if="!item.status" top>
+                <v-tooltip v-if="item.sealStatus === 'WAIT'" top>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       class="ma-2"
                       fab
                       small
                       color="success"
-                      @click="sign(item)"
+                      @click="signOff(item.acceptNum)"
                       v-on="on"
                     >
                       <v-icon v-text="'mdi-account-check-outline'" />
@@ -84,7 +92,7 @@
               </div>                                                                         
             </template> 
             <template v-slot:item.download="{ item }">  
-              <v-tooltip v-if="item.status" top>
+              <v-tooltip v-if="item.sealStatus === 'PASS'" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -132,9 +140,6 @@
           <v-card-text>
             <div v-show="sealOffFinish">
               <form-page :key="formKey" restrict-mode="viewDownload" :form-param="formParam" />
-            </div>
-            <div v-show="!sealOffFinish">
-              <form-page :key="formKey" restrict-mode="view" :form-param="formParam" /> 
             </div>         
           </v-card-text>
           <!-- <v-card-text>

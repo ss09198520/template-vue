@@ -282,11 +282,11 @@ export default {
             MessageService.showError(response.restData.message,'修改派工設定');
             return;
            } 
-            // 關閉 dialog
+           this.queryAccountingDispatchInfo();
+           this.queryAccountingDispatchOption(); 
+           // 關閉 dialog
             this.dialog = false;
             MessageService.showSuccess('修改派工設定');
-            this.queryAccountingDispatchInfo();
-            this.queryAccountingDispatchOption(); 
        },
        // eslint-disable-next-line no-unused-vars
        (response) => {                
@@ -314,11 +314,11 @@ export default {
             return;
         }
  
-          // 關閉 dialog
+        this.queryAccountingDispatchInfo();
+        this.queryAccountingDispatchOption(); 
+        // 關閉 dialog
           this.dialog = false;
           MessageService.showSuccess('新增派工設定');
-          this.queryAccountingDispatchInfo();
-          this.queryAccountingDispatchOption(); 
        },
        // eslint-disable-next-line no-unused-vars
        (response) => {                
@@ -341,10 +341,10 @@ export default {
               return;
           }
 
-        this.deleteDispatchModel = false;
-        MessageService.showSuccess("刪除派工設定");
-        this.queryAccountingDispatchInfo();
-        this.queryAccountingDispatchOption()
+          this.queryAccountingDispatchInfo();
+          this.queryAccountingDispatchOption()
+          this.deleteDispatchModel = false;
+          MessageService.showSuccess("刪除派工設定");
 
       },
       // eslint-disable-next-line no-unused-vars
@@ -601,6 +601,11 @@ export default {
         // 驗證電號是否重複        
         if(!this.checkElectricRange(dispatchList)){
           isValid = false;          
+        }
+
+        // 驗證選到的值與下拉選單清單是否符合
+        if(!this.checkOptionValid(dispatchList)){
+          isValid = false;
         }
 
 
@@ -874,7 +879,7 @@ export default {
 
        // 取出是第幾筆的電號資料
       if(!ValidateUtil.isEmpty(selectItem)){
-        selectIndex = this.dispatchInfo[item].indexOf(selectItem);
+        selectIndex = this.dispatchInfo[listName].indexOf(selectItem);
       }
 
       // 驗證電號格式
@@ -944,6 +949,27 @@ export default {
       } else {
         this.errorMsg.electricNum = null
       }
+    },
+
+    checkOptionValid(dispatchList){
+      let accounting = dispatchList[0].accounting;
+      let calculate  = dispatchList[0].calculate;
+      let isOptionValid = false;
+
+      for(let i in this.oriAccoutingList){
+        if(this.oriAccoutingList[i].empNo === accounting){
+          isOptionValid = true;
+          break;
+        }
+      }
+
+      for(let i in this.oriCalculateList){
+        if(this.oriCalculateList[i].empNo === calculate){
+          isOptionValid = true;
+          break;
+        }
+      }      
+      return isOptionValid;      
     },
 
     /**

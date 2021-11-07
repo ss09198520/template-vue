@@ -144,7 +144,7 @@
                   prepend-icon
                   @change="getImagePreviews()"
                 />
-                <v-img :src="imageURL" />
+                <v-img v-if="!!imageURL" :src="imageURL" />
               </v-col>
             </v-row>
             <v-row
@@ -185,6 +185,12 @@
     fileName: null,
     fileDesc: null,
     uploadType: null,
+    file: {}
+  }
+  const defaultFile = {
+    originalFileName: null,
+    imgSrc: null,
+    base64: null,
   }
   export default {
     data() {
@@ -210,7 +216,15 @@
     mounted() {
       this.reader = new FileReader();
       this.reader.addEventListener("load", () => {
+        // preview data url
         this.imageURL = this.reader.result
+        // assign file 
+        this.postForm.file = Object.assign({} , defaultFile)
+        this.postForm.file.originalFileName = this.uploadData.name
+        this.postForm.file.fileExt = this.getFileExtension(this.uploadData.name)
+        this.postForm.file.imgSrc = this.reader.result
+        this.postForm.file.base64 = this.reader.result.split(",")[1]
+        this.postForm.file.fileCode = "fileCode"
       })
     },
     methods: {
@@ -221,17 +235,17 @@
           this.imageURL = null
         }
       },
+      getFileExtension(filename){
+        // get file extension
+        const extension = filename.split('.').pop();
+        return extension;
+      },
       submit() {
-        const formData = new FormData();
-        formData.append("file", this.uploadData);
-        formData.append("req", JSON.stringify(this.postForm));
-        console.log(formData)
         
         if (this.$refs.form.validate()) {
           console.log(this.postForm)
-          console.log(this.$refs.form)
           
-          this.submitForm(formData)
+          this.submitForm(this.postForm)
         }
       },
       validate() {

@@ -30,7 +30,7 @@
                 md="6"
               >
                 <v-text-field
-                  v-model="filename"
+                  v-model="postForm.filename"
                   :rules="rules.requiredRule.concat(rules.lengthRules)"
                   :hide-details="hideDatails"
                   color="accent"
@@ -60,7 +60,7 @@
                 md="6"
               >
                 <v-text-field
-                  v-model="fileDesc"
+                  v-model="postForm.fileDesc"
                   :rules="rules.lengthRules"
                   :hide-details="hideDatails"
                   color="accent"
@@ -91,7 +91,7 @@
                 md="6"
               >
                 <v-radio-group
-                  v-model="uploadType"
+                  v-model="postForm.uploadType"
                   class="mt-2"
                   dense
                   row
@@ -134,10 +134,9 @@
                 <v-file-input
                   :hide-details="hideDatails"
                   label="上傳圖片或影片"
+                  show-size
                   color="accent"
-                  outlined
-                  dense
-                  accept="image/jpg"
+                  accept="image/jpg , image/png"
                   hint="(.jpg、.png，最多不超過 50MB)"
                   persistent-hint
                   prepend-inner-icon="mdi-cloud-upload"
@@ -200,6 +199,14 @@
 </template>
 
 <script>
+  import MessageService from "@/assets/services/message.service";
+  import { initQuestionnaireAnswer} from '@/api/questionnaire'
+
+  const defaultForm = {
+    filename: null,
+    fileDesc: null,
+    uploadType: null,
+  }
   export default {
     data() {
       return {
@@ -208,19 +215,7 @@
         filename: '',
         fileDesc: '',
         uploadType: '1',
-        uploadData: '',
-        formData: {
-          filename: '',
-          fileDesc: '',
-          uploadType: '',
-          uploadData: '',
-        },
-        dropzoneOptions: {
-          url: 'https://httpbin.org/post',
-          thumbnailWidth: 150,
-          maxFilesize: 0.5,
-          headers: { "My-Awesome-Header": "header value" }
-        },
+        postForm: Object.assign({} , defaultForm),
         dense: false,
         noGutters: false,
         hideDatails: false,
@@ -234,14 +229,9 @@
       }
     },
     methods: {
-      getParentRouteName() {
-        // only show parent route with meta.title
-        let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
-        return matched[0].meta.title
-      },
       submit() {
         if (this.$refs.form.validate()) {
-          this.snackbar = true
+          console.log(this.postForm)
         }
       },
       validate() {
@@ -253,12 +243,23 @@
       resetValidation() {
         this.$refs.form.resetValidation()
       },
-      dropzoneS(file) {
-        console.log('this.$message', this.$message)
-        console.log(file)
-      },
-      dropzoneR(file) {
-        console.log(file)
+
+      /**
+       * 
+       * Ajax start 
+       * 
+       **/
+      
+      //Action: 上傳素材
+      async submitForm(postData) {
+        const data = await initQuestionnaireAnswer(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+            MessageService.showError(data.restData.message,'上傳素材');
+            return;
+        }
+
+        MessageService.showSuccess('作答成功' + "✓")
       },
     }
   }

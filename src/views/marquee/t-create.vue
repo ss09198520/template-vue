@@ -351,11 +351,6 @@
             console.log( editor.html);
             console.log(editor);
           },
-      getParentRouteName() {
-        // only show parent route with meta.title
-        let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
-        return matched[0].meta.title
-      },
       submit() {
         if (this.$refs.form.validate()) {
           this.snackbar = true

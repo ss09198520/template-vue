@@ -30,16 +30,17 @@
                 md="6"
               >
                 <v-text-field
-                  v-model="filename"
+                  v-model="postForm.fileName"
                   :rules="rules.requiredRule.concat(rules.lengthRules)"
                   :hide-details="hideDatails"
                   color="accent"
-                  label="素 材 名 稱"
                   placeholder="請輸入素材名稱"
                   :counter="maxCharacter"
                   outlined
                   required
                   dense
+                  clearable
+                  persistent-hint
                 />
               </v-col>
             </v-row>
@@ -60,11 +61,10 @@
                 md="6"
               >
                 <v-text-field
-                  v-model="fileDesc"
-                  :rules="rules.lengthRules"
+                  v-model="postForm.fileDesc"
+                  :rules="rules.requiredRule.concat(rules.lengthRules)"
                   :hide-details="hideDatails"
                   color="accent"
-                  label="檔 案 描 述"
                   placeholder="請輸入檔案描述"
                   :counter="maxCharacter"
                   outlined
@@ -91,7 +91,7 @@
                 md="6"
               >
                 <v-radio-group
-                  v-model="uploadType"
+                  v-model="postForm.uploadType"
                   class="mt-2"
                   dense
                   row
@@ -99,12 +99,12 @@
                 >
                   <v-radio
                     label="純圖檔"
-                    value="1"
+                    value="image"
                     color="red"
                   />
                   <v-radio
                     label="影片檔(mp4)"
-                    value="2"
+                    value="video"
                     color="red"
                   />
                   <!-- <v-radio
@@ -132,43 +132,21 @@
                 md="6"
               >
                 <v-file-input
+                  v-model="uploadData"
                   :hide-details="hideDatails"
                   label="上傳圖片或影片"
+                  show-size
                   color="accent"
-                  outlined
-                  dense
-                  accept="image/jpg"
+                  accept="image/jpg , image/png , video/*"
                   hint="(.jpg、.png，最多不超過 50MB)"
                   persistent-hint
                   prepend-inner-icon="mdi-cloud-upload"
                   prepend-icon
+                  @change="getImagePreviews()"
                 />
+                <v-img v-if="!!imageURL" :src="imageURL" />
               </v-col>
             </v-row>
-            <!-- <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
-            >
-              <v-col
-                cols="3"
-                md="3"
-              >
-                <v-subheader class="justify-center">
-                  多行欄位
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="9"
-                md="8"
-              >
-                <v-textarea
-                  color="accent"
-                  outlined
-                  placeholder="請輸入文字"
-                  counter="50"
-                />
-              </v-col>
-            </v-row> -->
             <v-row
               :dense="dense"
               :no-gutters="noGutters"
@@ -200,48 +178,74 @@
 </template>
 
 <script>
+  import MessageService from "@/assets/services/message.service";
+  import { uploadFile} from '@/api/mediaFile'
+
+  const defaultForm = {
+    fileName: null,
+    fileDesc: null,
+    uploadType: null,
+    file: {}
+  }
+  const defaultFile = {
+    originalFileName: null,
+    imgSrc: null,
+    base64: null,
+  }
   export default {
     data() {
       return {
         valid: false,
         maxCharacter: 40,
-        filename: '',
-        fileDesc: '',
-        uploadType: '1',
-        uploadData: '',
-        formData: {
-          filename: '',
-          fileDesc: '',
-          uploadType: '',
-          uploadData: '',
-        },
-        dropzoneOptions: {
-          url: 'https://httpbin.org/post',
-          thumbnailWidth: 150,
-          maxFilesize: 0.5,
-          headers: { "My-Awesome-Header": "header value" }
-        },
+        postForm: Object.assign({} , defaultForm),
+        uploadData: null,
+        imageURL: null,
+        reader: null,
         dense: false,
         noGutters: false,
         hideDatails: false,
         snackbar: false,
         rules: {
           requiredRule: [v => !!v || '此欄位為必填欄位'],
-          lengthRules: [v => (v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
+          lengthRules: [v => (v && v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
           videoSizeRules: [v => !!v || v.size < 50000000 || 'Avatar size should be less than 50 MB!',],
           iamgeSizeRules: [v => !!v || v.size < 10000000 || 'Avatar size should be less than 10 MB!',],
         },
       }
     },
+    mounted() {
+      this.reader = new FileReader();
+      this.reader.addEventListener("load", () => {
+        // preview data url
+        this.imageURL = this.reader.result
+        // assign file 
+        this.postForm.file = Object.assign({} , defaultFile)
+        this.postForm.file.originalFileName = this.uploadData.name
+        this.postForm.file.fileExt = this.getFileExtension(this.uploadData.name)
+        this.postForm.file.imgSrc = this.reader.result
+        this.postForm.file.base64 = this.reader.result.split(",")[1]
+        this.postForm.file.fileCode = "fileCode"
+      })
+    },
     methods: {
-      getParentRouteName() {
-        // only show parent route with meta.title
-        let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
-        return matched[0].meta.title
+      getImagePreviews() {    
+        if (this.uploadData instanceof Blob){
+          this.reader.readAsDataURL(this.uploadData)    
+        }else{
+          this.imageURL = null
+        }
+      },
+      getFileExtension(filename){
+        // get file extension
+        const extension = filename.split('.').pop();
+        return extension;
       },
       submit() {
+        
         if (this.$refs.form.validate()) {
-          this.snackbar = true
+          console.log(this.postForm)
+          
+          this.submitForm(this.postForm)
         }
       },
       validate() {
@@ -253,12 +257,25 @@
       resetValidation() {
         this.$refs.form.resetValidation()
       },
-      dropzoneS(file) {
-        console.log('this.$message', this.$message)
-        console.log(file)
-      },
-      dropzoneR(file) {
-        console.log(file)
+
+      /**
+       * 
+       * Ajax start 
+       * 
+       **/
+      
+      //Action: 上傳素材
+      async submitForm(postData) {
+        const data = await uploadFile(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+            MessageService.showError(data.restData.message,'上傳素材');
+            return;
+        }
+
+        MessageService.showSuccess('上傳成功' + "✓")
+        
+        this.reset() //重置表單
       },
     }
   }

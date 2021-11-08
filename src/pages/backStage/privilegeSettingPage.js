@@ -1,5 +1,5 @@
 import MessageService from "@/assets/services/message.service";
-
+import AjaxService from "@/assets/services/ajax.service";
 
 export default {
     components: {
@@ -12,26 +12,10 @@ export default {
       return {
         openList: [0,1,2,3,4], // 存放縮合項目的index
         role: null, // 選擇的角色
-        comments: null, //說明 
+        description: null, //說明 
         // 角色清單
-        rolesOption:[
-            { text: '主辦業務計畫員', value: 'AUTH01'},
-            { text: '受理部門', value: 'AUTH02'},
-            { text: '服務中心主辦', value: 'AUTH03'},
-            { text: '受理部門主管', value: 'AUTH04'},
-            { text: '業務經理', value: 'AUTH05'},
-            { text: '調閱管理員', value: 'AUTH06'},
-            { text: '核算課長', value: 'AUTH07'},
-            { text: '電費經理', value: 'AUTH08'},
-            { text: '服務中心主任', value: 'AUTH09'},
-            { text: '行銷主管-銷售作業', value: 'AUTH10'},
-            { text: '行銷組組長', value: 'AUTH11'},
-            { text: '多媒體設定-業務區', value: 'AUTH12'},
-            { text: '多媒體設定-區處', value: 'AUTH13'},
-            { text: '核算員', value: 'AUTH15'},
-            { text: '多媒體滿意度報表調開-業務處', value: 'AUTH16'},
-
-        ],
+        authRoleList:[],
+        oriAuthRoleList:[],//備份角色設定資料
         authorityList:[],
         //查詢角色權限結果
         rolePrivilegeList : [
@@ -43,7 +27,7 @@ export default {
     methods: {
       // 載入頁面初始化
       init() {
-          
+          this.queryAllRoleAuth();
       },
 
       // 判斷是否展開權限設定資料
@@ -67,6 +51,9 @@ export default {
       // },
 
       chooseDivision(){
+        // 將角色設定備註取出
+        this.description = this.role.description;      
+
         this.authorityList=[
           { text: '我的工作區',
             hasAuth:false,            
@@ -187,6 +174,26 @@ export default {
 
 
       /**Ajax start */
+
+      // Action: 查詢全部角色設定資料
+      queryAllRoleAuth(){
+        AjaxService.post('/roleAuth/queryAllRoleAuth',{},
+        (response) => {
+            // 驗證是否成功
+            if (!response.restData.success) {              
+                MessageService.showError(response.restData.returnMessage,'查詢全部角色設定資料');
+                return;
+            }
+  
+            // 將取得的資料放進前端參數中
+            this.authRoleList = response.restData.authRoleList;
+
+        },
+        // eslint-disable-next-line no-unused-vars
+        (response) => {                
+            MessageService.showSystemError();
+        });
+      },
 
       // 儲存權限設定Action
       saveAuth(){

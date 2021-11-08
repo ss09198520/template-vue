@@ -19,10 +19,12 @@
         >                
           <v-select   
             v-model="role"
-            :items="rolesOption"                
+            :items="authRoleList"                
             color="#ADADAD"
             outlined
             hide-details
+            item-text="roleName"
+            :return-object="true"
             dense
             placeholder="請選擇角色"
             class="font-bold font-18px"
@@ -43,7 +45,7 @@
           class="d-flex"
         >
           <v-textarea
-            v-model="comments"
+            v-model="description"
             class="my-textarea"
             color="#ADADAD"
             outlined

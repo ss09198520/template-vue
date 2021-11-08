@@ -302,7 +302,7 @@
         },
         rules: {
           requiredRule: [v => !!v || '此欄位為必填欄位'],
-          lengthRules: [v => (v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
+          lengthRules: [v => (v && v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
           videoSizeRules: [v => !!v || v.size < 50000000 || 'Avatar size should be less than 50 MB!',],
           iamgeSizeRules: [v => !!v || v.size < 10000000 || 'Avatar size should be less than 10 MB!',],
         },
@@ -351,11 +351,6 @@
             console.log( editor.html);
             console.log(editor);
           },
-      getParentRouteName() {
-        // only show parent route with meta.title
-        let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
-        return matched[0].meta.title
-      },
       submit() {
         if (this.$refs.form.validate()) {
           this.snackbar = true

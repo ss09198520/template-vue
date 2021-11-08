@@ -29,7 +29,7 @@
           </v-icon>
         </v-btn>
       </template>
-      {{ title }}
+      {{ getTitle }}
     </v-toolbar-title>
     
     <v-spacer />
@@ -371,6 +371,10 @@ import AjaxService from '@/assets/services/ajax.service';
       ...mapGetters([
         'miniSidebar',
       ]),
+      getTitle() {
+        let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
+        return matched[0].meta.title
+      }
     },
     watch: {
       $route(val) {

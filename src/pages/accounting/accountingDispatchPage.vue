@@ -414,7 +414,7 @@
                             hide-details                                         
                             dense
                             :disabled="dispatchInfo.dispatchType !== 1 || !dispatchInfo.useMeter || dispatchInfo.meterType!==0"
-                            @blur="checkElectric(meterElectricNum,'meterElectricNumList','start')"
+                            @blur="checkElectric(meterElectricNum,'meterElectricNum','meterElectricNumList','start')"
                           />
                         </v-col>
                         <span :class="dispatchInfo.dispatchType !== 0 && dispatchInfo.useMeter ? '':'disable-text'">~</span>
@@ -425,7 +425,7 @@
                             hide-details                                         
                             dense
                             :disabled="dispatchInfo.dispatchType !== 1 || !dispatchInfo.useMeter || dispatchInfo.meterType!==0"
-                            @blur="checkElectric(meterElectricNum,'meterElectricNumList','end')"
+                            @blur="checkElectric(meterElectricNum,'meterElectricNum','meterElectricNumList','end')"
                           />
                         </v-col>
                         <v-col v-if="dispatchInfo.dispatchType == 1 && dispatchInfo.meterElectricNumList.length > 1 && dispatchInfo.useMeter && dispatchInfo.meterType == 0" cols="1">

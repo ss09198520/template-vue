@@ -37,6 +37,16 @@
       </v-row>
       <span class="marginLeft"><h4>used time: {{ excelToImgTime }} s.</h4></span>
       <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row>
+        <h1>Test PMC</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-btn class="mr-3" @click="openNewWindow()">OPEN CHROME</v-btn>
+        <v-btn class="mr-3" @click="dualScreenExtend()">EXTEND</v-btn>
+        <v-btn @click="dualScreenClone()">CLONE</v-btn>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
     </v-container>
     <v-dialog id="importWordModal" v-model="importWordModalShow" width="370">
       <v-card>
@@ -85,6 +95,7 @@
 
 <script>
 import AjaxService from '@/assets/services/ajax.service.js';
+import PMCService from '@/assets/services/pmc.service.js';
 
 export default {
     name: 'StylePromo',
@@ -169,6 +180,15 @@ export default {
             });
             
             this.importExcelModalShow = false;
+        },
+        openNewWindow() {
+          PMCService.callBrowserAdapter('https://www.google.com');
+        },
+        dualScreenExtend() {
+          PMCService.callDualScreenAdapterExtend();
+        },
+        dualScreenClone() {
+          PMCService.callDualScreenAdapterClone();
         }
     }
 }

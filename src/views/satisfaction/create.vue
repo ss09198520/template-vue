@@ -121,49 +121,56 @@
                       </div>
                     </div>
                     <v-col class="q-wrap">
-                      <draggable v-for="question, idxQ in questionnaire.questions" :key="idxQ" v-model="questionnaire.questions" group="question" :move="onMove">
-                        <v-col id="items" class="q-li" :class="{'q-li-focus': focusIndex === idxQ}" @click="focusItem($event, idxQ)">
-                          <div class="drap-area">
-                            <v-icon v-text="'mdi-drag-horizontal'" />
-                          </div>
-                          <div class="q-item-wrap">
-                            <div class="q-item q-title-wrap">
-                              <div class="q-title">
-                                <v-text-field 
-                                  v-model="question.title" 
-                                  :rules="rules.requiredRule"
-                                  placeholder="問題名稱" 
-                                  color="#68cbd8" 
-                                  outlined
-                                />
+                      <draggable 
+                        :list="questionnaire.questions"
+                        :options="{group:'question'}"
+                        @start="drag=true" 
+                        @end="onEnd"
+                      >
+                        <template v-for="question, idxQ in questionnaire.questions">
+                          <v-col id="items" :key="idxQ" class="q-li" :class="{'q-li-focus': focusIndex === idxQ}" @click="focusItem($event, idxQ)">
+                            <div class="drap-area">
+                              <v-icon v-text="'mdi-drag-horizontal'" />
+                            </div>
+                            <div class="q-item-wrap">
+                              <div class="q-item q-title-wrap">
+                                <div class="q-title">
+                                  <v-text-field 
+                                    v-model="question.title" 
+                                    :rules="rules.requiredRule"
+                                    placeholder="問題名稱" 
+                                    color="#68cbd8" 
+                                    outlined
+                                  />
+                                </div>
+                              </div>
+                              <div class="q-item">
+                                <v-radio-group
+                                  disabled
+                                  row
+                                >
+                                  <v-radio
+                                    v-for="answer, idxAns in question.answers" 
+                                    :key="idxAns"
+                                    :label="answer.label"
+                                    :value="answer.value"
+                                  />
+                                </v-radio-group>
+                              </div>
+                              <div v-if="focusIndex === idxQ" class="q-item option-wrap">
+                                <v-divider class="mt-6 mb-5" />
+                                <ul class="option-list">
+                                  <li>
+                                    <v-icon @click="copyListFn(idxQ)" v-text="'mdi-content-copy'" />
+                                  </li>
+                                  <li>
+                                    <v-icon @click="deleteListFn(idxQue)" v-text="'mdi-delete'" />
+                                  </li>
+                                </ul>
                               </div>
                             </div>
-                            <div class="q-item">
-                              <v-radio-group
-                                disabled
-                                row
-                              >
-                                <v-radio
-                                  v-for="answer, idxAns in question.answers" 
-                                  :key="idxAns"
-                                  :label="answer.label"
-                                  :value="answer.value"
-                                />
-                              </v-radio-group>
-                            </div>
-                            <div v-if="focusIndex === idxQ" class="q-item option-wrap">
-                              <v-divider class="mt-6 mb-5" />
-                              <ul class="option-list">
-                                <li>
-                                  <v-icon @click="copyListFn(idxQ)" v-text="'mdi-content-copy'" />
-                                </li>
-                                <li>
-                                  <v-icon @click="deleteListFn(idxQue)" v-text="'mdi-delete'" />
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
-                        </v-col>
+                          </v-col>
+                        </template>
                       </draggable>
                     </v-col>
                   </div>
@@ -244,7 +251,7 @@
 
     data () {
       return {
-
+        drag: false,
         valid: false,
         rules: {
           requiredRule: [v => !!v || '此欄位為必填欄位'],
@@ -261,7 +268,19 @@
         //日曆 end
         
         postForm: Object.assign({}, defaultForm), //Form 送出用
-        questionnaire: {}, // 呈現用送出用
+        questionnaire: {
+          questionnaireName: '',
+          memo: '',
+          releaseStartDate: null,
+          questions: [{
+            question_id: 1,
+            title:'',
+            type: 'radio',
+            required: true, //預設此題必答
+            answers: Object.assign([], defaultAnswers), //塞入預設答案
+            }
+          ]
+        }, // 呈現用送出用
         
         // selectOptions: ['單選題', '多選題', '下拉列表', '線性量表', '矩陣量表', '優先級', '文本題'],
         type: 'radio',
@@ -274,12 +293,12 @@
         focusIndex: 0
       }
     },
-    created() { //initial data
+    mounted() { //initial data
       // if (this.isView) {
       //   const id = this.$route.params && this.$route.params.id
       //   this.fetchQuestionnaire(id)
       // } else {
-        this.init()
+        // this.init()
       // }
     },
     methods: {
@@ -339,7 +358,7 @@
         let data = JSON.parse(JSON.stringify(this.questionnaire.questions[index]))
         this.questionnaire.questions.splice(index, 0, data)
         this.focusIndex = this.questionnaire.questions.length - 1
-        console.log(this.questionnaire)
+        console.log(this.questionnaire ,this.focusIndex ,this.questionnaire.questions)
       },
       addListFn () {
         let newQuestion = Object.assign({}, defaultQuestion) //塞入預設題目
@@ -368,11 +387,8 @@
           this.submitForm(postData)
         }else{
           this.$nextTick(() => {
-            // this.$el.querySelector(".q-li-focus").classList.remove('q-li-focus');
             const el = this.$el.querySelector(".error--text:first-of-type");
-          //   el.classList.add('q-li-focus')
             this.$vuetify.goTo(el);
-          //   this.stepEl = Number(el.dataset.step)
             return;
           });
         }

@@ -27,6 +27,7 @@ export default {
             panel: [0, 1, 2, 3],
             imgSrcPrefix: "data:image/jpeg;base64,",
             formSeq: null,          // 表單流水號
+            formFileNo: null,       // 表單檔案編號
             acceptNum: null,        // 受理編號
             formType: null,         // 登記單代碼
             apitCod: null,          // 申請項目編號
@@ -47,7 +48,9 @@ export default {
             isAddAttachment: null,  // 補附件操作
             isAffidavit: null,      // 切結註記
             uploadNo: null,     // 證件編號
-            signImgSrc: "",
+            formSignPage: null,
+            isFormSignPageOpened: false,
+            customerSign: {},
             cancelSignImgSrc: "",
             certificateList: [],
             oriCertificateList: [],
@@ -74,7 +77,7 @@ export default {
         }
     },
     methods: {
-        init(){            
+        init(){
             if(this.restrictMode){
                 this.formPageMode = this.restrictMode;
                 this.showModeSelect = false;
@@ -156,6 +159,10 @@ export default {
                 }
 
                 this.formSeq = response.restData.formSeq;
+                this.formFileNo = response.restData.formFileNo;
+                if(!ValidateUtil.isEmpty(response.restData.customerSign)){
+                    this.customerSign = response.restData.customerSign;
+                }
                 // 整理證件及附件
                 this.setCertificateList(response.restData.certificateList);
                 this.setAttachmentList(response.restData.attachmentList);
@@ -212,7 +219,24 @@ export default {
         },
         openFormSignPage(){
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-            window.open("/#/imageEditor", '表單及簽名', config);
+            this.formSignPage = window.open("/#/imageEditor", '表單及簽名', config);
+            this.formSignPage.formFileNo = this.formFileNo;
+            this.formSignPage.signFileNo = this.customerSign.fileNo;
+            this.formSignPage.acceptNum = this.acceptNum;
+            this.formSignPage.formSeq = this.formSeq;
+            this.formSignPage.onbeforeunload = this.formSignPageClosed;
+
+            this.isFormSignPageOpened = true;
+        },
+        formSignPageClosed(){
+            this.isFormSignPageOpened = false;
+        },
+        closeFormSignPage(){
+            if(!this.formSignPage) {
+                return;
+            }
+            this.formSignPage.close();
+            this.isFormSignPageOpened = false;
         },
         cleanCertificateImg(certificate) {
             certificate.imgSrc = null;
@@ -531,8 +555,9 @@ export default {
             // 若勾選套印則取消勾選其餘附件
             if(needSeal){
                 for(let index in this.attachmentList){
-                    if(index != needSealIndex){
+                    if(index != needSealIndex && this.attachmentList[index].needSeal){
                         this.attachmentList[index].needSeal = false;
+                        this.attachmentList[index].hasEdit = true;
                     }
                 }
             }

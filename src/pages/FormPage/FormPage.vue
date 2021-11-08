@@ -30,11 +30,21 @@
             <v-expansion-panel-content>
               <v-row>
                 <v-col cols="6" class="d-center">
-                  <v-btn depressed color="primary" class="big-btn" @click="openFormSignPage()">
+                  <v-btn v-if="isFormSignPageOpened" depressed color="primary" class="big-btn" @click="closeFormSignPage()">
+                    <span class="pt-3">
+                      <v-icon dark size="7vh">
+                        mdi-close
+                      </v-icon>
+                      <br>
+                      <div class="big-btn-text mt-2">關閉視窗</div>
+                    </span>
+                  </v-btn>
+                  <v-btn v-else depressed color="primary" class="big-btn" @click="openFormSignPage()">
                     <span class="pt-3">
                       <v-icon dark size="7vh">
                         mdi-file-document-outline
-                      </v-icon><br>
+                      </v-icon>
+                      <br>
                       <div v-if="formPageMode==='accounting' || formPageMode=='view'" class="big-btn-text mt-2">檢視表單</div>
                       <div v-else-if="formPageMode==='cancel'" class="big-btn-text mt-2">取消表單簽名</div>
                       <div v-else class="big-btn-text mt-2">開啟表單及簽名</div>
@@ -42,13 +52,26 @@
                   </v-btn>
                 </v-col>
                 <v-col v-if="formPageMode!=='accounting' || formPageMode=='view'" cols="6">
-                  <div class="sign-preview-area">
-                    <span>簽名預覽</span>
-                    <img v-if="formPageMode==='cancel' && cancelSignImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + cancelSignImgSrc">
-                    <img v-else-if="formPageMode != 'cancel' && signImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + signImgSrc">
-                    <div v-else class="not-scan-area">
-                      <span>尚未簽名</span>
+                  <div class="sign-preview-area ma-auto">
+                    <div class="h-10">簽名預覽</div>
+                    <div class="h-90 d-center">
+                      <img v-if="formPageMode==='cancel' && cancelSignImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + cancelSignImgSrc">
+                      <img v-else-if="formPageMode != 'cancel' && customerSign.imgSrc" style="width: 100%; max-height: 100%" :src="customerSign.imgSrc">
+                      <div v-else class="not-scan-area">
+                        <span>尚未簽名</span>
+                      </div>
                     </div>
+                  </div>
+                  <div class="w-60 t-center ma-auto">
+                    <v-btn color="info" text @click="formInit()">
+                      重新整理
+                      <v-icon
+                        right
+                        dark
+                      >
+                        mdi-refresh
+                      </v-icon>
+                    </v-btn>
                   </div>
                 </v-col>
               </v-row>
@@ -642,101 +665,110 @@
 
 <style scoped>
     .marginLeft {
-        margin-left: 100px !important;
+      margin-left: 100px !important;
+    }
+    .h-10{
+      height: 10%;
+    }
+    .h-90{
+      height: 90%;
     }
     .h-100{
-        height: 100%;
+      height: 100%;
+    }
+    .w-60{
+      width: 60%
     }
     .w-100{
-        width: 100%;
+      width: 100%;
     }
     .row + .row{
-        margin-top: 0;
+      margin-top: 0;
     }
     .panel-header{
-        border-bottom: 3px solid rgba(0, 0, 0, 0.54);
+      border-bottom: 3px solid rgba(0, 0, 0, 0.54);
     }
     .d-center{
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .t-center{
-        text-align: center;
+      text-align: center;
     }
     .t-right{
-        text-align: right;
+      text-align: right;
     }
     .t-center >>> input {
       text-align: center
     }
     .h3 >>> input{
-        font-size: 1.5625rem !important;
-        line-height: 1.4em !important;
-        margin-top: 20px;
-        margin-bottom: 4px;
+      font-size: 1.5625rem !important;
+      line-height: 1.4em !important;
+      margin-top: 20px;
+      margin-bottom: 4px;
     }
     .big-btn{
-        height: 20vh !important;
-        width: 20vw !important;
+      height: 20vh !important;
+      width: 20vw !important;
     }
     .big-btn-text{
-        font-size: 5vh;
+      font-size: 5vh;
     }
     .sign-preview-area{
-        width: 60%;
-        height: 100%;
-        border: 1px solid rgb(207, 207, 207);
-        border-radius: 8px;
-        text-align: center;
+      width: 60%;
+      height: 90%;
+      border: 1px solid rgb(207, 207, 207);
+      border-radius: 8px;
+      text-align: center;
     }
     .img-area {
-        height: 30vh;
-        width: 100%;
-        border: 1px solid rgb(207, 207, 207);
-        border-radius: 8px;
+      height: 30vh;
+      width: 100%;
+      border: 1px solid rgb(207, 207, 207);
+      border-radius: 8px;
     }
     .not-scan-area{
-        width: 100%;
-        height: 100%;
-        background-color: rgba(230, 230, 230, 0.116);
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(230, 230, 230, 0.116);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .add-attachment-area{
-        min-height: 30vh;
+      min-height: 30vh;
     }
     .chip-text-field >>> .v-text-field__slot input{
-        color: white !important;
-        font-size: 18px;
-        margin-top: 5px !important;
+      color: white !important;
+      font-size: 18px;
+      margin-top: 5px !important;
     }
     .chip-text-field >>> .v-text-field__slot input::placeholder{
-        color: white !important;
-        opacity: 0.8;
+      color: white !important;
+      opacity: 0.8;
     }
     .blocking-area{
-        background-color: black;
-        opacity: 0.8;
-        font-size: 32px;
-        z-index: 999;
-        width: 100%;
-        height: 100%;
-        top: 0px;
-        left: 0px;
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      background-color: black;
+      opacity: 0.8;
+      font-size: 32px;
+      z-index: 999;
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      left: 0px;
+      position: absolute;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .blocking-text{
-        font-size: 60px;
-        font-weight: bold;
-        color: white;
-        text-align: center;
+      font-size: 60px;
+      font-weight: bold;
+      color: white;
+      text-align: center;
     }
 
     .cancel-text{

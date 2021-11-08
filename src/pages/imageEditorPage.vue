@@ -20,8 +20,24 @@
         />
       </v-row>
       <v-row justify="center" class="mt-5">
-        <v-btn color="error" @click="clearSign()">清除重簽</v-btn>
-        <!-- <v-btn color="success" @click="saveSign()">確認儲存</v-btn> -->
+        <v-btn color="error" @click="clearSign()">
+          清除重簽
+          <v-icon
+            right
+            dark
+          >
+            mdi-eraser-variant
+          </v-icon>
+        </v-btn>
+        <v-btn class="ml-2" color="success" @click="saveSign()">
+          確認儲存
+          <v-icon
+            right
+            dark
+          >
+            mdi-check
+          </v-icon>
+        </v-btn>
       </v-row>
     </v-container>
   </v-app>

@@ -31,7 +31,7 @@
             </v-col>
             <v-col cols="3" class="mt-5">
               <v-text-field
-                v-model="postForm.materialType"
+                v-model="postForm.createAuthor"
                 color="accent"
                 dense
                 placeholder="請輸入上傳人員(員編代號)"

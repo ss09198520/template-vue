@@ -219,7 +219,7 @@
         const data = await fetchActiveQuestionnaire()
         // 驗證是否成功
         if (!data.restData.success) {              
-            MessageService.showError(data.restData.returnMessage,'查詢問卷上架資料');
+            MessageService.showError(data.restData.message,'查詢問卷上架資料');
             return;
         }
         // 驗證是否有資料
@@ -236,7 +236,7 @@
         const data = await fetchEditQuestionnaire(id)
         // 驗證是否成功
         if (!data.restData.success) {              
-            MessageService.showError(data.restData.returnMessage,'查詢問卷詳細資料');
+            MessageService.showError(data.restData.message,'查詢問卷詳細資料');
             return;
         }
         // 驗證是否有資料

@@ -230,6 +230,7 @@
             no-data-text="查無資料"
             @page-count="itemsListPageCount = $event"
           >
+            <!-- 刪除案件 -->
             <template v-slot:top>
               <v-dialog v-model="dialog" max-width="500" />
               <v-dialog v-if="alertDialog" v-model="alertDialog" :max-width="450">
@@ -263,7 +264,7 @@
                     fab
                     x-small
                     color="error"
-                    :disabled="item.active"
+                    :disabled="!!item.relatedInfos"
                     @click="deleteItem(item)"
                     v-on="on"
                   >
@@ -273,8 +274,10 @@
                 <span>刪除</span>
               </v-tooltip>
             </template>
-            <template v-slot:[`item.relatedInfo`]="{ item }">
-              <v-tooltip v-if="item.relatedInfo" top>
+
+            <!-- 關聯節目單資訊 -->
+            <template v-slot:[`item.relatedInfos`]="{ item }">
+              <v-tooltip v-if="item.relatedInfos" top>
                 <template v-slot:activator="{ on }">
                   <v-icon
                     class="mr-2 d-flex justify-center"
@@ -286,12 +289,35 @@
                 </template>
                 <v-data-table
                   :headers="headerReleate"
-                  :items="item.relatedInfo"
+                  :items="item.relatedInfos"
                   disable-sort
                   hide-default-footer
-                />
+                >
+                  <template v-slot:[`item.status`]="{ item }">
+                    {{ statusOption.find(state => { return item.status===state.value }).text }}
+                  </template>
+                  <template v-slot:[`item.signStatus`]="{ item }">
+                    {{ signStatusOption.find(state => { return item.signStatus===state.value }).text }}
+                  </template>
+                </v-data-table>
               </v-tooltip>
             </template>
+            <!-- 使用中 -->
+            <template v-slot:[`item.active`]="{ item }">
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    class="d-flex justify-center"
+                    :color="!!item.relatedInfos ? 'green darken-2':''"
+                    v-on="on"
+                  >
+                    {{ !!item.relatedInfos ? 'mdi-checkbox-marked-circle':'' }}
+                  </v-icon>
+                </template>
+                {{ !!item.relatedInfos ? '使用中':'' }}
+              </v-tooltip>
+            </template>
+            <!-- 縮圖 -->
             <template v-slot:[`item.dataUrl`]="{ item }">
               <v-img
                 :src="item.dataUrl"
@@ -301,14 +327,6 @@
                 @dblclick="(previewUrl = item.dataUrl),(overlay = true)"
               />
               {{ item.fileName }}
-            </template>
-            <template v-slot:[`item.active`]="{ item }">
-              <v-icon
-                class="d-flex justify-center"
-                :color="item.active?'green darken-2':''"
-              >
-                {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
-              </v-icon>
             </template>
           </v-data-table>
           <!-- 選頁 -->
@@ -355,26 +373,26 @@
     status: null //暫無使用
   }
   
-  const defaultRelatedInfo = [
-      {
-        programState: '審核完成',
-        programPlayState: '上架中',
-        programType: '一般',
-        programTitle: '中秋節目測試',
-      },
-      {
-        programState: '審核完成',
-        programPlayState: '上架中',
-        programType: '一般',
-        programTitle: '中秋節目測試2',
-      },
-      {
-        programState: '審核完成',
-        programPlayState: '上架中',
-        programType: '一般',
-        programTitle: '中秋節目測試3',
-      },
-    ]
+  // const defaultRelatedInfo = [
+  //     {
+  //       programState: '審核完成',
+  //       programPlayState: '上架中',
+  //       programType: '一般',
+  //       programTitle: '中秋節目測試',
+  //     },
+  //     {
+  //       programState: '審核完成',
+  //       programPlayState: '上架中',
+  //       programType: '一般',
+  //       programTitle: '中秋節目測試2',
+  //     },
+  //     {
+  //       programState: '審核完成',
+  //       programPlayState: '上架中',
+  //       programType: '一般',
+  //       programTitle: '中秋節目測試3',
+  //     },
+  //   ]
 
   export default {
     
@@ -400,22 +418,36 @@
             { text: '圖片', value: 'image'},
             { text: '影音', value: 'video'},
         ],
+        //狀態 Option
+        statusOption: [
+          { text: '上架中', value: 'ACTIVE' , icon: 'mdi-checkbox-marked-circle'},
+          { text: '未上架', value: 'WAIT' , icon : 'mdi-minus-circle'},
+          { text: '已下架', value: 'CLOSE', icon: 'mdi-minus-circle'},
+        ],
+        signStatusOption: [
+            { text: '暫存', value: 'DRAFT'},
+            { text: '退件', value: 'REJECT'},
+            { text: '審核中', value: 'WAIT'},
+            { text: '審核中', value: 'PROGRESS'},
+            { text: '審核完成', value: 'PASS'},
+        ],
+        
         //素材資料清單
         mediaFiles:[],
         header: [
           { text: '素材名稱', value: 'materialName', width: '24%', },
-          { text: '上傳人員名稱', value: 'createAuthor', align: 'center', },
+          { text: '上傳人員名稱', value: 'createAuthor', width: '10%', },
           { text: '上傳時間', value: 'createDate', align: 'center' },
           { text: '縮圖', value: 'dataUrl', },
-          { text: '關聯使用資訊', value: 'relatedInfo', align: 'center' },
+          { text: '關聯使用資訊', value: 'relatedInfos', align: 'center' },
           { text: '使用中', value: 'active', sortable: false, align: 'center', },
           { text: '狀態操作', value: 'action', sortable: false, align: 'center' },
         ],
         headerReleate:[
-          {text: '節目單標題',value: 'programTitle',align: 'center',},
-          {text: '關聯節目單類別',value: 'programPlayState',align: 'center',},
-          {text: '關聯節目單審核狀態',value: 'programState',align: 'center',},
-          {text: '關聯節目單播放狀態',value: 'programPlayState',align: 'center',},
+          {text: '節目單標題',value: 'programName',align: 'center',},
+          {text: '關聯節目單類別',value: 'programType',align: 'center',},
+          {text: '關聯節目單審核狀態',value: 'status',align: 'center',},
+          {text: '關聯節目單播放狀態',value: 'signStatus',align: 'center',},
         ],
         // CRUD
         dialog: false,
@@ -505,7 +537,7 @@
         const data = await listMediaFile(postData)
         // 驗證是否成功
         if (!data.restData.success) {              
-          MessageService.showError(data.restData.returnMessage,'查詢素材清單資料');
+          MessageService.showError(data.restData.message,'查詢素材清單資料');
             return;
         }
         //查詢前清空資料
@@ -515,10 +547,10 @@
           let tmpData = data.restData.materialFiles
 
           //處理關聯資訊轉換
-          tmpData.forEach(element => {
-            element.relatedInfo = [];
-            Object.assign(element.relatedInfo, defaultRelatedInfo);
-          });
+          // tmpData.forEach(element => {
+          //   element.relatedInfo = [];
+          //   Object.assign(element.relatedInfo, defaultRelatedInfo);
+          // });
           this.mediaFiles = tmpData
           this.isShow = true 
         }
@@ -531,7 +563,7 @@
         const data = await deleteFile(id)
         // 驗證是否成功
         if (!data.restData.success) {              
-          MessageService.showError(data.restData.returnMessage,'刪除素材資料');
+          MessageService.showError(data.restData.message,'刪除素材資料');
             return;
         }
         MessageService.showSuccess('刪除成功' + "✓")

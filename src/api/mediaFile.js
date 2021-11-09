@@ -15,3 +15,10 @@ export function listMediaFile(data) {
     data
   })
 }
+
+export function deleteFile(id) {
+  return request({
+    url: `/mediaFile/v1/delete/${id}`,
+    method: 'post',
+  })
+}

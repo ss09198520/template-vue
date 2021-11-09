@@ -232,12 +232,25 @@
           >
             <template v-slot:top>
               <v-dialog v-model="dialog" max-width="500" />
-              <v-dialog v-model="alertDialog" :max-width="250">
+              <v-dialog v-if="alertDialog" v-model="alertDialog" :max-width="450">
                 <v-card>
-                  <v-card-title class="justify-center">Are you sure?</v-card-title>
-                  <v-card-text />
+                  <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+                    確認是否要刪除素材
+                    <v-spacer />
+                    <v-btn
+                      color="white"
+                      icon
+                      small
+                      text
+                      @click="alertDialog = false"
+                    >
+                      <v-icon> mdi-close </v-icon>
+                    </v-btn>
+                  </v-card-title>
+                  <v-card-title class="justify-center">確定刪除 {{ mediaFiles[editedIndex].materialName||'' }} 此筆素材資料?</v-card-title>
                   <v-card-actions class="justify-center">
-                    <v-btn color="error" depressed @click="remove" v-text="'Yes'" />
+                    <v-btn color="normal" depressed @click="alertDialog = false ; dialog = false" v-text="' 取消 '" />
+                    <v-btn color="error" depressed @click="remove" v-text="' 確定 '" />
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -251,7 +264,7 @@
                     x-small
                     color="error"
                     :disabled="item.active"
-                    @click="action('deleteMultiMedia',item)"
+                    @click="deleteItem(item)"
                     v-on="on"
                   >
                     <v-icon v-text="'mdi-delete'" />
@@ -331,7 +344,7 @@
 
 <script>
   import MessageService from "@/assets/services/message.service"
-  import { listMediaFile } from '@/api/mediaFile'
+  import { listMediaFile , deleteFile} from '@/api/mediaFile'
   import isEmpty from 'lodash/isEmpty'
 
   const defaultForm = {
@@ -413,22 +426,19 @@
     methods: {
       close() {
         this.dialog = false
-        // this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
         this.alertDialog = false
       },
       editItem(item) {
-        this.editedIndex = this.itemsCRUD.indexOf(item)
+        this.editedIndex = this.mediaFiles.indexOf(item)
         // this.editedItem = Object.assign({}, item)
         this.$router.push({path:'/marquee/create'})
         this.dialog = true
       },
-      deleteItem(item) {
-        this.alertDialog = true
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-      },
+      
       remove() {
-        this.itemsCRUD.splice(this.editedIndex, 1)
+        let itemId = this.mediaFiles[this.editedIndex].id
+        this.deleteMediaFile(itemId)
         this.close()
       },
       preview(e) {
@@ -459,6 +469,14 @@
       submitSearch() {
         //API post data 
         this.fetchMediaFileList(this.postForm)
+      },
+      //刪除素材
+      deleteItem(item) {
+        // this.dialog = true
+        this.alertDialog = true
+        this.editedIndex = this.mediaFiles.indexOf(item)
+        //API post data 
+        // this.deleteFile(item.id)
       },
 
       /**
@@ -505,6 +523,21 @@
           this.isShow = true 
         }
         
+      },
+
+      //Action:素材刪除
+      async deleteMediaFile(id) {
+        
+        const data = await deleteFile(id)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.returnMessage,'刪除素材資料');
+            return;
+        }
+        MessageService.showSuccess('刪除成功' + "✓")
+        //刪除畫面資料
+        this.mediaFiles.splice(this.editedIndex, 1)
+
       },
     }
   }

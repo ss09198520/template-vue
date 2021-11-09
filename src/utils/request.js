@@ -1,5 +1,7 @@
 import axios from 'axios'
 import MessageService from '@/assets/services/message.service.js';
+import EventBus from '@/assets/services/eventBus.js';
+import LoadingConfig from '@/assets/constant/loadingConfig.js';
 
 // create an axios instance
 const service = axios.create({
@@ -12,7 +14,11 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-    // do something before request is sent
+    // ** do something before request is sent **//
+
+    // 使用 Vuetify 的 <v-overlay> <v-progress-circular> 開啟Loading畫面
+    EventBus.publish('toggleLoading', true); /* 開啟loading小圈圈 */
+    LoadingConfig.hasLoader = true;
 
     // if (store.getters.token) {
     //   // let each request carry token
@@ -25,6 +31,19 @@ service.interceptors.request.use(
   error => {
     // do something with request error
     console.log(error) // for debug
+
+    //送出請求錯誤後 關閉loading
+    LoadingConfig.blockCount--;
+    if(LoadingConfig.blockCount <= 0){
+    // 3 關掉loading 小圈圈
+      LoadingConfig.blockCount = 0;
+      if(LoadingConfig.hasLoader){
+        EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+        LoadingConfig.hasLoader = false;
+      }
+    }
+    MessageService.showError('送出請求發生錯誤');
+
     return Promise.reject(error)
   }
 )
@@ -42,6 +61,17 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
+
+
+    LoadingConfig.blockCount--;
+    if(LoadingConfig.blockCount <= 0){
+    // 3 關掉loading 小圈圈
+      LoadingConfig.blockCount = 0;
+      if(LoadingConfig.hasLoader){
+        EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+        LoadingConfig.hasLoader = false;
+      }
+    }
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
     if (res.rtnCode !== '00000') {
@@ -67,6 +97,18 @@ service.interceptors.response.use(
     }
   },
   error => {
+    
+    //送出請求錯誤後 關閉loading
+    LoadingConfig.blockCount--;
+    if(LoadingConfig.blockCount <= 0){
+    // 3 關掉loading 小圈圈
+      LoadingConfig.blockCount = 0;
+      if(LoadingConfig.hasLoader){
+        EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+        LoadingConfig.hasLoader = false;
+      }
+    }
+
     if (error.response) {
       console.log('err' + error) // for debug
       // Http error code 的處理
@@ -83,6 +125,9 @@ service.interceptors.response.use(
           console.log(error.message)
           MessageService.showSystemError();
       }
+    } else {
+      console.log('錯誤訊息 : ' + error) // for debug
+      MessageService.showError('接收伺服器回應發生錯誤' ,'');
     }
     return Promise.reject(error)
   }

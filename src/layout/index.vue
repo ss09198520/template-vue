@@ -1,9 +1,9 @@
 <template>
   <div>
-    <sidemenu />
-    <core-topnav />
-    <core-content />
-    <core-footer />
+    <sidemenu v-if="!showOnlyContent" />
+    <core-topnav v-if="!showOnlyContent" />
+    <core-content @showOnlyContent="showOnlyContent = true" />
+    <core-footer v-if="!showOnlyContent" />
   </div>
 </template>
 
@@ -17,6 +17,11 @@
       CoreFooter,
       CoreContent,
     },
+    data() {
+      return {
+        showOnlyContent: false
+      }
+    }
   }
 </script>
 

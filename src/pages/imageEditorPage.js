@@ -62,6 +62,8 @@ export default {
         document.getElementsByClassName("tie-btn-reset")[0].addEventListener('click', () => {
             this.resetZoom();
         });
+
+        this.$emit("showOnlyContent");
     },
     methods: {
         queryFormImage(){

@@ -118,7 +118,7 @@
           class="ma-2"
           icon
         >
-          {{ item.acceptUser }} {{ item.acceptUserName }}
+          {{ item.acceptUserName }}
         </div>                         
       </template>
     </v-data-table>                 

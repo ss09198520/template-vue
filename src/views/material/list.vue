@@ -16,9 +16,10 @@
             </v-col>
             <v-col cols="3" class="mt-5">
               <v-text-field
+                v-model="postForm.materialName"
                 color="accent"
                 dense
-                placeholder="素材名稱"
+                placeholder="請輸入素材名稱"
                 outlined
                 clearable
                 persistent-hint
@@ -30,9 +31,10 @@
             </v-col>
             <v-col cols="3" class="mt-5">
               <v-text-field
+                v-model="postForm.createAuthor"
                 color="accent"
                 dense
-                placeholder="上傳人員"
+                placeholder="請輸入上傳人員(員編代號)"
                 outlined
                 clearable
                 persistent-hint
@@ -47,8 +49,10 @@
               素 材 類 型
             </v-col>
             <v-col cols="3">
-              <v-select
-                :items="['圖片', '影片',]"
+              <v-autocomplete
+                v-model="postForm.materialType"
+                :items="materialTypeOption"
+                clearable
                 class="font-bold"
                 color="accent"
                 item-color="accent"
@@ -71,7 +75,7 @@
               class="d-flex"
             >
               <v-menu
-                v-model="releaseDateStartMenu"
+                v-model="createDateStartMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -79,7 +83,7 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="releaseDateStart"
+                    v-model="postForm.createDateStart"
                     append-icon="mdi-calendar"
                     placeholder="上傳時間(起)"
                     color="accent"
@@ -92,13 +96,13 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="releaseDateStart"
+                  v-model="postForm.createDateStart"
                   scrollable
                 />
               </v-menu>
               <div class="mt-2"> ~ </div>
               <v-menu
-                v-model="releaseDateEndMenu"
+                v-model="createDateEndMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -106,7 +110,7 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="releaseDateEnd"
+                    v-model="postForm.createDateEnd"
                     append-icon="mdi-calendar"
                     placeholder="上傳時間(迄)"
                     color="accent"
@@ -119,7 +123,7 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="releaseDateEnd"
+                  v-model="postForm.createDateEnd"
                   scrollable
                 />
               </v-menu>
@@ -153,7 +157,7 @@
             fab
             small
             color="primary"
-            @click="isShow = true"
+            @click="submitSearch"
             v-on="on"
           >
             <v-icon v-text="'mdi-magnify'" />
@@ -168,7 +172,7 @@
             fab
             small
             color="accent"
-            @click="isShow = false"
+            @click="postForm={};mediaFiles=[]"
             v-on="on"
           >
             <v-icon>mdi-refresh</v-icon>
@@ -179,8 +183,8 @@
     </v-row>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">
-    <v-row v-show="isShow">
-      <v-col v-show="isGrid" md="12">
+    <v-row v-if="isShow">
+      <v-col v-if="isGrid" md="12">
         <fet-card
           full-width
           title="搜尋結果"
@@ -190,23 +194,23 @@
             <div class="imgList">
               <ul class="resourceList">
                 <li
-                  v-for="(resource,id) in resources"
+                  v-for="(resource,id) in mediaFiles"
                   :id="resource.id"
                   :key="id"
-                  :url="resource.url"
-                  @dblclick="preview($event)"
+                  @dblclick="(previewUrl = resource.dataUrl),(overlay = true)"
                 >
                   <div class="imgBox">
-                    <img :src="require(`@/resource/${resource.thumbnail}`)">
+                    <img :src="resource.dataUrl">
                   </div>
-                  <p>{{ resource.name }}</p>
+
+                  <p>{{ resource.materialName }}</p>
                 </li>
               </ul>
             </div>
           </v-row>
         </fet-card>
       </v-col>
-      <v-col v-show="!isGrid" md="12">
+      <v-col v-if="!isGrid" md="12">
         <fet-card
           full-width
           title="搜尋結果"
@@ -214,8 +218,8 @@
         >
           <v-data-table
             item-key="id"
-            :headers="headerCRUD"
-            :items="itemsCRUD"
+            :headers="header"
+            :items="mediaFiles"
             :items-per-page="itemsPerPage"
             :page.sync="itemsListPage"
             :footer-props="{
@@ -227,14 +231,28 @@
             no-data-text="查無資料"
             @page-count="itemsListPageCount = $event"
           >
+            <!-- 刪除案件 -->
             <template v-slot:top>
               <v-dialog v-model="dialog" max-width="500" />
-              <v-dialog v-model="alertDialog" :max-width="250">
+              <v-dialog v-if="alertDialog" v-model="alertDialog" :max-width="450">
                 <v-card>
-                  <v-card-title class="justify-center">Are you sure?</v-card-title>
-                  <v-card-text />
+                  <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+                    確認是否要刪除素材
+                    <v-spacer />
+                    <v-btn
+                      color="white"
+                      icon
+                      small
+                      text
+                      @click="alertDialog = false"
+                    >
+                      <v-icon> mdi-close </v-icon>
+                    </v-btn>
+                  </v-card-title>
+                  <v-card-title class="justify-center">確定刪除 {{ mediaFiles[editedIndex].materialName||'' }} 此筆素材資料?</v-card-title>
                   <v-card-actions class="justify-center">
-                    <v-btn color="error" depressed @click="remove" v-text="'Yes'" />
+                    <v-btn color="normal" depressed @click="alertDialog = false ; dialog = false" v-text="' 取消 '" />
+                    <v-btn color="error" depressed @click="remove" v-text="' 確定 '" />
                   </v-card-actions>
                 </v-card>
               </v-dialog>
@@ -247,8 +265,8 @@
                     fab
                     x-small
                     color="error"
-                    :disabled="item.active"
-                    @click="action('deleteMultiMedia',item)"
+                    :disabled="!!item.relatedInfos"
+                    @click="deleteItem(item)"
                     v-on="on"
                   >
                     <v-icon v-text="'mdi-delete'" />
@@ -257,8 +275,10 @@
                 <span>刪除</span>
               </v-tooltip>
             </template>
-            <template v-slot:[`item.relatedInfo`]="{ item }">
-              <v-tooltip v-if="item.relatedInfo" top>
+
+            <!-- 關聯節目單資訊 -->
+            <template v-slot:[`item.relatedInfos`]="{ item }">
+              <v-tooltip v-if="item.relatedInfos" top>
                 <template v-slot:activator="{ on }">
                   <v-icon
                     class="mr-2 d-flex justify-center"
@@ -270,29 +290,44 @@
                 </template>
                 <v-data-table
                   :headers="headerReleate"
-                  :items="item.relatedInfo"
+                  :items="item.relatedInfos"
                   disable-sort
                   hide-default-footer
-                />
+                >
+                  <template v-slot:[`item.status`]="{ item }">
+                    {{ statusOption.find(state => { return item.status===state.value }).text }}
+                  </template>
+                  <template v-slot:[`item.signStatus`]="{ item }">
+                    {{ signStatusOption.find(state => { return item.signStatus===state.value }).text }}
+                  </template>
+                </v-data-table>
               </v-tooltip>
             </template>
-            <template v-slot:[`item.thumbnail`]="{ item }">
+            <!-- 使用中 -->
+            <template v-slot:[`item.active`]="{ item }">
+              <v-tooltip top>
+                <template v-slot:activator="{ on }">
+                  <v-icon
+                    class="d-flex justify-center"
+                    :color="!!item.relatedInfos ? 'green darken-2':''"
+                    v-on="on"
+                  >
+                    {{ !!item.relatedInfos ? 'mdi-checkbox-marked-circle':'' }}
+                  </v-icon>
+                </template>
+                {{ !!item.relatedInfos ? '使用中':'' }}
+              </v-tooltip>
+            </template>
+            <!-- 縮圖 -->
+            <template v-slot:[`item.dataUrl`]="{ item }">
               <v-img
-                :src="require('@/resource/'+ item.thumbnail)"
+                :src="item.dataUrl"
                 :style="`cursor: pointer`"
                 max-width="50"
                 max-height="50"
-                @dblclick="(previewUrl = item.thumbnail),(overlay = true)"
+                @dblclick="(previewUrl = item.dataUrl),(overlay = true)"
               />
-              {{ item.thumbnail }}
-            </template>
-            <template v-slot:[`item.active`]="{ item }">
-              <v-icon
-                class="d-flex justify-center"
-                :color="item.active?'green darken-2':''"
-              >
-                {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
-              </v-icon>
+              {{ item.fileName }}
             </template>
           </v-data-table>
           <!-- 選頁 -->
@@ -312,7 +347,7 @@
       class="text-right"
     >
       <v-img
-        :src="require('@/resource/'+ previewUrl)"
+        :src="previewUrl"
         max-width="700"
         max-height="1024"
         @load="imageLoaded = true"
@@ -327,13 +362,27 @@
 </template>
 
 <script>
+  import MessageService from "@/assets/services/message.service"
+  import { listMediaFile , deleteFile} from '@/api/mediaFile'
+  import isEmpty from 'lodash/isEmpty'
+
+  const defaultForm = {
+    materialName: null, 
+    createDateStart: null, 
+    createDateEnd: null, 
+    createAuthor: null,
+    status: null //暫無使用
+  }
+  
   export default {
+    
     data() {
       return {
+        postForm: Object.assign({}, defaultForm),
         isShow: false,
         isGrid: false,
         overlay: false,
-        previewUrl: 'image/bg1.jpg',
+        previewUrl: '',
         imageLoaded: false,
         //分頁
         itemsPerPage: 10,
@@ -341,285 +390,67 @@
         itemsListPageCount: 1,
         //分頁 end
         //日曆
-        releaseDateStartMenu: false,
-        releaseDateStart: '',
-        releaseDateEndMenu: false,
-        releaseDateEnd: '',
+        createDateStartMenu: false,
+        createDateEndMenu: false,
         //日曆 end
-        resources: [
-          {
-            "id": 1,
-            "url": "image/bg1_tn.jpg",
-            "thumbnail": "image/bg1_tn.jpg",
-            "name": "bg1.jpg",
-            "type": "image"
-          },
-          {
-            "id": 2,
-            "url": "image/bg2_tn.jpg",
-            "thumbnail": "image/bg2_tn.jpg",
-            "name": "bg2.jpg",
-            "type": "image"
-          },
-          {
-            "id": 3,
-            "url": "image/p1.jpg",
-            "thumbnail": "image/p1.jpg",
-            "name": "p1.jpg",
-            "type": "image"
-          },
-          {
-            "id": 4,
-            "url": "image/p2_tn.jpg",
-            "thumbnail": "image/p2_tn.jpg",
-            "name": "p2.jpg",
-            "type": "image"
-          },
-          {
-            "id": 5,
-            "url": "image/p3_tn.jpg",
-            "thumbnail": "image/p3_tn.jpg",
-            "name": "p3.jpg",
-            "type": "image"
-          },
-          {
-            "id": 6,
-            "url": "image/p4_tn.jpg",
-            "thumbnail": "image/p4_tn.jpg",
-            "name": "p4.jpg",
-            "type": "image"
-          },
-          {
-            "id": 7,
-            "url": "image/p5_tn.jpg",
-            "thumbnail": "image/p5_tn.jpg",
-            "name": "p5.jpg",
-            "type": "image"
-          },
-          {
-            "id": 8,
-            "url": "image/p6_tn.jpg",
-            "thumbnail": "image/p6_tn.jpg",
-            "name": "p6.jpg",
-            "type": "image"
-          },
-          {
-            "id": 9,
-            "url": "image/p7_tn.jpg",
-            "thumbnail": "image/p7_tn.jpg",
-            "name": "p7.jpg",
-            "type": "image"
-          },
-          {
-            "id": 10,
-            "url": "image/p8.jpg",
-            "thumbnail": "image/p8_tn.jpg",
-            "name": "p8.jpg",
-            "type": "image"
-          },
-          {
-            "id": 11,
-            "url": "image/p9.jpg",
-            "thumbnail": "image/p9_tn.jpg",
-            "name": "p9.jpg",
-            "type": "image"
-          },
-          {
-            "id": 12,
-            "url": "image/p10.jpg",
-            "thumbnail": "image/p10_tn.jpg",
-            "name": "p10.jpg",
-            "type": "image"
-          }
+        //素材類型下拉
+        materialTypeOption: [
+            { text: '圖片', value: 'image'},
+            { text: '影音', value: 'video'},
         ],
-        headerCRUD: [
-          {
-            text: '素材名稱',
-            value: 'name',
-            width: '24%',
-          },
-          {
-            text: '上傳人員名稱',
-            value: 'division',
-            align: 'center',
-          },
-          {
-            text: '上傳時間',
-            value: 'ondate',
-            align: 'center'
-          },
-          {
-            text: '縮圖',
-            value: 'thumbnail',
-          },
-          {
-            text: '關聯使用資訊',
-            value: 'relatedInfo',
-            align: 'center'
-          },
-          {
-            text: '使用中',
-            value: 'active',
-            sortable: false,
-            align: 'center',
-          },
-          {
-            text: '狀態操作',
-            value: 'action',
-            sortable: false,
-            align: 'center'
-          },
+        //狀態 Option
+        statusOption: [
+          { text: '上架中', value: 'ACTIVE' , icon: 'mdi-checkbox-marked-circle'},
+          { text: '未上架', value: 'WAIT' , icon : 'mdi-minus-circle'},
+          { text: '已下架', value: 'CLOSE', icon: 'mdi-minus-circle'},
+        ],
+        signStatusOption: [
+            { text: '暫存', value: 'DRAFT'},
+            { text: '退件', value: 'REJECT'},
+            { text: '審核中', value: 'WAIT'},
+            { text: '審核中', value: 'PROGRESS'},
+            { text: '審核完成', value: 'PASS'},
+        ],
+        
+        //素材資料清單
+        mediaFiles:[],
+        header: [
+          { text: '素材名稱', value: 'materialName', width: '24%', },
+          { text: '上傳人員名稱', value: 'createAuthor', width: '10%', },
+          { text: '上傳時間', value: 'createDate', align: 'center' },
+          { text: '縮圖', value: 'dataUrl', },
+          { text: '關聯使用資訊', value: 'relatedInfos', align: 'center' },
+          { text: '使用中', value: 'active', sortable: false, align: 'center', },
+          { text: '狀態操作', value: 'action', sortable: false, align: 'center' },
         ],
         headerReleate:[
-          {text: '節目單標題',value: 'programTitle',align: 'center',},
-          {text: '關聯節目單類別',value: 'programPlayState',align: 'center',},
-          {text: '關聯節目單審核狀態',value: 'programState',align: 'center',},
-          {text: '關聯節目單播放狀態',value: 'programPlayState',align: 'center',},
+          {text: '節目單標題',value: 'programName',align: 'center',},
+          {text: '關聯節目單類別',value: 'programType',align: 'center',},
+          {text: '關聯節目單審核狀態',value: 'signStatus',align: 'center',},
+          {text: '關聯節目單播放狀態',value: 'status',align: 'center',},
         ],
-        itemsCRUD: [
-          {
-            name: '電廠維護圖片',
-            id: 1,
-            scp_id: '一般',
-            marquee_content: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
-            division:'王大明',
-            active: true,
-            ondate: '2021-09-11',
-            offdate: '2021-10-30',
-            signoff: '簽核完成',
-            thumbnail: "image/p1.jpg",
-            relatedInfo: [
-              {
-                programState: '審核完成',
-                programPlayState: '上架中',
-                programType: '一般',
-                programTitle: '中秋節目測試',
-              },
-              {
-                programState: '審核完成',
-                programPlayState: '上架中',
-                programType: '一般',
-                programTitle: '中秋節目測試2',
-              },
-              {
-                programState: '審核完成',
-                programPlayState: '上架中',
-                programType: '一般',
-                programTitle: '中秋節目測試3',
-              },
-            ]
-          },
-          {
-            name: '秋季節約用電宣導圖片',
-            id: 2,
-            scp_id: '預設',
-            marquee_content: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
-            division:'李小凡',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '簽核完成',
-            thumbnail: "image/p2_tn.jpg",
-          },
-          {
-            name: '颱風緊急通報圖片',
-            id: 3,
-            scp_id: '一般',
-            marquee_content: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
-            division:'葉星辰',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '暫存',
-            thumbnail: "image/p3_tn.jpg",
-          },
-          {
-            name: '宣導圖片',
-            id: 4,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'趙元智',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '審核中',
-            thumbnail: "image/p4_tn.jpg",
-          },
-          {
-            name: '台電連4年獲亞洲企業社會責任獎',
-            id: 5,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
-            division:'陳立元',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '退件',
-            thumbnail: "image/p5_tn.jpg",
-          },
-          {
-            name: '台電首度攜手紙風車劇團，到彰化員林打造露天舞台劇',
-            id: 6,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'陳立元',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '退件',
-            thumbnail: "image/p2_tn.jpg",
-          },
-        ],
-        defaultItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
         // CRUD
         dialog: false,
         alertDialog: false,
         editedIndex: -1,
-        editedItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
       }
     },
     methods: {
       close() {
         this.dialog = false
-        this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
         this.alertDialog = false
       },
-      save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.itemsCRUD[this.editedIndex], this.editedItem)
-        } else {
-          this.itemsCRUD.push(this.editedItem)
-        }
-        this.close()
-      },
       editItem(item) {
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-        this.editedItem = Object.assign({}, item)
+        this.editedIndex = this.mediaFiles.indexOf(item)
+        // this.editedItem = Object.assign({}, item)
         this.$router.push({path:'/marquee/create'})
-        
         this.dialog = true
       },
-      deleteItem(item) {
-        this.alertDialog = true
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-      },
+      
       remove() {
-        this.itemsCRUD.splice(this.editedIndex, 1)
+        let itemId = this.mediaFiles[this.editedIndex].id
+        this.deleteMediaFile(itemId)
         this.close()
       },
       preview(e) {
@@ -645,6 +476,80 @@
         //   let myVideo = document.getElementById('myVideo');
         //   myVideo.load();
         // }
+      },
+      // 送出查詢
+      submitSearch() {
+        //API post data 
+        this.fetchMediaFileList(this.postForm)
+      },
+      //刪除素材
+      deleteItem(item) {
+        // this.dialog = true
+        this.alertDialog = true
+        this.editedIndex = this.mediaFiles.indexOf(item)
+        //API post data 
+        // this.deleteFile(item.id)
+      },
+
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+      hasResult (dataList) {
+        // 驗證questionnaire是否有資料
+        if(isEmpty(dataList) || dataList.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
+        }
+        return true
+      },
+
+
+      /**
+       * 
+       * Ajax start 
+       * 
+       **/
+      
+      //Action:素材查詢
+      async fetchMediaFileList(postData) {
+        
+        const data = await listMediaFile(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢素材清單資料');
+            return;
+        }
+        //查詢前清空資料
+        this.mediaFiles = Object.assign([])
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.materialFiles)){
+          let tmpData = data.restData.materialFiles
+
+          //處理關聯資訊轉換
+          // tmpData.forEach(element => {
+          //   element.relatedInfo = [];
+          //   Object.assign(element.relatedInfo, defaultRelatedInfo);
+          // });
+          this.mediaFiles = tmpData
+          this.isShow = true 
+        }
+        
+      },
+
+      //Action:素材刪除
+      async deleteMediaFile(id) {
+        
+        const data = await deleteFile(id)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'刪除素材資料');
+            return;
+        }
+        MessageService.showSuccess('刪除成功' + "✓")
+        //刪除畫面資料
+        this.mediaFiles.splice(this.editedIndex, 1)
+
       },
     }
   }

@@ -6,7 +6,7 @@
         style="height: 100%"
       >
         <v-fade-transition mode="out-in">
-          <router-view />
+          <router-view @showOnlyContent="showOnlyContent()" />
         </v-fade-transition>
       </v-container>
     </div>
@@ -14,7 +14,13 @@
 </template>
 
 <script>
-  export default {}
+  export default {
+    methods: {
+      showOnlyContent(){
+        this.$emit("showOnlyContent");
+      }
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

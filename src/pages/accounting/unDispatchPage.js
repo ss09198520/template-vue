@@ -95,10 +95,10 @@ export default {
         queryUndispatchInit(){
             // 取得未分派清單資料
            let unDispatchList = [
-                {seq:1 ,formSeq: 1, action: true, acceptNum: 'A00028',archieveNum: '000201', custName: '許小花',contractType:'包制',electricNum:'0120123223', countDate: '01', computeDate: '2021-09-10 10:00', colseDate: '2021-09-10 16:00', acceptItem: 'QA210  軍眷用電申請優待'},
-                {seq:2, formSeq: 2, action: true, acceptNum: 'A00040',archieveNum: '000202', custName: '陳文生',contractType:'高壓',electricNum:'012012321',countDate: '05', computeDate: '2021-09-07 15:36', colseDate: '2021-09-08 15:06', acceptItem: 'I0520  增加電表'},
-                {seq:3, formSeq: 3, action: true, acceptNum: 'A00605',archieveNum: '000203', custName: '連瑜千',contractType:'表制',electricNum:'0120123222',countDate: '10', computeDate: '2021-09-10 09:45', colseDate: '2021-09-15 10:50', acceptItem: 'F3030  表燈非時間電價停用廢止'},
-                {seq:4, formSeq: 4, action: true, acceptNum: 'A00619',archieveNum: '000204', custName: '辰文興',contractType:'包制',electricNum:'0120123225',countDate: '12', computeDate: '2021-09-10 13:44', colseDate: '2021-09-10 15:26', acceptItem: 'I0510  故障換表'}
+                {seq:1 ,formSeq: 1, action: true, acceptNum: 'A00028',archieveNum: '000201', custName: '許小花',contractType:'包制',electricNum:'0120123223', countDate: '01', computeDate: '2021-09-10 10:00', colseDate: '2021-09-10 16:00', acceptItem: '軍眷用電申請優待'},
+                {seq:2, formSeq: 2, action: true, acceptNum: 'A00040',archieveNum: '000202', custName: '陳文生',contractType:'高壓',electricNum:'012012321',countDate: '05', computeDate: '2021-09-07 15:36', colseDate: '2021-09-08 15:06', acceptItem: '增加電表'},
+                {seq:3, formSeq: 3, action: true, acceptNum: 'A00605',archieveNum: '000203', custName: '連瑜千',contractType:'表制',electricNum:'0120123222',countDate: '10', computeDate: '2021-09-10 09:45', colseDate: '2021-09-15 10:50', acceptItem: '表燈非時間電價停用廢止'},
+                {seq:4, formSeq: 4, action: true, acceptNum: 'A00619',archieveNum: '000204', custName: '辰文興',contractType:'包制',electricNum:'0120123225',countDate: '12', computeDate: '2021-09-10 13:44', colseDate: '2021-09-10 15:26', acceptItem: '故障換表'}
             ];
 
             this.unDispatchList = unDispatchList;

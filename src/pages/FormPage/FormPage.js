@@ -4,6 +4,7 @@ import MessageService from "@/assets/services/message.service";
 import CommonService from "@/assets/services/common.service";
 import ValidateUtil from '@/assets/services/validateUtil';
 import AjaxService from '@/assets/services/ajax.service.js';
+import PMCService from '@/assets/services/pmc.service.js';
 
 export default {
     name: 'Form',
@@ -27,6 +28,8 @@ export default {
             panel: [0, 1, 2, 3],
             imgSrcPrefix: "data:image/jpeg;base64,",
             formSeq: null,          // 表單流水號
+            formFileNo: null,       // 表單檔案編號
+            editedFormFileNo: null, // 已編輯的表單檔案編號
             acceptNum: null,        // 受理編號
             formType: null,         // 登記單代碼
             apitCod: null,          // 申請項目編號
@@ -47,8 +50,10 @@ export default {
             isAddAttachment: null,  // 補附件操作
             isAffidavit: null,      // 切結註記
             uploadNo: null,     // 證件編號
-            signImgSrc: "",
-            cancelSignImgSrc: "",
+            formSignPage: null,
+            isFormSignPageOpened: false,
+            customerSign: {},
+            cancelSign: {},
             certificateList: [],
             oriCertificateList: [],
             certificateNo: 1,
@@ -74,7 +79,7 @@ export default {
         }
     },
     methods: {
-        init(){            
+        init(){
             if(this.restrictMode){
                 this.formPageMode = this.restrictMode;
                 this.showModeSelect = false;
@@ -156,6 +161,19 @@ export default {
                 }
 
                 this.formSeq = response.restData.formSeq;
+                this.formFileNo = response.restData.formFileNo;
+                this.editedFormFileNo = response.restData.editedFormFileNo;
+
+                // 簽名
+                if(!ValidateUtil.isEmpty(response.restData.customerSign)){
+                    this.customerSign = response.restData.customerSign;
+                }
+
+                // 取消簽名
+                if(!ValidateUtil.isEmpty(response.restData.cancelSign)){
+                    this.cancelSign = response.restData.cancelSign;
+                }
+
                 // 整理證件及附件
                 this.setCertificateList(response.restData.certificateList);
                 this.setAttachmentList(response.restData.attachmentList);
@@ -212,7 +230,53 @@ export default {
         },
         openFormSignPage(){
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-            window.open("/#/imageEditor", '表單及簽名', config);
+            this.formSignPage = window.open("/#/imageEditor", '表單及簽名', config);
+
+            // 若為取消需將模式傳給簽名頁做取消簽名
+            if(this.formPageMode == "cancel"){
+                this.formSignPage.mode = "cancel";
+                this.formSignPage.signFileNo = this.cancelSign.fileNo;
+            }
+            // 若為檢視表單則不需簽名
+            else if(this.formPageMode == "accounting" || this.formPageMode == "view"){
+                this.formSignPage.mode = "view";
+            }
+            else{
+                this.formSignPage.signFileNo = this.customerSign.fileNo;
+            }
+
+            this.formSignPage.formFileNo = this.formFileNo;
+            this.formSignPage.editedFormFileNo = this.editedFormFileNo;
+            this.formSignPage.acceptNum = this.acceptNum;
+            this.formSignPage.formSeq = this.formSeq;
+            this.formSignPage.onbeforeunload = this.formSignPageClosed;
+
+            try {
+                // 將畫面顯示改為同步
+                PMCService.callDualScreenAdapterClone();
+            } catch (error) {
+                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            }
+            
+            this.isFormSignPageOpened = true;
+        },
+        formSignPageClosed(){
+            try {
+                // 將畫面顯示改為延伸
+                PMCService.callDualScreenAdapterExtend();
+            } catch (error) {
+                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            }
+
+            this.isFormSignPageOpened = false;
+            this.formInit();
+        },
+        closeFormSignPage(){
+            if(!this.formSignPage) {
+                return;
+            }
+            this.formSignPage.close();
+            this.isFormSignPageOpened = false;
         },
         cleanCertificateImg(certificate) {
             certificate.imgSrc = null;
@@ -255,7 +319,12 @@ export default {
             this.newCertificateModal = false;
         },
         scanCertificate(certificate){
-            certificate.hasEdit = true;
+            try {
+                PMCService.callWebScanAdapter();
+                certificate.hasEdit = true;
+            } catch (error) {
+                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            }
         },
         openNewAttachmentModal(){
             this.newAttachmentModal = true;
@@ -531,8 +600,9 @@ export default {
             // 若勾選套印則取消勾選其餘附件
             if(needSeal){
                 for(let index in this.attachmentList){
-                    if(index != needSealIndex){
+                    if(index != needSealIndex && this.attachmentList[index].needSeal){
                         this.attachmentList[index].needSeal = false;
+                        this.attachmentList[index].hasEdit = true;
                     }
                 }
             }
@@ -551,7 +621,7 @@ export default {
         },
         cancel(){
             // 驗證是否已簽名
-            if(ValidateUtil.isEmpty(this.cancelSignImgSrc)){
+            if(ValidateUtil.isEmpty(this.cancelSign.imgSrc)){
                 MessageService.showInfo("尚未簽名", "提示");
                 return;
             }

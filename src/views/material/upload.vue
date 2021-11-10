@@ -30,7 +30,7 @@
                 md="6"
               >
                 <v-text-field
-                  v-model="postForm.fileName"
+                  v-model="postForm.materialName"
                   :rules="rules.requiredRule.concat(rules.lengthRules)"
                   :hide-details="hideDatails"
                   color="accent"
@@ -61,7 +61,7 @@
                 md="6"
               >
                 <v-text-field
-                  v-model="postForm.fileDesc"
+                  v-model="postForm.memo"
                   :rules="rules.requiredRule.concat(rules.lengthRules)"
                   :hide-details="hideDatails"
                   color="accent"
@@ -91,7 +91,7 @@
                 md="6"
               >
                 <v-radio-group
-                  v-model="postForm.uploadType"
+                  v-model="postForm.materialType"
                   class="mt-2"
                   dense
                   row
@@ -137,7 +137,7 @@
                   label="上傳圖片或影片"
                   show-size
                   color="accent"
-                  accept="image/jpg , image/png , video/*"
+                  accept="image/jpeg, image/png, image/jpg, video/*"
                   hint="(.jpg、.png，最多不超過 50MB)"
                   persistent-hint
                   prepend-inner-icon="mdi-cloud-upload"
@@ -182,9 +182,9 @@
   import { uploadFile} from '@/api/mediaFile'
 
   const defaultForm = {
-    fileName: null,
-    fileDesc: null,
-    uploadType: null,
+    materialName: null,
+    memo: null,
+    materialType: null,
     file: {}
   }
   const defaultFile = {
@@ -218,13 +218,15 @@
       this.reader.addEventListener("load", () => {
         // preview data url
         this.imageURL = this.reader.result
+        console.log(this.uploadData)
         // assign file 
         this.postForm.file = Object.assign({} , defaultFile)
+        this.postForm.file.fileName = this.uploadData.name.substr(0,this.uploadData.name.lastIndexOf("."))
         this.postForm.file.originalFileName = this.uploadData.name
         this.postForm.file.fileExt = this.getFileExtension(this.uploadData.name)
-        this.postForm.file.imgSrc = this.reader.result
+        this.postForm.file.fileSize = this.uploadData.size
+        // this.postForm.file.imgSrc = this.reader.result
         this.postForm.file.base64 = this.reader.result.split(",")[1]
-        this.postForm.file.fileCode = "fileCode"
       })
     },
     methods: {
@@ -238,7 +240,7 @@
       getFileExtension(filename){
         // get file extension
         const extension = filename.split('.').pop();
-        return extension;
+        return "." + extension;
       },
       submit() {
         

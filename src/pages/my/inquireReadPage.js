@@ -33,7 +33,7 @@ export default{
                 { text: '契約種類', value: 'contractType', align: 'center' },
                 { text: '整理號碼', value: 'archiveNum', align: 'center' },
                 { text: '申請日期', value: 'acceptDateStr', align: 'center' },
-                { text: '歸檔日期', value: 'achieveDateStr', align: 'center' },            
+                { text: '歸檔日期', value: 'archiveDateStr', align: 'center' },            
                 { text: '受理項目', value: 'acceptItem', align: 'center' },                
                 { text: '狀態操作', value: 'mani', align: 'center' }
             ],

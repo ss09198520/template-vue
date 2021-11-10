@@ -72,19 +72,19 @@
             flat
           >
             <v-expansion-panel
-              v-for="(item,i) in authorityList"
+              v-for="(item,i) in rolePrivilegeList"
               :key="i"
               inset
             >
               <v-expansion-panel-header class="headerLine">
-                <span class="d-inline-block mr-5 mt-5 font-bold font-18px">{{ item.text }}</span>      
+                <span class="d-inline-block mr-5 mt-5 font-bold font-18px">{{ item.privilegeTypeName }}</span>      
                
                
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <v-row> 
                   <v-col
-                    v-for="(items,index) in item.subAuthList"
+                    v-for="(items,index) in item.authPrivilegeList"
                     :key="index"
                     cols="6"
                   > 
@@ -95,7 +95,7 @@
                       color="primary"
                       @click="turnSubAuth(item,items)"
                     />
-                    <span class="d-inline-flex font-bold font-18px">{{ items.type == 1 ? '無紙化-' : null }}{{ items.text }}</span>
+                    <span class="d-inline-flex font-bold font-18px">{{ items.privilegeName }}</span>
                   </v-col>                      
                 </v-row>
               </v-expansion-panel-content>
@@ -107,7 +107,7 @@
       <v-row v-if="role != null">
         <v-col cols="9" />
         <v-col cols="">
-          <v-btn depressed color="success" @click="saveAuth()">&emsp;儲存&emsp;</v-btn>
+          <v-btn depressed color="success" @click="setAuthInfo()">&emsp;儲存&emsp;</v-btn>
         </v-col>
         <v-col cols="1" />
       </v-row>

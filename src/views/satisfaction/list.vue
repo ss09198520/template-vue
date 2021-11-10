@@ -210,7 +210,7 @@
               </template>
               <span>編輯</span>
             </v-tooltip>
-          </template><template v-slot:[`item.returnInfo`]="{ item }">
+          </template><template v-slot:[`item.rejectInfo`]="{ item }">
             <v-tooltip v-if="item.rejectInfo" top>
               <template v-slot:activator="{ on }">
                 <v-icon
@@ -294,11 +294,11 @@
           { text: '已下架', value: 'CLOSE', icon: 'mdi-minus-circle'},
         ],
         signStatusOption: [
-            { text: '暫存', value: 'DRAFT'},
-            { text: '退件', value: 'REJECT'},
-            { text: '審核中', value: 'WAIT'},
-            { text: '審核中', value: 'PROGRESS'},
-            { text: '審核完成', value: 'PASS'},
+          { text: '暫存', value: 'DRAFT'},
+          { text: '退件', value: 'REJECT'},
+          { text: '審核中', value: 'WAIT'},
+          { text: '審核中', value: 'PROGRESS'},
+          { text: '審核完成', value: 'PASS'},
         ],
         headerQuestionnaire: [
           { text: '滿意度問卷標題', value: 'questionnaireName', width: '24%', },
@@ -307,7 +307,7 @@
           { text: '上架日期', value: 'releaseStartDate', width: '10%', },
           { text: '問卷建立日期', value: 'createDate', width: '15%', align: 'center', },
           { text: '上架', value: 'status', sortable: false, align: 'center', },
-          { text: '退件資訊', value: 'returnInfo', align: 'center' },
+          { text: '退件資訊', value: 'rejectInfo', align: 'center' },
           { text: '操作', value: 'action', sortable: false, align: 'center', },
         ],
         headerReject:[
@@ -364,7 +364,7 @@
         const data = await fetchQuestionnaireList(postData)
         // 驗證是否成功
         if (!data.restData.success) {              
-          MessageService.showError(data.restData.returnMessage,'查詢問卷上架資料');
+          MessageService.showError(data.restData.message,'查詢問卷清單資料');
             return;
         }
         //查詢前清空資料

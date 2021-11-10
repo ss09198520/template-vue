@@ -38,8 +38,8 @@
               </template>
               <!-- 原受理人號碼+姓名 -->
               <template v-slot:item.acceptUser="{ item }"> 
-                {{ item.acceptUser }}
-                <br>
+                <!-- {{ item.acceptUser }}
+                <br> -->
                 {{ item.acceptUserName }}
               </template>
               <!-- 瀏覽按鈕 -->
@@ -110,8 +110,8 @@
 
             <!-- 原受理人號碼+姓名 -->
             <template v-slot:item.sender="{ item }"> 
-              {{ item.sender }}
-              <br>
+              <!-- {{ item.sender }}
+              <br> -->
               {{ item.senderName }}
             </template>
 

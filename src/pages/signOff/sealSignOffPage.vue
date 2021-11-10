@@ -99,6 +99,7 @@
                     fab
                     small
                     color="primary"
+                    @click="download(item.acceptNum)"
                     v-on="on"
                   >
                     <v-icon v-text="'mdi-download-box-outline'" />

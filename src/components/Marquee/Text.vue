@@ -85,12 +85,6 @@
 </script>
 
 <style>
-p ,b, strong {
-  font-size: 0.8cm !important;
-  margin-top: 15px;
-  margin: 0 !important;
-}
-
 .marquee.span{
   height:50px;
 }
@@ -129,6 +123,12 @@ div.marquee > span {
 </style>
 
 <style module>
+  /* for quill editor style */
+  div.ql-editor > p ,b, strong {
+    font-size: 0.8cm !important;
+    margin-top: 15px;
+    margin: 0 !important;
+  }
   .wrap {
     overflow: hidden;
   }

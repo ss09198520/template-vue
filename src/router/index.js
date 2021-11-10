@@ -322,10 +322,10 @@ export const constantRoutes = [
         meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },
       {
-        path: 't-create',
+        path: 'createMarquee',
         name: 't-Marquee-Edit',
-        component: () => import('@/views/marquee/t-create'),
-        meta: { title: 't-跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
+        component: () => import('@/views/marquee/createMarquee'),
+        meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
       },
       {
         path: 't-calendarList',

@@ -4,6 +4,7 @@ import MessageService from "@/assets/services/message.service";
 import CommonService from "@/assets/services/common.service";
 import ValidateUtil from '@/assets/services/validateUtil';
 import AjaxService from '@/assets/services/ajax.service.js';
+import PMCService from '@/assets/services/pmc.service.js';
 
 export default {
     name: 'Form',
@@ -229,9 +230,23 @@ export default {
             this.formSignPage.formSeq = this.formSeq;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
 
+            try {
+                // 將畫面顯示改為同步
+                PMCService.callDualScreenAdapterClone();
+            } catch (error) {
+                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            }
+            
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
+            try {
+                // 將畫面顯示改為延伸
+                PMCService.callDualScreenAdapterExtend();
+            } catch (error) {
+                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            }
+
             this.isFormSignPageOpened = false;
             this.formInit();
         },
@@ -283,7 +298,12 @@ export default {
             this.newCertificateModal = false;
         },
         scanCertificate(certificate){
-            certificate.hasEdit = true;
+            try {
+                PMCService.callWebScanAdapter();
+                certificate.hasEdit = true;
+            } catch (error) {
+                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            }
         },
         openNewAttachmentModal(){
             this.newAttachmentModal = true;

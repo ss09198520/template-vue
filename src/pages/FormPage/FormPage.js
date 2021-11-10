@@ -53,7 +53,7 @@ export default {
             formSignPage: null,
             isFormSignPageOpened: false,
             customerSign: {},
-            cancelSignImgSrc: "",
+            cancelSign: {},
             certificateList: [],
             oriCertificateList: [],
             certificateNo: 1,
@@ -163,9 +163,17 @@ export default {
                 this.formSeq = response.restData.formSeq;
                 this.formFileNo = response.restData.formFileNo;
                 this.editedFormFileNo = response.restData.editedFormFileNo;
+
+                // 簽名
                 if(!ValidateUtil.isEmpty(response.restData.customerSign)){
                     this.customerSign = response.restData.customerSign;
                 }
+
+                // 取消簽名
+                if(!ValidateUtil.isEmpty(response.restData.cancelSign)){
+                    this.cancelSign = response.restData.cancelSign;
+                }
+
                 // 整理證件及附件
                 this.setCertificateList(response.restData.certificateList);
                 this.setAttachmentList(response.restData.attachmentList);
@@ -223,9 +231,22 @@ export default {
         openFormSignPage(){
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
             this.formSignPage = window.open("/#/imageEditor", '表單及簽名', config);
+
+            // 若為取消需將模式傳給簽名頁做取消簽名
+            if(this.formPageMode == "cancel"){
+                this.formSignPage.mode = "cancel";
+                this.formSignPage.signFileNo = this.cancelSign.fileNo;
+            }
+            // 若為檢視表單則不需簽名
+            else if(this.formPageMode == "accounting" || this.formPageMode == "view"){
+                this.formSignPage.mode = "view";
+            }
+            else{
+                this.formSignPage.signFileNo = this.customerSign.fileNo;
+            }
+
             this.formSignPage.formFileNo = this.formFileNo;
             this.formSignPage.editedFormFileNo = this.editedFormFileNo;
-            this.formSignPage.signFileNo = this.customerSign.fileNo;
             this.formSignPage.acceptNum = this.acceptNum;
             this.formSignPage.formSeq = this.formSeq;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
@@ -600,7 +621,7 @@ export default {
         },
         cancel(){
             // 驗證是否已簽名
-            if(ValidateUtil.isEmpty(this.cancelSignImgSrc)){
+            if(ValidateUtil.isEmpty(this.cancelSign.imgSrc)){
                 MessageService.showInfo("尚未簽名", "提示");
                 return;
             }

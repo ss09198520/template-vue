@@ -55,7 +55,7 @@
                   <div class="sign-preview-area ma-auto">
                     <div class="h-10">簽名預覽</div>
                     <div class="h-90 d-center">
-                      <img v-if="formPageMode==='cancel' && cancelSignImgSrc" style="width: 100%; max-height: 100%" :src="imgSrcPrefix + cancelSignImgSrc">
+                      <img v-if="formPageMode==='cancel' && cancelSign.imgSrc" style="width: 100%; max-height: 100%" :src="cancelSign.imgSrc">
                       <img v-else-if="formPageMode != 'cancel' && customerSign.imgSrc" style="width: 100%; max-height: 100%" :src="customerSign.imgSrc">
                       <div v-else class="not-scan-area">
                         <span>尚未簽名</span>

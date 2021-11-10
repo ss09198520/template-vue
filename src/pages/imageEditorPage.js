@@ -11,6 +11,7 @@ export default {
     },
     data() {
         return {
+            mode: "edit",
             formFileNo: null,
             editedFormFileNo: null,
             signFileNo: null,
@@ -55,6 +56,7 @@ export default {
             this.signFileNo = window.signFileNo;
             this.acceptNum = window.acceptNum;
             this.formSeq = window.formSeq;
+            this.mode = window.mode;
 
             this.queryFormImage();
         });
@@ -120,7 +122,13 @@ export default {
             this.$refs.signaturePad.clearSignature();
         },
         async save(){
-            let isSucess = await this.saveEditedFormImage();
+            let isSucess = true;
+
+            // 狀態不為取消才儲存編輯後的表單圖片
+            if(this.mode != "cancel"){
+                isSucess = await this.saveEditedFormImage();
+            }
+
             if(isSucess){
                 this.saveSign();
             }
@@ -178,10 +186,10 @@ export default {
                 acceptNum: this.acceptNum,
                 formSeq: this.formSeq,
                 fileNo: this.signFileNo,
-                fileName: "客戶簽名",
-                originalFileName: "customerSign.png",
+                fileName: (this.mode == "cancel") ? "客戶簽名(取消表單)" : "客戶簽名",
+                originalFileName: (this.mode == "cancel") ? "cancelSign.png" : "customerSign.png",
                 fileExt: ".png",
-                category: "SIGN",
+                category: (this.mode == "cancel") ? "CANCEL_SIGN" : "SIGN",
                 file: data,
                 needSeal: false,
             };

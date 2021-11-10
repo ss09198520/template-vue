@@ -197,11 +197,12 @@
                   v-for="(resource,id) in mediaFiles"
                   :id="resource.id"
                   :key="id"
-                  @dblclick="preview($event)"
+                  @dblclick="(previewUrl = resource.dataUrl),(overlay = true)"
                 >
                   <div class="imgBox">
                     <img :src="resource.dataUrl">
                   </div>
+
                   <p>{{ resource.materialName }}</p>
                 </li>
               </ul>
@@ -373,27 +374,6 @@
     status: null //暫無使用
   }
   
-  // const defaultRelatedInfo = [
-  //     {
-  //       programState: '審核完成',
-  //       programPlayState: '上架中',
-  //       programType: '一般',
-  //       programTitle: '中秋節目測試',
-  //     },
-  //     {
-  //       programState: '審核完成',
-  //       programPlayState: '上架中',
-  //       programType: '一般',
-  //       programTitle: '中秋節目測試2',
-  //     },
-  //     {
-  //       programState: '審核完成',
-  //       programPlayState: '上架中',
-  //       programType: '一般',
-  //       programTitle: '中秋節目測試3',
-  //     },
-  //   ]
-
   export default {
     
     data() {
@@ -446,8 +426,8 @@
         headerReleate:[
           {text: '節目單標題',value: 'programName',align: 'center',},
           {text: '關聯節目單類別',value: 'programType',align: 'center',},
-          {text: '關聯節目單審核狀態',value: 'status',align: 'center',},
-          {text: '關聯節目單播放狀態',value: 'signStatus',align: 'center',},
+          {text: '關聯節目單審核狀態',value: 'signStatus',align: 'center',},
+          {text: '關聯節目單播放狀態',value: 'status',align: 'center',},
         ],
         // CRUD
         dialog: false,

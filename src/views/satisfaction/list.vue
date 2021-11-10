@@ -364,7 +364,7 @@
         const data = await fetchQuestionnaireList(postData)
         // 驗證是否成功
         if (!data.restData.success) {              
-          MessageService.showError(data.restData.returnMessage,'查詢問卷上架資料');
+          MessageService.showError(data.restData.message,'查詢問卷上架資料');
             return;
         }
         //查詢前清空資料

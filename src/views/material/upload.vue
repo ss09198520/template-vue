@@ -137,7 +137,7 @@
                   label="上傳圖片或影片"
                   show-size
                   color="accent"
-                  accept="image/jpg , image/png , video/*"
+                  accept="image/jpeg, image/png, image/jpg, video/*"
                   hint="(.jpg、.png，最多不超過 50MB)"
                   persistent-hint
                   prepend-inner-icon="mdi-cloud-upload"

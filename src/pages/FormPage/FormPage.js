@@ -28,6 +28,7 @@ export default {
             imgSrcPrefix: "data:image/jpeg;base64,",
             formSeq: null,          // 表單流水號
             formFileNo: null,       // 表單檔案編號
+            editedFormFileNo: null, // 已編輯的表單檔案編號
             acceptNum: null,        // 受理編號
             formType: null,         // 登記單代碼
             apitCod: null,          // 申請項目編號
@@ -160,6 +161,7 @@ export default {
 
                 this.formSeq = response.restData.formSeq;
                 this.formFileNo = response.restData.formFileNo;
+                this.editedFormFileNo = response.restData.editedFormFileNo;
                 if(!ValidateUtil.isEmpty(response.restData.customerSign)){
                     this.customerSign = response.restData.customerSign;
                 }
@@ -221,6 +223,7 @@ export default {
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
             this.formSignPage = window.open("/#/imageEditor", '表單及簽名', config);
             this.formSignPage.formFileNo = this.formFileNo;
+            this.formSignPage.editedFormFileNo = this.editedFormFileNo;
             this.formSignPage.signFileNo = this.customerSign.fileNo;
             this.formSignPage.acceptNum = this.acceptNum;
             this.formSignPage.formSeq = this.formSeq;
@@ -230,6 +233,7 @@ export default {
         },
         formSignPageClosed(){
             this.isFormSignPageOpened = false;
+            this.formInit();
         },
         closeFormSignPage(){
             if(!this.formSignPage) {

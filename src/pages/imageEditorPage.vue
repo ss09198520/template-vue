@@ -29,7 +29,7 @@
             mdi-eraser-variant
           </v-icon>
         </v-btn>
-        <v-btn class="ml-2" color="success" @click="saveSign()">
+        <v-btn class="ml-2" color="success" @click="save()">
           確認儲存
           <v-icon
             right

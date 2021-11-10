@@ -12,6 +12,7 @@ export default {
     data() {
         return {
             formFileNo: null,
+            editedFormFileNo: null,
             signFileNo: null,
             acceptNum: null,
             formSeq: null,
@@ -50,6 +51,7 @@ export default {
     created() {
         this.$nextTick(() => {
             this.formFileNo = window.formFileNo;
+            this.editedFormFileNo = window.editedFormFileNo;
             this.signFileNo = window.signFileNo;
             this.acceptNum = window.acceptNum;
             this.formSeq = window.formSeq;
@@ -116,6 +118,53 @@ export default {
         },
         clearSign(){
             this.$refs.signaturePad.clearSignature();
+        },
+        async save(){
+            let isSucess = await this.saveEditedFormImage();
+            if(isSucess){
+                this.saveSign();
+            }
+        },
+        async saveEditedFormImage(){
+            let isSucess = false;
+            let formImage = this.$refs.tuiImageEditor.editorInstance.toDataURL();
+
+            if(!formImage){
+                return isSucess;
+            }
+
+            let fileExt = "." + formImage.split(";")[0].split("/")[1];
+
+            let vin = {
+                acceptNum: this.acceptNum,
+                formSeq: this.formSeq,
+                fileNo: this.editedFormFileNo,
+                fileName: "表單圖片(已被編輯)",
+                originalFileName: "editedForm" + fileExt,
+                fileExt: fileExt,
+                category: "EDITED_FORM",
+                file: formImage,
+                needSeal: false,
+            };
+
+            await AjaxService.post("/tpesForm/uploadFile", vin, 
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.message,'上傳檔案');
+                    return;
+                }
+
+                this.editedFormFileNo = response.restData.fileNo;
+
+                isSucess = true;
+            },
+            (error) => {
+                MessageService.showSystemError();
+                console.log(error);
+            });
+            
+            return isSucess;
         },
         saveSign(){
             let { isEmpty, data } = this.$refs.signaturePad.saveSignature();

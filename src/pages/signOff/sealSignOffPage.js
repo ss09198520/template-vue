@@ -104,6 +104,23 @@ export default {
                     MessageService.showError(response.restData.message, "簽核");
                 }
             });
+        },
+        download(acceptNum){
+            let param = {
+                acceptNum: acceptNum
+            };
+
+            AjaxService.postFile("/seal/downloadSealedFile", param, 
+                (response) => {
+                    if(response.restData.success){
+                        MessageService.showSuccess("下載");
+                    }
+                },
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
+                }
+            );
         }
     }
 }

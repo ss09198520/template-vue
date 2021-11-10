@@ -16,6 +16,7 @@
             </v-col>
             <v-col cols="3" class="mt-5">
               <v-text-field
+                v-model="postForm.programName"
                 color="accent"
                 dense
                 placeholder="節目單標題內容"
@@ -30,7 +31,8 @@
             </v-col>
             <v-col cols="3" class="ml-2">
               <v-select
-                :items="['一般','預設']"
+                v-model="postForm.programType"
+                :items="programTypeOption"
                 class="font-bold"
                 color="accent"
                 item-color="accent"
@@ -46,15 +48,17 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              狀 態
+              簽 核 狀 態
             </v-col>
             <v-col cols="3">
-              <v-select
-                :items="['暫存', '退件', '審核中', '審核完成']"
+              <v-autocomplete
+                v-model="postForm.status"
+                :items="signStatusOption"
+                clearable
+                item-color="accent"
                 class="font-bold"
                 color="accent"
-                item-color="accent"
-                placeholder="狀態"
+                placeholder="簽核狀態"
                 dense
                 outlined
                 hide-details
@@ -65,8 +69,9 @@
               上架狀態
             </v-col>
             <v-col cols="3" class="ml-2">
-              <v-select
-                :items="['上架','未上架','下架']"
+              <v-autocomplete
+                v-model="postForm.signStatus"
+                :items="statusOption"
                 class="font-bold"
                 color="accent"
                 item-color="accent"
@@ -89,7 +94,7 @@
               class="d-flex"
             >
               <v-menu
-                v-model="releaseDateStartMenu"
+                v-model="releaseStartDateFromMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -97,7 +102,7 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="releaseDateStart"
+                    v-model="postForm.releaseStartDateFrom"
                     append-icon="mdi-calendar"
                     placeholder="上架時間(起)"
                     color="accent"
@@ -110,13 +115,13 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="releaseDateStart"
+                  v-model="postForm.releaseStartDateFrom"
                   scrollable
                 />
               </v-menu>
               <div class="mt-2"> ~ </div>
               <v-menu
-                v-model="releaseDateEndMenu"
+                v-model="releaseStartDateToMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -124,7 +129,7 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="releaseDateEnd"
+                    v-model="postForm.releaseStartDateTo"
                     append-icon="mdi-calendar"
                     placeholder="上架時間(迄)"
                     color="accent"
@@ -137,7 +142,7 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="releaseDateEnd"
+                  v-model="postForm.releaseStartDateTo"
                   scrollable
                 />
               </v-menu>
@@ -151,7 +156,7 @@
               class="d-flex ml-2"
             >
               <v-menu
-                v-model="sunsetDateStartMenu"
+                v-model="releaseEndDateFromMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -159,7 +164,7 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="sunsetDateStart"
+                    v-model="postForm.releaseEndDateFrom"
                     append-icon="mdi-calendar"
                     label="下架時間(起)"
                     color="accent"
@@ -172,13 +177,13 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="sunsetDateStart"
+                  v-model="postForm.releaseEndDateFrom"
                   scrollable
                 />
               </v-menu>
               <div class="mt-2"> ~ </div>
               <v-menu
-                v-model="sunsetDateEndMenu"
+                v-model="releaseEndDateToMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -186,7 +191,7 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="sunsetDateEnd"
+                    v-model="postForm.releaseEndDateTo"
                     append-icon="mdi-calendar"
                     label="下架時間(迄)"
                     color="accent"
@@ -199,7 +204,7 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="sunsetDateEnd"
+                  v-model="postForm.releaseEndDateTo"
                   scrollable
                 />
               </v-menu>
@@ -234,7 +239,7 @@
             fab
             small
             color="primary"
-            @click="isShow = true"
+            @click="submitSearch"
             v-on="on"
           >
             <v-icon v-text="'mdi-magnify'" />
@@ -249,7 +254,7 @@
             fab
             small
             color="accent"
-            @click="isShow = false"
+            @click="postForm={};programs=[]"
             v-on="on"
           >
             <v-icon>mdi-refresh</v-icon>
@@ -264,8 +269,8 @@
       <v-col md="12">
         <v-data-table
           item-key="id"
-          :headers="headerCRUD"
-          :items="itemsCRUD"
+          :headers="headerProgram"
+          :items="programs"
           :items-per-page="itemsPerPage"
           :page.sync="itemsListPage"
           :footer-props="{
@@ -289,6 +294,7 @@
               </v-card>
             </v-dialog>
           </template>
+          <!-- 動作 -->
           <template v-slot:[`item.action`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
@@ -336,8 +342,9 @@
               <span>刪除</span>
             </v-tooltip>
           </template>
-          <template v-slot:[`item.returnInfo`]="{ item }">
-            <v-tooltip v-if="item.returnInfo" top>
+          <!-- 退件資訊 -->
+          <template v-slot:[`item.rejectInfo`]="{ item }">
+            <v-tooltip v-if="item.rejectInfo" top>
               <template v-slot:activator="{ on }">
                 <v-icon
                   class="mr-2 d-flex justify-center"
@@ -348,34 +355,31 @@
                 </v-icon>
               </template>
               <v-data-table
-                :headers="headerReturn"
-                :items="[item.returnInfo]" 
+                :headers="headerReject"
+                :items="[item.rejectInfo]"
                 disable-sort
                 hide-default-footer
               />
             </v-tooltip>
           </template>
-          <template v-slot:[`item.marquee_content`]="{ item }">
+          <!-- 上架狀態 -->
+          <template v-slot:[`item.status`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-icon
-                  small
-                  class="mr-2 d-flex justify-center"
+                  class="d-flex justify-center"
+                  :color="item.status==='ACTIVE' ? 'green darken-2':''"
                   v-on="on"
                 >
-                  mdi-file
+                  {{ statusOption.find(state => { return item.status===state.value }).icon }}
                 </v-icon>
               </template>
-              <span>{{ item.marquee_content }}</span>
+              {{ statusOption.find(state => { return item.status===state.value }).text }}
             </v-tooltip>
           </template>
-          <template v-slot:[`item.active`]="{ item }">
-            <v-icon
-              class="d-flex justify-center"
-              :color="item.active?'green darken-2':''"
-            >
-              {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
-            </v-icon>
+          <!-- 簽核狀態 -->
+          <template v-slot:[`item.signStatus`]="{ item }">
+            {{ signStatusOption.find(state => { return item.signStatus===state.value }).text }}
           </template>
         </v-data-table>
         <!-- 選頁 -->
@@ -392,189 +396,103 @@
 </template>
 
 <script>
+  import MessageService from "@/assets/services/message.service";
+  import { fetchProgramList} from '@/api/program'
+  import isEmpty from 'lodash/isEmpty'
+
+  const defaultForm = {
+    programName: null, 
+    releaseStartDateFrom: null, 
+    releaseStartDateTo: null, 
+    releaseEndDateFrom: null, 
+    releaseEndDateTo: null, 
+    status: null
+  }
+
   export default {
     data() {
       return {
-        isShow: true,
+        isShow: false,
         menu: false,
+        postForm: Object.assign({}, defaultForm),
         date: new Date().toISOString().substr(0, 10),
         //分頁
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
         //分頁 end
-        //日曆
-        releaseDateStartMenu: false,
-        releaseDateStart: '',
-        releaseDateEndMenu: false,
-        releaseDateEnd: '',
-        sunsetDateStartMenu: false,
-        sunsetDateStart: '',
-        sunsetDateEndMenu: false,
-        sunsetDateEnd: '',
-          //日曆 end
-        headerCRUD: [
-          {
-            text: '節目標題',
-            value: 'name',
-          },
-          {
-            text: '節目類別',
-            value: 'scp_id',
-            align: 'center',
-          },
-          {
-            text: '狀態',
-            value: 'signoff',
-            sortable: false,
-            align: 'center',
-          },
-          {
-            text: '上架人員名稱',
-            value: 'division',
-            align: 'center',
-          },
-          {
-            text: '上架日期',
-            value: 'ondate',
-            align: 'center',
-          },
-          {
-            text: '下架日期',
-            value: 'offdate',
-            align: 'center',
-          },
-          {
-            text: '上架',
-            value: 'active',
-            sortable: false,
-            width: '10%',
-            align: 'center',
-          },
-          {
-            text: '退件資訊',
-            value: 'returnInfo',
-            align: 'center'
-          },
-          {
-            text: '操作',
-            value: 'action',
-            sortable: false,
-            align: 'center',
-          },
+        //日曆 開關
+        releaseStartDateFromMenu: false,
+        releaseStartDateToMenu: false,
+        releaseEndDateFromMenu: false,
+        releaseEndDateToMenu: false,
+        //日曆 end
+
+        //節目單類型下拉選單
+        programTypeOption: [
+          { text: '一般', value: 'ACTIGENERALVE'},
+          { text: '預設', value: 'DEFAULT'},
         ],
-        headerReturn:[
-          {text: '退件主管名稱',value: 'returnManagerName',align: 'center',},
-          {text: '退件日期',value: 'returnDate',align: 'center',},
-          {text: '退件原因',value: 'returnReason',align: 'center',},
+        //節目單上架下拉選單
+        statusOption: [
+          { text: '上架中', value: 'ACTIVE' , icon: 'mdi-checkbox-marked-circle'},
+          { text: '未上架', value: 'WAIT' , icon : 'mdi-minus-circle'},
+          { text: '已下架', value: 'CLOSE', icon: 'mdi-minus-circle'},
         ],
-        itemsCRUD: [
-          {
-            name: '電廠維護公告',
-            id: 1,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/menu',
-            division:'王大明',
-            ondate: '2021-09-15',
-            offdate: '2021-10-30',
-            active: true,
-            signoff: '審核完成',
-          },
-          {
-            name: '秋季節約用電宣導',
-            id: 2,
-            scp_id: '預設',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/01/footer',
-            division:'王大明',
-            ondate: '2021-12-21',
-            offdate: '2022-01-30',
-            active: false,
-            signoff: '退件',
-            returnInfo: {
-              returnManagerName: '陳組長',
-              returnDate: '上架',
-              returnReason: '文字錯誤',
-            },
-          },
-          {
-            name: '台電公司對受疫情影響農業及服務業之電費減免措施',
-            id: 4,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'葉星辰',
-            ondate: '2021-10-21',
-            offdate: '2021-10-30',
-            active: false,
-            signoff: '退件',
-            returnInfo: {
-              returnManagerName: '黃課長',
-              returnDate: '上架',
-              returnReason: '文字錯誤',
-            },
-          },
-          {
-            name: '台電連4年獲亞洲企業社會責任獎',
-            id: 5,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
-            division:'王大明',
-            ondate: '2021-11-11',
-            offdate: '2021-12-24',
-            active: false,
-            signoff: '審核完成',
-          },
-          {
-            name: '台電首度攜手紙風車劇團，到彰化員林打造露天舞台劇',
-            id: 6,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'趙元智',
-            ondate: '2021-12-21',
-            offdate: '2022-04-30',
-            active: false,
-            signoff: '審核完成',
-          },
+        //節目單簽核狀態下拉選單
+        signStatusOption: [
+          { text: '暫存', value: 'DRAFT'},
+          { text: '退件', value: 'REJECT'},
+          { text: '審核中', value: 'WAIT'},
+          { text: '審核中', value: 'PROGRESS'},
+          { text: '審核完成', value: 'PASS'},
         ],
-        defaultItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
-        // CRUD
+        //節目單DataTable表頭
+        headerProgram: [
+          { text: '節目標題', value: 'programName',},
+          { text: '節目類別', value: 'programType', align: 'center', },
+          { text: '簽核狀態', value: 'signStatus', sortable: false, align: 'center', },
+          { text: '上架人員名稱', value: 'createAuthor', align: 'center', },
+          { text: '上架日期', value: 'releaseStartDate', align: 'center', },
+          { text: '下架日期', value: 'releaseEndDate', align: 'center', },
+          { text: '上架', value: 'status', sortable: false, width: '10%', align: 'center', },
+          { text: '退件資訊', value: 'rejectInfo', align: 'center' },
+          { text: '操作', value: 'action', sortable: false, align: 'center', },
+        ],
+        //退件資訊表頭
+        headerReject:[
+          {text: '退件主管名稱',value: 'rejectManagerName',align: 'center',},
+          {text: '退件日期',value: 'rejectDate',align: 'center',},
+          {text: '退件原因',value: 'rejectReason',align: 'center',},
+        ],
+        programs: [],
+        //彈跳視窗
         dialog: false,
         alertDialog: false,
         editedIndex: -1,
-        editedItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
+        // editedItem: {
+        //   name: '',
+        //   scp_id: '',
+        //   marquee_content: '',
+        //   division:'',
+        //   ondate: 0,
+        //   pages: 0,
+        // },
       }
     },
     methods: {
+      previewItem(item) {
+        this.$router.push({path:`/media/preview/questionnaire/${item.questionnaireId}`})
+      },
       close() {
         this.dialog = false
-        this.editedItem = Object.assign({}, this.defaultItem)
+        // this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
         this.alertDialog = false
       },
-      save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.itemsCRUD[this.editedIndex], this.editedItem)
-        } else {
-          this.itemsCRUD.push(this.editedItem)
-        }
-        this.close()
-      },
       editItem(item) {
         this.editedIndex = this.itemsCRUD.indexOf(item)
-        this.editedItem = Object.assign({}, item)
+        // this.editedItem = Object.assign({}, item)
         this.$router.push({path: `${this.$route.matched[0].path}/create`})
       },
       viewSchedule() {
@@ -587,6 +505,66 @@
       remove() {
         this.itemsCRUD.splice(this.editedIndex, 1)
         this.close()
+      },
+      // 送出問卷查詢
+      submitSearch() {
+        console.log(this.postForm)
+        //API post data
+        this.fetchProgramList(this.postForm)
+      },
+
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+      hasResult (dataList) {
+        // 驗證questionnaire是否有資料
+        if(isEmpty(dataList) || dataList.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
+        }
+        return true
+      },
+
+      /**
+       * 
+       * Ajax start 
+       * 
+       **/
+      
+      //Action:節目單清單查詢
+      async fetchProgramList(postData) {
+        
+        const data = await fetchProgramList(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢節目單清單資料');
+            return;
+        }
+        //查詢前清空資料
+        this.programs = Object.assign([])
+        this.isShow = false
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.programs)){
+          
+          this.isShow = !this.isShow
+          let tmpData = data.restData.programs
+          
+          //處理退件資訊轉換
+          tmpData.forEach(item => {
+            if(item.signStatus==='REJECT'){
+              Object.assign(item, {rejectInfo: {
+                rejectManagerName: item.rejectUser,
+                rejectDate: item.rejectDate,
+                rejectReason: item.rejectReason,
+              }});
+            }
+          });
+
+          this.programs = tmpData
+        }
+        
+        
       },
     }
   }

@@ -22,7 +22,7 @@ export default{
             formListHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
                 { text: '受理日期', value: 'acceptDateStr', align: 'center' },
-                { text: '歸檔日期', value: 'archieveDateStr', align: 'center' },
+                { text: '歸檔日期', value: 'archiveDateStr', align: 'center' },
                 { text: '調閱狀態', value: 'status', align: 'center' },            
                 { text: '退件原因', value: 'rejectReason', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },

@@ -8,7 +8,7 @@ export default {
         openEndDate: false, //是否開啟查詢退件日期的datePicker
         headers: [
           { text: '退件日期', value: 'rejectDate', align: 'center' },
-            { text: '主辦業務計劃員簽核時間', value: 'salesPlannerSignDate', align: 'center' },
+            { text: '核算部門主辦簽核時間', value: 'salesPlannerSignDate', align: 'center' },
             { text: '核算課長簽核時間', value: 'leaderSignDate', align: 'center' },         
             { text: '下載', value: 'download', align: 'center' },            
         ],

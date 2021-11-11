@@ -8,8 +8,8 @@
       <v-row justify="center">
         <v-btn style="width:200px; margin: 5px;" depressed color="primary" @click="downloadFile()">DOWNLOAD</v-btn>
       </v-row> -->
-      <hr style="margin-top: 30px;margin-bottom: 30px;">
-      <v-row justify="center">
+      <hr v-if="mode != 'view'" style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row v-if="mode != 'view'" justify="center">
         <span class="sign-title mb-3">用戶簽名</span>
         <VueSignaturePad
           ref="signaturePad"
@@ -19,7 +19,7 @@
           :options="signatureOptions"
         />
       </v-row>
-      <v-row justify="center" class="mt-5">
+      <v-row v-if="mode != 'view'" justify="center" class="mt-5">
         <v-btn color="error" @click="clearSign()">
           清除重簽
           <v-icon

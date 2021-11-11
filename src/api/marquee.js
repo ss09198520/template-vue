@@ -6,7 +6,7 @@ export function fetchInitMarquee(data) {
     method: 'post',
     data,
     headers: {
-      "Content-Type": undefined
+      'content-type': 'multipart/form-data; boundary=ebf9f03029db4c2799ae16b5428b06bd'
     },
   })
 }

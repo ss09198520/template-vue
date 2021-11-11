@@ -199,7 +199,12 @@
 
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col class="d-flex justify-end" cols="8" md="8">
-              <v-btn class="ma-1" outlined color="accent"> 取消 </v-btn>
+              <v-btn 
+              class="ma-1" 
+              outlined 
+              color="accent"
+              @click="reset"
+              > 取消 </v-btn>
               <v-btn
                 class="ma-1"
                 depressed
@@ -248,8 +253,7 @@ export default {
       min: 0,
       max: 60,
       marqueeName: "",
-      marqueeHTML: "123",
-      //`<p><strong style="color: rgb(255, 255, 204); background-color: rgb(255, 153, 0);">此</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(240, 102, 102);">時</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(194, 133, 255);">已</strong><strong style="color: rgb(136, 136, 136); background-color: rgb(255, 255, 102);">鶯</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(136, 136, 136);">飛</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(0, 41, 102);">草</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(102, 163, 224);">長</strong><strong> </strong><strong style="background-color: rgb(255, 194, 102); color: rgb(153, 51, 255);" class="ql-size-small">愛的人正在路上</strong></p><p><strong style="color: rgb(161, 0, 0);">我知他<u>風雨兼程</u> </strong><strong style="color: rgb(178, 178, 0);">途經日暮不賞 </strong></p><p><strong style="color: rgb(204, 232, 204); background-color: rgb(178, 107, 0);"> 穿越人海</strong><strong style="color: rgb(204, 232, 204);"> </strong><strong style="color: rgb(102, 185, 102);" class="ql-size-small">只為與你相擁</strong></p><p><span style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);"> </span><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);">此</strong><strong style="color: rgb(0, 102, 204); background-color: rgb(255, 255, 0);">刻</strong><strong style="color: rgb(153, 51, 255); background-color: rgb(255, 255, 0);">已</strong><strong style="color: rgb(0, 97, 0); background-color: rgb(255, 255, 0);">皓</strong><strong style="color: rgb(178, 107, 0); background-color: rgb(255, 255, 0);">月</strong><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);">當</strong><strong style="color: rgb(240, 102, 102); background-color: rgb(255, 255, 0);">空</strong><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);"> </strong><span style="color: rgb(230, 0, 0); background-color: rgb(102, 163, 224);"> </span><em style="color: rgb(255, 255, 255); background-color: rgb(102, 163, 224);">愛的人手捧星光</em></p><p><strong style="color: rgb(255, 255, 255); background-color: rgb(0, 55, 0);">我知他乘風破浪 </strong><span style="color: rgb(187, 187, 187); background-color: rgb(0, 55, 0);"> </span><strong style="color: rgb(255, 235, 204); background-color: rgb(240, 102, 102);">去了黑暗一趟</strong></p>`,
+      marqueeHTML:`<p><strong style="color: rgb(255, 255, 204); background-color: rgb(255, 153, 0);">此</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(240, 102, 102);">時</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(194, 133, 255);">已</strong><strong style="color: rgb(136, 136, 136); background-color: rgb(255, 255, 102);">鶯</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(136, 136, 136);">飛</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(0, 41, 102);">草</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(102, 163, 224);">長</strong><strong> </strong><strong style="background-color: rgb(255, 194, 102); color: rgb(153, 51, 255);" class="ql-size-small">愛的人正在路上</strong></p><p><strong style="color: rgb(161, 0, 0);">我知他<u>風雨兼程</u> </strong><strong style="color: rgb(178, 178, 0);">途經日暮不賞 </strong></p><p><strong style="color: rgb(204, 232, 204); background-color: rgb(178, 107, 0);"> 穿越人海</strong><strong style="color: rgb(204, 232, 204);"> </strong><strong style="color: rgb(102, 185, 102);" class="ql-size-small">只為與你相擁</strong></p><p><span style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);"> </span><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);">此</strong><strong style="color: rgb(0, 102, 204); background-color: rgb(255, 255, 0);">刻</strong><strong style="color: rgb(153, 51, 255); background-color: rgb(255, 255, 0);">已</strong><strong style="color: rgb(0, 97, 0); background-color: rgb(255, 255, 0);">皓</strong><strong style="color: rgb(178, 107, 0); background-color: rgb(255, 255, 0);">月</strong><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);">當</strong><strong style="color: rgb(240, 102, 102); background-color: rgb(255, 255, 0);">空</strong><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);"> </strong><span style="color: rgb(230, 0, 0); background-color: rgb(102, 163, 224);"> </span><em style="color: rgb(255, 255, 255); background-color: rgb(102, 163, 224);">愛的人手捧星光</em></p><p><strong style="color: rgb(255, 255, 255); background-color: rgb(0, 55, 0);">我知他乘風破浪 </strong><span style="color: rgb(187, 187, 187); background-color: rgb(0, 55, 0);"> </span><strong style="color: rgb(255, 235, 204); background-color: rgb(240, 102, 102);">去了黑暗一趟</strong></p>`,
       marqueeText: "",
       marqueeDesc: "",
       attachedFiles: null,
@@ -334,27 +338,30 @@ export default {
         !ValidateUtil.isEmpty(this.endDate)
       ) {
         this.errMsg.acceptDate = "上架日期未選擇完整範圍";
-        // this.formatArray.push('受理日期區間');
         hasCheck = false;
-        // 1-3 判斷受理日期起訖日欄位皆未選擇
+        // 1-3 判斷輪播起迄日欄位皆未選擇
       } else {
         this.errMsg.acceptDate = "上架日期(起-訖)必填";
       }
       return hasCheck;
     },
 
+
     submit() {
       //if (this.$refs.form.validate()) {
       var formData = new FormData();
       if (this.checkDate && this.onEditorChange) {
         console.log(this.marqueeText);
-        if(this.attachedFiles) {
-          for (let file in this.attachedFiles) {
-            formData.append("attachedFiles", file);
-          }
-          console.log(formData.getAll("attachedFiles"));
-          console.log(this.attachedFiles);
-          console.log("hi here");
+         /**多檔案要跑回圈 */
+         // if(this.attachedFiles) {
+         // for (let file in this.attachedFiles) {
+         //   formData.append("attachedFiles", file);
+         // }
+
+         if(this.attachedFiles){
+            formData.append("attachedFiles", this.attachedFiles);
+         }
+             
           formData.append("properties",new Blob([JSON.stringify({
               "marqueeName": this.marqueeName,
               "marqueeType": "一般",
@@ -368,22 +375,9 @@ export default {
             })], {
                 type: "application/json"
             }));
-        }else{
-          formData.append("properties",new Blob([JSON.stringify({
-              "marqueeName": this.marqueeName,
-              "marqueeType": "一般",
-              "marqueeContent": this.marqueeText,
-              "marqueeContentHTML": this.marqueeHTML,
-              "animationDuration": this.duration,
-              "memo": this.marqueeDesc,
-              "region": "區處",
-              "releaseStartDate": this.startDate,
-              "releaseEndDate": this.endDate                    
-            })], {
-                type: "application/json"
-            }));
-        }
-        fetchInitMarquee({formData})
+            console.log(formData.getAll("properties"));
+      
+        fetchInitMarquee(formData)
           .then(res => {
             console.log("登入成功", res);
             MessageService.showSuccess(res.rtnMsg);
@@ -479,6 +473,10 @@ span.marquee > span {
 
 <style>
 /*需要覆蓋 全域的粗體樣式以及大小 此處style 不加上scoped申明 加上class .quill-marquee 避免衝突*/
+ .quill-marquee .ql-editor p{
+  font-weight: normal !important; 
+  font-size: 32px !important; 
+}
 .quill-marquee .ql-container.ql-snow{
   height: auto;
   font-weight: normal !important;

@@ -11,7 +11,7 @@
           outlined
           title="節 目 單 製 作"
         >
-          <v-form ref="form" v-model="valid" lazy-validation>
+          <v-form ref="programForm" v-model="valid" lazy-validation>
             <v-row
               :dense="dense"
               :no-gutters="noGutters"
@@ -30,7 +30,7 @@
                 md="6"
               >
                 <v-text-field
-                  v-model="filename"
+                  v-model="postForm.programName"
                   :rules="rules.requiredRule.concat(rules.lengthRules)"
                   :hide-details="hideDatails"
                   color="accent"
@@ -60,7 +60,7 @@
                 md="6"
               >
                 <v-text-field
-                  v-model="fileDesc"
+                  v-model="postForm.memo"
                   :rules="rules.lengthRules"
                   :hide-details="hideDatails"
                   color="accent"
@@ -91,7 +91,7 @@
                 >
                   <template v-slot:activator="{ on }">
                     <v-text-field
-                      v-model="releaseStartDate"
+                      v-model="postForm.releaseStartDate"
                       append-icon="mdi-calendar"
                       placeholder="上架時間(起)"
                       color="accent"
@@ -104,7 +104,7 @@
                     />
                   </template>
                   <v-date-picker
-                    v-model="releaseStartDate"
+                    v-model="postForm.releaseStartDate"
                     scrollable
                   />
                 </v-menu>
@@ -118,7 +118,7 @@
                 >
                   <template v-slot:activator="{ on }">
                     <v-text-field
-                      v-model="releaseEndDate"
+                      v-model="postForm.releaseEndDate"
                       append-icon="mdi-calendar"
                       placeholder="上架時間(迄)"
                       color="accent"
@@ -131,7 +131,7 @@
                     />
                   </template>
                   <v-date-picker
-                    v-model="releaseEndDate"
+                    v-model="postForm.releaseEndDate"
                     scrollable
                   />
                 </v-menu>
@@ -177,7 +177,6 @@
                     <v-icon
                       class="mr-2"
                       @click="editItem(item)"
-                      v-on="on"
                     >
                       mdi-sort-variant
                     </v-icon>
@@ -203,8 +202,8 @@
                 md="6"
               >
                 <v-file-input
-                  :hide-details="hideDatails"
-                  label="上傳附件"
+                  v-model="attachmentFile"
+                  placeholder="請選擇上傳附件"
                   color="accent"
                   outlined
                   dense
@@ -212,7 +211,13 @@
                   persistent-hint
                   prepend-inner-icon="mdi-cloud-upload"
                   prepend-icon
+                  @change="onUpload"
                 />
+                <div v-if="!!dataURL" class="t-center">
+                  <v-icon x-large class="mb-2">
+                    mdi-file-document-outline
+                  </v-icon><br>
+                </div>
               </v-col>
             </v-row>
             <v-row
@@ -232,7 +237,7 @@
                   depressed
                   color="primary"
                   :disabled="!valid"
-                  @click="submit"
+                  @click="submit(false)"
                 >
                   暫存
                 </v-btn>
@@ -241,7 +246,7 @@
                   depressed
                   color="success"
                   :disabled="!valid"
-                  @click="submit"
+                  @click="submit(true)"
                 >
                   送出審核
                 </v-btn>
@@ -320,7 +325,27 @@
 
 <script>
   import Sortable from 'sortablejs'
-  
+import MessageService from '@/assets/services/message.service'
+import { initProgram } from '@/api/program'
+
+  const defaultForm = {
+    programName: null,
+    memo: null,
+    programType: null,
+    releaseStartDate: null,
+    releaseEndDate: null,
+  }
+  const defaultFile = { //sign AttachmentFile
+    originalFileName: null,
+    imgSrc: null,
+    base64: null,
+  }
+
+  const defaultProgramItem = {
+    materialId: 27,
+    materialName: '222',
+  }
+
   export default {
     directives: {
       sortableDataTable: {
@@ -340,28 +365,20 @@
         isShow: false,
         valid: false,
         dialog: false,
+        isDraft: false,
         maxCharacter: 40,
-        filename: '',
-        fileDesc: '',
-        uploadType: '',
-        uploadData: '',
+        //api post data
+        postForm: Object.assign({}, defaultForm),
+        attachmentFile: null,
+        attachmentList: [],
+        dataURL: null,
+        signAttachmentFile: null,
+        programMaterials:[], //set defaultProgramItem
         releaseStartDateMenu: false,
         releaseStartDate: '',
         releaseEndDateMenu: false,
         releaseEndDate: '',
         dateMenu: false,
-        formData: {
-          filename: '',
-          fileDesc: '',
-          uploadType: '',
-          uploadData: '',
-        },
-        dropzoneOptions: {
-          url: 'https://httpbin.org/post',
-          thumbnailWidth: 150,
-          maxFilesize: 0.5,
-          headers: { "My-Awesome-Header": "header value" }
-        },
         headerCRUD: [
           {
             text: '素材名稱',
@@ -489,7 +506,41 @@
         },
       }
     },
+    mounted() {
+      this.reader = new FileReader();
+      this.reader.onload = () => {
+        // preview data url
+        this.dataURL = this.reader.result
+        // console.log('onload' , this.attachmentFile)
+        // console.log('this.reader' , this.reader.result)
+        
+        // assign file 
+        this.signAttachmentFile = Object.assign({} , defaultFile)
+        this.signAttachmentFile.category = "MEDIA_ATTACHMENT"
+        this.signAttachmentFile.fileName = this.attachmentFile.name
+        this.signAttachmentFile.originalFileName = this.attachmentFile.name
+        this.signAttachmentFile.fileExt = this.getFileExtension(this.attachmentFile.name)
+        this.signAttachmentFile.fileSize = this.attachmentFile.size
+        this.signAttachmentFile.base64 = this.dataURL.split(",")[1]
+      }
+    },
     methods: {
+      //附件上傳
+      onUpload() {
+        this.dataURL = null
+        this.signAttachmentFile = null
+        if (this.attachmentFile instanceof Blob){
+          this.reader.readAsDataURL(this.attachmentFile)    
+        }else{
+          this.signAttachmentFile = this.attachmentFile
+          this.dataURL = null
+        }
+      },
+      getFileExtension(filename){
+        // get file extension
+        const extension = filename.split('.').pop();
+        return "." + extension;
+      },
       saveOrder (event) {
         const movedItem = this.itemsCRUD.splice(event.oldIndex, 1)[0];
         this.itemsCRUD.splice(event.newIndex, 0, movedItem);
@@ -500,19 +551,43 @@
           // this.itemsCRUD[step].id = step
         }
       },
-      submit() {
-        if (this.$refs.form.validate()) {
-          this.snackbar = true
+      // 送出節目單製作儲存
+      submit(isSign) {
+        //填答時先將資料Assign 進 postForm
+        // Object.keys(this.questionnaire).filter(key => key in this.postForm).forEach(key => this.postForm[key] = this.questionnaire[key]);
+        let items = []
+        items.push(Object.assign({},defaultProgramItem)) //set testdata
+        
+        this.postForm.programMaterials = items
+
+        //API post data 
+        let postData = {
+          program : this.postForm ,
+          // programName: this.postForm.programName,
+          // memo: this.postForm.memo,
+          // programType: this.postForm.memo,
+          // releaseStartDate: this.postForm.releaseStartDate,
+          // releaseEndDate: this.postForm.releaseEndDate,
+          signAttachment : this.signAttachmentFile ,
+          isSign : isSign ? true : false, //是否暫存
+          // programMaterials : this.programMaterials,
         }
-      },
-      validate() {
-        this.$refs.form.validate()
+        
+        if (this.$refs.programForm.validate()) {
+          console.log(postData)
+          this.submitForm(postData)
+        }else{
+          this.$nextTick(() => {
+            const el = this.$el.querySelector(".error--text:first-of-type");
+            this.$vuetify.goTo(el);
+            return;
+          });
+        }
+
+        this.isDraft = !this.isDraft
       },
       reset() {
         this.$refs.form.reset()
-      },
-      resetValidation() {
-        this.$refs.form.resetValidation()
       },
       selected(e) {
         let dom = e.currentTarget.id;
@@ -541,6 +616,25 @@
             if (this.ids[i] == dom) this.ids.splice(i, 1)
           }    //取消则从ids删除该元素
         }
+      },
+
+      /**
+       * 
+       * Ajax start 
+       * 
+       **/
+      
+      //Action: 節目單建立/暫存
+      async submitForm(postData) {
+        const data = await initProgram(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+            MessageService.showError(data.restData.message,'儲存節目單資料');
+            return;
+        }
+
+        MessageService.showSuccess('新增節目單資料')
+        this.reset() //重置表單
       },
     }
   }

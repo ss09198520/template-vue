@@ -76,6 +76,8 @@ export default {
             otherAttachment: '',
             isBlocking: false,
             blockingMsg: null,
+            isCompanyCancel: false,
+            cancelReason: null,
         }
     },
     methods: {
@@ -116,6 +118,8 @@ export default {
                 this.isAddAttachment = formParam.isAddAttachment;
                 this.isAffidavit = formParam.isAffidavit;
                 this.uploadNo = formParam.uploadNo;
+                this.isCompanyCancel = formParam.isCompanyCancel;
+                this.cancelReason = formParam.cancelReason;
                 
                 this.formPageMode = ValidateUtil.isEmpty(formParam.formPageMode) ? this.formPageMode : formParam.formPageMode;
             }
@@ -625,6 +629,29 @@ export default {
                 MessageService.showInfo("尚未簽名", "提示");
                 return;
             }
+
+            let vin = {
+                formSeq: this.formSeq,
+                acceptNum: this.acceptNum,
+                cancelSignBase64: this.cancelSign.imgSrc.split(",")[1],
+                cancelReason: this.cancelReason,
+                isCompanyCancel: this.isCompanyCancel
+            };
+
+            AjaxService.post("/tpesForm/cancel", vin, 
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.message,'取消表單');
+                    return;
+                }
+
+                MessageService.showSuccess("取消成功");
+            },
+            (error) => {
+                MessageService.showSystemError();
+                console.log(error);
+            });
         },
         addWaterMark(originImageSrc){
             let originImage = new Image();

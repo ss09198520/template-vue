@@ -319,7 +319,31 @@
                     outlined
                     placeholder="點選 [儲存備註並關閉]、[退件]、[核算通過] 都會進行儲存"
                     :no-resize="true"
-                    counter="50"
+                    counter="100"
+                    auto-grow
+                    rows="4"
+                  />
+                </v-col>
+              </v-row>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+
+          <v-expansion-panel v-if="formPageMode == 'cancel'">
+            <v-expansion-panel-header class="panel-header mb-3">
+              <v-col cols="12">
+                <h2>取消原因</h2>
+              </v-col>
+            </v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col cols="12" class="d-center">
+                  <v-textarea
+                    v-model="cancelReason"
+                    class="accouting-textarea"                   
+                    outlined
+                    placeholder="請輸入原因"
+                    :no-resize="true"
+                    counter="100"
                     auto-grow
                     rows="4"
                   />

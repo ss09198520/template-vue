@@ -12,7 +12,7 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              跑馬燈內容
+              跑 馬 燈 內 容
             </v-col>
             <v-col cols="3" class="mt-5">
               <v-text-field
@@ -27,7 +27,7 @@
             </v-col>
             <v-col cols="1" />
             <v-col cols="1" class="ml-2">
-              跑馬燈類型
+              跑 馬 燈 類 型
             </v-col>
             <v-col cols="3" class="ml-2">
               <v-select
@@ -47,15 +47,31 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              跑馬燈類型
+              簽 核 狀 態
             </v-col>
             <v-col cols="3">
               <v-select
-                :items="['暫存', '退件', '審核中', '審核完成']"
+                :items="signStatusOption"
                 class="font-bold"
                 color="accent"
                 item-color="accent"
                 placeholder="狀態"
+                dense
+                outlined
+                hide-details
+              />
+            </v-col>
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2">
+              上架狀態
+            </v-col>
+            <v-col cols="3" class="ml-2">
+              <v-select
+                :items="statusOption"
+                class="font-bold"
+                color="accent"
+                item-color="accent"
+                placeholder="上架狀態"
                 dense
                 outlined
                 hide-details
@@ -67,7 +83,7 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              上架時間
+              上 架 時 間
             </v-col>
             <v-col 
               cols="3"   
@@ -129,11 +145,11 @@
             </v-col>
             <v-col cols="1" />
             <v-col cols="1" class="ml-2">
-              下架時間
+              下 架 時 間
             </v-col>
             <v-col 
-              cols="3"   
-              class="d-flex"
+              cols="3"
+              class="d-flex ml-2"
             >
               <v-menu
                 v-model="sunsetDateStartMenu"
@@ -275,6 +291,19 @@
             </v-dialog>
           </template>
           <template v-slot:[`item.action`]="{ item }">
+            <!-- <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="mr-2"
+                  color="red"
+                  @click="editItem(item)"
+                  v-on="on"
+                >
+                  mdi-pencil
+                </v-icon>
+              </template>
+              <span>編輯</span>
+            </v-tooltip> -->
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -304,6 +333,21 @@
                 </v-btn>
               </template>
               <span>編輯</span>
+            </v-tooltip>
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="error"
+                  @click="action('deleteMultiMedia',item)"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-delete'" />
+                </v-btn>
+              </template>
+              <span>刪除</span>
             </v-tooltip>
           </template>
           <template v-slot:[`item.returnInfo`]="{ item }">
@@ -361,6 +405,8 @@
 </template>
 
 <script>
+  import enums from '@/utils/enums'
+
   export default {
     data() {
       return {
@@ -381,6 +427,14 @@
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
+
+        //上架下拉選單
+        statusOption: enums.mediaStatusOption,
+        //簽核狀態下拉選單
+        signStatusOption: enums.mediaSignStatusOption,
+        //類型下拉選單
+        programTypeOption: enums.mediaTypeOption,
+
         //日曆 end
         headerCRUD: [
           {

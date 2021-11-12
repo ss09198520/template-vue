@@ -44,7 +44,9 @@
             </v-col>
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
-            <v-col cols="2" md="2"> 上架日期 </v-col>
+            <v-col cols="2" md="2"> 上架日期 
+               <span class="red--text ml-2">*</span>
+            </v-col>
             <v-col cols="6" class="d-flex">
               <v-menu
                 v-model="startDateMenu"
@@ -57,6 +59,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="startDate"
+                    placeholder="上架時間(起)"
                     :rules="rules.requiredRule"
                     append-icon="mdi-calendar"
                     readonly
@@ -85,6 +88,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="endDate"
+                    placeholder="上架時間(起)"
                     :rules="rules.requiredRule"
                     append-icon="mdi-calendar"
                     readonly
@@ -128,7 +132,7 @@
                 label="點擊上傳檔案"
                 outlined
                 dense
-                accept="application/pdf,application/vnd.ms-excel,image/gif, image/jpeg, image/png"
+                accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf"
                 persistent-hint
                 prepend-inner-icon="mdi-cloud-upload"
                 prepend-icon
@@ -171,7 +175,7 @@
               >
                 {{ marqueeHTML }}
               </marquee-text>
-            </v-col>
+            </v-col>           
           </v-row>
           <v-row>
             <v-col
@@ -180,7 +184,7 @@
               md="10"
               style="margin-top: -25px"
             >
-              <span 
+              <span
                 class="red--text font-14px"
               >*錯誤提示：{{ errMsg.editorData }}
               </span>
@@ -191,7 +195,7 @@
               <quill
                 ref="editor"
                 v-model="marqueeHTML"
-                class="quill-marquee"                
+                class="quill-marquee"
                 @change="onEditorChange($event)"
               />
             </v-col>
@@ -200,11 +204,13 @@
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col class="d-flex justify-end" cols="8" md="8">
               <v-btn 
-              class="ma-1" 
-              outlined 
-              color="accent"
-              @click="reset"
-              > 取消 </v-btn>
+                class="ma-1" 
+                outlined 
+                color="accent" 
+                @click="reset"
+              >
+                取消
+              </v-btn>
               <v-btn
                 class="ma-1"
                 depressed
@@ -253,7 +259,7 @@ export default {
       min: 0,
       max: 60,
       marqueeName: "",
-      marqueeHTML:`<p><strong style="color: rgb(255, 255, 204); background-color: rgb(255, 153, 0);">此</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(240, 102, 102);">時</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(194, 133, 255);">已</strong><strong style="color: rgb(136, 136, 136); background-color: rgb(255, 255, 102);">鶯</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(136, 136, 136);">飛</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(0, 41, 102);">草</strong><strong style="color: rgb(255, 255, 204); background-color: rgb(102, 163, 224);">長</strong><strong> </strong><strong style="background-color: rgb(255, 194, 102); color: rgb(153, 51, 255);" class="ql-size-small">愛的人正在路上</strong></p><p><strong style="color: rgb(161, 0, 0);">我知他<u>風雨兼程</u> </strong><strong style="color: rgb(178, 178, 0);">途經日暮不賞 </strong></p><p><strong style="color: rgb(204, 232, 204); background-color: rgb(178, 107, 0);"> 穿越人海</strong><strong style="color: rgb(204, 232, 204);"> </strong><strong style="color: rgb(102, 185, 102);" class="ql-size-small">只為與你相擁</strong></p><p><span style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);"> </span><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);">此</strong><strong style="color: rgb(0, 102, 204); background-color: rgb(255, 255, 0);">刻</strong><strong style="color: rgb(153, 51, 255); background-color: rgb(255, 255, 0);">已</strong><strong style="color: rgb(0, 97, 0); background-color: rgb(255, 255, 0);">皓</strong><strong style="color: rgb(178, 107, 0); background-color: rgb(255, 255, 0);">月</strong><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);">當</strong><strong style="color: rgb(240, 102, 102); background-color: rgb(255, 255, 0);">空</strong><strong style="color: rgb(230, 0, 0); background-color: rgb(255, 255, 0);"> </strong><span style="color: rgb(230, 0, 0); background-color: rgb(102, 163, 224);"> </span><em style="color: rgb(255, 255, 255); background-color: rgb(102, 163, 224);">愛的人手捧星光</em></p><p><strong style="color: rgb(255, 255, 255); background-color: rgb(0, 55, 0);">我知他乘風破浪 </strong><span style="color: rgb(187, 187, 187); background-color: rgb(0, 55, 0);"> </span><strong style="color: rgb(255, 235, 204); background-color: rgb(240, 102, 102);">去了黑暗一趟</strong></p>`,
+      marqueeHTML: `<p><span class="ql-size-small" style="color: rgb(0, 41, 102); background-color: rgb(204, 224, 245);">結廬在人境，而無車馬喧。</span></p><p><span class="ql-size-small" style="color: rgb(0, 41, 102); background-color: rgb(204, 224, 245);">問君何能爾？心遠地自偏。</span></p>`,
       marqueeText: "",
       marqueeDesc: "",
       attachedFiles: null,
@@ -277,30 +283,28 @@ export default {
             "Avatar size should be less than 25 MB!"
         ] 多檔案使用*/
         filesSizeRules: [
-          v => !v || v.size < 25e6 || 'Avatar size should be less than 25 MB!',
-         ],
+          v => !v || v.size < 25e6 || "Avatar size should be less than 25 MB!"
+        ]
       }
     };
   },
-  computed: {      
+  computed: {
     editor() {
       return this.$refs.myQuillEditor;
     },
-    
-    isAddButtonDisabled(){
-      return !this.valid && !this.isSubmited;
+     isAddButtonDisabled() {
+      return !this.valid || this.isSubmited; 
     },
-
     animationDuration() {
       return 600 / this.duration;
     }
   },
   mounted() {
     console.log("this is current quill instance object", this.editor);
-    this.onEditorChange(this.marqueeHTML);
+    this.onEditorChange(this.marqueeHTML);    
+   // this.isAddButtonDisabled();
   },
   methods: {
-
     filtersHTML(val) {
       if (val != null && val != "") {
         let reg = /<[^>]+>/g;
@@ -310,7 +314,7 @@ export default {
       }
     },
     filtersBr(val) {
-      if (val != null && val != "") {        
+      if (val != null && val != "") {
         let reg = /<br>/g;
         return val.replace(reg, "");
       } else {
@@ -329,6 +333,7 @@ export default {
           this.errMsg.acceptDate =
             "上架日期選擇範圍錯誤，起始日期不得大於結束日期";
           hasCheck = false;
+          this.valid = false;
         } else {
           this.errMsg.acceptDate = null;
         }
@@ -339,6 +344,7 @@ export default {
       ) {
         this.errMsg.acceptDate = "上架日期未選擇完整範圍";
         hasCheck = false;
+        this.valid = false;
         // 1-3 判斷輪播起迄日欄位皆未選擇
       } else {
         this.errMsg.acceptDate = "上架日期(起-訖)必填";
@@ -346,37 +352,44 @@ export default {
       return hasCheck;
     },
 
-
     submit() {
       //if (this.$refs.form.validate()) {
       var formData = new FormData();
       if (this.checkDate && this.onEditorChange) {
         console.log(this.marqueeText);
-         /**多檔案要跑回圈 */
-         // if(this.attachedFiles) {
-         // for (let file in this.attachedFiles) {
-         //   formData.append("attachedFiles", file);
-         // }
+        /**多檔案要跑回圈 */
+        // if(this.attachedFiles) {
+        // for (let file in this.attachedFiles) {
+        //   formData.append("attachedFiles", file);
+        // }
 
-         if(this.attachedFiles){
-            formData.append("attachedFiles", this.attachedFiles);
-         }
-             
-          formData.append("properties",new Blob([JSON.stringify({
-              "marqueeName": this.marqueeName,
-              "marqueeType": "一般",
-              "marqueeContent": this.marqueeText,
-              "marqueeContentHTML": this.marqueeHTML,
-              "animationDuration": this.duration,
-              "memo": this.marqueeDesc,
-              "region": "區處",
-              "releaseStartDate": this.startDate,
-              "releaseEndDate": this.endDate                    
-            })], {
-                type: "application/json"
-            }));
-            console.log(formData.getAll("properties"));
-      
+        if (this.attachedFiles) {
+          formData.append("attachedFiles", this.attachedFiles);
+        }
+
+        formData.append(
+          "properties",
+          new Blob(
+            [
+              JSON.stringify({
+                marqueeName: this.marqueeName,
+                marqueeType: "一般",
+                marqueeContent: this.marqueeText,
+                marqueeContentHTML: this.marqueeHTML,
+                animationDuration: this.duration,
+                memo: this.marqueeDesc,
+                region: "區處",
+                releaseStartDate: this.startDate,
+                releaseEndDate: this.endDate
+              })
+            ],
+            {
+              type: "application/json"
+            }
+          )
+        );
+        console.log(formData.getAll("properties"));
+
         fetchInitMarquee(formData)
           .then(res => {
             console.log("登入成功", res);
@@ -389,13 +402,13 @@ export default {
       }
     },
     validate() {
-      this.$refs.form.validate();
+      this.$refs.form.validate()
     },
-    reset() {
-      this.$refs.form.reset();
-    },
+    reset () {
+        this.$refs.form.reset()
+      },
     resetValidation() {
-      this.$refs.form.resetValidation();
+      this.$refs.form.resetValidation()
     },
     decrementDuration() {
       //減慢播放
@@ -415,9 +428,11 @@ export default {
       if (this.marqueeText.length <= 2) {
         this.errMsg.editorData = "跑馬燈內容必填";
         hasCheck = false;
+        this.valid = false;
       } else {
         this.errMsg.editorData = null;
         hasCheck = true;
+        this.valid = true;
       }
       console.log(this.marqueeText);
       return hasCheck;
@@ -426,29 +441,35 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.marquee{
-  height: 70px;  
-  font-family: Helvetica, Arial, sans-serif, "Microsoft JhengHei", "微軟正黑體","Helvetica", sans-serif
+.marquee {
+  height: 70px;
+  font-family: Helvetica, Arial, sans-serif, "Microsoft JhengHei", "微軟正黑體",
+    "Helvetica", sans-serif;
 }
-span.marquee > h1, h2, h3, .h1, .h2, .h3 {
-    margin-top: 0px;
-    margin-bottom: 0px !important;
+span.marquee > h1,
+h2,
+h3,
+.h1,
+.h2,
+.h3 {
+  margin-top: 0px;
+  margin-bottom: 0px !important;
 }
-span.marquee >p{
+span.marquee > p {
   font-size: 32px !important;
   margin: 0px;
   font-weight: normal !important;
-  display:inline;
-} 
-span.marquee{
+  display: inline;
+}
+span.marquee {
   font-size: 32px !important;
   margin: 0px;
   font-weight: normal !important;
-  display:inline;
-} 
+  display: inline;
+}
 span.marquee > span {
-   font-weight: normal !important;
-   font-size: 32px !important;
+  font-weight: normal !important;
+  font-size: 32px !important;
 }
 .quill-marquee .ql-editor {
   font-weight: normal !important;
@@ -456,42 +477,43 @@ span.marquee > span {
   height: 150px;
   font-size: 32px;
 }
- .ql-editor p{
-  font-weight: normal !important; 
-  font-size: 32px !important; 
+.marquee .ql-editor p {
+  font-weight: normal !important;
+  font-size: 32px !important;
 }
-.ql-editor.ql-size-small {
-    font-size: 0.75em !important; 
+.marquee .ql-editor.ql-size-small {
+  font-size: 0.75em !important;
 }
- .ql-editor.ql-size-large {
-    font-size: 1.20em !important; 
+.marquee .ql-editor.ql-size-large {
+  font-size: 1.2em !important;
 }
- .ql-editor.ql-size-huge {
-    font-size: 1.35em !important; 
+.marquee .ql-editor.ql-size-huge {
+  font-size: 1.35em !important;
 }
 </style>
 
 <style>
 /*需要覆蓋 全域的粗體樣式以及大小 此處style 不加上scoped申明 加上class .quill-marquee 避免衝突*/
- .quill-marquee .ql-editor p{
-  font-weight: normal !important; 
-  font-size: 32px !important; 
+.quill-marquee .ql-editor p {
+  font-weight: normal !important;
+  font-size: 32px !important;
 }
-.quill-marquee .ql-container.ql-snow{
+.quill-marquee .ql-container.ql-snow {
   height: auto;
   font-weight: normal !important;
-}  
+}
 .quill-marquee .ql-size-small {
-    font-size: 0.75em !important;
+  font-size: 0.75em !important;
 }
 .quill-marquee .ql-size-large {
-    font-size: 1.20em !important;
+  font-size: 1.2em !important;
 }
-.quill-marquee .ql-size-huge{
-    font-size: 1.35em !important;
+.quill-marquee .ql-size-huge {
+  font-size: 1.35em !important;
 }
-span.quill-marquee > b, strong {
-    font-weight: bolder !important;
-    font-size: inherit !important;
-} 
+span.quill-marquee > b,
+strong {
+  font-weight: bolder !important;
+  font-size: inherit !important;
+}
 </style>

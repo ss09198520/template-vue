@@ -258,7 +258,7 @@
     </v-row>
     <v-dialog
       v-model="dialog"
-      max-width="800px"
+      max-width="50vw"
       transition="dialog-bottom-transition"
       scrollable
     >
@@ -271,7 +271,9 @@
           >
             <v-col>
               <v-text-field
+                v-model="postQueryForm.materialName"
                 class="font-weight-bold"
+                color="accent"
                 dense
                 placeholder="素材名稱"
                 outlined
@@ -280,9 +282,12 @@
               />
             </v-col>
             <v-col>
-              <v-select
-                :items="['圖片','影片']"
+              <v-autocomplete
+                v-model="postQueryForm.materialType"
+                :items="materialTypeOption"
+                clearable
                 class="font-bold"
+                color="accent"
                 item-color="accent"
                 placeholder="素材類型"
                 dense
@@ -291,10 +296,104 @@
               />
             </v-col>
           </v-row>
+          <v-row
+            class="mt-2 justify-center"
+          >
+            <v-col>
+              <v-text-field
+                v-model="postQueryForm.createAuthor"
+                color="accent"
+                dense
+                placeholder="請輸入上傳人員(員編代號)"
+                outlined
+                clearable
+                persistent-hint
+              />
+            </v-col>
+            <v-col>
+              <v-menu
+                v-model="createDateStartMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="postQueryForm.createDateStart"
+                    append-icon="mdi-calendar"
+                    placeholder="上傳時間(起)"
+                    color="accent"
+                    outlined
+                    dense
+                    readonly
+                    hide-details   
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="postQueryForm.createDateStart"
+                  scrollable
+                />
+              </v-menu>
+            </v-col>
+          </v-row>
           <v-row>
-            <v-btn class="primary mb-1" @click="search()">&emsp;查詢&emsp;</v-btn>        
-          </v-row>  
-          <hr>
+            <v-btn class="primary mb-1" @click="submitSearch()">&emsp;查詢&emsp;</v-btn>        
+          </v-row>
+          <v-row
+            class="d-flex justify-end"
+            dense
+          >
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  small
+                  color="primary"
+                  @click="submitSearch"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-magnify'" />
+                </v-btn>
+              </template>
+              <span>&emsp;查詢&emsp;</span>
+            </v-tooltip>
+          </v-row>
+          <!-- <v-divider class="mt-6 mb-5" /> -->
+          <hr class="mt-6 mb-5">
+          <v-item-group multiple>
+            <v-container>
+              <v-row>
+                <v-col
+                  v-for="(resource,id) in resources"
+                  :id="resource.id"
+                  :key="id"
+                  cols="12"
+                  md="4"
+                > 
+                  <v-checkbox 
+                    :key="id"
+                    v-model="resource.selected"
+                  >
+                    <template v-slot:label>
+                      <v-img
+                        :src="require(`@/resource/${resource.thumbnail}`)"
+                        :lazy-src="require(`@/resource/${resource.thumbnail}`)"
+                        class="grey lighten-2"
+                        max-width="500"
+                        max-height="300"
+                      >
+                      </v-img>
+                    </template>
+                  </v-checkbox>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-item-group>
+          
           <div class="imgList">
             <ul class="resourceList">
               <li
@@ -325,9 +424,11 @@
 
 <script>
   import Sortable from 'sortablejs'
-import MessageService from '@/assets/services/message.service'
-import { initProgram } from '@/api/program'
-
+  import MessageService from '@/assets/services/message.service'
+  import { initProgram } from '@/api/program'
+  import { listMediaFile } from '@/api/mediaFile'
+  import isEmpty from 'lodash/isEmpty'
+  
   const defaultForm = {
     programName: null,
     memo: null,
@@ -346,6 +447,14 @@ import { initProgram } from '@/api/program'
     materialName: '222',
   }
 
+  const defaultQueryForm = {
+    materialName: null, 
+    createDateStart: null, 
+    createDateEnd: null, 
+    createAuthor: null,
+    status: null //暫無使用
+  }
+
   export default {
     directives: {
       sortableDataTable: {
@@ -360,6 +469,11 @@ import { initProgram } from '@/api/program'
         }
       }
     },
+    inject: {
+      theme: {
+        default: { isDark: false },
+      },
+    },
     data() {
       return {
         isShow: false,
@@ -367,17 +481,39 @@ import { initProgram } from '@/api/program'
         dialog: false,
         isDraft: false,
         maxCharacter: 40,
+
+        //素材日曆
+        createDateStartMenu: false,
+        //節目上架日曆
+        releaseStartDateMenu: false,
+        releaseStartDate: '',
+        releaseEndDateMenu: false,
+        releaseEndDate: '',
+        //素材類型下拉
+        materialTypeOption: [
+            { text: '圖片', value: 'image'},
+            { text: '影音', value: 'video'},
+        ],
+        
         //api post data
         postForm: Object.assign({}, defaultForm),
+        postQueryForm: Object.assign({},defaultQueryForm),
+
         attachmentFile: null,
         attachmentList: [],
         dataURL: null,
         signAttachmentFile: null,
         programMaterials:[], //set defaultProgramItem
-        releaseStartDateMenu: false,
-        releaseStartDate: '',
-        releaseEndDateMenu: false,
-        releaseEndDate: '',
+        //素材資料
+        headerMaterial: [
+          { text: '素材名稱', value: 'materialName', width: '24%', },
+          { text: '上傳人員名稱', value: 'createAuthor', width: '10%', },
+          { text: '上傳時間', value: 'createDate', align: 'center' },
+          { text: '縮圖', value: 'dataUrl', },
+          { text: '關聯使用資訊', value: 'relatedInfos', align: 'center' },
+          { text: '使用中', value: 'active', sortable: false, align: 'center', },
+          { text: '狀態操作', value: 'action', sortable: false, align: 'center' },
+        ],
         dateMenu: false,
         headerCRUD: [
           {
@@ -551,6 +687,11 @@ import { initProgram } from '@/api/program'
           // this.itemsCRUD[step].id = step
         }
       },
+      // 查詢素材
+      submitSearch() {
+        //API post data 
+        this.fetchMediaFileList(this.postForm)
+      },
       // 送出節目單製作儲存
       submit(isSign) {
         //填答時先將資料Assign 進 postForm
@@ -635,6 +776,32 @@ import { initProgram } from '@/api/program'
 
         MessageService.showSuccess('新增節目單資料')
         this.reset() //重置表單
+      },
+
+      //Action:素材查詢
+      async fetchMediaFileList(fetchMediaFilePostData) {
+        
+        const data = await listMediaFile(fetchMediaFilePostData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢素材清單資料');
+            return;
+        }
+        //查詢前清空資料
+        this.mediaFiles = Object.assign([])
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.materialFiles)){
+          let tmpData = data.restData.materialFiles
+
+          //處理關聯資訊轉換
+          // tmpData.forEach(element => {
+          //   element.relatedInfo = [];
+          //   Object.assign(element.relatedInfo, defaultRelatedInfo);
+          // });
+          this.mediaFiles = tmpData
+          this.isShow = true 
+        }
+        
       },
     }
   }

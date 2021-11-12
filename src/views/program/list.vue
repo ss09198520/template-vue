@@ -398,6 +398,7 @@
 <script>
   import MessageService from "@/assets/services/message.service";
   import { fetchProgramList} from '@/api/program'
+  import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
 
   const defaultForm = {
@@ -414,14 +415,18 @@
       return {
         isShow: false,
         menu: false,
+        
+        //api post data
         postForm: Object.assign({}, defaultForm),
+
         date: new Date().toISOString().substr(0, 10),
         //分頁
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
         //分頁 end
-        //日曆 開關
+
+        //日曆開關
         releaseStartDateFromMenu: false,
         releaseStartDateToMenu: false,
         releaseEndDateFromMenu: false,
@@ -429,24 +434,12 @@
         //日曆 end
 
         //節目單類型下拉選單
-        programTypeOption: [
-          { text: '一般', value: 'ACTIGENERALVE'},
-          { text: '預設', value: 'DEFAULT'},
-        ],
+        programTypeOption: enums.mediaTypeOption,
         //節目單上架下拉選單
-        statusOption: [
-          { text: '上架中', value: 'ACTIVE' , icon: 'mdi-checkbox-marked-circle'},
-          { text: '未上架', value: 'WAIT' , icon : 'mdi-minus-circle'},
-          { text: '已下架', value: 'CLOSE', icon: 'mdi-minus-circle'},
-        ],
+        statusOption: enums.mediaStatusOption,
         //節目單簽核狀態下拉選單
-        signStatusOption: [
-          { text: '暫存', value: 'DRAFT'},
-          { text: '退件', value: 'REJECT'},
-          { text: '審核中', value: 'WAIT'},
-          { text: '審核中', value: 'PROGRESS'},
-          { text: '審核完成', value: 'PASS'},
-        ],
+        signStatusOption: enums.mediaSignStatusOption,
+
         //節目單DataTable表頭
         headerProgram: [
           { text: '節目標題', value: 'programName',},
@@ -465,6 +458,7 @@
           {text: '退件日期',value: 'rejectDate',align: 'center',},
           {text: '退件原因',value: 'rejectReason',align: 'center',},
         ],
+        
         programs: [],
         //彈跳視窗
         dialog: false,

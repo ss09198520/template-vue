@@ -27,7 +27,7 @@
             </v-col>
             <v-col cols="1" />
             <v-col cols="1" class="ml-2">
-              狀 態
+              簽 核 狀 態
             </v-col>
             <v-col cols="3">
               <v-autocomplete
@@ -263,6 +263,7 @@
 <script>
   import MessageService from "@/assets/services/message.service";
   import { fetchQuestionnaireList} from '@/api/questionnaire'
+  import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
 
   const defaultForm = {
@@ -288,18 +289,12 @@
         releaseDateStartMenu: false,
         releaseDateEndMenu: false,
         //日曆 end
-        statusOption: [
-          { text: '上架中', value: 'ACTIVE' , icon: 'mdi-checkbox-marked-circle'},
-          { text: '未上架', value: 'WAIT' , icon : 'mdi-minus-circle'},
-          { text: '已下架', value: 'CLOSE', icon: 'mdi-minus-circle'},
-        ],
-        signStatusOption: [
-          { text: '暫存', value: 'DRAFT'},
-          { text: '退件', value: 'REJECT'},
-          { text: '審核中', value: 'WAIT'},
-          { text: '審核中', value: 'PROGRESS'},
-          { text: '審核完成', value: 'PASS'},
-        ],
+
+        //上架下拉選單
+        statusOption: enums.mediaStatusOption,
+        //簽核狀態下拉選單
+        signStatusOption: enums.mediaSignStatusOption,
+        
         headerQuestionnaire: [
           { text: '滿意度問卷標題', value: 'questionnaireName', width: '24%', },
           { text: '上架人員', value: 'createAuthor', width: '10%', },

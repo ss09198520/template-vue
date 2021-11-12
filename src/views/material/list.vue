@@ -364,6 +364,7 @@
 <script>
   import MessageService from "@/assets/services/message.service"
   import { listMediaFile , deleteFile} from '@/api/mediaFile'
+  import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
 
   const defaultForm = {
@@ -378,7 +379,9 @@
     
     data() {
       return {
+        //api post data
         postForm: Object.assign({}, defaultForm),
+
         isShow: false,
         isGrid: false,
         overlay: false,
@@ -393,24 +396,13 @@
         createDateStartMenu: false,
         createDateEndMenu: false,
         //日曆 end
+
         //素材類型下拉
-        materialTypeOption: [
-            { text: '圖片', value: 'image'},
-            { text: '影音', value: 'video'},
-        ],
-        //狀態 Option
-        statusOption: [
-          { text: '上架中', value: 'ACTIVE' , icon: 'mdi-checkbox-marked-circle'},
-          { text: '未上架', value: 'WAIT' , icon : 'mdi-minus-circle'},
-          { text: '已下架', value: 'CLOSE', icon: 'mdi-minus-circle'},
-        ],
-        signStatusOption: [
-            { text: '暫存', value: 'DRAFT'},
-            { text: '退件', value: 'REJECT'},
-            { text: '審核中', value: 'WAIT'},
-            { text: '審核中', value: 'PROGRESS'},
-            { text: '審核完成', value: 'PASS'},
-        ],
+        materialTypeOption: enums.materialFileTypeOption,
+        //上架下拉選單
+        statusOption: enums.mediaStatusOption,
+        //簽核狀態下拉選單
+        signStatusOption: enums.mediaSignStatusOption,
         
         //素材資料清單
         mediaFiles:[],
@@ -487,8 +479,6 @@
         // this.dialog = true
         this.alertDialog = true
         this.editedIndex = this.mediaFiles.indexOf(item)
-        //API post data 
-        // this.deleteFile(item.id)
       },
 
       /**

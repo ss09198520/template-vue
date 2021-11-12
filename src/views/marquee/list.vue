@@ -47,11 +47,11 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              狀態
+              簽 核 狀 態
             </v-col>
             <v-col cols="3">
               <v-select
-                :items="['暫存', '退件', '審核中', '審核完成']"
+                :items="signStatusOption"
                 class="font-bold"
                 color="accent"
                 item-color="accent"
@@ -67,7 +67,7 @@
             </v-col>
             <v-col cols="3" class="ml-2">
               <v-select
-                :items="['上架','未上架','下架']"
+                :items="statusOption"
                 class="font-bold"
                 color="accent"
                 item-color="accent"
@@ -405,6 +405,8 @@
 </template>
 
 <script>
+  import enums from '@/utils/enums'
+
   export default {
     data() {
       return {
@@ -425,6 +427,14 @@
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
+
+        //上架下拉選單
+        statusOption: enums.mediaStatusOption,
+        //簽核狀態下拉選單
+        signStatusOption: enums.mediaSignStatusOption,
+        //類型下拉選單
+        programTypeOption: enums.mediaTypeOption,
+
         //日曆 end
         headerCRUD: [
           {

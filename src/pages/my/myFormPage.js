@@ -32,7 +32,6 @@ export default{
                 { text: '代理件所有人', value: 'agentAcceptUser', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
-            // 先放假資料
             numberOfAccept: 0,
             numberOfAgent:0, 
             oriFormList:[], // 原始資料

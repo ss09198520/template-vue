@@ -6,7 +6,7 @@ const materialFileTypeOption = [
 
 //多媒體類型下拉選單
 const mediaTypeOption = [
-  { text: '一般', value: 'ACTIGENERALVE'},
+  { text: '一般', value: 'GENERAL'},
   { text: '預設', value: 'DEFAULT'},
 ]
 //多媒體上架下拉選單

@@ -64,7 +64,10 @@
                         <v-col md="3">
                           <v-menu
                             v-model="releaseDateStartMenu"
-                            min-width="290px"
+                            :close-on-content-click="false"
+                            transition="scale-transition"
+                            offset-y
+                            min-width="auto"
                           >
                             <template v-slot:activator="{ on }">
                               <v-text-field
@@ -72,10 +75,13 @@
                                 :rules="rules.requiredRule"
                                 append-icon="mdi-calendar"
                                 label="上架時間"
+                                placeholder="上架時間"
                                 color="accent"
                                 outlined
                                 dense
                                 class="font-weight-bold"
+                                readonly
+                                hide-details
                                 :clearable="true"
                                 v-on="on"
                               />

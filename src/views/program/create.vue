@@ -34,7 +34,6 @@
                   :rules="rules.requiredRule.concat(rules.lengthRules)"
                   :hide-details="hideDatails"
                   color="accent"
-                  label=" 節 目 標 題"
                   placeholder="請輸入節目標題"
                   :counter="maxCharacter"
                   outlined
@@ -61,11 +60,10 @@
               >
                 <v-text-field
                   v-model="postForm.memo"
-                  :rules="rules.lengthRules"
+                  :rules="rules.requiredRule.concat(rules.lengthRules)"
                   :hide-details="hideDatails"
                   color="accent"
-                  label="檔 案 描 述"
-                  placeholder="請輸入檔案描述"
+                  placeholder="請輸入節目描述"
                   :counter="maxCharacter"
                   outlined
                   dense
@@ -85,6 +83,7 @@
               <v-col cols="1" md="3">
                 <v-menu
                   v-model="releaseStartDateMenu"
+                  :close-on-content-click="false"
                   transition="scale-transition"
                   offset-y
                   min-width="auto"
@@ -92,6 +91,7 @@
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="postForm.releaseStartDate"
+                      :rules="rules.requiredRule.concat(rules.lengthRules)"
                       append-icon="mdi-calendar"
                       placeholder="上架時間(起)"
                       color="accent"
@@ -112,6 +112,7 @@
               <v-col cols="1" md="3">
                 <v-menu
                   v-model="releaseEndDateMenu"
+                  :close-on-content-click="false"
                   transition="scale-transition"
                   offset-y
                   min-width="auto"
@@ -119,6 +120,7 @@
                   <template v-slot:activator="{ on }">
                     <v-text-field
                       v-model="postForm.releaseEndDate"
+                      :rules="rules.requiredRule"
                       append-icon="mdi-calendar"
                       placeholder="上架時間(迄)"
                       color="accent"
@@ -154,32 +156,61 @@
                 cols="7"
                 md="6"
               >
-                <v-btn class="primary" style="margin:10px;" @click="dialog=true"><v-icon style="margin-right: 3px;">mdi-plus</v-icon>新增</v-btn>
+                <v-btn class="primary" style="margin:10px;" @click="showSelectPannel"><v-icon small style="margin-right: 3px;">mdi-plus</v-icon>新增</v-btn>
               </v-col>
             </v-row>
             <v-row 
-              v-show="isShow"
-              :dense="dense"
-              :no-gutters="noGutters"
+              v-if="selectedFiles.length > 0"
             >
-              <v-col>
+              <v-col
+                cols="3"
+                md="3"
+              >
+                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                  已 選 擇 素 材
+                </v-subheader>
+              </v-col>
+              <v-col
+                cols="7"
+                md="6"
+              >
                 <v-data-table
                   v-sortable-data-table
                   disable-sort
                   hide-default-footer
-                  :headers="headerCRUD"
-                  :items="itemsCRUD"
+                  :headers="headerSelectedFiles"
+                  :items="selectedFiles"
                   item-key="id"
                   class="font-weight-bold elevation-1"
                   @sorted="saveOrder"
                 >
-                  <template v-slot:[`item.action`]="{ item }">
+                  <!-- 縮圖 -->
+                  <template v-slot:[`item.dataUrl`]="{ item }">
+                    <v-img
+                      :src="item.dataUrl"
+                      max-width="50"
+                      max-height="50"
+                    />
+                  </template>
+                  <template v-slot:[`item.sort`]>
                     <v-icon
                       class="mr-2"
-                      @click="editItem(item)"
+                      :style="`cursor: pointer`"
                     >
                       mdi-sort-variant
                     </v-icon>
+                  </template>
+                  <template v-slot:[`item.delete`]="{ item }">
+                    <v-btn
+                      class="ma-2"
+                      fab
+                      x-small
+                      color="error"
+                      @click="deleteItem(item)"
+                      v-on="on"
+                    >
+                      <v-icon v-text="'mdi-delete'" />
+                    </v-btn>
                   </template>
                 </v-data-table>
               </v-col>
@@ -203,14 +234,16 @@
               >
                 <v-file-input
                   v-model="attachmentFile"
+                  :rules="rules.requiredRule"
                   placeholder="請選擇上傳附件"
                   color="accent"
                   outlined
                   dense
-                  accept="image/jpg"
                   persistent-hint
                   prepend-inner-icon="mdi-cloud-upload"
                   prepend-icon
+                  accept="application/pdf,application/vnd.ms-excel"
+                  show-size
                   @change="onUpload"
                 />
                 <div v-if="!!dataURL" class="t-center">
@@ -256,6 +289,7 @@
         </fet-card>
       </v-col>
     </v-row>
+    <!-- 選 擇 素 材 視 窗 -->
     <v-dialog
       v-model="dialog"
       max-width="50vw"
@@ -340,82 +374,49 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-btn class="primary mb-1" @click="submitSearch()">&emsp;查詢&emsp;</v-btn>        
-          </v-row>
-          <v-row
-            class="d-flex justify-end"
-            dense
-          >
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  class="ma-2"
-                  fab
-                  small
-                  color="primary"
-                  @click="submitSearch"
-                  v-on="on"
-                >
-                  <v-icon v-text="'mdi-magnify'" />
-                </v-btn>
-              </template>
-              <span>&emsp;查詢&emsp;</span>
-            </v-tooltip>
+            <v-btn 
+              class="primary mb-1"
+              depressed
+              @click="submitSearch()"
+            >
+              查詢 
+              <v-icon right v-text="'mdi-magnify'" />
+            </v-btn>        
           </v-row>
           <!-- <v-divider class="mt-6 mb-5" /> -->
           <hr class="mt-6 mb-5">
-          <v-item-group multiple>
+          <v-item-group>
             <v-container>
               <v-row>
                 <v-col
-                  v-for="(resource,id) in resources"
-                  :id="resource.id"
+                  v-for="(itemFile,id) in mediaFiles"
+                  :id="itemFile.id"
                   :key="id"
-                  cols="12"
-                  md="4"
-                > 
+                >
                   <v-checkbox 
                     :key="id"
-                    v-model="resource.selected"
+                    v-model="itemFile.selected"
                   >
                     <template v-slot:label>
                       <v-img
-                        :src="require(`@/resource/${resource.thumbnail}`)"
-                        :lazy-src="require(`@/resource/${resource.thumbnail}`)"
+                        :src="itemFile.dataUrl"
+                        :lazy-src="itemFile.dataUrl"
                         class="grey lighten-2"
-                        max-width="500"
-                        max-height="300"
-                      >
-                      </v-img>
+                        max-height="150"
+                        max-width="150"
+                      />
+                      
                     </template>
                   </v-checkbox>
                 </v-col>
               </v-row>
             </v-container>
           </v-item-group>
-          
-          <div class="imgList">
-            <ul class="resourceList">
-              <li
-                v-for="(resource,id) in resources"
-                :id="resource.id"
-                :key="id"
-                :url="resource.url" 
-                @click="selected($event)" 
-              >
-                <label class="el-upload-list__item-status-label" />
-                <div class="imgBox">
-                  <img :src="require(`@/resource/${resource.thumbnail}`)">
-                </div>
-                <p>{{ resource.name }}</p>
-              </li>
-            </ul>
-          </div>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
           <v-btn style="margin: 0 10px 10px 0;" @click="dialog = false">關閉</v-btn>
-          <v-btn color="primary" style="margin-bottom: 10px;" @click="dialog = false ; isShow = true">新增</v-btn>
+          <v-btn color="primary" style="margin-bottom: 10px;" @click="addMediaFile">新增</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -427,6 +428,7 @@
   import MessageService from '@/assets/services/message.service'
   import { initProgram } from '@/api/program'
   import { listMediaFile } from '@/api/mediaFile'
+  import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
   
   const defaultForm = {
@@ -440,11 +442,6 @@
     originalFileName: null,
     imgSrc: null,
     base64: null,
-  }
-
-  const defaultProgramItem = {
-    materialId: 27,
-    materialName: '222',
   }
 
   const defaultQueryForm = {
@@ -469,18 +466,14 @@
         }
       }
     },
-    inject: {
-      theme: {
-        default: { isDark: false },
-      },
-    },
     data() {
       return {
         isShow: false,
+        isShowSelected: false,
         valid: false,
         dialog: false,
         isDraft: false,
-        maxCharacter: 40,
+        maxCharacter: 150,
 
         //素材日曆
         createDateStartMenu: false,
@@ -490,11 +483,10 @@
         releaseEndDateMenu: false,
         releaseEndDate: '',
         //素材類型下拉
-        materialTypeOption: [
-            { text: '圖片', value: 'image'},
-            { text: '影音', value: 'video'},
-        ],
-        
+        materialTypeOption: enums.materialFileTypeOption,
+        //素材資料清單
+        mediaFiles:[],
+
         //api post data
         postForm: Object.assign({}, defaultForm),
         postQueryForm: Object.assign({},defaultQueryForm),
@@ -503,6 +495,7 @@
         attachmentList: [],
         dataURL: null,
         signAttachmentFile: null,
+        selectedFiles:[],
         programMaterials:[], //set defaultProgramItem
         //素材資料
         headerMaterial: [
@@ -514,20 +507,12 @@
           { text: '使用中', value: 'active', sortable: false, align: 'center', },
           { text: '狀態操作', value: 'action', sortable: false, align: 'center' },
         ],
-        dateMenu: false,
-        headerCRUD: [
-          {
-            text: '素材名稱',
-            value: 'name',
-            width: '5%'
-          },
-          {
-            text: '播放順序',
-            value: 'action',
-            sortable: false,
-            align: 'center',
-            width: '5%'
-          },
+        headerSelectedFiles: [
+          { text: '素材名稱', value: 'materialName', },
+          { text: '縮圖', value: 'dataUrl', },
+          { text: '播放順序', value: 'sort', sortable: false, align: 'center', },
+          { text: '', value: 'delete', align: 'right', width: '2%',},
+          
         ],
         itemsCRUD: [
           {
@@ -544,92 +529,92 @@
             id: 3,
           },
         ],
-        resources: [
-          {
-            "id": 1,
-            "url": "image/bg1.jpg",
-            "thumbnail": "image/bg1_tn.jpg",
-            "name": "bg1.jpg",
-            "type": "image"
-          },
-          {
-            "id": 2,
-            "url": "image/bg2.png",
-            "thumbnail": "image/bg2_tn.jpg",
-            "name": "bg2.jpg",
-            "type": "image"
-          },
-          {
-            "id": 3,
-            "url": "image/p1.jpg",
-            "thumbnail": "image/p1_tn.jpg",
-            "name": "p1.jpg",
-            "type": "image"
-          },
-          {
-            "id": 4,
-            "url": "image/p2.jpg",
-            "thumbnail": "image/p2_tn.jpg",
-            "name": "p2.jpg",
-            "type": "image"
-          },
-          {
-            "id": 5,
-            "url": "image/p3.jpg",
-            "thumbnail": "image/p3_tn.jpg",
-            "name": "p3.jpg",
-            "type": "image"
-          },
-          {
-            "id": 6,
-            "url": "image/p4.jpg",
-            "thumbnail": "image/p4_tn.jpg",
-            "name": "p4.jpg",
-            "type": "image"
-          },
-          {
-            "id": 7,
-            "url": "image/p5.jpg",
-            "thumbnail": "image/p5_tn.jpg",
-            "name": "p5.jpg",
-            "type": "image"
-          },
-          {
-            "id": 8,
-            "url": "image/p6.jpg",
-            "thumbnail": "image/p6_tn.jpg",
-            "name": "p6.jpg",
-            "type": "image"
-          },
-          {
-            "id": 9,
-            "url": "image/p7.jpg",
-            "thumbnail": "image/p7_tn.jpg",
-            "name": "p7.jpg",
-            "type": "image"
-          },
-          {
-            "id": 10,
-            "url": "image/p8.jpg",
-            "thumbnail": "image/p8_tn.jpg",
-            "name": "p8.jpg",
-            "type": "image"
-          },
-          {
-            "id": 11,
-            "url": "image/p9.jpg",
-            "thumbnail": "image/p9_tn.jpg",
-            "name": "p9.jpg",
-            "type": "image"
-          },
-          {
-            "id": 12,
-            "url": "image/p10.jpg",
-            "thumbnail": "image/p10_tn.jpg",
-            "name": "p10.jpg",
-            "type": "image"
-          }
-        ],
+        // resources: [
+        //   {
+        //     "id": 1,
+        //     "url": "image/bg1.jpg",
+        //     "thumbnail": "image/bg1_tn.jpg",
+        //     "name": "bg1.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 2,
+        //     "url": "image/bg2.png",
+        //     "thumbnail": "image/bg2_tn.jpg",
+        //     "name": "bg2.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 3,
+        //     "url": "image/p1.jpg",
+        //     "thumbnail": "image/p1_tn.jpg",
+        //     "name": "p1.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 4,
+        //     "url": "image/p2.jpg",
+        //     "thumbnail": "image/p2_tn.jpg",
+        //     "name": "p2.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 5,
+        //     "url": "image/p3.jpg",
+        //     "thumbnail": "image/p3_tn.jpg",
+        //     "name": "p3.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 6,
+        //     "url": "image/p4.jpg",
+        //     "thumbnail": "image/p4_tn.jpg",
+        //     "name": "p4.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 7,
+        //     "url": "image/p5.jpg",
+        //     "thumbnail": "image/p5_tn.jpg",
+        //     "name": "p5.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 8,
+        //     "url": "image/p6.jpg",
+        //     "thumbnail": "image/p6_tn.jpg",
+        //     "name": "p6.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 9,
+        //     "url": "image/p7.jpg",
+        //     "thumbnail": "image/p7_tn.jpg",
+        //     "name": "p7.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 10,
+        //     "url": "image/p8.jpg",
+        //     "thumbnail": "image/p8_tn.jpg",
+        //     "name": "p8.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 11,
+        //     "url": "image/p9.jpg",
+        //     "thumbnail": "image/p9_tn.jpg",
+        //     "name": "p9.jpg",
+        //     "type": "image"
+        //   },
+        //   {
+        //     "id": 12,
+        //     "url": "image/p10.jpg",
+        //     "thumbnail": "image/p10_tn.jpg",
+        //     "name": "p10.jpg",
+        //     "type": "image"
+        //   }
+        // ],
         dense: false,
         noGutters: false,
         hideDatails: false,
@@ -647,8 +632,6 @@
       this.reader.onload = () => {
         // preview data url
         this.dataURL = this.reader.result
-        // console.log('onload' , this.attachmentFile)
-        // console.log('this.reader' , this.reader.result)
         
         // assign file 
         this.signAttachmentFile = Object.assign({} , defaultFile)
@@ -677,6 +660,35 @@
         const extension = filename.split('.').pop();
         return "." + extension;
       },
+      
+      // Button Function 開啟選取畫面
+      showSelectPannel() {
+        //將查詢結果與選取結果整理
+        this.mediaFiles.forEach(item => item.selected = this.selectedFiles.indexOf(item) >= 0 ? true : false );
+        
+        this.dialog = true
+      },
+      // 排序欄位內刪除
+      deleteItem(item) {
+        this.editedIndex = this.selectedFiles.indexOf(item)
+        this.selectedFiles.splice(this.editedIndex, 1)
+      },
+      // Button Function 添加已選擇素材
+      addMediaFile() {
+        this.dialog = false 
+        this.isShowSelected = true
+        
+        for (const item of this.mediaFiles) {
+          if (!!item.selected && this.selectedFiles.indexOf(item) === -1) {
+            this.selectedFiles.push(item)
+          } else if (!item.selected && this.selectedFiles.indexOf(item) >= 0) {
+            const index = this.selectedFiles.indexOf(item)
+            this.selectedFiles.splice(index,1)
+          }
+        }
+      },
+
+      //素材排序
       saveOrder (event) {
         const movedItem = this.itemsCRUD.splice(event.oldIndex, 1)[0];
         this.itemsCRUD.splice(event.newIndex, 0, movedItem);
@@ -687,19 +699,22 @@
           // this.itemsCRUD[step].id = step
         }
       },
-      // 查詢素材
+
+      // Button Function 查詢素材
       submitSearch() {
         //API post data 
-        this.fetchMediaFileList(this.postForm)
+        this.fetchMediaFileList(this.postQueryForm)
       },
-      // 送出節目單製作儲存
+
+      // Button Function 送出節目單製作儲存
       submit(isSign) {
-        //填答時先將資料Assign 進 postForm
-        // Object.keys(this.questionnaire).filter(key => key in this.postForm).forEach(key => this.postForm[key] = this.questionnaire[key]);
-        let items = []
-        items.push(Object.assign({},defaultProgramItem)) //set testdata
-        
-        this.postForm.programMaterials = items
+
+        this.postForm.programMaterials = this.selectedFiles.reduce((items, mediaFile) => {
+          // new {materialId , mediaFileName}
+          items.push(Object.assign({materialId : mediaFile.id , 
+                                    mediaFileName : mediaFile.materialName}))
+          return items
+        }, [])
 
         //API post data 
         let postData = {
@@ -728,7 +743,7 @@
         this.isDraft = !this.isDraft
       },
       reset() {
-        this.$refs.form.reset()
+        this.$refs.programForm.reset()
       },
       selected(e) {
         let dom = e.currentTarget.id;
@@ -757,6 +772,18 @@
             if (this.ids[i] == dom) this.ids.splice(i, 1)
           }    //取消则从ids删除该元素
         }
+      },
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+      hasResult (dataList) {
+        // 驗證questionnaire是否有資料
+        if(isEmpty(dataList) || dataList.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
+        }
+        return true
       },
 
       /**

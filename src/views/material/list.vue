@@ -522,7 +522,7 @@
           //   Object.assign(element.relatedInfo, defaultRelatedInfo);
           // });
           this.mediaFiles = tmpData
-          this.isShow = true 
+          this.isShow = true
         }
         
       },

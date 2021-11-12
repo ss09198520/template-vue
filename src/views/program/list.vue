@@ -362,6 +362,7 @@
               />
             </v-tooltip>
           </template>
+          
           <!-- 上架狀態 -->
           <template v-slot:[`item.status`]="{ item }">
             <v-tooltip top>
@@ -380,6 +381,10 @@
           <!-- 簽核狀態 -->
           <template v-slot:[`item.signStatus`]="{ item }">
             {{ signStatusOption.find(state => { return item.signStatus===state.value }).text }}
+          </template>
+          <!-- 節目單類型 -->
+          <template v-slot:[`item.programType`]="{ item }">
+            {{ programTypeOption.find(type => { return item.programType===type.value }).text }}
           </template>
         </v-data-table>
         <!-- 選頁 -->
@@ -448,6 +453,7 @@
           { text: '上架人員名稱', value: 'createAuthor', align: 'center', },
           { text: '上架日期', value: 'releaseStartDate', align: 'center', },
           { text: '下架日期', value: 'releaseEndDate', align: 'center', },
+          { text: '建立時間', value: 'createDate', align: 'center' },
           { text: '上架', value: 'status', sortable: false, width: '10%', align: 'center', },
           { text: '退件資訊', value: 'rejectInfo', align: 'center' },
           { text: '操作', value: 'action', sortable: false, align: 'center', },

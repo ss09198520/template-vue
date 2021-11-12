@@ -72,7 +72,9 @@ export default {
     methods: {
         queryFormImage(){
             let param = {
-                fileNo: this.formFileNo
+                fileNo: this.formFileNo,
+                signFileNo: this.signFileNo,
+                formSeq: this.formSeq
             }
 
             AjaxService.post("/tpesForm/queryFormImage", param, 

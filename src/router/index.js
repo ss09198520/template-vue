@@ -357,6 +357,13 @@ export const constantRoutes = [
         meta: { title: '節目單製作', icon: 'mdi-movie-edit' }
       },
       {
+        path: 'edit/:id(\\d+)',
+        name: 'Program-Edit',
+        component: () => import('@/views/program/edit'),
+        hidden: true,
+        meta: { title: '節目單編輯', icon: 'mdi-movie-edit' }
+      },
+      {
         path: 'list',
         name: 'Program-List',
         component: () => import('@/views/program/list'),

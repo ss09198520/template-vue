@@ -92,13 +92,14 @@
                     <v-text-field
                       v-model="postForm.releaseStartDate"
                       :rules="rules.requiredRule.concat(rules.lengthRules)"
+                      :error-messages="errormages.dateCheck"
                       append-icon="mdi-calendar"
                       placeholder="上架時間(起)"
                       color="accent"
                       outlined
                       dense
                       readonly
-                      hide-details   
+                      :hide-details="hideDatails"
                       :clearable="true"
                       v-on="on"
                     />
@@ -106,6 +107,10 @@
                   <v-date-picker
                     v-model="postForm.releaseStartDate"
                     scrollable
+                    :min="getMinimumStartDate"
+                    :max="getMaximumStartDate"
+                    @input="releaseStartDateMenu = false"
+                    @change="checkDate"
                   />
                 </v-menu>
               </v-col>
@@ -121,13 +126,14 @@
                     <v-text-field
                       v-model="postForm.releaseEndDate"
                       :rules="rules.requiredRule"
+                      :error-messages="errormages.dateCheck"
                       append-icon="mdi-calendar"
                       placeholder="上架時間(迄)"
                       color="accent"
                       outlined
                       dense
                       readonly
-                      hide-details   
+                      :hide-details="hideDatails"
                       :clearable="true"
                       v-on="on"
                     />
@@ -135,6 +141,9 @@
                   <v-date-picker
                     v-model="postForm.releaseEndDate"
                     scrollable
+                    :min="getMinimumEndDate"
+                    @input="releaseEndDateMenu = false"
+                    @change="checkDate"
                   />
                 </v-menu>
               </v-col>
@@ -207,7 +216,6 @@
                       x-small
                       color="error"
                       @click="deleteItem(item)"
-                      v-on="on"
                     >
                       <v-icon v-text="'mdi-delete'" />
                     </v-btn>
@@ -385,7 +393,7 @@
           </v-row>
           <!-- <v-divider class="mt-6 mb-5" /> -->
           <hr class="mt-6 mb-5">
-          <v-item-group>
+          <v-item-group v-if="isShow">
             <v-container>
               <v-row>
                 <v-col
@@ -425,6 +433,7 @@
 
 <script>
   import Sortable from 'sortablejs'
+  import ValidateUtil from "@/assets/services/validateUtil";
   import MessageService from '@/assets/services/message.service'
   import { initProgram } from '@/api/program'
   import { listMediaFile } from '@/api/mediaFile'
@@ -478,6 +487,10 @@
     },
     data() {
       return {
+        nowDate: new Date().toISOString().slice(0,10),
+        errormages: {
+          dateCheck: null,
+        },
         isShow: false,
         isShowSelected: false,
         valid: false,
@@ -638,10 +651,41 @@
         },
       }
     },
+    computed: {
+      getMinimumEndDate() {
+        let tmpDate
+        if(isEmpty(this.postForm.releaseStartDate)){
+          tmpDate = new Date(this.nowDate)
+          tmpDate.setDate(tmpDate.getDate() + 1)
+        } else {
+          tmpDate = new Date(this.postForm.releaseStartDate)
+          tmpDate.setDate(tmpDate.getDate() + 1)
+        }
+        return tmpDate.toISOString().slice(0,10)
+      },
+      getMinimumStartDate() {
+        let tmpDate
+        if(isEmpty(this.postForm.releaseEndDate)){
+          tmpDate = new Date(this.nowDate)
+        } else {
+          tmpDate = new Date()
+          tmpDate.setDate(tmpDate.getDate() + 1)
+        }
+        return tmpDate.toISOString().slice(0,10)
+      },
+      getMaximumStartDate() {
+        let tmpDate
+        let returnStr = ''
+        if(!isEmpty(this.postForm.releaseEndDate)){
+          tmpDate = new Date(this.postForm.releaseEndDate)
+          tmpDate.setDate(tmpDate.getDate() - 1)
+          returnStr = tmpDate.toISOString().slice(0,10)
+        }
+        return returnStr
+      },
+    },
     mounted() {
-      
       this.init()
-
       if (this.isEdit) {
         const id = this.$route.params && this.$route.params.id
         this.fetchQuestionnaire(id)
@@ -652,18 +696,44 @@
       init() {
         this.reader = new FileReader();
         this.reader.onload = () => {
-        // preview data url
-        this.dataURL = this.reader.result
-        
-        // assign file 
-        this.signAttachmentFile = Object.assign({} , defaultFile)
-        this.signAttachmentFile.category = "MEDIA_ATTACHMENT"
-        this.signAttachmentFile.fileName = this.attachmentFile.name
-        this.signAttachmentFile.originalFileName = this.attachmentFile.name
-        this.signAttachmentFile.fileExt = this.getFileExtension(this.attachmentFile.name)
-        this.signAttachmentFile.fileSize = this.attachmentFile.size
-        this.signAttachmentFile.base64 = this.dataURL.split(",")[1]
-      }
+          // preview data url
+          this.dataURL = this.reader.result
+          
+          // assign file 
+          this.signAttachmentFile = Object.assign({} , defaultFile)
+          this.signAttachmentFile.category = "MEDIA_ATTACHMENT"
+          this.signAttachmentFile.fileName = this.attachmentFile.name
+          this.signAttachmentFile.originalFileName = this.attachmentFile.name
+          this.signAttachmentFile.fileExt = this.getFileExtension(this.attachmentFile.name)
+          this.signAttachmentFile.fileSize = this.attachmentFile.size
+          this.signAttachmentFile.base64 = this.dataURL.split(",")[1]
+        }
+      },
+      checkDate() {
+        let hasCheck = true;
+        console.log('start checkbox')
+        // 1-1 輪播起迄日都有選擇
+        if (!isEmpty(this.postForm.releaseStartDate) && !isEmpty(this.postForm.releaseEndDate)) {
+          console.log('start date' , this.postForm.releaseStartDate)
+          console.log('end date' ,this.postForm.releaseEndDate)
+          if (!ValidateUtil.validateDateRange(this.postForm.releaseStartDate, this.postForm.releaseEndDate)) {
+            this.errormages.dateCheck= "上架日期選擇範圍錯誤，起始日期不得大於結束日期";
+            hasCheck = false;
+            this.valid = false;
+          } else {
+            this.errormages.dateCheck = null;
+          }
+        } else if(!isEmpty(this.postForm.releaseEndDate)) {
+          console.log(this.postForm)
+          if (!ValidateUtil.validateDateRange(this.postForm.releaseEndDate , this.postForm.releaseStartDate)) {
+            this.errormages.dateCheck= "上架日期選擇範圍錯誤，結束日期不得大於起始日期";
+            hasCheck = false;
+            this.valid = false;
+          } else {
+            this.errormages.dateCheck = null;
+          }
+        }
+        return hasCheck;
       },
       //附件上傳
       onUpload() {
@@ -685,7 +755,7 @@
       // Button Function 開啟選取畫面
       showSelectPannel() {
         //將查詢結果與選取結果整理
-        this.mediaFiles.forEach(item => item.selected = this.selectedFiles.indexOf(item) >= 0 ? true : false );
+        this.mediaFiles.forEach(item => item.selected = this.selectedFiles.some(selected => selected.id == item.id) ? true : false );
         
         this.dialog = true
       },
@@ -700,9 +770,11 @@
         this.isShowSelected = true
         
         for (const item of this.mediaFiles) {
-          if (!!item.selected && this.selectedFiles.indexOf(item) === -1) {
+          
+          if (item.selected && !this.selectedFiles.some(selected => selected.id == item.id)) {
+            // this.selectedFiles.indexOf(item) === -1
             this.selectedFiles.push(item)
-          } else if (!item.selected && this.selectedFiles.indexOf(item) >= 0) {
+          } else if (!item.selected && this.selectedFiles.some(selected => selected.id == item.id)) {
             const index = this.selectedFiles.indexOf(item)
             this.selectedFiles.splice(index,1)
           }
@@ -830,7 +902,8 @@
 
       //Action:素材查詢
       async fetchMediaFileList(fetchMediaFilePostData) {
-        
+        this.isShow = false
+
         const data = await listMediaFile(fetchMediaFilePostData)
         // 驗證是否成功
         if (!data.restData.success) {              
@@ -843,13 +916,15 @@
         if(this.hasResult(data.restData.materialFiles)){
           let tmpData = data.restData.materialFiles
 
-          //處理關聯資訊轉換
-          // tmpData.forEach(element => {
-          //   element.relatedInfo = [];
-          //   Object.assign(element.relatedInfo, defaultRelatedInfo);
-          // });
+          //處理已選擇素材資訊轉換
+          if(!isEmpty(this.selectedFiles)) {
+            tmpData.forEach(item => {
+              ////已選擇一一比對回傳之資料
+              item.selected = this.selectedFiles.some(selected => selected.id == item.id) ? true : false
+            });
+          }
           this.mediaFiles = tmpData
-          this.isShow = true 
+          this.isShow = true
         }
         
       },

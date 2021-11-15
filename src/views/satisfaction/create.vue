@@ -90,6 +90,7 @@
                               v-model="questionnaire.releaseStartDate"
                               no-title
                               scrollable
+                              :min="questionnaire.releaseStartDate||nowDate"
                             />
                           </v-menu>
                         </v-col>
@@ -257,6 +258,7 @@
 
     data () {
       return {
+        nowDate: new Date().toISOString().slice(0,10),
         drag: false,
         valid: false,
         rules: {

@@ -1,6 +1,8 @@
 import FormPage from '@/pages/FormPage/FormPage.vue';
 import MessageService from "@/assets/services/message.service";
 import ValidateUtil from '@/assets/services/validateUtil';
+import AjaxService from '@/assets/services/ajax.service';
+
 
 export default {
     name: 'MyWaitingAccounting',
@@ -27,7 +29,7 @@ export default {
                 { text: '待核算累積日數', value: 'cumulativeDay', align: 'center',width:'5%'  },
                 { text: '派工日期', value: 'dispatchDate', align: 'center',width:'10%'  },
                 { text: '契約種類', value: 'contractType', align: 'center',width:'10%' },
-                { text: '整理號碼', value: 'archieveNum', align: 'center',width:'10%' },
+                { text: '整理號碼', value: 'archiveNum', align: 'center',width:'10%' },
                 { text: '檢視註記', value: 'hasView', align: 'center',width:'5%'},
                 { text: '代理件', value: 'isAgent', align: 'center',width:'5%' },
                 { text: '備註', value: 'memo', align: 'center',sortable:false,width:'2%' },
@@ -47,6 +49,9 @@ export default {
             rejectReason: null,
             reasonList:[],
             oriReasonList:[],
+            formParam:{},
+            formKey: 0,
+            accnting: '',
             computeDateOption:[
                 {text:'01',value:'01'},
                 {text:'02',value:'02'},
@@ -95,7 +100,7 @@ export default {
                 custName: null,           //戶名
                 cumulativeDay: null,      //待核算累積日數
                 computeDate: null,        //計算日
-                archieveNum: null,        //整理號碼
+                archiveNum: null,        //整理號碼
                 dispatchStartDate: null,  //派工日期開始
                 dispatchEndDate: null,    //派工日期結束
                 contractType: null,       //契約種類
@@ -121,24 +126,60 @@ export default {
         },
 
         // 點擊打開核算視窗
-        accounting(item) {          
-          this.selectIndex = this.accoutingList.indexOf(item); // 取出被選擇資料的index
-          this.selectItem = item; // 將選到的資料放進selectItem中
-          
+        accounting(item) {   
+            let seq = item.seq;
+            AjaxService.post('/waitAccounting/updateAccntStatus',
+            {
+                seq: seq,
+            },
+            (response) => {
+                if (response != null &&
+                    response != undefined &&                                
+                    response.success
+                    ) {    
+                        console.log(response);                                                             
+                         // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄(Action)
+                        //  this.selectIndex = this.accoutingList.indexOf(item); // 取出被選擇資料的index
+                        //  this.selectItem = item; // 將選到的資料放進selectItem中
+                        // if(ValidateUtil.isEmpty(item.status)){
+                        //     this.updateAccoutingStatus(item.seq,this.selectIndex);
+                        // }                                                                                       
+                        this.queryAccoutingInit();
 
+                } else {
+                  //接後端候要放errorMsg
+                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                }
+            },
+                (response) => { // server 出錯才會進入
+                    // server error
+                    console.log(response.rtnCode);
+                    MessageService.showSystemError(response.rtnCode);
+                }
+            );
+            
+          
+          // 帶入受理編號
+          this.formParam = {
+            acceptNum: item.acceptNum
+        };
+        this.formKey++;
           // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄(Action)
-          if(ValidateUtil.isEmpty(item.status)){
-              this.updateAccoutingStatus(item.seq,this.selectIndex);
-          }
+        //   if(ValidateUtil.isEmpty(item.status)){
+        //       this.updateAccoutingStatus(item.seq,this.selectIndex);
+        //   }
           // 查詢待核算案件資料(Action)
           this.queryAccoutingData();
+          this.selectItem.seq = item.seq;  
+          this.selectItem.formSeq = item.formSeq;     
+          this.selectItem.accnting = item.accnting;   
           this.accountingDialog = true;
 
         },
         // 打開核算視窗
         checking(item){
             this.selectIndex = this.accoutingList.indexOf(item);
-            this.checkingDialog = true;
+            this.checkingDialog = true;            
         },
         // 打開核算退件視窗
         returnOrder(){
@@ -148,9 +189,10 @@ export default {
         accountingSubmit(memo){
             this.memo = memo;
             this.updateAccouting(); 
+            this.accountingDialog = false;
         },
         saveComments(memo){
-            this.memo = memo;
+            this.memo = memo;            
             this.saveAccoutingMemo();
 
             this.accountingDialog = false;
@@ -207,7 +249,44 @@ export default {
 
         // Action:頁面初始化
         queryAccoutingInit(){
-            // 模擬從後端取到的假資料
+            // 模擬從後端取到的假資料            
+            AjaxService.post('/waitAccounting/init',
+            {
+                       
+            },
+            (response) => {
+                if (response != null &&
+                    response != undefined &&                    
+                    response.message != null &&
+                    response.message != undefined &&
+                    response.success
+                    ) {
+                    if (ValidateUtil.isEmpty(response.initWaitAccountingListVo)) {                        
+                        MessageService.showInfo('查無資料');
+                    } else {           
+                        console.log(response);                                                             
+                        this.accoutingList = Object.assign(response.initWaitAccountingListVo);                        
+                        response.initWaitAccountingListVo.forEach((element) => {
+                            element.action = true;
+                        });       
+                        response.initWaitAccountingListVo.forEach((element) => {
+                            if(element.status == 'READ'){
+                                element.hasView = true;
+                            }                            
+                        });                                                         
+                    }
+                } else {
+                  //接後端候要放errorMsg
+                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                }
+            },
+                (response) => { // server 出錯才會進入
+                    // server error
+                    console.log(response.rtnCode);
+                    MessageService.showSystemError(response.rtnCode);
+                }
+            );
+
             let accoutingList = [
                 { action: true,
                   seq:1,
@@ -323,6 +402,7 @@ export default {
         queryAccoutingData(){
             // vin參數
             // formSeq: this.selectItem.formSeq,
+            
         },
 
         // Action:更新待審核案件檢視狀態
@@ -330,6 +410,7 @@ export default {
             // vin參數
             // seq: seq
             console.log(seq);
+            console.log(index);
             this.accoutingList[index].hasView = true;
         },
 
@@ -337,38 +418,101 @@ export default {
         saveAccoutingMemo(){
             // vin參數
             // seq: this.selectItem.seq,
-            // memo: this.memo,
+            // memo: this.memo,            
+            const SaveMemoReq = {
+                seq: this.selectItem.seq,
+                memo: this.memo,
+            };
+            
+            AjaxService.post('/waitAccounting/saveMemo',SaveMemoReq,
+            (response) => {
+                if (response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                    ) {                             
+                        // console.log(response);                                                             
+                        // this.accoutingList = Object.assign(response.queryWaitAccountingListVo);                        
+                        // response.queryWaitAccountingListVo.forEach((element) => {
+                        //     element.action = true;
+                        // });       
+                        // response.queryWaitAccountingListVo.forEach((element) => {
+                        //     if(element.status == 'READ'){
+                        //         element.hasView = true;
+                        //     }                            
+                        // });          
+                        MessageService.showInfo('儲存備註成功');                                                                   
+                } else {
+                  //接後端候要放errorMsg
+                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                }
+            },
+                (response) => { // server 出錯才會進入
+                    // server error
+                    console.log(response.rtnCode);
+                    MessageService.showSystemError(response.rtnCode);
+                }
+            );
         },
 
         // Action:更新案件審核狀態(成功/退件)
-        updateAccouting(type){
+        updateAccouting(){
             // vin參數
             // seq: this.selectItem.seq,
             // formSeq: this.selectItem.formSeq,
             // memo: this.memo,
-            // rejectToDept:this.department,
+            // accounting: this.accounting,           
             // rejectReason:this.rejectReason,
-            // rejectDesc:this.rejectDesc,
-            // oriDeptList: this.oriDeptList,
-            // oriReasonList: this.oriReasonList,
+            // rejectDesc:this.rejectDesc,            
+
+            const AuditAccountingReq = {
+                seq: this.selectItem.seq,
+                formSeq: this.selectItem.formSeq,                
+                memo: this.memo,
+                accnting: this.selectItem.accnting,
+                rejectReason: this.rejectReason,
+                rejectDesc: this.rejectDesc,
+            };
+            
+            AjaxService.post('/waitAccounting/auditAccounting',AuditAccountingReq,
+            (response) => {
+                if (response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                    ) {                                                             
+                        MessageService.showInfo('核算成功');                                                                   
+                } else {
+                  //接後端候要放errorMsg
+                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                }
+            },
+                (response) => { // server 出錯才會進入
+                    // server error
+                    console.log(response.rtnCode);
+                    MessageService.showSystemError(response.rtnCode);
+                }
+            );
 
 
-            if(type === 'reject') {
-                if (this.selectIndex > -1) {
-                    this.accoutingList.splice(this.selectIndex, 1);
-                }
-                this.returnReasonModel = false;
-                this.accountingDialog = false;
-                this.waitingCount = this.waitingCount -1;
-                MessageService.showSuccess("案件退件");
-            } else {
-                if (this.selectIndex > -1) {
-                    this.accoutingList.splice(this.selectIndex, 1);
-                }
-                MessageService.showSuccess("案件核算");
-                this.accountingDialog = false;
-                this.waitingCount = this.waitingCount -1;
-            }
+            // if(type === 'reject') {
+            //     if (this.selectIndex > -1) {
+            //         this.accoutingList.splice(this.selectIndex, 1);
+            //     }
+            //     this.returnReasonModel = false;
+            //     this.accountingDialog = false;
+            //     this.waitingCount = this.waitingCount -1;
+            //     MessageService.showSuccess("案件退件");
+            // } else {
+            //     if (this.selectIndex > -1) {
+            //         this.accoutingList.splice(this.selectIndex, 1);
+            //     }
+            //     MessageService.showSuccess("案件核算");
+            //     this.accountingDialog = false;
+            //     this.waitingCount = this.waitingCount -1;
+            // }
         },
 
 

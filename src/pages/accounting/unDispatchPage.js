@@ -1,5 +1,6 @@
 import MessageService from "@/assets/services/message.service";
 import ValidateUtil from "@/assets/services/validateUtil";
+import AjaxService from '@/assets/services/ajax.service';
 
 
 export default {
@@ -94,6 +95,39 @@ export default {
         // Action:頁面初始化
         queryUndispatchInit(){
             // 取得未分派清單資料
+
+            AjaxService.post('/undispatch/init',
+            {
+                       
+            },
+            (response) => {
+                if (response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                    ) {
+                    if (ValidateUtil.isEmpty(response.restData.initUndispatchListVo)) {                        
+                        MessageService.showInfo('查無資料');
+                    } else {           
+                        console.log(response);                                                             
+                        this.unDispatchList = Object.assign(response.restData.initUndispatchListVo);                        
+                        response.restData.initUndispatchListVo.forEach((element) => {
+                            element.action = true;
+                        });                                                                                       
+                    }
+                } else {
+                  //接後端候要放errorMsg
+                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                }
+            },
+                (response) => { // server 出錯才會進入
+                    // server error
+                    console.log(response.rtnCode);
+                    MessageService.showSystemError(response.rtnCode);
+                }
+            );
+
            let unDispatchList = [
                 {seq:1 ,formSeq: 1, action: true, acceptNum: 'A00028',archieveNum: '000201', custName: '許小花',contractType:'包制',electricNum:'0120123223', countDate: '01', computeDate: '2021-09-10 10:00', colseDate: '2021-09-10 16:00', acceptItem: '軍眷用電申請優待'},
                 {seq:2, formSeq: 2, action: true, acceptNum: 'A00040',archieveNum: '000202', custName: '陳文生',contractType:'高壓',electricNum:'012012321',countDate: '05', computeDate: '2021-09-07 15:36', colseDate: '2021-09-08 15:06', acceptItem: '增加電表'},
@@ -107,6 +141,9 @@ export default {
         // Action: 取得下拉選單 (操作人為核算課長)
         queryUndispatchOption(){
            // 取得班別資料
+
+           
+
            let classList = ['班別1','班別2','班別3','班別4','班別5','班別6','班別7'];
            // 取得有設定班別的核算員清單
            let accountingList = [

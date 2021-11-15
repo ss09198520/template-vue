@@ -108,7 +108,7 @@
             cols="3"
           >
             <v-text-field
-              v-model="searchForm.archieveNum"                       
+              v-model="searchForm.archiveNum"                       
               outlined
               hide-details
               dense
@@ -368,7 +368,14 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <FormPage :restrict-mode="'accounting'" @returnOrder="returnOrder($event)" @accountingSubmit="accountingSubmit($event)" @saveComments="saveComments($event)" />
+          <FormPage
+            :key="formKey"
+            :form-param="formParam"
+            :restrict-mode="'accounting'"
+            @returnOrder="returnOrder($event)"
+            @accountingSubmit="accountingSubmit($event)"
+            @saveComments="saveComments($event)"
+          />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -417,7 +424,7 @@
         </v-card-title>
         <v-card-text class="font-18px">
           <v-row class="mt-6 ml-1" align="center">
-            <v-col cols="3">
+            <!-- <v-col cols="3">
               <span class="red--text">*</span>
               退件部門
             </v-col>
@@ -435,7 +442,7 @@
                 @change="checkRejectVal()"
               />
               <span class="red--text font-14px">{{ errMsg.dept }}</span>
-            </v-col>
+            </v-col> -->
           </v-row>
           <v-row class="mt-6 ml-1" align="center">
             <v-col cols="3">

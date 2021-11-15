@@ -161,7 +161,7 @@ export default {
           
           // 帶入受理編號
           this.formParam = {
-            acceptNum: item.acceptNum
+            fmNo: item.acceptNum
         };
         this.formKey++;
           // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄(Action)
@@ -464,7 +464,7 @@ export default {
             // memo: this.memo,
             // accounting: this.accounting,           
             // rejectReason:this.rejectReason,
-            // rejectDesc:this.rejectDesc,            
+            // rejectDesc:this.rejectDesc,accounting            
 
             const AuditAccountingReq = {
                 seq: this.selectItem.seq,

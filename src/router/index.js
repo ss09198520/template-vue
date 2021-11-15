@@ -434,6 +434,18 @@ export const constantRoutes = [
         name: 'TpesForm',
         component: () => import('@/pages/FormPage/FormPage.vue'),
         meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+      },
+      {
+        path: '/tpesForm/createForm',
+        name: 'CreateForm',
+        component: () => import('@/pages/FormPage/FormPage.vue'),
+        meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+      },
+      {
+        path: '/tpesForm/cancelForm_cust',
+        name: 'CancelForm',
+        component: () => import('@/pages/FormPage/FormPage.vue'),
+        meta: { title: 'TPES Form', icon: 'mdi-file-document' }
       }
     ]
   }

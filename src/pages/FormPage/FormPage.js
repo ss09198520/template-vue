@@ -17,6 +17,8 @@ export default {
     },
     data() {
         return {
+            empNo: null,
+            region: null,
             modeList: [
                 {name: "新增/修改", value: "edit"},
                 {name: "核算", value: "accounting"},
@@ -31,6 +33,7 @@ export default {
             formFileNo: null,       // 表單檔案編號
             editedFormFileNo: null, // 已編輯的表單檔案編號
             acceptNum: null,        // 受理編號
+            fmbhNo: null,           // 受理分號
             formType: null,         // 登記單代碼
             apitCod: null,          // 申請項目編號
             applyType: null,        // 案件進件類型
@@ -92,13 +95,18 @@ export default {
         getInitParam(){
             // 從網址取得參數
             let formParam = CommonService.getURLParamObject();
+            let page = CommonService.getURLPage();
+
             // 若無資料改從頁面參數取
             if(ValidateUtil.isEmpty(formParam)){
                 formParam = this.formParam;
             }
 
             if(!ValidateUtil.isEmpty(formParam)){
-                this.acceptNum = formParam.acceptNum;
+                this.empNo = formParam.empNo;
+                this.region = formParam.region;
+                this.acceptNum = formParam.fmNo;
+                this.fmbhNo = formParam.fmbhNo;
                 this.formType = formParam.formType;
                 this.apitCod = formParam.apitCod;
                 this.applyType = formParam.applyType;
@@ -122,6 +130,16 @@ export default {
                 this.cancelReason = formParam.cancelReason;
                 
                 this.formPageMode = ValidateUtil.isEmpty(formParam.formPageMode) ? this.formPageMode : formParam.formPageMode;
+            }
+
+            // 依頁面改變顯示模式
+            if(page == "createForm"){
+                this.formPageMode = "edit";
+                this.showModeSelect = false;
+            }
+            else if(page == "cancelForm_cust"){
+                this.formPageMode = "cancel";
+                this.showModeSelect = false;
             }
         },
         formInit(){
@@ -225,6 +243,7 @@ export default {
                         base64: attachment.base64,
                         hasEdit: false,
                         needSeal: attachment.needSeal,
+                        canOnlyView: attachment.canOnlyView,
                     });
                     this.attachmentNo++;
                 }

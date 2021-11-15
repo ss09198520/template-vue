@@ -81,8 +81,14 @@
             <v-expansion-panel-header class="panel-header mb-3">
               <v-col cols="12">
                 <h2 v-if="formPageMode == 'edit'">新增/刪除 證件</h2>
+                <h2 v-else-if="certificateList == null || certificateList.length == 0">
+                  證件 (無資料)
+                </h2>
+                <h2 v-else-if="formPageMode == 'cancel'">
+                  證件 <span class="cancel-text">(若確定取消將在兩年後刪除)</span>
+                </h2>
                 <h2 v-else>
-                  證件 <span v-if="formPageMode == 'cancel'" class="cancel-text">(若確定取消將在兩年後刪除)</span>
+                  證件
                 </h2>
               </v-col>
             </v-expansion-panel-header>
@@ -177,8 +183,14 @@
             <v-expansion-panel-header class="panel-header mb-3">
               <v-col cols="12">
                 <h2 v-if="formPageMode == 'edit'">新增/刪除 附件</h2>
+                <h2 v-else-if="attachmentList == null || attachmentList.length == 0">
+                  附件 (無資料)
+                </h2>
+                <h2 v-else-if="formPageMode == 'cancel'">
+                  附件 <span class="cancel-text">(若確定取消將在兩年後刪除)</span>
+                </h2>
                 <h2 v-else>
-                  附件 <span v-if="formPageMode == 'cancel'" class="cancel-text">(若確定取消將在兩年後刪除)</span>
+                  附件
                 </h2>
               </v-col>
             </v-expansion-panel-header>
@@ -194,7 +206,7 @@
                     <v-row>
                       <v-col>
                         <div class="img-area d-center">
-                          <img v-if="attachment.imgSrc" style="width: 100%; max-height: 100%" :src="attachment.imgSrc">
+                          <img v-if="attachment.imgSrc" style="max-width: 100%; max-height: 100%" :src="attachment.imgSrc">
                           <div v-else-if="attachment.originalFileName" class="t-center">
                             <v-icon x-large class="mb-2">
                               mdi-file-document-outline
@@ -225,7 +237,13 @@
                         />
                       </v-col>
                     </v-row>
-                    <v-row v-if="formPageMode == 'edit'">
+                    <input
+                      ref="uploaders"
+                      class="d-none"
+                      type="file"
+                      @change="onFileChanged"
+                    >
+                    <v-row v-if="formPageMode == 'edit' && !attachment.canOnlyView">
                       <v-col cols="6" class="t-center">
                         <v-btn depressed color="error" @click="deleteAttachment(index)">
                           刪除
@@ -247,15 +265,9 @@
                             mdi-cloud-upload
                           </v-icon>
                         </v-btn>
-                        <input
-                          ref="uploaders"
-                          class="d-none"
-                          type="file"
-                          @change="onFileChanged"
-                        >
                       </v-col>
                     </v-row>
-                    <v-row v-else-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload'">
+                    <v-row v-else-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || attachment.canOnlyView">
                       <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="viewImage(attachment)">
                           檢視

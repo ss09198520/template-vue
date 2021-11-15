@@ -1,12 +1,12 @@
 <template>
-  <program-edit-view :is-edit="true" />
+  <program-view :is-edit="true" />
 </template>
 
 <script>
-import ProgramEditView from './components/ProgramEditView'
+import ProgramView from './components/ProgramEditView'
 
 export default {
   name: 'ProgramEditView',
-  components: { ProgramEditView }
+  components: { ProgramView }
 }
 </script>

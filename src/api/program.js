@@ -23,10 +23,11 @@ export function fetchProgramList(data) {
   })
 }
 
-export function fetchProgram(id) {
+export function fetchProgram(data) {
   return request({
-    url: `/program/v1/fetch/${id}`,
+    url: '/program/v1/fetch',
     method: 'post',
+    data
   })
 }
 

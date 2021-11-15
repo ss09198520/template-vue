@@ -1,6 +1,7 @@
 <template>
   <v-container>
     <h2 class="font-bold">節 目 單 製 作</h2>
+    
     <v-row class="d-flex justify-center">
       <v-col
         class="ml-10"
@@ -11,7 +12,9 @@
           outlined
           title="節 目 單 製 作"
         >
-          <v-form ref="programForm" v-model="valid" lazy-validation>
+          <not-found v-if="isNotFound" />
+
+          <v-form v-else ref="programForm" v-model="valid" lazy-validation>
             <v-row
               :dense="dense"
               :no-gutters="noGutters"
@@ -435,12 +438,13 @@
   import Sortable from 'sortablejs'
   import ValidateUtil from "@/assets/services/validateUtil";
   import MessageService from '@/assets/services/message.service'
-  import { initProgram } from '@/api/program'
+  import { fetchProgram, initProgram } from '@/api/program'
   import { listMediaFile } from '@/api/mediaFile'
   import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
-  
-  const defaultForm = {
+  import NotFound from './NotFound.vue'
+
+const defaultForm = {
     programName: null,
     memo: null,
     programType: null,
@@ -479,6 +483,7 @@
         }
       }
     },
+    components: { NotFound },
     props: {
       isEdit: {
         type: Boolean,
@@ -493,6 +498,7 @@
         },
         isShow: false,
         isShowSelected: false,
+        isNotFound: false,
         valid: false,
         dialog: false,
         isDraft: false,
@@ -538,107 +544,6 @@
           { text: '', value: 'delete', align: 'right', width: '2%',},
           
         ],
-        itemsCRUD: [
-          {
-            name: '電廠維護公告圖',
-            id: 1,
-          },
-          {
-            name: '秋季節約用電宣導',
-            id: 2,
-            scp_id: '預設',
-          },
-          {
-            name: 'New! 9月11日颱風緊急通報',
-            id: 3,
-          },
-        ],
-        // resources: [
-        //   {
-        //     "id": 1,
-        //     "url": "image/bg1.jpg",
-        //     "thumbnail": "image/bg1_tn.jpg",
-        //     "name": "bg1.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 2,
-        //     "url": "image/bg2.png",
-        //     "thumbnail": "image/bg2_tn.jpg",
-        //     "name": "bg2.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 3,
-        //     "url": "image/p1.jpg",
-        //     "thumbnail": "image/p1_tn.jpg",
-        //     "name": "p1.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 4,
-        //     "url": "image/p2.jpg",
-        //     "thumbnail": "image/p2_tn.jpg",
-        //     "name": "p2.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 5,
-        //     "url": "image/p3.jpg",
-        //     "thumbnail": "image/p3_tn.jpg",
-        //     "name": "p3.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 6,
-        //     "url": "image/p4.jpg",
-        //     "thumbnail": "image/p4_tn.jpg",
-        //     "name": "p4.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 7,
-        //     "url": "image/p5.jpg",
-        //     "thumbnail": "image/p5_tn.jpg",
-        //     "name": "p5.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 8,
-        //     "url": "image/p6.jpg",
-        //     "thumbnail": "image/p6_tn.jpg",
-        //     "name": "p6.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 9,
-        //     "url": "image/p7.jpg",
-        //     "thumbnail": "image/p7_tn.jpg",
-        //     "name": "p7.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 10,
-        //     "url": "image/p8.jpg",
-        //     "thumbnail": "image/p8_tn.jpg",
-        //     "name": "p8.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 11,
-        //     "url": "image/p9.jpg",
-        //     "thumbnail": "image/p9_tn.jpg",
-        //     "name": "p9.jpg",
-        //     "type": "image"
-        //   },
-        //   {
-        //     "id": 12,
-        //     "url": "image/p10.jpg",
-        //     "thumbnail": "image/p10_tn.jpg",
-        //     "name": "p10.jpg",
-        //     "type": "image"
-        //   }
-        // ],
         dense: false,
         noGutters: false,
         hideDatails: false,
@@ -688,7 +593,8 @@
       this.init()
       if (this.isEdit) {
         const id = this.$route.params && this.$route.params.id
-        this.fetchQuestionnaire(id)
+        this.postQueryProgramForm.programId = id 
+        this.fetchProgram(this.postQueryProgramForm)
       }
     },
     methods: {
@@ -702,7 +608,7 @@
           // assign file 
           this.signAttachmentFile = Object.assign({} , defaultFile)
           this.signAttachmentFile.category = "MEDIA_ATTACHMENT"
-          this.signAttachmentFile.fileName = this.attachmentFile.name
+          this.signAttachmentFile.fileName = this.attachmentFile.name.substr(0,this.attachmentFile.name.lastIndexOf("."))
           this.signAttachmentFile.originalFileName = this.attachmentFile.name
           this.signAttachmentFile.fileExt = this.getFileExtension(this.attachmentFile.name)
           this.signAttachmentFile.fileSize = this.attachmentFile.size
@@ -711,7 +617,6 @@
       },
       checkDate() {
         let hasCheck = true;
-        console.log('start checkbox')
         // 1-1 輪播起迄日都有選擇
         if (!isEmpty(this.postForm.releaseStartDate) && !isEmpty(this.postForm.releaseEndDate)) {
           console.log('start date' , this.postForm.releaseStartDate)
@@ -756,7 +661,6 @@
       showSelectPannel() {
         //將查詢結果與選取結果整理
         this.mediaFiles.forEach(item => item.selected = this.selectedFiles.some(selected => selected.id == item.id) ? true : false );
-        
         this.dialog = true
       },
       // 排序欄位內刪除
@@ -770,9 +674,7 @@
         this.isShowSelected = true
         
         for (const item of this.mediaFiles) {
-          
           if (item.selected && !this.selectedFiles.some(selected => selected.id == item.id)) {
-            // this.selectedFiles.indexOf(item) === -1
             this.selectedFiles.push(item)
           } else if (!item.selected && this.selectedFiles.some(selected => selected.id == item.id)) {
             const index = this.selectedFiles.indexOf(item)
@@ -801,7 +703,6 @@
 
       // Button Function 送出節目單製作儲存
       submit(isSign) {
-
         this.postForm.programMaterials = this.selectedFiles.reduce((items, mediaFile) => {
           // new {materialId , mediaFileName}
           items.push(Object.assign({
@@ -839,6 +740,8 @@
       },
       reset() {
         this.$refs.programForm.reset()
+        this.selectedFiles = Object.assign([])
+        this.mediaFiles = Object.assign([])
       },
       selected(e) {
         let dom = e.currentTarget.id;
@@ -892,14 +795,43 @@
         const data = await initProgram(postData)
         // 驗證是否成功
         if (!data.restData.success) {              
-            MessageService.showError(data.restData.message,'儲存節目單資料');
+            MessageService.showError(data.restData.message,'儲存節目單資料')
             return;
         }
 
         MessageService.showSuccess('新增節目單資料')
         this.reset() //重置表單
       },
+      //Action:編輯素材查詢
+      async fetchProgram(postData) {
+        this.isNotFound = true
+        
+        const data = await fetchProgram(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢編輯素材資料');
+            return;
+        }
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.programs)){
+          
+          this.isNotFound = false
+          let tmpData = data.restData.programs[0] //僅會有一筆
+          Object.keys(this.postForm).filter(key => key in tmpData).forEach(key => this.postForm[key] = tmpData[key])
+          
+          //處理已選擇素材資訊轉換
+          this.selectedFiles = tmpData.programMaterials.reduce((items, mediaFile) => {
+            // new {materialId , mediaFileName}
+            items.push(Object.assign(mediaFile))
+            return items
+          }, [])
 
+          this.signAttachmentFile = data.restData.signAttachment
+          
+          console.log(this.signAttachmentFile)
+          this.isShowSelected = true
+        }
+      },
       //Action:素材查詢
       async fetchMediaFileList(fetchMediaFilePostData) {
         this.isShow = false
@@ -926,7 +858,6 @@
           this.mediaFiles = tmpData
           this.isShow = true
         }
-        
       },
     }
   }

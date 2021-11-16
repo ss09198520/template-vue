@@ -6,16 +6,21 @@
         class="ml-10 font-18px"
         cols="12"
       >
-        <v-form class="font-weight-bold">
+        <v-form 
+          ref="form"
+          v-model="valid"
+          class="font-weight-bold"
+        >
           <v-row
             class="d-flex justify-start"
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              跑 馬 燈 內 容
+              跑馬燈內容
             </v-col>
-            <v-col cols="3" class="mt-5">
+            <v-col cols="4" class="mt-5">
               <v-text-field
+                v-model="marqueeName"
                 class="font-weight-bold"
                 color="accent"
                 dense
@@ -25,12 +30,13 @@
                 persistent-hint
               />
             </v-col>
-            <v-col cols="1" />
+            
             <v-col cols="1" class="ml-2">
-              跑 馬 燈 類 型
+              跑馬燈類型
             </v-col>
-            <v-col cols="3" class="ml-2">
+            <v-col cols="4" class="ml-2">
               <v-select
+                v-model="marqueeType"
                 :items="['一般','預設']"
                 class="font-bold"
                 color="accent"
@@ -47,10 +53,11 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              簽 核 狀 態
+              簽核狀態
             </v-col>
-            <v-col cols="3">
+            <v-col cols="4">
               <v-select
+                v-model="status"
                 :items="signStatusOption"
                 class="font-bold"
                 color="accent"
@@ -61,12 +68,12 @@
                 hide-details
               />
             </v-col>
-            <v-col cols="1" />
             <v-col cols="1" class="ml-2">
               上架狀態
             </v-col>
-            <v-col cols="3" class="ml-2">
+            <v-col cols="4" class="ml-2">
               <v-select
+                v-model="signStatus"
                 :items="statusOption"
                 class="font-bold"
                 color="accent"
@@ -83,14 +90,14 @@
             align="center"
           >
             <v-col cols="1" class="ml-2">
-              上 架 時 間
+              上架日期
             </v-col>
             <v-col 
-              cols="3"   
+              cols="4"   
               class="d-flex"
             >
               <v-menu
-                v-model="releaseDateStartMenu"
+                v-model="releaseStartDateFromMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y              
@@ -98,9 +105,9 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="releaseDateStart"
+                    v-model="releaseStartDateFrom"
                     append-icon="mdi-calendar"
-                    placeholder="上架時間(起)"
+                    placeholder="上架日期(起)"
                     color="accent"
                     outlined
                     dense
@@ -111,13 +118,13 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="releaseDateStart"
+                  v-model="releaseStartDateFrom"
                   scrollable
                 />
               </v-menu>
               <div class="mt-2"> ~ </div>
               <v-menu
-                v-model="releaseDateEndMenu"
+                v-model="releaseStartDateToMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y              
@@ -125,9 +132,9 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="releaseDateEnd"
+                    v-model="releaseStartDateTo"
                     append-icon="mdi-calendar"
-                    placeholder="上架時間(迄)"
+                    placeholder="上架日期(迄)"
                     color="accent"
                     outlined
                     dense
@@ -138,21 +145,21 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="releaseDateEnd"
+                  v-model="releaseStartDateTo"
                   scrollable
                 />
               </v-menu>
             </v-col>
-            <v-col cols="1" />
+            
             <v-col cols="1" class="ml-2">
-              下 架 時 間
+              下架日期
             </v-col>
             <v-col 
-              cols="3"
+              cols="4"
               class="d-flex ml-2"
             >
               <v-menu
-                v-model="sunsetDateStartMenu"
+                v-model="releaseEndDateFromMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y              
@@ -160,9 +167,9 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="sunsetDateStart"
+                    v-model="releaseEndDateFrom"
                     append-icon="mdi-calendar"
-                    label="下架時間(起)"
+                    label="下架日期(起)"
                     color="accent"
                     outlined
                     dense
@@ -173,13 +180,13 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="sunsetDateStart"
+                  v-model="releaseEndDateFrom"
                   scrollable
                 />
               </v-menu>
               <div class="mt-2"> ~ </div>
               <v-menu
-                v-model="sunsetDateEndMenu"
+                v-model="releaseEndDateToMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y              
@@ -187,9 +194,9 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="sunsetDateEnd"
+                    v-model="releaseEndDateTo"
                     append-icon="mdi-calendar"
-                    label="下架時間(迄)"
+                    label="下架日期(迄)"
                     color="accent"
                     outlined
                     dense
@@ -200,7 +207,7 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="sunsetDateEnd"
+                  v-model="releaseEndDateTo"
                   scrollable
                 />
               </v-menu>
@@ -235,7 +242,7 @@
             fab
             small
             color="primary"
-            @click="isShow = true"
+            @click="submitSearch"
             v-on="on"
           >
             <v-icon v-text="'mdi-magnify'" />
@@ -261,7 +268,7 @@
     </v-row>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">
-    <v-row v-show="isShow">
+    <v-row v-show="true">
       <v-col md="12">
         <v-data-table
           item-key="id"
@@ -291,19 +298,6 @@
             </v-dialog>
           </template>
           <template v-slot:[`item.action`]="{ item }">
-            <!-- <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-icon
-                  class="mr-2"
-                  color="red"
-                  @click="editItem(item)"
-                  v-on="on"
-                >
-                  mdi-pencil
-                </v-icon>
-              </template>
-              <span>編輯</span>
-            </v-tooltip> -->
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -369,7 +363,7 @@
               />
             </v-tooltip>
           </template>
-          <template v-slot:[`item.marquee_content`]="{ item }">
+          <template v-slot:[`item.marqueeContent`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-icon
@@ -379,7 +373,7 @@
                   mdi-file
                 </v-icon>
               </template>
-              <span>{{ item.marquee_content }}</span>
+              <span>{{ item.marqueeContent }}</span>
             </v-tooltip>
           </template>
           <template v-slot:[`item.active`]="{ item }">
@@ -406,27 +400,32 @@
 
 <script>
   import enums from '@/utils/enums'
-
+  import { fetchListMarquee } from "@/api/marquee";
+  import MessageService from "@/assets/services/message.service";
   export default {
     data() {
       return {
         isShow: false,
-        // menu: false,
-        // date: new Date().toISOString().substr(0, 10),
-        //分頁
-        releaseDateStartMenu: false,
-        releaseDateStart: '',
-        releaseDateEndMenu: false,
-        releaseDateEnd: '',
-        sunsetDateStartMenu: false,
-        sunsetDateStart: '',
-        sunsetDateEndMenu: false,
-        sunsetDateEnd: '',
+        marqueeName: null, 
+        marqueeType: null,
+        releaseStartDateFrom: null, 
+        releaseStartDateTo: null, 
+        releaseEndDateFrom: null, 
+        releaseEndDateTo: null,
+        status: null,
+        signStatus: "",
+        //日曆開關
+        releaseStartDateFromMenu: false,
+        releaseStartDateToMenu: false,
+        releaseEndDateFromMenu: false,
+        releaseEndDateToMenu: false,
         //分頁 end
         //日曆
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
+
+        valid: false,
 
         //上架下拉選單
         statusOption: enums.mediaStatusOption,
@@ -439,146 +438,73 @@
         headerCRUD: [
           {
             text: '跑馬燈名稱',
-            value: 'name',
-            width: '24%',
+            value: 'marqueeName',
+            width: '18%',
           },
           {
-            text: '跑馬燈內容',
-            value: 'marquee_content',
+            text: '內容',
+            value: 'marqueeContent',
             align: 'center',
+            width: '5%',
           },
           {
-            text: '跑馬燈類別',
-            value: 'scp_id',
-            align: 'center'
+            text: '類別',
+            value: 'marqueeType',
+            align: 'center',
+            width: '7%',
           },
           {
-            text: '上架人員名稱',
-            value: 'division',
+            text: '上架人員',
+            value: 'createAuthor',
             align: 'center',
           },
           {
             text: '狀態',
-            value: 'signoff',
+            value: 'signStatus',
             sortable: false,
             align: 'center',
           },
           {
             text: '上架日期',
-            value: 'ondate',
+            value: 'releaseStartDate',
             align: 'center',
           },
           {
             text: '下架日期',
-            value: 'offdate',
+            value: 'releaseEndDate',
             align: 'center',
           },
           {
             text: '上架',
-            value: 'active',
+            value: 'status',
             sortable: false,
-            width: '10%',
+            width: '6%',
             align: 'center',
           },
           {
             text: '退件資訊',
             value: 'returnInfo',
-            align: 'center'
+            align: 'center',
+            width: '7%',
           },
           {
             text: '操作',
             value: 'action',
             sortable: false,
             align: 'center',
+            width: '17%',
           },
         ],
         headerReturn:[
-          {text: '退件主管名稱',value: 'returnManagerName',align: 'center',},
-          {text: '退件日期',value: 'returnDate',align: 'center',},
-          {text: '退件原因',value: 'returnReason',align: 'center',},
+          {text: '退件主管名稱',value: 'rejectUser',align: 'center',},
+          {text: '退件日期',value: 'rejectDate',align: 'center',},
+          {text: '退件原因',value: 'rejectReason',align: 'center',},
         ],
-        itemsCRUD: [
-          {
-            name: '電廠維護公告',
-            id: 1,
-            scp_id: '一般',
-            marquee_content: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
-            division:'王大明',
-            active: true,
-            ondate: '2021-09-11',
-            offdate: '2021-10-30',
-            signoff: '審核完成'
-          },
-          {
-            name: '秋季節約用電宣導',
-            id: 2,
-            scp_id: '預設',
-            marquee_content: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
-            division:'李小凡',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '審核完成'
-          },
-          {
-            name: 'New! 9月11日颱風緊急通報',
-            id: 3,
-            scp_id: '一般',
-            marquee_content: '台灣電力公司跑馬燈輪播測試!!! :   今日北部地區即時電力 最大供電能力 4,044.6 萬瓩 供電充裕。!!!!',
-            division:'葉星辰',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '暫存'
-          },
-          {
-            name: '台電公司對受疫情影響農業及服務業之電費減免措施',
-            id: 4,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'趙元智',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '審核中'
-          },
-          {
-            name: '台電連4年獲亞洲企業社會責任獎',
-            id: 5,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/menu',
-            division:'陳立元',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '退件',
-            returnInfo: {
-              returnManagerName: '黃課長',
-              returnDate: '上架',
-              returnReason: '文字錯誤',
-            },
-          },
-          {
-            name: '台電首度攜手紙風車劇團，到彰化員林打造露天舞台劇',
-            id: 6,
-            scp_id: '一般',
-            marquee_content: '/content/dam/fetnet/user_resource/cbu/contents/ad/material/202012/08/footer',
-            division:'陳立元',
-            active: false,
-            ondate: '2020-12-21',
-            offdate: '2021-04-30',
-            signoff: '退件',
-            returnInfo: {
-              returnManagerName: '陳組長',
-              returnDate: '上架',
-              returnReason: '名稱錯誤',
-            },
-          },
-        ],
+        itemsCRUD: [],
         defaultItem: {
           name: '',
           scp_id: '',
-          marquee_content: '',
+          marqueeContent: '',
           division:'',
           ondate: 0,
           pages: 0,
@@ -590,7 +516,7 @@
         editedItem: {
           name: '',
           scp_id: '',
-          marquee_content: '',
+          marqueeContent: '',
           division:'',
           ondate: 0,
           pages: 0,
@@ -615,7 +541,7 @@
       editItem(item) {
         this.editedIndex = this.itemsCRUD.indexOf(item)
         this.editedItem = Object.assign({}, item)
-        this.$router.push({path:`${this.$route.matched[0].path}/create`})
+        this.$router.push({path:`${this.$route.matched[0].path}/createMarquee?id=${item.marqueeId}`})
       },
       viewSchedule() {
         this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
@@ -627,6 +553,49 @@
       remove() {
         this.itemsCRUD.splice(this.editedIndex, 1)
         this.close()
+      },
+
+         // 送出問卷查詢
+      submitSearch() {
+        //console.log(this.postForm)
+        
+        //API post data
+        fetchListMarquee({
+          marqueeName: this.marqueeName, 
+          releaseStartDateFrom: this.releaseStartDateFrom, 
+          releaseStartDateTo: this.releaseStartDateTo, 
+          releaseEndDateFrom: this.releaseEndDateFrom, 
+          releaseEndDateTo: this.releaseEndDateTo, 
+          status: this.status
+        }).then(res => {
+          this.itemsCRUD = [],
+          this.isShow = !this.isShow
+          if((res.restData.marquee).length > 1){
+                      let arrayObj = res.restData.marquee     //處理退件資訊轉換
+                      arrayObj.forEach(item => {
+                        if(item.signStatus==='REJECT'){
+                          Object.assign(item, {returnInfo: {
+                            rejectUser: item.rejectUser,
+                            rejectDate: item.rejectDate,
+                            rejectReason: item.rejectReason,
+                          }});
+                        }
+                      });
+
+                    this.itemsCRUD = Object.assign([],arrayObj)
+          }else {
+             this.itemsCRUD = [],
+             MessageService.showSuccess("查無資料");
+          }
+          console.log(this.itemsCRUD)
+
+        })
+         .catch(error => {
+            //MessageService.showError(error.rtnMsg);
+            this.isSubmited = false;
+            console.error(error);
+          });
+
       },
     }
   }

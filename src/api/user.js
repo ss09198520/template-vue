@@ -2,18 +2,17 @@ import request from '@/utils/request'
 
 export const authUser = param => request.post('/api/authenticate', param)
 
-export function fetchList(query) {
+  
+  export function login(data) {
     return request({
-      url: '/api/article/list',
-      method: 'get',
-      params: query
+      url: `/login?username=${data.username}&password=${data.password}`,
+      method: 'post',
     })
   }
-  
-  export function fetchArticle(id) {
+
+  export function logout() {
     return request({
-      url: '/vue-element-admin/article/detail',
-      method: 'get',
-      params: { id }
+      url: '/logout',
+      method: 'post'
     })
   }

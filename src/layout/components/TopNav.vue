@@ -94,9 +94,9 @@
                 </v-list-item-avatar>
 
                 <v-list-item-content>
-                  <v-list-item-title>{{ userName }}</v-list-item-title>
+                  <v-list-item-title>{{ empName }} </v-list-item-title>
                   <v-list-item-subtitle class="grey--text">
-                    Founder of Vuetify.js
+                    ({{ empNo }})
                   </v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
@@ -232,12 +232,12 @@ import AjaxService from '@/assets/services/ajax.service';
     data() {
       return {
         title: null,
+        showPassword: false,
         responsive: false,
         menuValue: false,
         menuValue2: false,
         menuValue3: false,
         // TODO: 測試用，之後應會刪除
-        isLogin: false,
         loginDialog: false,
         account: '',
         password: '',
@@ -370,6 +370,9 @@ import AjaxService from '@/assets/services/ajax.service';
     computed: {
       ...mapGetters([
         'miniSidebar',
+        'empName',
+        'empNo',
+        'isLogin'
       ]),
       getTitle() {
         let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
@@ -411,19 +414,22 @@ import AjaxService from '@/assets/services/ajax.service';
         AjaxService.post(loginUrl, {}, (response) => {
           console.log(response);
           if(response.restData.code == 200){
-            this.loginDialog = false;
-            this.isLogin = true;
             this.userName = response.restData.empName;
+            console.log(response)
           }
         });
       },
-      logout(){
-        AjaxService.post("/logout", {}, (response) => {
-          console.log(response);
-          if(response.restData.code == 200){
-            this.isLogin = false;
-          }
-        });
+      // logout1(){
+      //   AjaxService.post("/logout", {}, (response) => {
+      //     console.log(response);
+      //     if(response.restData.code == 200){
+      //       this.$store.dispatch('user/toggleIsLogin' , false) //切換為登入
+      //     }
+      //   });
+      // },
+      async logout() {
+        await this.$store.dispatch('user/logout') //請看src/store/modules/user.js 內 logout
+        this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       }
     },
   }

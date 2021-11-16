@@ -18,6 +18,7 @@
             :return-object="true"
             item-text="divisionName"
             placeholder="請選擇單位"
+            :clearable="(divOption.length === 1? false : true)"
             @change="chooseDivision()"
           />
         </v-col>
@@ -37,6 +38,7 @@
             item-text="groupName"
             dense
             placeholder="請選擇組別"
+            :clearable="(groupOption.length === 1? false : true)"
             @change="chooseGroup()"
           />
         </v-col>
@@ -57,7 +59,7 @@
             hide-details
             dense
             placeholder="請選擇課別"
-            @change="chooseSection()"
+            :clearable="(sectionOption.length === 1? false : true)"
           />
         </v-col>
         <v-col cols="1" />
@@ -69,10 +71,12 @@
           <v-select  
             v-model="role"
             :items="roleOption" 
+            :return-object="true"
             color="#ADADAD"
             outlined
             hide-details
             item-text="setRoleName"
+            :clearable="true"
             dense
             placeholder="請選擇角色"
           />
@@ -93,7 +97,7 @@
                 fab
                 small
                 color="primary"
-                @click="searchRoleSetting()"
+                @click="queryEmpRoleInfo()"
                 v-on="on"
               >
                 <v-icon v-text="'mdi-magnify'" />
@@ -136,7 +140,9 @@
           <template v-slot:item.role="{ item }">
             <!--隱藏被選擇的欄位 -->
             <div v-if="!item.edit" class="d-flex">
-              <div style="width:250px; margin: auto; text-overflow: ellipsis; overflow: hidden; white-space:nowrap;">{{ item.role }}</div>              
+              <div style="width:250px; margin: auto; text-overflow: ellipsis; overflow: hidden; white-space:nowrap;">
+                <div v-for="(role,index) in item.roleList" :key="index">{{ role.roleName }}</div>
+              </div>              
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -160,7 +166,7 @@
                 style="width:min-content; margin:auto;"
                 multiple
                 :items="roleOption"
-                item-text="text"
+                item-text="setRoleName"
                 item-value="value"
                 return-object        
               >

@@ -323,7 +323,7 @@ export const constantRoutes = [
       },
       {
         path: 'queryList',
-        name: 'Marquee-List',
+        name: 'Marquee-Query-List',
         component: () => import('@/views/marquee/queryList'),
         meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },

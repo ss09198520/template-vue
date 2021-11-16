@@ -95,7 +95,7 @@
     methods: {
       handleLogin() {
         if (this.$refs.loginFormRef.validate()) {
-          this.$store.dispatch('user/login', this.loginForm) //請看src/store/modules/user.js 內 login
+          this.$store.dispatch('user/login', this.loginForm) // 請看src/store/modules/user.js 內 login
             .then(() => {
               console.log('login success redirect to',this.redirect)
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })

@@ -117,14 +117,16 @@ const actions = {
   },
 
   // remove token
-  // resetToken({ commit }) {
-  //   return new Promise(resolve => {
-  //     commit('SET_TOKEN', '')
-  //     commit('SET_ROLES', [])
-  //     removeToken()
-  //     resolve()
-  //   })
-  // },
+  resetToken({ commit }) {
+    return new Promise(resolve => {
+      commit('SET_TOKEN', '')
+      commit('SET_ROLES', [])
+      commit('SET_LOGIN', false)
+      removeToken()
+      resetRouter()
+      resolve()
+    })
+  },
 
 //   // dynamically modify permissions
 //   async changeRoles({ commit, dispatch }, role) {

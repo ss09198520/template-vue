@@ -86,12 +86,7 @@
           <template v-if="isLogin">
             <v-list dense>
               <v-list-item>
-                <v-list-item-avatar>
-                  <img
-                    src="https://cdn.vuetifyjs.com/images/john.jpg"
-                    alt="林珍妮"
-                  >
-                </v-list-item-avatar>
+                <v-list-item-avatar />
 
                 <v-list-item-content>
                   <v-list-item-title>{{ empName }} </v-list-item-title>
@@ -104,36 +99,10 @@
 
             <v-divider />
 
-            <v-list dense>
-              <v-list-item
-                v-for="(item, i) in accountInfos"
-                :key="i"
-                link
-                dense
-                ripple
-              >
-                <v-list-item-icon>
-                  <v-icon v-text="item.icon" />
-                </v-list-item-icon>
-                <v-list-item-title v-text="item.text" />
 
-                <v-badge
-                  v-if="item.notification.num"
-                  :color="item.notification.level"
-                  left
-                >
-                  <template slot="badge">
-                    {{ item.notification.num }}
-                  </template>
-                </v-badge>
-              </v-list-item>
-            </v-list>
-            <v-divider />
-
-            <v-list dense>
+            <v-list>
               <v-list-item
                 link
-                dense
                 ripple
                 @click="logout()"
               >

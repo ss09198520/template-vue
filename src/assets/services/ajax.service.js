@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '@/store'
 import MessageService from '@/assets/services/message.service.js';
 import EventBus from '@/assets/services/eventBus.js';
 import LoadingConfig from '@/assets/constant/loadingConfig.js';
@@ -36,16 +37,32 @@ const AjaxService = {
         },
         params : urlParam
       }).then((response) => {
-          
-          // 1.2 回傳正確資訊
-          callBack(response.data);
-  
+
+          const res = response.data
+
+          // 1.1 回傳資訊判斷是否已登入 (add by john zeng)
+          // 無登入權限, 400 導頁,
+          if (res.restData.code === '400' || res.restData.code === 50012 || res.restData.code === 50014) {
+            MessageService.showInfo(res.restData.message , '尚未登入')
+            // 清除登入資訊, 導至登入頁
+            store.dispatch('user/resetToken').then(() => {
+              location.reload()
+            })
+          } else {
+            // 1.2 回傳正確資訊
+            callBack(res);
+          }
+
         }).catch((error) => {
   
           // 無登入權限, 401 導頁,
           if(error != undefined && error.response != undefined && error.response.status == 401){
             // 清除登入資訊, 導至登入頁
             EventBus.publish('unauthorizedLogout');
+            // 清除登入資訊, 導至登入頁 add by john zeng 
+            store.dispatch('user/resetToken').then(() => {
+              location.reload()
+            })
           }
   
           // 1 呼叫後端失敗

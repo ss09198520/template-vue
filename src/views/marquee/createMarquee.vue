@@ -45,7 +45,7 @@
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col cols="2" md="2"> 上架日期 
-               <span class="red--text ml-2">*</span>
+              <span class="red--text ml-2">*</span>
             </v-col>
             <v-col cols="6" class="d-flex">
               <v-menu

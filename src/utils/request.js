@@ -1,4 +1,5 @@
 import axios from 'axios'
+import store from '@/store'
 import MessageService from '@/assets/services/message.service.js';
 import EventBus from '@/assets/services/eventBus.js';
 import LoadingConfig from '@/assets/constant/loadingConfig.js';
@@ -8,7 +9,7 @@ const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   headers: { 'Content-Type': 'application/json' }, //body content type
   // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 5000 // request timeout
+  timeout: 50000 // request timeout
 })
 
 // request interceptor
@@ -62,7 +63,6 @@ service.interceptors.response.use(
    */
   response => {
 
-
     LoadingConfig.blockCount--;
     if(LoadingConfig.blockCount <= 0){
     // 3 關掉loading 小圈圈
@@ -74,26 +74,26 @@ service.interceptors.response.use(
     }
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
-
+    
     if (res.rtnCode !== '00000') {
       MessageService.showSystemError()
-
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      // if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      // if (res.code === '400' || res.code === 50012 || res.code === 50014) {
       //   // to re-login
-      //   MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-      //     confirmButtonText: 'Re-Login',
-      //     cancelButtonText: 'Cancel',
-      //     type: 'warning'
-      //   }).then(() => {
-      //     store.dispatch('user/resetToken').then(() => {
-      //       location.reload()
-      //     })
+      //   console.log('re login')
+      //   store.dispatch('user/resetToken').then(() => {
+      //     location.reload()
       //   })
       // }
       return Promise.reject(new Error(res.rtnMsg || 'Error'))
-      
     } else {
+      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
+      if (res.restData.code === '400' || res.restData.code === 50012 || res.restData.code === 50014) {
+        // to re-login
+        store.dispatch('user/resetToken').then(() => {
+          location.reload()
+        })
+      }
       return res
     }
   },

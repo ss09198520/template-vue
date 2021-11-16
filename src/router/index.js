@@ -203,9 +203,9 @@ export const constantRoutes = [
     meta: { title: '報表區', icon: 'mdi-text-box' },
     children: [
       {
-        path: 'returnReport',
-        name: 'ReturnReport',
-        component: () => import('@/pages/report/returnReportPage.vue'),
+        path: 'rejectReport',
+        name: 'RejectReport',
+        component: () => import('@/pages/report/rejectReportPage.vue'),
         meta: { title: '退件報表', icon: 'mdi-alert' }
       },
       {

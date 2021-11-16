@@ -75,14 +75,8 @@
                     <v-icon v-text="'mdi-magnify'" />
                   </v-btn>
                 </template>
-                <span>{{ searchText }}</span>
+                <span>&nbsp;查詢&nbsp;</span>
               </v-tooltip>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="11" /> 
-            <v-col>
-              <!-- <v-btn color="primary" class="ml-3" @click="search()">{{ searchText }}</v-btn> -->
             </v-col>
           </v-row>
         </div>
@@ -92,7 +86,7 @@
         <v-col cols="12">    
           <v-data-table
             :headers="headers"
-            :items="returnList"
+            :items="itemList"
             :page.sync="dataListPage"
             :items-per-page="10"
             hide-default-footer
@@ -101,9 +95,8 @@
             disable-sort
             @page-count="dataListPageCount = $event"
           >
-            <template v-slot:item.signOff="{ item }">
-              <!-- <v-btn v-if="item.signOff" color="success">{{ signOffText }}</v-btn> -->
-              <v-tooltip v-if="item.signOff" top>
+            <template v-slot:item.salesPlannerSignDate="{ item }">
+              <v-tooltip v-if="item.needSalesPlannerSign" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -111,36 +104,18 @@
                     small
                     color="success"
                     v-on="on"
+                    @click="signOff(item.fileNo, 'AUTH01')"
                   >
                     <v-icon v-text="'mdi-account-check-outline'" />
                   </v-btn>
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else style="color: gray;">已簽核</span>
-            </template>
-
-            <template v-slot:item.salesPlannerSignDate="{ item }">              
-              <v-tooltip v-if="!item.salesPlannerSignDate" top>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    class="ma-2"
-                    fab
-                    small
-                    color="success"
-                    v-on="on"
-                  >
-                    <v-icon v-text="'mdi-account-check-outline'" />
-                  </v-btn>
-                </template>
-                <span>簽核</span>
-              </v-tooltip>
-              <span v-else>{{ item.salesPlannerSignDate }}</span>
-            </template>
-            
+              <span v-else-if="item.salesPlannerSignDate" style="color: gray;">{{ salesPlannerSignDate }}</span>
+              <span v-else>未簽核</span>
+            </template>           
             <template v-slot:item.leaderSignDate="{ item }">
-              <span v-if="!item.leaderSignDate && !item.salesPlannerSignDate" style="color: gray;">未簽核</span>
-              <v-tooltip v-else-if="!item.leaderSignDate" top>
+              <v-tooltip v-if="item.needLeaderSign" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
                     class="ma-2"
@@ -148,24 +123,26 @@
                     small
                     color="success"
                     v-on="on"
+                    @click="signOff(item.fileNo, 'AUTH07')"
                   >
                     <v-icon v-text="'mdi-account-check-outline'" />
                   </v-btn>
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else>{{ item.leaderSignDate }}</span>
+              <span v-else-if="item.leaderSignDate">{{ item.leaderSignDate }}</span>
+              <span v-else>未簽核</span>
             </template>    
             <template v-slot:item.download="{ item }">              
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
-                    v-if="item.download"
                     class="ma-2"
                     fab
                     small
                     color="primary"
                     v-on="on"
+                    @click="download(item.fileNo)"
                   >
                     <v-icon v-text="'mdi-file-download-outline'" />
                   </v-btn>

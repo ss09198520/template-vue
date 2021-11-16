@@ -1,5 +1,6 @@
 import AjaxService from "@/assets/services/ajax.service";
 import MessageService from "@/assets/services/message.service";
+import ValidateUtil from "@/assets/services/validateUtil";
 
   export default {
     data() {
@@ -16,10 +17,14 @@ import MessageService from "@/assets/services/message.service";
         openSelectBox: '',
         deptList:[],
         //區處                
-        division: '',
+        division: [
+            {division: null, divisionName: null},            
+        ],
         divOption: [],
         //組別
-        group: '',
+        group: [
+            {group: null, groupName: null},            
+        ],
         groupOption: [],
         taichungGroupOption: [
             { text: '業務組', value: '1'},
@@ -32,7 +37,9 @@ import MessageService from "@/assets/services/message.service";
             { text: '行銷組', value: '3'},        
         ],
         //課別
-        section: '', 
+        section: [
+            {section: null, sectionName: null},
+        ],
         sectionOption: [],
         taiSectionOption: [
             { text: '服務中心', value: '1' },
@@ -68,15 +75,17 @@ import MessageService from "@/assets/services/message.service";
             { text: '甲安服務所', value: '27'},
         ],
         //角色別
-        role: [],
+        role: [
+            {setRoleCode: null, setRoleName: null},            
+        ],
         roleOption: [],
         //員工清單項目名稱
         empListHeaders: [
             { text: '姓名代號', value: 'empNo', align: 'center' },
             { text: '姓名', value: 'empName', align: 'center' },
-            { text: '單位', value: 'empDivision', align: 'center' },
-            { text: '組別', value: 'empGroup', align: 'center' },
-            { text: '課別', value: 'empSection', align: 'center' },
+            { text: '單位', value: 'divisionName', align: 'center' },
+            { text: '組別', value: 'groupName', align: 'center' },
+            { text: '課別', value: 'sectionName', align: 'center' },
             { text: '資料來源', value: 'settingStyle', align: 'center' },
             { text: '備註', value: 'memo', align: 'center' },
             { text: '角色', value: 'role', align: 'center',width:'25' }
@@ -147,13 +156,6 @@ import MessageService from "@/assets/services/message.service";
         modroleTitle:[],
         //批次選擇的角色
         setrole: '',
-
-        search:{
-            division: null,
-            group: null,
-            section: null,
-            roleCode: null,
-        },
       }
     },
     beforeMount(){
@@ -161,14 +163,15 @@ import MessageService from "@/assets/services/message.service";
     },
     methods: {
         init(){
-            this.empList = this.empMockList;
             this.queryAuthSettingOption();
+            this.queryEmpRoleInfo()
         },
 
         //根據選擇的單位顯示可選取組別，再根據選擇的組別顯示可選取課別
         chooseDivision(){
+            this.division = this.divOption[0];
             for(let i in this.deptList){
-                if(this.search.division === this.deptList[i].divisionCode){
+                if(this.division.division === this.deptList[i].divisionCode){
                     for(let index in this.deptList[i].groupSectionList){
                         this.groupOption.push({
                             group: this.deptList[i].groupSectionList[index].groupCode,
@@ -181,7 +184,6 @@ import MessageService from "@/assets/services/message.service";
             // 若組別資料只有一筆則直接顯示
             if(this.groupOption.length == 1){
                 this.group = this.groupOption[0];
-                this.search.group = this.groupOption[0].group;
 
                 this.chooseGroup();
             }
@@ -189,11 +191,10 @@ import MessageService from "@/assets/services/message.service";
         },
 
         chooseGroup(){
-            this.search.group = this.group.group;
             for(let i in this.deptList){
-                if(this.search.division === this.deptList[i].divisionCode){
+                if(this.division.division === this.deptList[i].divisionCode){
                     for(let index in this.deptList[i].groupSectionList){
-                        if(this.search.group === this.deptList[i].groupSectionList[index].groupCode){
+                        if(this.group.group === this.deptList[i].groupSectionList[index].groupCode){
                             this.sectionOption = this.deptList[i].groupSectionList[index].sectionList;
                         }
                     }
@@ -203,18 +204,8 @@ import MessageService from "@/assets/services/message.service";
             // 若課別資料只有一筆則直接顯示
             if(this.sectionOption.length == 1){
                 this.section = this.sectionOption[0];
-                this.search.section = this.sectionOption[0].section;
             }
         },
-
-        chooseSection(){
-            this.search.section = this.section.section;
-        },
-
-
-
-        //     this.sectionOption
-        // },
       
         searchRoleSetting(){  
             this.empList = [];        
@@ -457,13 +448,11 @@ import MessageService from "@/assets/services/message.service";
 
            if(this.divOption.length == 1){
              this.division = this.divOption[0];
-             this.search.division = this.divOption[0].division;
-
              this.chooseDivision();
            }
-           
-
         },
+
+
 
         /**
          * Ajax Start
@@ -492,8 +481,15 @@ import MessageService from "@/assets/services/message.service";
 
         // Action:依條件查詢員工角色清單
         queryEmpRoleInfo(){
-            AjaxService.post('/roleAuth/queryEmpRoleInfo',{
-
+            console.log(this.division);
+            console.log(this.group);
+            console.log(this.section);
+            console.log(this.role);
+            AjaxService.post('/roleAuth/querySettingEmpAuth',{
+                division: this.division.division,
+                group: this.group.group,
+                section: (ValidateUtil.isEmpty(this.section)? null : this.section.sectionCode),
+                roleCode:(ValidateUtil.isEmpty(this.role)? null : this.role.setRoleCode),
             },
             (response) => {
                 // 驗證是否成功
@@ -501,7 +497,7 @@ import MessageService from "@/assets/services/message.service";
                     MessageService.showError(response.restData.returnMessage,'依條件查詢員工角色清單');
                     return;
                 }
-                this.empList = response.restData.empList;
+                this.empList = response.restData.empRoleList;
     
             },
             // eslint-disable-next-line no-unused-vars

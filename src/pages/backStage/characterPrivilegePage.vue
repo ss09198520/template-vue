@@ -93,7 +93,7 @@
                 fab
                 small
                 color="primary"
-                @click="search()"
+                @click="searchRoleSetting()"
                 v-on="on"
               >
                 <v-icon v-text="'mdi-magnify'" />

@@ -190,7 +190,6 @@ import MessageService from "@/assets/services/message.service";
 
         chooseGroup(){
             this.search.group = this.group.group;
-            debugger;
             for(let i in this.deptList){
                 if(this.search.division === this.deptList[i].divisionCode){
                     for(let index in this.deptList[i].groupSectionList){
@@ -217,7 +216,7 @@ import MessageService from "@/assets/services/message.service";
         //     this.sectionOption
         // },
       
-        search(){  
+        searchRoleSetting(){  
             this.empList = [];        
             if(this.division == '1'){                              
                 if(this.group == '1'){

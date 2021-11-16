@@ -79,7 +79,6 @@ export default {
             otherAttachment: '',
             isBlocking: false,
             blockingMsg: null,
-            isCompanyCancel: false,
             cancelReason: null,
         }
     },
@@ -126,7 +125,6 @@ export default {
                 this.isAddAttachment = formParam.isAddAttachment;
                 this.isAffidavit = formParam.isAffidavit;
                 this.uploadNo = formParam.uploadNo;
-                this.isCompanyCancel = formParam.isCompanyCancel;
                 this.cancelReason = formParam.cancelReason;
                 
                 this.formPageMode = ValidateUtil.isEmpty(formParam.formPageMode) ? this.formPageMode : formParam.formPageMode;
@@ -654,10 +652,9 @@ export default {
                 acceptNum: this.acceptNum,
                 cancelSignBase64: this.cancelSign.imgSrc.split(",")[1],
                 cancelReason: this.cancelReason,
-                isCompanyCancel: this.isCompanyCancel
             };
 
-            AjaxService.post("/tpesForm/cancel", vin, 
+            AjaxService.post("/tpesForm/custCancelForm", vin, 
             (response) => {
                 // 驗證是否成功
                 if (!response.restData.success) {              

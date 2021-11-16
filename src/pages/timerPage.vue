@@ -9,7 +9,9 @@
         <v-btn @click="importWordModalShow=true;wordConvertType='pdf';">CHOOSE FILE</v-btn>
       </v-row>
       <span class="marginLeft"><h4>used time: {{ wordToPdfTime }} s.</h4></span>
+
       <hr style="margin-top: 30px;margin-bottom: 30px;">
+
       <v-row>
         <h1>Excel to Pdf</h1>
       </v-row>
@@ -19,6 +21,7 @@
       </v-row>
       <span class="marginLeft"><h4>used time: {{ excelToPdfTime }} s.</h4></span>
       <hr style="margin-top: 30px;margin-bottom: 30px;">
+
       <v-row>
         <h1>Word to Image</h1>
       </v-row>
@@ -27,7 +30,9 @@
         <v-btn @click="importWordModalShow=true;wordConvertType='img';">CHOOSE FILE</v-btn>
       </v-row>
       <span class="marginLeft"><h4>used time: {{ wordToImgTime }} s.</h4></span>
+
       <hr style="margin-top: 30px;margin-bottom: 30px;">
+
       <v-row>
         <h1>Excel to Image</h1>
       </v-row>
@@ -36,7 +41,9 @@
         <v-btn @click="importExcelModalShow=true;excelConvertType='img';">CHOOSE FILE</v-btn>
       </v-row>
       <span class="marginLeft"><h4>used time: {{ excelToImgTime }} s.</h4></span>
+
       <hr style="margin-top: 30px;margin-bottom: 30px;">
+
       <v-row>
         <h1>Test PMC</h1>
       </v-row>
@@ -47,6 +54,176 @@
         <v-btn @click="dualScreenClone()">CLONE</v-btn>
       </v-row>
       <hr style="margin-top: 30px;margin-bottom: 30px;">
+
+      <v-row>
+        <h1>Test Wsdl - EmpWebService.getEmpInfoByEmp</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getEmpInfoByEmpReq.empNo"
+          label="empNo"
+          placeholder="empNo"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getEmpInfoByEmpReq.user"
+          label="user"
+          placeholder="user"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getEmpInfoByEmpReq.password"
+          label="password"
+          placeholder="password"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-btn @click="getEmpInfoByEmp()">submit</v-btn>
+        <span class="ml-2">URL: http://s02402040.taipower.com.tw/PIWS_00717/EmpService.asmx?WSDL</span>
+      </v-row>
+
+      <v-row>
+        <h1>Test Wsdl - EmpWebService.getDeptEmpList</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getDeptEmpListReq.division"
+          label="division"
+          placeholder="division"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getDeptEmpListReq.department"
+          label="department"
+          placeholder="department"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getDeptEmpListReq.user"
+          label="user"
+          placeholder="user"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getDeptEmpListReq.password"
+          label="password"
+          placeholder="password"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-btn @click="getDeptEmpList()">submit</v-btn>
+        <span class="ml-2">URL: http://s02402040.taipower.com.tw/PIWS_00717/EmpService.asmx?WSDL</span>
+      </v-row>
+
+      <v-row>
+        <h1>Test Wsdl - LTWebService1.getLEAInfo</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getLEAInfoReq.queryDiv"
+          label="queryDiv"
+          placeholder="queryDiv"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getLEAInfoReq.queryDep"
+          label="queryDep"
+          placeholder="queryDep"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getLEAInfoReq.querySec"
+          label="querySec"
+          placeholder="querySec"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getLEAInfoReq.queryBeginDate"
+          label="queryBeginDate"
+          placeholder="queryBeginDate (yyyyMMdd)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getLEAInfoReq.queryEndDate"
+          label="queryEndDate"
+          placeholder="queryEndDate (yyyyMMdd)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getLEAInfoReq.user"
+          label="user"
+          placeholder="user"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getLEAInfoReq.password"
+          label="password"
+          placeholder="password"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-btn @click="getLEAInfo()">submit</v-btn>
+        <span class="ml-2">URL: http://s02402040.taipower.com.tw/LTWS_007/LTWebService1.asmx?WSDL</span>
+      </v-row>
+
+      <v-row>
+        <h1>Test Wsdl - SSOWebService.getResult</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getResultReq.apUid"
+          label="AP_UID"
+          placeholder="AP_UID"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getResultReq.userId"
+          label="USER_ID"
+          placeholder="USER_ID"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getResultReq.timestamp"
+          label="TIMESTAMP"
+          placeholder="TIMESTAMP"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getResultReq.apX"
+          label="AP_X"
+          placeholder="AP_X"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="getResultReq.userX"
+          label="USER_X"
+          placeholder="USER_X"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-btn @click="getResult()">submit</v-btn>
+        <span class="ml-2">URL: http://10.16.9.126:8080/SSO_WEBSERVICE/services/SSOPWDCHECK_X2</span>
+      </v-row>
+
     </v-container>
     <v-dialog id="importWordModal" v-model="importWordModalShow" width="370">
       <v-card>
@@ -90,6 +267,20 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog id="showResponseModal" v-model="responseModalShow">
+      <v-card>
+        <v-card-title>Response</v-card-title>
+        <v-row class="ml-1">
+          <v-col>
+            <span>{{ responseStr }}</span>
+          </v-col>
+        </v-row>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn color="normal" @click="responseModalShow=false;">CLOSE</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
 
@@ -114,6 +305,35 @@ export default {
             importExcelModalShow: false,
             uploadWord: null,
             uploadExcel: null,
+            responseModalShow: false,
+            responseStr: "",
+            getEmpInfoByEmpReq: {
+              empNo: null,
+              user: null,
+              password: null
+            },
+            getDeptEmpListReq: {
+              division: null,
+              department: null,
+              user: null,
+              password: null
+            },
+            getLEAInfoReq: {
+              queryDiv: null,
+              queryDep: null,
+              querySec: null,
+              queryBeginDate: null,
+              queryEndDate: null,
+              user: null,
+              password: null
+            },
+            getResultReq: {
+              apUid: null,
+              userId: null,
+              timestamp: null,
+              apX: null,
+              userX: null
+            }
         }
     },
     methods: {
@@ -189,7 +409,59 @@ export default {
         },
         dualScreenClone() {
           PMCService.callDualScreenAdapterClone();
-        }
+        },
+        getEmpInfoByEmp(){
+          this.responseStr = "";
+
+          AjaxService.post("/test/getEmpInfoByEmp", this.getEmpInfoByEmpReq, 
+            (response) => {
+                this.responseStr = response.restData;
+                this.responseModalShow = true;
+            },
+            (error) => {
+                this.responseStr = error;
+                this.responseModalShow = true;
+            });
+        },
+        getDeptEmpList(){
+          this.responseStr = "";
+
+          AjaxService.post("/test/getDeptEmpList", this.getDeptEmpListReq, 
+            (response) => {
+                this.responseStr = response.restData;
+                this.responseModalShow = true;
+            },
+            (error) => {
+                this.responseStr = error;
+                this.responseModalShow = true;
+            });
+        },
+        getLEAInfo(){
+          this.responseStr = "";
+
+          AjaxService.post("/test/getLEAInfo", this.getLEAInfoReq, 
+            (response) => {
+                this.responseStr = response.restData;
+                this.responseModalShow = true;
+            },
+            (error) => {
+                this.responseStr = error;
+                this.responseModalShow = true;
+            });
+        },
+        getResult(){
+          this.responseStr = "";
+
+          AjaxService.post("/test/getResult", this.getResultReq, 
+            (response) => {
+                this.responseStr = response.restData;
+                this.responseModalShow = true;
+            },
+            (error) => {
+                this.responseStr = error;
+                this.responseModalShow = true;
+            });
+        },
     }
 }
 </script>

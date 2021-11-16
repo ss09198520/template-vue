@@ -207,7 +207,7 @@
                 class="ma-1" 
                 outlined 
                 color="accent" 
-                @click="reset"
+                @click="resetForm"
               >
                 取消
               </v-btn>
@@ -220,6 +220,7 @@
               >
                 暫存
               </v-btn>
+
               <v-btn
                 class="ma-1"
                 depressed
@@ -238,7 +239,7 @@
 </template>
 <script>
 import Quill from "@/components/Quill";
-import { fetchInitMarquee, fetchListMarquee } from "@/api/marquee";
+import { fetchInitMarquee } from "@/api/marquee";
 import ValidateUtil from "@/assets/services/validateUtil";
 import MessageService from "@/assets/services/message.service";
 export default {
@@ -258,7 +259,7 @@ export default {
       duration: 30,
       min: 0,
       max: 60,
-      marqueeName: "",
+      marqueeName: "123",
       marqueeHTML: `<p><span class="ql-size-small" style="color: rgb(0, 41, 102); background-color: rgb(204, 224, 245);">結廬在人境，而無車馬喧。</span></p><p><span class="ql-size-small" style="color: rgb(0, 41, 102); background-color: rgb(204, 224, 245);">問君何能爾？心遠地自偏。</span></p>`,
       marqueeText: "",
       marqueeDesc: "",
@@ -380,7 +381,7 @@ export default {
                 memo: this.marqueeDesc,
                 region: "區處",
                 releaseStartDate: this.startDate,
-                releaseEndDate: this.endDate
+                releaseEndDate: this.endDate,                
               })
             ],
             {
@@ -392,14 +393,34 @@ export default {
 
         fetchInitMarquee(formData)
           .then(res => {
-            console.log("登入成功", res);
-            MessageService.showSuccess(res.rtnMsg);
-            this.isSubmited = true;
+            if(res.restData.code == "00000"){
+              MessageService.showSuccess(res.rtnMsg);
+              this.isSubmited = true;
+              console.log("登入成功", res);               
+              this.resetForm();
+              console.log(this.isSubmited);
+              this.isSubmited = false;  
+            }else if (res.restData.code =='20001'){
+              MessageService.showError("儲存失敗",res.restData.message);
+             }          
           })
           .catch(error => {
+            //MessageService.showError(error.rtnMsg);
+            this.isSubmited = false;
             console.error(error);
           });
       }
+    },
+    resetForm(){
+      this.isSubmited = true;
+      this.marqueeName = "";     
+      this.marqueeHTML= "";
+      this.marqueeText = null;
+      this.duration = 30;
+      this.marqueeDesc = null;
+      this.startDate = null;
+      this.endDate = null;
+      this.attachedFiles =null;
     },
     validate() {
       this.$refs.form.validate()
@@ -429,6 +450,7 @@ export default {
         this.errMsg.editorData = "跑馬燈內容必填";
         hasCheck = false;
         this.valid = false;
+        this.isSubmited = false;
       } else {
         this.errMsg.editorData = null;
         hasCheck = true;

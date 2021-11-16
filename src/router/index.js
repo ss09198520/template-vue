@@ -322,6 +322,12 @@ export const constantRoutes = [
         meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },
       {
+        path: 'queryList',
+        name: 'Marquee-List',
+        component: () => import('@/views/marquee/queryList'),
+        meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
+      },
+      {
         path: 'createMarquee',
         name: 't-Marquee-Edit',
         component: () => import('@/views/marquee/createMarquee'),

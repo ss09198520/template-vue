@@ -183,6 +183,7 @@ export default {
                 this.formSeq = response.restData.formSeq;
                 this.formFileNo = response.restData.formFileNo;
                 this.editedFormFileNo = response.restData.editedFormFileNo;
+                this.accountingMemo = response.restData.accountingMemo;
 
                 // 簽名
                 if(!ValidateUtil.isEmpty(response.restData.customerSign)){

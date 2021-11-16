@@ -1,5 +1,5 @@
 export default {
-    name: 'ReturnReport',
+    name: 'RejectReport',
     props: {
     
     },

@@ -1,3 +1,5 @@
+import AjaxService from "@/assets/services/ajax.service";
+import MessageService from "@/assets/services/message.service";
 
   export default {
     data() {
@@ -12,18 +14,13 @@
         maxDisplay: 1,
         //控制是否打開修改角色                
         openSelectBox: '',
+        deptList:[],
         //區處                
         division: '',
-        divOption: [
-            { text: '台中區處', value: '1'},
-            { text: '台中區處-豐原分處', value: '2'},
-            { text: '業務處', value: '3'},
-        ],
+        divOption: [],
         //組別
         group: '',
-        groupOption: [
-
-        ],
+        groupOption: [],
         taichungGroupOption: [
             { text: '業務組', value: '1'},
             { text: '電費組', value: '2'},
@@ -36,9 +33,7 @@
         ],
         //課別
         section: '', 
-        sectionOption: [
-
-        ],
+        sectionOption: [],
         taiSectionOption: [
             { text: '服務中心', value: '1' },
             { text: '東山服務所', value: '2' },
@@ -74,22 +69,7 @@
         ],
         //角色別
         role: [],
-        roleOption: [
-            { text: '主辦業務計畫員', value: 'AUTH01'},
-            { text: '受理部門', value: 'AUTH02'},
-            { text: '服務中心主辦', value: 'AUTH03'},
-            { text: '受理部門主管', value: 'AUTH04'},
-            { text: '業務經理', value: 'AUTH05'},
-            { text: '調閱管理員', value: 'AUTH06'},
-            { text: '核算課長', value: 'AUTH07'},
-            { text: '電費經理', value: 'AUTH08'},
-            { text: '服務中心主任', value: 'AUTH09'},
-            { text: '行銷主管-銷售作業', value: 'AUTH10'},
-            { text: '行銷組組長', value: 'AUTH11'},
-            { text: '多媒體設定-業務處', value: 'AUTH12'},
-            { text: '多媒體設定-區處', value: 'AUTH13'},
-            { text: '核算員', value: 'AUTH15'},
-        ],
+        roleOption: [],
         //員工清單項目名稱
         empListHeaders: [
             { text: '姓名代號', value: 'empNo', align: 'center' },
@@ -167,6 +147,13 @@
         modroleTitle:[],
         //批次選擇的角色
         setrole: '',
+
+        search:{
+            division: null,
+            group: null,
+            section: null,
+            roleCode: null,
+        },
       }
     },
     beforeMount(){
@@ -175,28 +162,61 @@
     methods: {
         init(){
             this.empList = this.empMockList;
+            this.queryAuthSettingOption();
         },
 
         //根據選擇的單位顯示可選取組別，再根據選擇的組別顯示可選取課別
         chooseDivision(){
-            if(this.division == '1'){
-                this.groupOption = this.taichungGroupOption;
-                if(this.group == '1'){
-                    this.sectionOption = this.taiSectionOption;
-                }else if(this.group == '2'){
-                    this.sectionOption = this.electricBillSectionOption;
+            for(let i in this.deptList){
+                if(this.search.division === this.deptList[i].divisionCode){
+                    for(let index in this.deptList[i].groupSectionList){
+                        this.groupOption.push({
+                            group: this.deptList[i].groupSectionList[index].groupCode,
+                            groupName: this.deptList[i].groupSectionList[index].groupName,
+                        })
+                    }
                 }
-            }else if(this.division == '2'){
-                this.groupOption = this.fonyuenGroupOption;
-                if(this.group == '1'){
-                    this.sectionOption = this.fonYuenSectionOption;
+            }
+
+            // 若組別資料只有一筆則直接顯示
+            if(this.groupOption.length == 1){
+                this.group = this.groupOption[0];
+                this.search.group = this.groupOption[0].group;
+
+                this.chooseGroup();
+            }
+
+        },
+
+        chooseGroup(){
+            this.search.group = this.group.group;
+            for(let i in this.deptList){
+                if(this.search.division === this.deptList[i].divisionCode){
+                    for(let index in this.deptList[i].groupSectionList){
+                        if(this.search.group === this.deptList[i].groupSectionList[index].groupCode){
+                            this.sectionOption = this.deptList[i].groupSectionList[index].sectionList;
+                        }
+                    }
                 }
-            }else if(this.division == '3'){
-                this.groupOption = this.mainGroupOption;
+            }
+
+            // 若課別資料只有一筆則直接顯示
+            if(this.sectionOption.length == 1){
+                this.section = this.sectionOption[0];
+                this.search.section = this.sectionOption[0].section;
             }
         },
+
+        chooseSection(){
+            this.search.section = this.section.section;
+        },
+
+
+
+        //     this.sectionOption
+        // },
       
-        search(){  
+        searchRoleSetting(){  
             this.empList = [];        
             if(this.division == '1'){                              
                 if(this.group == '1'){
@@ -426,5 +446,90 @@
                 }
             }
         },
+
+        settingOption(deptOptList){
+           for(let i in deptOptList){
+                this.divOption.push({
+                    division:deptOptList[i].divisionCode,
+                    divisionName:deptOptList[i].divisionName,
+                })
+           }
+
+           if(this.divOption.length == 1){
+             this.division = this.divOption[0];
+             this.search.division = this.divOption[0].division;
+
+             this.chooseDivision();
+           }
+           
+
+        },
+
+        /**
+         * Ajax Start
+         */
+
+        // Action:查詢角色設定下拉選單
+        queryAuthSettingOption(){
+            AjaxService.post('/roleAuth/queryAuthSettingOption',{},
+              (response) => {
+                  // 驗證是否成功
+                  if (!response.restData.success) {              
+                      MessageService.showError(response.restData.returnMessage,'查詢角色設定下拉選單');
+                      return;
+                  }
+                this.roleOption = response.restData.authList;
+                this.deptList = response.restData.deptList;
+                this.settingOption(response.restData.deptList);
+                
+      
+              },
+              // eslint-disable-next-line no-unused-vars
+              (response) => {                
+                  MessageService.showSystemError();
+              });
+        },
+
+        // Action:依條件查詢員工角色清單
+        queryEmpRoleInfo(){
+            AjaxService.post('/roleAuth/queryEmpRoleInfo',{
+
+            },
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.returnMessage,'依條件查詢員工角色清單');
+                    return;
+                }
+                this.empList = response.restData.empList;
+    
+            },
+            // eslint-disable-next-line no-unused-vars
+            (response) => {                
+                MessageService.showSystemError();
+            });
+        },
+
+        // Action:修改員工角色
+        updateEmpRole(){
+            
+        },
+
+        // Action:依角色查詢設定的員工清單
+        queryEmpInfoByRoleCode(){
+            
+        },
+
+        // Action:依角色設定的員工
+        updateEmpRoleByRoleCode(){
+            
+        },
+
+
+
+
+        /**
+         * Ajax End
+         */
     },
   }

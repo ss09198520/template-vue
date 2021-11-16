@@ -73,7 +73,7 @@
                   small
                   color="primary"
                   v-on="on"
-                  @click="hasShowList = true"
+                  @click="queryArchieveList()"
                 >
                   <v-icon v-text="'mdi-magnify'" />
                 </v-btn>

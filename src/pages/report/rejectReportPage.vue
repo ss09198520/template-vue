@@ -188,4 +188,4 @@
   </v-app>
 </template>
 
-<script src="./returnReportPage.js" />
+<script src="./rejectReportPage.js" />

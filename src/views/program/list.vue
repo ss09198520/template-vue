@@ -296,7 +296,7 @@
           </template>
           <!-- 動作 -->
           <template v-slot:[`item.action`]="{ item }">
-            <v-tooltip top>
+            <!-- <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="ma-2"
@@ -310,7 +310,7 @@
                 </v-btn>
               </template>
               <span>預覽</span>
-            </v-tooltip>
+            </v-tooltip> -->
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -491,9 +491,8 @@
         this.alertDialog = false
       },
       editItem(item) {
-        this.editedIndex = this.itemsCRUD.indexOf(item)
         // this.editedItem = Object.assign({}, item)
-        this.$router.push({path: `${this.$route.matched[0].path}/create`})
+        this.$router.push({path: `${this.$route.matched[0].path}/edit/${item.programId}`})
       },
       viewSchedule() {
         this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})

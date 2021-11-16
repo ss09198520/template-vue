@@ -143,7 +143,6 @@
       </div>
       <div 
         v-if="showCounts.mySignOffSeal || showCounts.mySignOffReadApply || showCounts.mySignOffReadList || showCounts.mySignOffReturnReport || showCounts.mySignOffMedia"
-        class="ml-10"
       >
         <div>
           <h1 class="font-bold">
@@ -168,7 +167,7 @@
                 class="font-bold t-center"  
                 max-width="200px"     
               >
-                <h2 class="font-bold">專用章簽核</h2>
+                <h2 class="font-bold">專用章</h2>
                 <span style="font-size:96px;">{{ numberOf.numberOfSealSignOff }}</span>
                 <span style="font-size:30px;">件</span>
               </v-card>
@@ -180,7 +179,7 @@
                 class="font-bold t-center"  
                 max-width="200px"     
               >
-                <h2 class="font-bold">退件報表簽核</h2>
+                <h2 class="font-bold">退件報表</h2>
                 <span style="font-size:96px;">{{ numberOf.numberOfReturnReport }}</span>
                 <span style="font-size:30px;">件</span>
               </v-card>
@@ -192,7 +191,7 @@
                 class="font-bold t-center"  
                 max-width="200px"     
               >
-                <h2 class="font-bold">調閱清單報表簽核</h2>
+                <h2 class="font-bold">調閱清單</h2>
                 <span style="font-size:96px;">{{ numberOf.numberOfReadReport }}</span>
                 <span style="font-size:30px;">件</span>
               </v-card>

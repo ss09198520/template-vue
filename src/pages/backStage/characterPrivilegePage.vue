@@ -7,7 +7,7 @@
         <v-col          
           cols="3"
           class="font-bold"          
-        >                
+        > 
           <v-select   
             v-model="division"
             :items="divOption"                
@@ -15,6 +15,8 @@
             outlined
             hide-details
             dense
+            :return-object="true"
+            item-text="divisionName"
             placeholder="請選擇單位"
             @change="chooseDivision()"
           />
@@ -29,11 +31,13 @@
             v-model="group"
             :items="groupOption"   
             color="#ADADAD"
+            :return-object="true"
             outlined
             hide-details
+            item-text="groupName"
             dense
             placeholder="請選擇組別"
-            @change="chooseDivision()"
+            @change="chooseGroup()"
           />
         </v-col>
       </v-row>
@@ -45,12 +49,15 @@
         >            
           <v-select
             v-model="section"
-            :items="sectionOption"                   
+            :items="sectionOption"
+            :return-object="true"            
             color="#ADADAD"
             outlined
+            item-text="sectionName"
             hide-details
             dense
             placeholder="請選擇課別"
+            @change="chooseSection()"
           />
         </v-col>
         <v-col cols="1" />
@@ -65,6 +72,7 @@
             color="#ADADAD"
             outlined
             hide-details
+            item-text="setRoleName"
             dense
             placeholder="請選擇角色"
           />
@@ -85,7 +93,7 @@
                 fab
                 small
                 color="primary"
-                @click="search()"
+                @click="searchRoleSetting()"
                 v-on="on"
               >
                 <v-icon v-text="'mdi-magnify'" />

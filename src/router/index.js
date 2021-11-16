@@ -203,9 +203,9 @@ export const constantRoutes = [
     meta: { title: '報表區', icon: 'mdi-text-box' },
     children: [
       {
-        path: 'returnReport',
-        name: 'ReturnReport',
-        component: () => import('@/pages/report/returnReportPage.vue'),
+        path: 'rejectReport',
+        name: 'RejectReport',
+        component: () => import('@/pages/report/rejectReportPage.vue'),
         meta: { title: '退件報表', icon: 'mdi-alert' }
       },
       {
@@ -363,6 +363,13 @@ export const constantRoutes = [
         meta: { title: '節目單製作', icon: 'mdi-movie-edit' }
       },
       {
+        path: 'edit/:id(\\d+)',
+        name: 'Program-Edit',
+        component: () => import('@/views/program/edit'),
+        hidden: true,
+        meta: { title: '節目單編輯', icon: 'mdi-movie-edit' }
+      },
+      {
         path: 'list',
         name: 'Program-List',
         component: () => import('@/views/program/list'),
@@ -431,6 +438,18 @@ export const constantRoutes = [
       {
         path: '/tpesForm',
         name: 'TpesForm',
+        component: () => import('@/pages/FormPage/FormPage.vue'),
+        meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+      },
+      {
+        path: '/tpesForm/createForm',
+        name: 'CreateForm',
+        component: () => import('@/pages/FormPage/FormPage.vue'),
+        meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+      },
+      {
+        path: '/tpesForm/cancelForm_cust',
+        name: 'CancelForm',
         component: () => import('@/pages/FormPage/FormPage.vue'),
         meta: { title: 'TPES Form', icon: 'mdi-file-document' }
       }

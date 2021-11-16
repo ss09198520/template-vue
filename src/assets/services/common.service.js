@@ -26,6 +26,10 @@ const CommonService = {
         let params = targetUrl.split('?')[1];//AAAA=11111&BBBB=22222
         return Object.fromEntries(new URLSearchParams(params));
     },
+    getURLPage(){
+        let urlList = location.href.split('?')[0].split('/');
+        return urlList[urlList.length - 1];
+    },
 }
 
 

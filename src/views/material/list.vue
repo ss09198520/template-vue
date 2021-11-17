@@ -363,7 +363,7 @@
 
 <script>
   import MessageService from "@/assets/services/message.service"
-  import { listMediaFile , deleteFile} from '@/api/mediaFile'
+  import { listMediaFile , deleteFile} from '@/api/media'
   import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
 

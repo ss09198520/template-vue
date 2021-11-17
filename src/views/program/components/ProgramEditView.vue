@@ -440,12 +440,12 @@
   import ValidateUtil from "@/assets/services/validateUtil";
   import MessageService from '@/assets/services/message.service'
   import { fetchProgram, initProgram } from '@/api/program'
-  import { listMediaFile } from '@/api/mediaFile'
+  import { listMediaFile } from '@/api/media'
   import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
   import NotFound from './NotFound.vue'
 
-const defaultForm = {
+  const defaultForm = {
     programId: null,
     programName: null,
     memo: null,

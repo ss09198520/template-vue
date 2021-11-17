@@ -179,7 +179,7 @@
 
 <script>
   import MessageService from "@/assets/services/message.service";
-  import { uploadFile} from '@/api/mediaFile'
+  import { uploadFile} from '@/api/media'
 
   const defaultForm = {
     materialName: null,

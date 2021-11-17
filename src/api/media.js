@@ -22,3 +22,14 @@ export function deleteFile(id) {
     method: 'post',
   })
 }
+
+
+// 簽核相關
+
+export function queryMediaSignOff(data) {
+  return request({
+    url: '/mediaSign/v1/querySignOff',
+    method: 'post',
+    data
+  })
+}

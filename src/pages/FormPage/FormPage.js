@@ -12,6 +12,7 @@ export default {
     props: {
         restrictMode: String,
         formParam: Object,
+        queryMemo: String,        
     },
     mounted() {
         this.init();
@@ -88,8 +89,14 @@ export default {
         init(){
             if(this.restrictMode){
                 this.formPageMode = this.restrictMode;
-                this.showModeSelect = false;
-            }
+                this.showModeSelect = false;        
+                console.log(this.queryMemo);         
+            }        
+            if(this.queryMemo){
+                console.log(this.queryMemo);
+                this.accountingMemo = this.queryMemo;
+            }                  
+           
             this.getInitParam();
             this.formInit();
 

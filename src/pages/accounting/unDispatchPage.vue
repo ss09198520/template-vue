@@ -125,7 +125,7 @@
                 <v-select
                   v-model="selectEmp"
                   :items="accountingList"
-                  item-text="empName"
+                  item-text="accountingName"
                   :return-object="true"
                   outlined
                   hide-details

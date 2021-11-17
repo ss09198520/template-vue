@@ -372,6 +372,7 @@
             :key="formKey"
             :form-param="formParam"
             :restrict-mode="'accounting'"
+            :query-memo="memo"
             @returnOrder="returnOrder($event)"
             @accountingSubmit="accountingSubmit($event)"
             @saveComments="saveComments($event)"
@@ -399,7 +400,7 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <FormPage :restrict-mode="'viewMyRead'" />
+          <FormPage :restrict-mode="'accounting'" />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -453,7 +454,7 @@
               <v-select
                 v-model="rejectReason"
                 :items="reasonList"
-                item-text="codeName"
+                item-text="returnReasonName"
                 :return-object="true"
                 outlined
                 hide-details

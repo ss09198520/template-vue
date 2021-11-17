@@ -63,7 +63,7 @@ export default {
                 this.selectEmp = null;
                 this.dispatchModel = true;
             } else {
-                this.updateUndispatch(actionType);
+                this.claimUndispatch();
             }
         },
        // 送出分派案件
@@ -122,17 +122,13 @@ export default {
                 }
             },
                 (response) => { // server 出錯才會進入
-                    // server error
-                    console.log(response.rtnCode);
-                    MessageService.showSystemError(response.rtnCode);
+                    // server error                    
+                    MessageService.showSystemError(response.restData.code);
                 }
             );
 
            let unDispatchList = [
-                {seq:1 ,formSeq: 1, action: true, acceptNum: 'A00028',archieveNum: '000201', custName: '許小花',contractType:'包制',electricNum:'0120123223', countDate: '01', computeDate: '2021-09-10 10:00', colseDate: '2021-09-10 16:00', acceptItem: '軍眷用電申請優待'},
-                {seq:2, formSeq: 2, action: true, acceptNum: 'A00040',archieveNum: '000202', custName: '陳文生',contractType:'高壓',electricNum:'012012321',countDate: '05', computeDate: '2021-09-07 15:36', colseDate: '2021-09-08 15:06', acceptItem: '增加電表'},
-                {seq:3, formSeq: 3, action: true, acceptNum: 'A00605',archieveNum: '000203', custName: '連瑜千',contractType:'表制',electricNum:'0120123222',countDate: '10', computeDate: '2021-09-10 09:45', colseDate: '2021-09-15 10:50', acceptItem: '表燈非時間電價停用廢止'},
-                {seq:4, formSeq: 4, action: true, acceptNum: 'A00619',archieveNum: '000204', custName: '辰文興',contractType:'包制',electricNum:'0120123225',countDate: '12', computeDate: '2021-09-10 13:44', colseDate: '2021-09-10 15:26', acceptItem: '故障換表'}
+               
             ];
 
             this.unDispatchList = unDispatchList;
@@ -140,54 +136,130 @@ export default {
 
         // Action: 取得下拉選單 (操作人為核算課長)
         queryUndispatchOption(){
-           // 取得班別資料
 
+            let classList = [];
+            let accountingList = [
+               
+            ];
+
+           AjaxService.post('/undispatch/queryUndispatchOptions',
+           {
+                      
+           },
+           (response) => {
+               if (response != null &&
+                   response != undefined &&                    
+                   response.restData.message != null &&
+                   response.restData.message != undefined &&
+                   response.restData.success
+                   ) {
+                   if (ValidateUtil.isEmpty(response.restData.accountingDispatchVoList) && ValidateUtil.isEmpty(response.restData.classNameList)) {                        
+                       MessageService.showInfo('查無資料');
+                   } else {           
+                    // 取得班別資料
+                    classList = response.restData.classNameList;  
+                    this.classList = classList;                         
+                    // 取得有設定班別的核算員清單
+                    accountingList = response.restData.accountingDispatchVoList;                                       
+                    this.accountingList = accountingList;  
+                   }
+               } else {
+                 //接後端候要放errorMsg
+                 //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+               }
+           },
+               (response) => { // server 出錯才會進入
+                   // server error                   
+                   MessageService.showSystemError(response.restData.code);
+               }
+           );
+    
            
-
-           let classList = ['班別1','班別2','班別3','班別4','班別5','班別6','班別7'];
-           // 取得有設定班別的核算員清單
-           let accountingList = [
-            { empName: '吳小花', empNo: '1000111'},
-            { empName: '王霏霏', empNo: '1000112'},
-            { empName: '王小林', empNo: '1000114'},
-            { empName: '林小飛', empNo: '1000135'},
-            { empName: '林旺成', empNo: '1000113'},
-            { empName: '徐彥豔', empNo: '1000116'},
-            { empName: '羅徐生', empNo: '1000117'},
-            { empName: '連靜菲', empNo: '1000118'},
-            { empName: '潘麗麗', empNo: '1000119'},
-            { empName: '陳小慶', empNo: '1000132'},
-        ];
-           this.accountingList = accountingList;
-           this.classList = classList;
         },
 
-        // Action: 分派(操作人為核算課長)/認領案件(核算課員)
+        // Action: 分派(操作人為核算課長)
         updateUndispatch(actionType){
             // Vin參數
             // seq: this.seq  // 待核算table的流水號
             // className: this.className,
-            // accouting: this.selectEmp.empNo,
+            // accouting: this.selectEmp.empNo,                              
+            let accounting = null;
+            if(this.selectEmp != null){
+                accounting = this.selectEmp.accounting;
+            }
+            let DispatchFormsReq = {
+                seq: this.seq,
+                accounting: accounting,
+                className: this.className
+            };            
+            AjaxService.post('/undispatch/submitDispatchForm',DispatchFormsReq,
+           (response) => {
+               if (response != null &&
+                   response != undefined &&                    
+                   response.restData.message != null &&
+                   response.restData.message != undefined &&
+                   response.restData.success
+                   ) {                    
+                    MessageService.showSuccess('案件分派成功');                  
+               } else {
+                 //接後端候要放errorMsg
+                 //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+               }
+           },
+               (response) => { // server 出錯才會進入
+                   // server error                   
+                   MessageService.showSystemError(response.restData.code);
+               }
+           );
+
+           this.dispatchModel = false;
 
             // 如為分派案件
-            if(actionType === 'dispatch'){
-                if (this.selectIndex > -1) {
-                    this.unDispatchList.splice(this.selectIndex, 1);
-                    this.numOfUndispatch = this.numOfUndispatch -1;
-                }
-                this.dispatchModel = false;
-                MessageService.showSuccess("案件分派");
+            // if(actionType === 'dispatch'){
+            //     if (this.selectIndex > -1) {
+            //         this.unDispatchList.splice(this.selectIndex, 1);
+            //         this.numOfUndispatch = this.numOfUndispatch -1;
+            //     }
+            //     this.dispatchModel = false;
+            //     MessageService.showSuccess("案件分派");
 
-            // 如為認領案件
-            } else {
-                if (this.selectIndex > -1) {
-                    this.unDispatchList.splice(this.selectIndex, 1);
-                    this.numOfUndispatch = this.numOfUndispatch -1;
-                }
-                MessageService.showSuccess("案件認領");
-            }
+            // // 如為認領案件
+            // } else {
+            //     if (this.selectIndex > -1) {
+            //         this.unDispatchList.splice(this.selectIndex, 1);
+            //         this.numOfUndispatch = this.numOfUndispatch -1;
+            //     }
+            //     MessageService.showSuccess("案件認領");
+            // }
             
 
+        },
+
+
+        //Action:認領案件(核算課員)
+        claimUndispatch(){            
+            let ClaimUnDispatchReq = {
+                seq: this.seq,                               
+            };            
+            AjaxService.post('/undispatch/claimUnDispatch',ClaimUnDispatchReq,
+           (response) => {
+               if (response != null &&
+                   response != undefined &&                    
+                   response.restData.message != null &&
+                   response.restData.message != undefined &&
+                   response.restData.success
+                   ) {                    
+                    MessageService.showSuccess('案件認領成功');                  
+               } else {
+                 //接後端候要放errorMsg
+                 //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+               }
+           },
+               (response) => { // server 出錯才會進入
+                   // server error                   
+                   MessageService.showSystemError(response.restData.code);
+               }
+           );
         },
         
 

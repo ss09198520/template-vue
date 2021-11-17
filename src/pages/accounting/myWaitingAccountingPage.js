@@ -15,7 +15,7 @@ export default {
         this.init();
     },
     data() {
-        return {
+        return {            
             User: 'auditer',
             numOfAccounting: null,
             accoutingHeaders: [
@@ -128,37 +128,33 @@ export default {
         // 點擊打開核算視窗
         accounting(item) {   
             let seq = item.seq;
+            let accounting = item.accounting;
             AjaxService.post('/waitAccounting/updateAccntStatus',
             {
                 seq: seq,
+                accounting: accounting
             },
             (response) => {
                 if (response != null &&
-                    response != undefined &&                                
-                    response.success
-                    ) {    
-                        console.log(response);                                                             
-                         // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄(Action)
-                        //  this.selectIndex = this.accoutingList.indexOf(item); // 取出被選擇資料的index
-                        //  this.selectItem = item; // 將選到的資料放進selectItem中
-                        // if(ValidateUtil.isEmpty(item.status)){
-                        //     this.updateAccoutingStatus(item.seq,this.selectIndex);
-                        // }                                                                                       
-                        this.queryAccoutingInit();
-
+                    response != undefined &&
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                    ) {                                                                                                                                                                                       
+                        this.queryAccoutingList();                                             
                 } else {
                   //接後端候要放errorMsg
                   //MessageService.showError('查詢審核帳號申請清單 失敗');                  
                 }
             },
                 (response) => { // server 出錯才會進入
-                    // server error
-                    console.log(response.rtnCode);
-                    MessageService.showSystemError(response.rtnCode);
+                    // server error                    
+                    MessageService.showSystemError(response.restData.code);
                 }
             );
-            
-          
+
+            //視窗帶入備註
+            this.memo = item.memo;
           // 帶入受理編號
           this.formParam = {
             fmNo: item.acceptNum
@@ -249,6 +245,8 @@ export default {
 
         // Action:頁面初始化
         queryAccoutingInit(){
+
+            let numOfAccounting = '';
             // 模擬從後端取到的假資料            
             AjaxService.post('/waitAccounting/init',
             {
@@ -257,23 +255,26 @@ export default {
             (response) => {
                 if (response != null &&
                     response != undefined &&                    
-                    response.message != null &&
-                    response.message != undefined &&
-                    response.success
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
                     ) {
-                    if (ValidateUtil.isEmpty(response.initWaitAccountingListVo)) {                        
+                    if (ValidateUtil.isEmpty(response.restData.initWaitAccountingListVo)) {                        
                         MessageService.showInfo('查無資料');
-                    } else {           
-                        console.log(response);                                                             
-                        this.accoutingList = Object.assign(response.initWaitAccountingListVo);                        
-                        response.initWaitAccountingListVo.forEach((element) => {
+                    } else {                                                                                                             
+                        this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
+                        response.restData.initWaitAccountingListVo.forEach((element) => {
                             element.action = true;
                         });       
-                        response.initWaitAccountingListVo.forEach((element) => {
+                        response.restData.initWaitAccountingListVo.forEach((element) => {
                             if(element.status == 'READ'){
                                 element.hasView = true;
-                            }                            
-                        });                                                         
+                            }          
+                            if(element.isAgentForm){
+                                element.isAgent = true;
+                            }                  
+                        });                        
+                        numOfAccounting = response.restData.initWaitAccountingListVo.length;                                               
                     }
                 } else {
                   //接後端候要放errorMsg
@@ -281,37 +282,15 @@ export default {
                 }
             },
                 (response) => { // server 出錯才會進入
-                    // server error
-                    console.log(response.rtnCode);
-                    MessageService.showSystemError(response.rtnCode);
+                    // server error                    
+                    MessageService.showSystemError(response.restData.code);
                 }
             );
 
             let accoutingList = [
-                { action: true,
-                  seq:1,
-                  formSeq:1, 
-                  acceptNum: 'A00028',
-                  isAgent:false,
-                  status:null,
-                  archieveNum:'000700',
-                  dispatchDate:'2021-09-10 10:00',
-                  electricNum:'91020122',
-                  custName:'利小凡',
-                  computeDate:'02',
-                  contractType:'表制',
-                  cumulativeDay:'3', 
-                  acceptDate: '2021-09-10 10:00',
-                  closeDate: '2021-09-10 16:00',  
-                  acceptItem: '軍眷用電申請優待',
-                  memo:'測試待核算備註'
-                },
-                {action: true, seq:2, formSeq:2, acceptNum: 'A00615',isAgent:true,status:null,archieveNum:'000701',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'陳和千',computeDate:'05',contractType:'包制',cumulativeDay:'1', acceptDate: '2021-09-09 11:21', closeDate: '2021-09-09 15:21',  acceptItem: '故障換表',memo:''},
-                {action: true, seq:3, formSeq:3, acceptNum: 'A00040',isAgent:false,status:null,archieveNum:'000702',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'黎維成',computeDate:'10',contractType:'表制',cumulativeDay:'4', acceptDate: '2021-09-07 15:36', closeDate: '2021-09-08 15:06', acceptItem: '增加電表',memo:''},
-                {action: true, seq:4, formSeq:4, acceptNum: 'A00605',isAgent:true,status:'READ',sortarchieveNumNo:'000703',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'區立言',computeDate:'16',contractType:'高壓',cumulativeDay:'3', acceptDate: '2021-09-10 09:45', closeDate: '2021-09-15 10:50',  acceptItem: '表燈非時間電價停用廢止',memo:''},
-                {action: true, seq:5, formSeq:5, acceptNum: 'A00619',isAgent:false,status:null,archieveNum:'000704',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'馮文卿',computeDate:'01',contractType:'表制',cumulativeDay:'2', acceptDate: '2021-09-10 13:44', closeDate: '2021-09-10 15:26',  acceptItem: '故障換表',memo:''}
+               
             ];
-            let numOfAccounting = '5';
+            
 
             // 整理案件資料
             this.setAccountInfo(accoutingList);
@@ -323,27 +302,35 @@ export default {
         queryInitOption(){
             // 取得退件原因清單
             let reasonList = [
-                {codeName:'原因由台電提供_1',code:'1'},
-                {codeName:'原因由台電提供_2',code:'2'},
-                {codeName:'原因由台電提供_3',code:'3'},
-                {codeName:'原因由台電提供_4',code:'4'},
-                {codeName:'原因由台電提供_5',code:'5'},
-                {codeName:'原因由台電提供_6',code:'6'},
-                {codeName:'原因由台電提供_7',code:'7'},
-                {codeName:'原因由台電提供_8',code:'8'},
-                {codeName:'原因由台電提供_9',code:'9'},
-                {codeName:'原因由台電提供_10',code:'10'},
-            ];
-
-            // 取得部門清單
-            let deptList = [
-                {deptName:'核算課',deptNum:'1'},
-                {deptName:'大里服務中心',deptNum:'2'},
-                {deptName:'東山服務所',deptNum:'3'},
-            ];
-
-            this.reasonList = reasonList;
-            this.deptList = deptList;
+               
+            ];                 
+            AjaxService.post('/waitAccounting/returnSeletionList',
+            {
+                       
+            },
+            (response) => {
+                if (response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                    ) {
+                    if (ValidateUtil.isEmpty(response.restData.returnReasonVoList)) {                        
+                        MessageService.showInfo('查無資料');
+                    } else {                                                                                                                                            
+                        reasonList = response.restData.returnReasonVoList;
+                        this.reasonList = reasonList;
+                    }
+                } else {
+                  //接後端候要放errorMsg
+                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                }
+            },
+                (response) => { // server 出錯才會進入
+                    // server error                    
+                    MessageService.showSystemError(response.restData.code);
+                }
+            );
         },
 
 
@@ -360,42 +347,65 @@ export default {
             // dispatchEndDate: this.searchForm.dispatchEndDate,
             // contractType: this.searchForm.contractType,
             // caseType: this.searchForm.caseType,
-
+            let QueryWaitAccountingReq ={
+                acceptNum: this.searchForm.acceptNum,
+                electricNum: this.searchForm.electricNum,
+                custName: this.searchForm.custName,
+                cumulativeDay: this.searchForm.cumulativeDay,
+                computeDate: this.searchForm.computeDate,
+                archieveNum: this.searchForm.archieveNum,
+                dispatchStartDate: this.searchForm.dispatchStartDate,
+                dispatchEndDate: this.searchForm.dispatchEndDate,
+                contractType: this.searchForm.contractType,
+                caseType: this.searchForm.caseType,
+            };
+            let numOfAccounting = '';
+            AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,
+            (response) => {
+                if (response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                    ) {
+                    if (ValidateUtil.isEmpty(response.restData.queryWaitAccountingListVo)) {                        
+                        MessageService.showInfo('查無資料');
+                    } else {                                                                                                             
+                        this.accoutingList = Object.assign(response.restData.queryWaitAccountingListVo);                        
+                        response.restData.queryWaitAccountingListVo.forEach((element) => {
+                            element.action = true;
+                        });       
+                        response.restData.queryWaitAccountingListVo.forEach((element) => {
+                            if(element.status == 'READ'){
+                                element.hasView = true;
+                            }          
+                            if(element.isAgentForm){
+                                element.isAgent = true;
+                            }                  
+                        });                        
+                        numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
+                        MessageService.showSuccess('依條件查詢待核算資料成功');                                       
+                    }
+                } else {
+                  //接後端候要放errorMsg
+                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                }
+            },
+                (response) => { // server 出錯才會進入
+                    // server error                    
+                    MessageService.showSystemError(response.restData.code);
+                }
+            );
              // 模擬從後端取到的假資料
             let accoutingList = [
-                { action: true,
-                  seq:1,
-                  formSeq:1, 
-                  acceptNum: 'A00028',
-                  isAgent:false,
-                  status:null,
-                  archieveNum:'000700',
-                  dispatchDate:'2021-09-10 10:00',
-                  electricNum:'91020122',
-                  custName:'利小凡',
-                  computeDate:'02',
-                  contractType:'表制',
-                  cumulativeDay:'3', 
-                  acceptDate: '2021-09-10 10:00',
-                  closeDate: '2021-09-10 16:00',  
-                  acceptItem: 'QA210  軍眷用電申請優待',
-                  memo:'測試待核算備註'
-                },
-                {action: true, seq:2, formSeq:2, acceptNum: 'A00615',isAgent:true,status:null,archieveNum:'000701',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'陳和千',computeDate:'05',contractType:'包制',cumulativeDay:'1', acceptDate: '2021-09-09 11:21', closeDate: '2021-09-09 15:21',  acceptItem: ' 故障換表',memo:''},
-                {action: true, seq:3, formSeq:3, acceptNum: 'A00040',isAgent:false,status:null,archieveNum:'000702',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'黎維成',computeDate:'10',contractType:'表制',cumulativeDay:'4', acceptDate: '2021-09-07 15:36', closeDate: '2021-09-08 15:06', acceptItem: ' 增加電表',memo:''},
-                {action: true, seq:4, formSeq:4, acceptNum: 'A00605',isAgent:true,status:'READ',sortarchieveNumNo:'000703',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'區立言',computeDate:'16',contractType:'高壓',cumulativeDay:'3', acceptDate: '2021-09-10 09:45', closeDate: '2021-09-15 10:50',  acceptItem: '  表燈非時間電價停用廢止',memo:''},
-                {action: true, seq:5, formSeq:5, acceptNum: 'A00619',isAgent:false,status:null,archieveNum:'000704',dispatchDate:'2021-09-10 10:00',electricNum:'91020122',custName:'馮文卿',computeDate:'01',contractType:'表制',cumulativeDay:'2', acceptDate: '2021-09-10 13:44', closeDate: '2021-09-10 15:26',  acceptItem: ' 故障換表',memo:''}
+                
             ];
-            let numOfAccounting = '5';
+            
 
             // 整理案件資料
             this.setAccountInfo(accoutingList);
             // 取出後端參數
             this.numOfAccounting = numOfAccounting;
-
-            MessageService.showSuccess('依條件查詢待核算資料');
-
-
         },
 
         // Action:查詢待審核案件資料
@@ -431,17 +441,7 @@ export default {
                     response.restData.message != null &&
                     response.restData.message != undefined &&
                     response.restData.success
-                    ) {                             
-                        // console.log(response);                                                             
-                        // this.accoutingList = Object.assign(response.queryWaitAccountingListVo);                        
-                        // response.queryWaitAccountingListVo.forEach((element) => {
-                        //     element.action = true;
-                        // });       
-                        // response.queryWaitAccountingListVo.forEach((element) => {
-                        //     if(element.status == 'READ'){
-                        //         element.hasView = true;
-                        //     }                            
-                        // });          
+                    ) {                                                           
                         MessageService.showInfo('儲存備註成功');                                                                   
                 } else {
                   //接後端候要放errorMsg
@@ -449,9 +449,8 @@ export default {
                 }
             },
                 (response) => { // server 出錯才會進入
-                    // server error
-                    console.log(response.rtnCode);
-                    MessageService.showSystemError(response.rtnCode);
+                    // server error                    
+                    MessageService.showSystemError(response.restData.code);
                 }
             );
         },
@@ -490,29 +489,13 @@ export default {
                 }
             },
                 (response) => { // server 出錯才會進入
-                    // server error
-                    console.log(response.rtnCode);
-                    MessageService.showSystemError(response.rtnCode);
+                    // server error                    
+                    MessageService.showSystemError(response.restData.code);
                 }
             );
 
 
-            // if(type === 'reject') {
-            //     if (this.selectIndex > -1) {
-            //         this.accoutingList.splice(this.selectIndex, 1);
-            //     }
-            //     this.returnReasonModel = false;
-            //     this.accountingDialog = false;
-            //     this.waitingCount = this.waitingCount -1;
-            //     MessageService.showSuccess("案件退件");
-            // } else {
-            //     if (this.selectIndex > -1) {
-            //         this.accoutingList.splice(this.selectIndex, 1);
-            //     }
-            //     MessageService.showSuccess("案件核算");
-            //     this.accountingDialog = false;
-            //     this.waitingCount = this.waitingCount -1;
-            // }
+           
         },
 
 

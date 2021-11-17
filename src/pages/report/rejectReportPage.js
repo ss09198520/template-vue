@@ -14,8 +14,8 @@ export default {
         openEndDate: false, //是否開啟查詢退件日期的datePicker
         headers: [
             { text: '退件日期', value: 'rejectDate', align: 'center' },
-            { text: '核算部門主辦簽核時間', value: 'salesPlannerSignDate', align: 'center' },
-            { text: '核算課長簽核時間', value: 'leaderSignDate', align: 'center' },         
+            { text: '核算部門主辦簽核時間', value: 'salesPlannerSignDateStr', align: 'center' },
+            { text: '核算課長簽核時間', value: 'leaderSignDateStr', align: 'center' },         
             { text: '下載', value: 'download', align: 'center' },            
         ],
         itemList: [],
@@ -59,9 +59,10 @@ export default {
               roleCode: roleCode
             };
     
-            AjaxService.post("/report/readSignOff", param, (response) => {
+            AjaxService.post("/report/rejectSignOff", param, (response) => {
               if(response.restData.success){
                 MessageService.showSuccess("簽核");
+                this.queryReport();
               }else{
                 MessageService.showError(response.restDate.message, "簽核");
               }

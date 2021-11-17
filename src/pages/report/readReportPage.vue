@@ -94,7 +94,7 @@
             disable-sort
             @page-count="dataListPageCount = $event"
           >            
-            <template v-slot:item.readMgmtSignDate="{ item }">              
+            <template v-slot:item.readMgmtSignDateStr="{ item }">              
               <v-tooltip v-if="item.needReadMgmtSign" style="color: gray;" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -110,11 +110,11 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>                
-              <span v-else-if="item.readMgmtSignDate">{{ item.readMgmtSignDate }}</span>
+              <span v-else-if="item.readMgmtSignDateStr">{{ item.readMgmtSignDateStr }}</span>
               <span v-else>未簽核</span>
             </template>
 
-            <template v-slot:item.leaderSignDate="{ item }">                            
+            <template v-slot:item.leaderSignDateStr="{ item }">                            
               <v-tooltip v-if="item.needLeaderSign" style="color: gray;" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -130,11 +130,11 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else-if="item.leaderSignDate">{{ item.leaderSignDate }}</span>
+              <span v-else-if="item.leaderSignDateStr">{{ item.leaderSignDateStr }}</span>
               <span v-else>未簽核</span>
             </template>
 
-            <template v-slot:item.managerSignDate="{ item }">                            
+            <template v-slot:item.managerSignDateStr="{ item }">                            
               <v-tooltip v-if="item.needManagerSign" style="color: gray;" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -150,7 +150,7 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else-if="item.managerSignDate">{{ item.managerSignDate }}</span>
+              <span v-else-if="item.managerSignDateStr">{{ item.managerSignDateStr }}</span>
               <span v-else>未簽核</span>
             </template>
 

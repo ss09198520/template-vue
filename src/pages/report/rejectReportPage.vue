@@ -95,7 +95,7 @@
             disable-sort
             @page-count="dataListPageCount = $event"
           >
-            <template v-slot:item.salesPlannerSignDate="{ item }">
+            <template v-slot:item.salesPlannerSignDateStr="{ item }">
               <v-tooltip v-if="item.needSalesPlannerSign" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -111,10 +111,10 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else-if="item.salesPlannerSignDate" style="color: gray;">{{ salesPlannerSignDate }}</span>
+              <span v-else-if="item.salesPlannerSignDateStr" style="color: gray;">{{ item.salesPlannerSignDateStr }}</span>
               <span v-else>未簽核</span>
             </template>           
-            <template v-slot:item.leaderSignDate="{ item }">
+            <template v-slot:item.leaderSignDateStr="{ item }">
               <v-tooltip v-if="item.needLeaderSign" top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -130,7 +130,7 @@
                 </template>
                 <span>簽核</span>
               </v-tooltip>
-              <span v-else-if="item.leaderSignDate">{{ item.leaderSignDate }}</span>
+              <span v-else-if="item.leaderSignDateStr">{{ item.leaderSignDateStr }}</span>
               <span v-else>未簽核</span>
             </template>    
             <template v-slot:item.download="{ item }">              

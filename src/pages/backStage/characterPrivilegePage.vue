@@ -162,20 +162,19 @@
                           
             <div v-if="openSelectBox == item.empNo" class="d-flex">
               <v-select
-                v-model="role"
+                v-model="selectRole"
                 style="width:min-content; margin:auto;"
                 multiple
                 :items="roleOption"
                 item-text="setRoleName"
-                item-value="value"
                 return-object        
               >
                 <template v-slot:selection="{ item, index }">
-                  <span v-if="index < maxDisplay">{{ item.text }} &nbsp;</span>
+                  <span v-if="index < maxDisplay">{{ item.setRoleName }} &nbsp;</span>
                   <span
                     v-if="index === maxDisplay"
                     class="grey--text caption"
-                  >(..還有{{ role.length - maxDisplay }}項)</span>
+                  >(..還有{{ selectRole.length - maxDisplay }}項)</span>
                 </template>
               </v-select>
               <v-btn class="mt-3" color="success" @click="submit(item)">&emsp;送出&emsp;</v-btn>

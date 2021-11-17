@@ -41,38 +41,8 @@ import ValidateUtil from "@/assets/services/validateUtil";
             {section: null, sectionName: null},
         ],
         sectionOption: [],
-        taiSectionOption: [
-            { text: '服務中心', value: '1' },
-            { text: '東山服務所', value: '2' },
-            { text: '西屯服務所', value: '3' },
-            { text: '南屯服務所', value: '4' },
-            { text: '烏日服務所', value: '5' },
-            { text: '大里服務所', value: '6' },
-            { text: '太平服務所', value: '7' },
-            { text: '潭子服務所', value: '8' },
-            { text: '大雅服務所', value: '9' },
-            { text: '清水服務所', value: '10' },
-            { text: '梧棲服務所', value: '11' },
-            { text: '沙鹿服務所', value: '12' },
-            { text: '龍井服務所', value: '13' },
-            { text: '大肚服務所', value: '14' },            
-        ],
         electricBillSectionOption:[
             { text: '核算課', value: '15'},
-        ],
-        fonYuenSectionOption: [
-            { text: '服務中心', value: '16'},
-            { text: '東勢服務所', value: '17'},
-            { text: '后里服務所', value: '18'},
-            { text: '神岡服務所', value: '19'},
-            { text: '新社服務所', value: '20'},
-            { text: '石岡服務所', value: '21'},
-            { text: '梨山服務所', value: '22'},
-            { text: '谷關服務所', value: '23'},
-            { text: '大甲服務所', value: '24'},
-            { text: '外埔服務所', value: '25'},
-            { text: '大安服務所', value: '26'},
-            { text: '甲安服務所', value: '27'},
         ],
         //角色別
         role: [
@@ -91,42 +61,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             { text: '角色', value: 'role', align: 'center',width:'25' }
         ],
         //員工清單
-        empList: [
-            
-        ],
-        empMockList: [
-            //台中區處
-            { empNo: '1050330-001', empName: '', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1050330-002', empName: '王曉花', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
-            { empNo: '1050330-003', empName: '林美美', empDivision:'台中區處', empGroup:'業務組',empSection:'東山服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1050331-001', empName: '蔡政揚', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1050331-002', empName: '張芊芊', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1050331-003', empName: '江舒語', empDivision:'台中區處', empGroup:'業務組',empSection:'西屯服務所',role:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
-            
-            { empNo: '1050320-001', empName: '陳大天', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',role:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1050320-002', empName: '何欣惠', empDivision:'台中區處', empGroup:'業務組',empSection:'服務中心',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            
-            { empNo: '1050403-001', empName: '黃昕怡', empDivision:'台中區處', empGroup:'電費組',empSection:'核算課',role:'核算課長',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1050403-002', empName: '簡芷蕾', empDivision:'台中區處', empGroup:'電費組',empSection:'核算課',role:'核算員,調閱管理員',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1050403-003', empName: '趙燁', empDivision:'台中區處', empGroup:'電費組',empSection:'核算課',role:'核算員,主辦業務計畫員',settingStyle:'人事資訊系統',memo:'',edit:false},
-            //豐原分處
-            { empNo: '1052331-001', empName: '葉慶華', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'東勢服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1052331-002', empName: '王曉花', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'東勢服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1052331-003', empName: '林美美', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'東勢服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1052332-001', empName: '蔡政揚', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'后里服務所',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1052332-002', empName: '張芊芊', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'后里服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1052332-003', empName: '江舒語', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'后里服務所',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-
-            { empNo: '1052320-001', empName: '陳大天', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'服務中心',role:'受理部門主管,服務中心主辦',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '1052320-002', empName: '何欣惠', empDivision:'台中區處-豐原分處', empGroup:'業務組',empSection:'服務中心',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            //業務處
-            { empNo: '0071702-001', empName: '李騰鴻', empDivision:'業務處', empGroup:'行銷組',empSection:'銷售作業課',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '0071702-002', empName: '沈欺霜', empDivision:'業務處', empGroup:'行銷組',empSection:'銷售作業課',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '0071702-003', empName: '楊振甫', empDivision:'業務處', empGroup:'行銷組',empSection:'銷售作業課',role:'受理部門',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '0071700-001', empName: '牧青羽', empDivision:'業務處', empGroup:'行銷組',empSection:'',role:'受理部門主管',settingStyle:'人事資訊系統',memo:'',edit:false},
-            { empNo: '0071700-002', empName: '王美玲', empDivision:'業務處', empGroup:'行銷組',empSection:'',role:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
-            { empNo: '0071700-003', empName: '蕭彥辰', empDivision:'業務處', empGroup:'行銷組',empSection:'',role:'受理部門',settingStyle:'人工設定',memo:'',edit:false},
-        ],
+        empList: [],
         //控制上一筆點選修改是否編輯中
         selectEmp:null,
         //mock的角色清單
@@ -156,7 +91,9 @@ import ValidateUtil from "@/assets/services/validateUtil";
         modroleTitle:[],
         //批次選擇的角色
         setrole: '',
-      }
+        selectRole:[],
+        newAuthList:[],
+    }
     },
     beforeMount(){
         this.init();
@@ -164,7 +101,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
     methods: {
         init(){
             this.queryAuthSettingOption();
-            this.queryEmpRoleInfo()
+            this.queryEmpRoleInfo();
         },
 
         //根據選擇的單位顯示可選取組別，再根據選擇的組別顯示可選取課別
@@ -184,10 +121,8 @@ import ValidateUtil from "@/assets/services/validateUtil";
             // 若組別資料只有一筆則直接顯示
             if(this.groupOption.length == 1){
                 this.group = this.groupOption[0];
-
                 this.chooseGroup();
             }
-
         },
 
         chooseGroup(){
@@ -207,148 +142,85 @@ import ValidateUtil from "@/assets/services/validateUtil";
             }
         },
       
-        searchRoleSetting(){  
-            this.empList = [];        
-            if(this.division == '1'){                              
-                if(this.group == '1'){
-                    if(this.section == '1'){
-                        for(let i = 0; i < this.empMockList.length; i++){
-                            if(this.empMockList[i].empSection == '服務中心' && this.empMockList[i].empDivision == '台中區處'){
-                                this.empList.push(this.empMockList[i]);
-                            }
-                        }
-                        return;
-                    }else if(this.section == '2'){
-                        for(let j = 0; j < this.empMockList.length; j++){
-                            if(this.empMockList[j].empSection == '東山服務所' && this.empMockList[j].empDivision == '台中區處'){
-                                this.empList.push(this.empMockList[j]);
-                            }
-                        }
-                        return;
-                    }else if(this.section == '3'){
-                        for(let k = 0; k < this.empMockList.length; k++){
-                            if(this.empMockList[k].empSection == '西屯服務所' && this.empMockList[k].empDivision == '台中區處'){
-                                this.empList.push(this.empMockList[k]);
-                            }
-                        }
-                        return;
-                    }
-                    for(let x = 0; x < this.empMockList.length; x++){
-                        if(this.empMockList[x].empGroup == '業務組' && this.empMockList[x].empDivision == '台中區處'){
-                            this.empList.push(this.empMockList[x]);
-                        }
-                    }
-                    return;
-                }else if(this.group == '2'){            
-                    if(this.section == '15'){
-                        for(let i = 0; i < this.empMockList.length; i++){
-                            if(this.empMockList[i].empSection == '核算課' && this.empMockList[i].empDivision == '台中區處'){
-                                this.empList.push(this.empMockList[i]);
-                            }
-                        }
-                        return;
-                    }
-                    for(let y = 0; y < this.empMockList.length; y++){
-                        if(this.empMockList[y].empGroup == '電費組'){
-                            this.empList.push(this.empMockList[y]);
-                        }
-                    }
-                    return;
-                }
-
-                for(let i = 0; i < this.empMockList.length; i++){                  
-                    if(this.empMockList[i].empDivision == '台中區處'){                      
-                        this.empList.push(this.empMockList[i]);
-                    }                  
-                }
-            }else if(this.division == '2'){
-                if(this.group == '1'){
-                    if(this.section == '16'){
-                        for(let i = 0; i < this.empMockList.length; i++){
-                            if(this.empMockList[i].empSection == '服務中心' && this.empMockList[i].empDivision == '台中區處-豐原分處'){
-                                this.empList.push(this.empMockList[i]);
-                            }
-                        }
-                        return;
-                    }else if(this.section == '17'){
-                        for(let j = 0; j < this.empMockList.length; j++){
-                            if(this.empMockList[j].empSection == '東勢服務所'){
-                                this.empList.push(this.empMockList[j]);
-                            }
-                        }
-                        return;
-                    }else if(this.section == '18'){
-                        for(let k = 0; k < this.empMockList.length; k++){
-                            if(this.empMockList[k].empSection == '后里服務所'){
-                                this.empList.push(this.empMockList[k]);
-                            }
-                        }
-                        return;
-                    }
-                    for(let x = 0; x < this.empMockList.length; x++){
-                        if(this.empMockList[x].empGroup == '業務組' && this.empMockList[x].empDivision == '台中區處-豐原分處'){
-                            this.empList.push(this.empMockList[x]);
-                        }
-                    }
-                    return;
-                }
-                for(let i = 0; i < this.empMockList.length; i++){                  
-                    if(this.empMockList[i].empDivision == '台中區處-豐原分處'){                      
-                        this.empList.push(this.empMockList[i]);
-                    }                  
-                }
-            }else if(this.division == '3'){
-                if(this.group == '3'){
-                    for(let x = 0; x < this.empMockList.length; x++){
-                        if(this.empMockList[x].empGroup == '行銷組'){
-                            this.empList.push(this.empMockList[x]);
-                        }
-                    }
-                    return;
-                }
-                for(let i = 0; i < this.empMockList.length; i++){                  
-                    if(this.empMockList[i].empDivision == '業務處'){                      
-                        this.empList.push(this.empMockList[i]);
-                    }                  
-                }
+        modifyrole(item){
+            let roleList = [];
+            this.selectRole = [];                                  
+            
+            // 取出選擇到的員工角色清單
+            for(let i in item.roleList){
+                roleList.push(item.roleList[i].roleName);
             }
-        },
-        modifyrole(item){ 
+            // 將選到的員工放進selectEmp參數中
             if(this.selectEmp == null){
                 this.selectEmp = item;
-            }            
+            }
             this.selectEmp.edit = false;            
-            this.role = [];                                  
             item.edit = true;
-            this.openSelectBox = item.empNo;            
-            let temprole = item.role.split(",");                        
+            this.openSelectBox = item.empNo;
+            // 比對角色下拉選項，那些是已經設定的角色          
             for(let i = 0; i < this.roleOption.length; i++){
-                for(let j = 0; j < temprole.length; j++){
-                    if(this.roleOption[i].text == temprole[j]){
-                        this.role.push(this.roleOption[i]);                        
+                for(let j = 0; j < roleList.length; j++){
+                    if(this.roleOption[i].setRoleName == roleList[j]){
+                        this.selectRole.push(this.roleOption[i]);                        
                     }
                 }                               
             }                    
             this.selectEmp = item;       
         },
-        submit(item){                       
-            item.role = "";              
-            let num = 0;            
-            console.log(this.role);
-            for(let i = 0; i < this.roleOption.length; i++){
-                for(let j = 0; j < this.role.length; j++){  
-                    if(this.roleOption[i].value == this.role[j].value){
-                        if(num > 0){
-                            item.role += ',' + this.roleOption[i].text;
-                        }else{
-                            item.role += this.roleOption[i].text;
-                        }                                    
-                        num++;
-                    }                                                                                          
-                }  
-            }                                                                         
-            this.role = [];
-            this.openSelectBox = '';
+        submit(item){
+            this.newAuthList = [];
+            let optionArray = new Map(); // 下拉選單資料
+
+            // 驗證選擇要設定的角色權限是否有在角色選單中
+            if(!this.checkSettingRoleLegal()){
+                return;
+            }
+
+            // 先將下拉選單取出並加進MAP中
+            for(let i in this.roleOption){
+                optionArray.set(this.roleOption[i].setRoleCode,this.roleOption[i]);
+            }
+
+            // 將原本的角色權限但不屬於操作人權限範圍的角色取出
+            for(let authIndex in this.selectEmp.roleList){
+                if(ValidateUtil.isEmpty(optionArray.get(this.selectEmp.roleList[authIndex].roleCode))){
+                    this.newAuthList.push({
+                        empNo: this.selectEmp.empNo,
+                        empName: this.selectEmp.empName,
+                        roleCode:this.selectEmp.roleList[authIndex].roleCode,
+                        roleName:this.selectEmp.roleList[authIndex].roleName,
+                    })
+                }
+            }
+
+            // 在操作人權限範圍內更動的角色權限
+            for(let optionIndex in this.roleOption){
+                for(let authIndex in this.selectRole){
+                    if(this.roleOption[optionIndex].setRoleName == this.selectRole[authIndex].setRoleName){
+                        this.newAuthList.push({
+                            empNo: this.selectEmp.empNo,
+                            empName: this.selectEmp.empName,
+                            roleCode:this.selectRole[authIndex].setRoleCode,
+                            roleName:this.selectRole[authIndex].setRoleName,
+                        })
+                    }
+                }
+            }
+
+            // 驗證是否沒有要更改的資料
+            let requiredArray = [];
+            if(ValidateUtil.isEmpty(this.newAuthList)){
+                requiredArray.push('請選擇要設定的角色')
+                MessageService.showCheckInfo(requiredArray,null);
+                return;
+            }
+
+            // 將更新的資料打後端更新
+            this.updateEmpRole();
+                                   
+            // 將選取資料重置
+            this.selectRole = [];
+            this.openSelectBox = null;
             item.edit = false;
             
         },
@@ -438,6 +310,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             }
         },
 
+        // 整理部門下拉選單
         settingOption(deptOptList){
            for(let i in deptOptList){
                 this.divOption.push({
@@ -446,12 +319,31 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 })
            }
 
+           // 若單位只有一筆資料，直接帶入組別下拉選單
            if(this.divOption.length == 1){
              this.division = this.divOption[0];
              this.chooseDivision();
            }
         },
 
+        // 驗證要設定的角色權限資料是否合法
+        checkSettingRoleLegal(){
+            let optionArray = new Map();
+            let hasSettingLegal = true;
+
+             // 先將下拉選單取出並加進MAP中
+             for(let i in this.roleOption){
+                optionArray.set(this.roleOption[i].setRoleCode,this.roleOption[i]);
+            }
+            // 比對選擇要更改的角色權限是否符合角色下拉選單
+            for( let i in this.selectRole){
+               if(ValidateUtil.isEmpty(optionArray.get(this.selectRole[i].setRoleCode))){
+                  hasSettingLegal = false; 
+               }
+            }
+
+           return hasSettingLegal;
+        },
 
 
         /**
@@ -467,9 +359,10 @@ import ValidateUtil from "@/assets/services/validateUtil";
                       MessageService.showError(response.restData.returnMessage,'查詢角色設定下拉選單');
                       return;
                   }
-                this.roleOption = response.restData.authList;
-                this.deptList = response.restData.deptList;
-                this.settingOption(response.restData.deptList);
+                
+                this.roleOption = response.restData.authList;// 將角色下拉選單帶入  
+                this.deptList = response.restData.deptList;// 部門下拉選單資料帶入
+                this.settingOption(response.restData.deptList);// 整理部門下拉選單
                 
       
               },
@@ -481,10 +374,6 @@ import ValidateUtil from "@/assets/services/validateUtil";
 
         // Action:依條件查詢員工角色清單
         queryEmpRoleInfo(){
-            console.log(this.division);
-            console.log(this.group);
-            console.log(this.section);
-            console.log(this.role);
             AjaxService.post('/roleAuth/querySettingEmpAuth',{
                 division: this.division.division,
                 group: this.group.group,
@@ -497,6 +386,8 @@ import ValidateUtil from "@/assets/services/validateUtil";
                     MessageService.showError(response.restData.returnMessage,'依條件查詢員工角色清單');
                     return;
                 }
+                
+                // 將員工角色資料帶入
                 this.empList = response.restData.empRoleList;
     
             },
@@ -508,7 +399,24 @@ import ValidateUtil from "@/assets/services/validateUtil";
 
         // Action:修改員工角色
         updateEmpRole(){
-            
+            AjaxService.post('/roleAuth/updateEmpRole',{
+                newEmpAuthVoList: this.newAuthList,
+            },
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.returnMessage,'修改員工角色');
+                    return;
+                }
+
+                // 再重新call一次查詢員工資料清單
+                this.queryEmpRoleInfo();
+    
+            },
+            // eslint-disable-next-line no-unused-vars
+            (response) => {                
+                MessageService.showSystemError();
+            });
         },
 
         // Action:依角色查詢設定的員工清單

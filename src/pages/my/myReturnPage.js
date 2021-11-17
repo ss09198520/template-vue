@@ -108,7 +108,7 @@ export default {
 
           // 帶入受理編號
           this.formParam = {
-            acceptNum: item.acceptNum
+            fmNo: item.acceptNum
           };
           this.formKey++;
 

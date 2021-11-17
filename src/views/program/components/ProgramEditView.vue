@@ -204,13 +204,14 @@
                       max-height="50"
                     />
                   </template>
-                  <template v-slot:[`item.sort`]>
+                  <template v-slot:[`item.sort`]="{ item }">
                     <v-icon
                       class="mr-2"
                       :style="`cursor: pointer`"
                     >
                       mdi-sort-variant
                     </v-icon>
+                    {{ item.sort || '' }}
                   </template>
                   <template v-slot:[`item.delete`]="{ item }">
                     <v-btn
@@ -220,7 +221,7 @@
                       color="error"
                       @click="deleteItem(item)"
                     >
-                      <v-icon v-text="'mdi-delete'" />
+                      <v-icon v-text="'mdi-delete'" /> 
                     </v-btn>
                   </template>
                 </v-data-table>
@@ -445,6 +446,7 @@
   import NotFound from './NotFound.vue'
 
 const defaultForm = {
+    programId: null,
     programName: null,
     memo: null,
     programType: null,
@@ -685,14 +687,14 @@ const defaultForm = {
 
       //素材排序
       saveOrder (event) {
-        const movedItem = this.itemsCRUD.splice(event.oldIndex, 1)[0];
-        this.itemsCRUD.splice(event.newIndex, 0, movedItem);
-        let step;
-        for (step = 0; step < this.itemsCRUD.length; step++) {
-          // 執行五次：從step為0到4
-          console.log(this.itemsCRUD[step]);
-          // this.itemsCRUD[step].id = step
-        }
+        const movedItem = this.selectedFiles.splice(event.oldIndex, 1)[0];
+        this.selectedFiles.splice(event.newIndex, 0, movedItem);
+        
+        // for (let step = 0; step < this.selectedFiles.length; step++) {
+        //   // 執行五次：從step為0到4
+        //   this.selectedFiles[step].sort = step + 1;
+        //   // this.itemsCRUD[step].id = step
+        // }
       },
 
       // Button Function 查詢素材
@@ -703,31 +705,37 @@ const defaultForm = {
 
       // Button Function 送出節目單製作儲存
       submit(isSign) {
-        this.postForm.programMaterials = this.selectedFiles.reduce((items, mediaFile) => {
-          // new {materialId , mediaFileName}
-          items.push(Object.assign({
-            materialId : mediaFile.id , 
-            mediaFileName : mediaFile.materialName}
-          ))
-          return items
-        }, [])
+      if (this.$refs.programForm.validate()) {
+          
+          if(isEmpty(this.selectedFiles)) {
+            let formatArray = []
+            let requiredArray = ['素材資料']
 
-        //API post data 
-        let postData = {
-          program : this.postForm ,
-          // programName: this.postForm.programName,
-          // memo: this.postForm.memo,
-          // programType: this.postForm.memo,
-          // releaseStartDate: this.postForm.releaseStartDate,
-          // releaseEndDate: this.postForm.releaseEndDate,
-          signAttachment : this.signAttachmentFile ,
-          isSign : isSign ? true : false, //是否暫存
-          // programMaterials : this.programMaterials,
-        }
+            MessageService.showCheckInfo(requiredArray,formatArray);
+            this.valid = false
+            return;
+          } else {
+            //塞入素材資訊
+            this.postForm.programMaterials = this.selectedFiles.reduce((items, mediaFile) => {
+              // new {materialId , mediaFileName}
+              items.push(Object.assign({
+                materialId : mediaFile.id , 
+                mediaFileName : mediaFile.materialName}
+              ))
+              return items
+            }, [])
+          }
+          
+          //API post data 
+          let postData = {
+            program : this.postForm ,
+            signAttachment : isEmpty(this.signAttachmentFile) ? null : this.signAttachmentFile,
+            sign : isSign ? true : false, //是否暫存
+          }
         
-        if (this.$refs.programForm.validate()) {
           console.log(postData)
           this.submitForm(postData)
+
         }else{
           this.$nextTick(() => {
             const el = this.$el.querySelector(".error--text:first-of-type");
@@ -742,34 +750,6 @@ const defaultForm = {
         this.$refs.programForm.reset()
         this.selectedFiles = Object.assign([])
         this.mediaFiles = Object.assign([])
-      },
-      selected(e) {
-        let dom = e.currentTarget.id;
-        let target = e.currentTarget;
-        /*if (e.target.tagName == 'DIV' || e.target.tagName == 'IMG' || e.target.tagName == 'P') {          //如果点击的是LI下面的子元素，就将子元素的父元素提取出来（即LI）。
-          dom = e.target.offsetParent.id
-          target = e.target.offsetParent
-        } else {
-          dom = e.target
-          target = e.target
-        }*/     //currentTarget与target的区别
-        let children = target.children[0];
-        if (children.style.display != 'block') {
-          children.style.display = 'block';
-          target.style.backgroundColor = "#ebebeb";
-
-          this.downloadUrl = this.baseURL + document.getElementById(target.id).getAttribute("url")
-          this.downloadName = target.children[2].innerText;
-          this.ids.push(dom)
-        } else {
-          children.style.display = 'none';
-          target.style.backgroundColor = "white";
-          this.downloadUrl = '';
-          this.downloadName = '';
-          for (let i = 0; i < this.ids.length; i++) {
-            if (this.ids[i] == dom) this.ids.splice(i, 1)
-          }    //取消则从ids删除该元素
-        }
       },
       /**
        * @param {Object} questionnaire
@@ -804,6 +784,7 @@ const defaultForm = {
       },
       //Action:編輯素材查詢
       async fetchProgram(postData) {
+
         this.isNotFound = true
         
         const data = await fetchProgram(postData)
@@ -816,6 +797,7 @@ const defaultForm = {
         if(this.hasResult(data.restData.programs)){
           
           this.isNotFound = false
+
           let tmpData = data.restData.programs[0] //僅會有一筆
           Object.keys(this.postForm).filter(key => key in tmpData).forEach(key => this.postForm[key] = tmpData[key])
           
@@ -825,10 +807,13 @@ const defaultForm = {
             items.push(Object.assign(mediaFile))
             return items
           }, [])
-
-          this.signAttachmentFile = data.restData.signAttachment
+          //塞入假檔案for 畫面呈現
+          let tmpfile = data.restData.signAttachment.originalFileName
+          this.attachmentFile = new File(["tmp"], tmpfile , {type:"text/plain", lastModified: new Date().getTime()});
           
+          this.signAttachmentFile = data.restData.signAttachment
           console.log(this.signAttachmentFile)
+          
           this.isShowSelected = true
         }
       },

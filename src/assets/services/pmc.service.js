@@ -1,5 +1,5 @@
 import WS from '@/assets/services/pmc.ws';
-
+import EventBus from './eventBus';
 class PMCService {
     constructor(){
         this.ws = WS;
@@ -13,46 +13,45 @@ class PMCService {
     }
 
     //證件拍攝器
-    callWebScanAdapter () {
+    async callWebScanAdapter () {
         //var message = document.getElementById("txtMessage").value;
         var uuid = this.uuidv4();
     
         var message = JSON.stringify({
             'REQUEST_UUID': uuid,
             'DeviceName': 'WebScanAdapter'
-          });
+        });
         this.ws.SendMessage(message, function (code, message, data) {
             // call back function here
-            console.log('get message:'+data);
+            // console.log('get message:'+data);
             
             // parse json
             var json = JSON.parse(data);
-    
+        
             // check request UUID = response UUID
             if(uuid === json.REQUEST_UUID){
                 console.log('-->request UUID = response UUID check OK.')
             } else {
                 console.error.log('-->request UUID = response UUID check fail.')
             }
-    
-            console.log('REQUEST_UUID:' + json.REQUEST_UUID);
-            console.log('RESULT_CODE:' + json.RESULT_CODE);
-            console.log('DeviceName:' + json.DeviceName);
-            console.log('RESULT_MESSAGE:' + json.RESULT_MESSAGE);
+        
+            // console.log('REQUEST_UUID:' + json.REQUEST_UUID);
+            // console.log('RESULT_CODE:' + json.RESULT_CODE);
+            // console.log('DeviceName:' + json.DeviceName);
+            // console.log('RESULT_MESSAGE:' + json.RESULT_MESSAGE);
             
             if(json.DeviceName === 'WebScanAdapter') {
                 for (var i = 0; i < json.ADAPTER_DATA.length; i++) {
                     var adapterdata = json.ADAPTER_DATA[i];
-                    console.log('SERIAL:' + adapterdata.SERIAL);
-                    console.log('BASE64STR:' + adapterdata.BASE64STR);
+                    // console.log('SERIAL:' + adapterdata.SERIAL);
+                    // console.log('BASE64STR:' + adapterdata.BASE64STR);
                     
                     var img = document.createElement('img');
                     img.src = 'data:image/jpg;base64,' + adapterdata.BASE64STR;
                     img.style.cssText = 'max-width:300px;max-height:400px;'
-                    var src = document.getElementById('scanimage');
-                    src.appendChild(img);
                 }
             }
+            EventBus.publish("scan-data-list", json.ADAPTER_DATA);
         });
     }
 
@@ -78,7 +77,7 @@ class PMCService {
 
         this.ws.SendMessage(message, function (code, message, data) {
             // call back function here
-            console.log('get message:'+data);
+            // console.log('get message:'+data);
             
             // parse json
             var json = JSON.parse(data);
@@ -119,7 +118,7 @@ class PMCService {
         
         this.ws.SendMessage(message, function (code, message, data) {
             // call back function here
-            console.log('get message:'+data); 
+            // console.log('get message:'+data); 
             
             // parse json
             var json = JSON.parse(data);

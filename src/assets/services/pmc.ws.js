@@ -42,10 +42,11 @@ class WS {
 
     // incoming websocket message
     onMessage (e) {
+        console.log(this);
         let resp = e.data;
 
         // for debug
-        this.OnMessageIn(resp);
+        // this.OnMessageIn(resp);
 
         // parse json
         let json = JSON.parse(resp);
@@ -86,6 +87,10 @@ class WS {
         this._ws.onclose = this.OnDisconnect;
         this._ws.onerror = this.OnError;
         this._ws.onmessage = this.onMessage;
+        this._ws._queue = this._queue;
+        this._ws._serial = this._serial;
+        this._ws._disp = this._disp;
+        this._ws.OnMessageIn = this.OnMessageIn;
     }
 
     // disconnect websocket

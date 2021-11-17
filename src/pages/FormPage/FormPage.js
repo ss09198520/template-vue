@@ -5,6 +5,7 @@ import CommonService from "@/assets/services/common.service";
 import ValidateUtil from '@/assets/services/validateUtil';
 import AjaxService from '@/assets/services/ajax.service.js';
 import PMCService from '@/assets/services/pmc.service.js';
+import EventBus from '@/assets/services/eventBus';
 
 export default {
     name: 'Form',
@@ -80,6 +81,7 @@ export default {
             isBlocking: false,
             blockingMsg: null,
             cancelReason: null,
+            scanDataList: []
         }
     },
     methods: {
@@ -90,6 +92,8 @@ export default {
             }
             this.getInitParam();
             this.formInit();
+
+            EventBus.subscriber("scan-data-list", this.getScanDataList);
         },
         getInitParam(){
             // 從網址取得參數
@@ -719,5 +723,9 @@ export default {
                 originImage.src = originImageSrc;
             });
         },
+        getScanDataList(data){
+            this.scanDataList = data;
+            // console.log(this.scanDataList);
+        }
     }
 }

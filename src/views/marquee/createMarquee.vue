@@ -216,7 +216,7 @@
                 depressed
                 color="primary"
                 :disabled="isAddButtonDisabled"
-                @click="submit"
+                @click="submit(false)"
               >
                 暫存
               </v-btn>
@@ -226,7 +226,7 @@
                 depressed
                 color="success"
                 :disabled="!valid"
-                @click="submit"
+                @click="submit(true)"
               >
                 送出審核
               </v-btn>
@@ -353,7 +353,7 @@ export default {
       return hasCheck;
     },
 
-    submit() {
+    submit(isSign) {
       //if (this.$refs.form.validate()) {
       var formData = new FormData();
       if (this.checkDate && this.onEditorChange) {
@@ -367,7 +367,6 @@ export default {
         if (this.attachedFiles) {
           formData.append("attachedFiles", this.attachedFiles);
         }
-
         formData.append(
           "properties",
           new Blob(
@@ -381,7 +380,8 @@ export default {
                 memo: this.marqueeDesc,
                 region: "區處",
                 releaseStartDate: this.startDate,
-                releaseEndDate: this.endDate,                
+                releaseEndDate: this.endDate,
+                sign: isSign ? true : false,          
               })
             ],
             {

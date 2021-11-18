@@ -90,12 +90,12 @@ export default {
                     fileCode: 'MILITARY_FAMILY_ID_CARD_BACK'
                 },
                 {
-                    fileName: '其他證件',
-                    fileCode: 'OTHER'
+                    fileName: '戶口名簿',
+                    fileCode: 'HOUSEHOLD_REGISTRY'
                 },
             ],
             newAttachmentType: -1,
-            attachmentOptions: ['農業動力用電主管機關證明文件', '電氣技術人員執照', '門牌整編證明', '扣繳代繳帳號資料或中獎證明', '戶口名簿', '抄表事故聯絡單', '切結書', '其他佐證文件'],
+            attachmentOptions: ['農業動力用電主管機關證明文件', '電氣技術人員執照', '門牌整編證明', '扣繳代繳帳號資料或中獎證明', '抄表事故聯絡單', '切結書', '其他佐證文件'],
             newCertificateModal: false,
             newAttachmentModal: false,
             otherCertificate: '',
@@ -106,6 +106,7 @@ export default {
             scanDataList: [],
             needScanFileCodeList: [],
             needScanFileHint: null,
+            isAgentNeedScanAttach: false,
         }
     },
     methods: {
@@ -217,6 +218,7 @@ export default {
                 this.editedFormFileNo = response.restData.editedFormFileNo;
                 this.accountingMemo = response.restData.accountingMemo;
                 this.needScanFileCodeList = response.restData.needScanFileCodeList;
+                this.isAgentNeedScanAttach = response.restData.agentNeedScanAttach;
 
                 // 檢查證件是否已依規範掃描
                 this.checkNeedScanFile();
@@ -355,8 +357,8 @@ export default {
             this.newCertificateType = index;
         },
         addCertificate(){
-            let fileName = this.newCertificateType === 4 ? this.otherCertificate : this.certificateOptions[this.newCertificateType].fileName;
-            let fileCode = this.certificateOptions[this.newCertificateType].fileCode;
+            let fileName = this.newCertificateType == this.certificateOptions.length ? this.otherCertificate : this.certificateOptions[this.newCertificateType].fileName;
+            let fileCode = this.newCertificateType == this.certificateOptions.length ? "OTHER" : this.certificateOptions[this.newCertificateType].fileCode;
 
             if(!ValidateUtil.isEmpty(this.certificateList)){
                 for(let certificate of this.certificateList){
@@ -369,7 +371,7 @@ export default {
 
             this.certificateList.push({
                 id: this.certificateNo,
-                // 4: 其他證件，須由使用者輸入證件類別
+                // 其他證件，須由使用者輸入證件類別
                 fileName: fileName,
                 originalFileName: null,
                 fileCode: fileCode,
@@ -399,7 +401,7 @@ export default {
             this.newAttachmentType = index;
         },
         addAttachment(){
-            let fileName = this.newAttachmentType === 7 ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType];
+            let fileName = this.newAttachmentType === this.attachmentOptions.length ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType];
             
             if(!ValidateUtil.isEmpty(this.attachmentList)){
                 for(let attachment of this.attachmentList){
@@ -412,7 +414,7 @@ export default {
 
             this.attachmentList.push({
                 id: this.attachmentNo,
-                // 7: 其他佐證文件，須由使用者輸入附件類別
+                // 其他佐證文件，須由使用者輸入附件類別
                 fileName: fileName,
                 fileNo: null,
                 imgSrc: null,
@@ -766,6 +768,8 @@ export default {
             // console.log(this.scanDataList);
         },
         checkNeedScanFile(){
+            this.needScanFileHint = "";
+
             if(!ValidateUtil.isEmpty(this.needScanFileCodeList)){
                 for (let index in this.needScanFileCodeList) {
                     let needScanFileCode = this.needScanFileCodeList[index];

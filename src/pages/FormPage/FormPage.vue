@@ -94,7 +94,7 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-container>
-                <v-row v-if="needScanFileHint" class="mb-2">
+                <v-row v-if="needScanFileHint && (formPageMode == 'edit' || formPageMode == 'accounting')" class="mb-2">
                   <v-col cols="12">
                     <span class="hint-text">提示：尚須掃描並上傳 {{ needScanFileHint }}</span>
                   </v-col>
@@ -201,6 +201,11 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-container>
+                <v-row v-if="isAgentNeedScanAttach && (formPageMode == 'edit' || formPageMode == 'accounting')" class="mb-2">
+                  <v-col cols="12">
+                    <span class="hint-text">提示：代理人需至少上傳一項附件</span>
+                  </v-col>
+                </v-row>
                 <v-row>
                   <v-col v-for="(attachment, index) in attachmentList" :key="attachment.id" cols="3" class="mb-2">                    
                     <v-row>
@@ -473,62 +478,25 @@
         </v-card-title>
         <v-card-text>
           <v-row class="ma-3">
-            <v-chip
-              v-if="newCertificateType === 0"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>本人身分證正面</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(0)">
-              <span>本人身分證正面</span>
-            </v-chip>
-            <v-chip
-              v-if="newCertificateType === 1"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>本人身分證反面</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(1)">
-              <span>本人身分證反面</span>
-            </v-chip>
-            <v-chip
-              v-if="newCertificateType === 2"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>現役軍人眷屬身分證正面</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(2)">
-              <span>現役軍人眷屬身分證正面</span>
-            </v-chip>
-            <v-chip
-              v-if="newCertificateType === 3"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>現役軍人眷屬身分證反面</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(3)">
-              <span>現役軍人眷屬身分證反面</span>
-            </v-chip>
+            <div v-for="(option, index) in certificateOptions" :key="option.fileCode">
+              <v-chip
+                v-if="newCertificateType === index"
+                label 
+                x-large 
+                class="ma-2" 
+                color="success"
+                text-color="white"
+              >
+                <span>{{ option.fileName }}</span>
+              </v-chip>
+              <v-chip v-else label x-large class="ma-2" @click="selectCertificate(index)">
+                <span>{{ option.fileName }}</span>
+              </v-chip>
+            </div>
           </v-row>
           <v-row class="ma-3">
             <v-chip
-              v-if="newCertificateType === 4"
+              v-if="newCertificateType === certificateOptions.length"
               label 
               x-large 
               class="ma-2" 
@@ -538,7 +506,7 @@
               <span>其他證件:&emsp;</span>
               <v-text-field v-model="otherCertificate" class="chip-text-field" placeholder="請輸入證件類別" />
             </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(4)">
+            <v-chip v-else label x-large class="ma-2" @click="selectCertificate(certificateOptions.length)">
               <span>其他證件</span>
             </v-chip>
           </v-row>
@@ -571,103 +539,25 @@
         </v-card-title>
         <v-card-text>
           <v-row class="ma-3">
-            <v-chip
-              v-if="newAttachmentType === 0"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>農業動力用電主管機關證明文件</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(0)">
-              <span>農業動力用電主管機關證明文件</span>
-            </v-chip>
-            <v-chip
-              v-if="newAttachmentType === 1"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>電氣技術人員執照</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(1)">
-              <span>電氣技術人員執照</span>
-            </v-chip>
-            <v-chip
-              v-if="newAttachmentType === 2"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>門牌整編證明</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(2)">
-              <span>門牌整編證明</span>
-            </v-chip>
+            <div v-for="(option, index) in attachmentOptions" :key="option">
+              <v-chip
+                v-if="newAttachmentType === index"
+                label 
+                x-large 
+                class="ma-2" 
+                color="success"
+                text-color="white"
+              >
+                <span>{{ option }}</span>
+              </v-chip>
+              <v-chip v-else label x-large class="ma-2" @click="selectAttachment(index)">
+                <span>{{ option }}</span>
+              </v-chip>
+            </div>
           </v-row>
           <v-row class="ma-3">
             <v-chip
-              v-if="newAttachmentType === 3"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>扣繳代繳帳號資料或中獎證明</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(3)">
-              <span>扣繳代繳帳號資料或中獎證明</span>
-            </v-chip>
-            <v-chip
-              v-if="newAttachmentType === 4"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>戶口名簿</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(4)">
-              <span>戶口名簿</span>
-            </v-chip>
-            <v-chip
-              v-if="newAttachmentType === 5"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>抄表事故聯絡單</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(5)">
-              <span>抄表事故聯絡單</span>
-            </v-chip>
-            <v-chip
-              v-if="newAttachmentType === 6"
-              label 
-              x-large 
-              class="ma-2" 
-              color="success"
-              text-color="white"
-            >
-              <span>切結書</span>
-            </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(6)">
-              <span>切結書</span>
-            </v-chip>
-          </v-row>
-          <v-row class="ma-3">
-            <v-chip
-              v-if="newAttachmentType === 7"
+              v-if="newAttachmentType === attachmentOptions.length"
               label 
               x-large 
               class="ma-2" 
@@ -677,7 +567,7 @@
               <span>其他佐證文件:&emsp;</span>
               <v-text-field v-model="otherAttachment" class="chip-text-field" placeholder="請輸入附件類別" />
             </v-chip>
-            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(7)">
+            <v-chip v-else label x-large class="ma-2" @click="selectAttachment(attachmentOptions.length)">
               <span>其他佐證文件</span>
             </v-chip>
           </v-row>

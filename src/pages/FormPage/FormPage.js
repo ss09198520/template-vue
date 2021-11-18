@@ -72,7 +72,28 @@ export default {
             showModeSelect: true,
             accountingMemo: "",
             newCertificateType: -1,
-            certificateOptions: ['本人身分證正面', '本人身分證背面', '現役軍人眷屬身分證正面', '現役軍人眷屬身分證背面', '其他證件'],
+            certificateOptions: [
+                {
+                    fileName: '本人身分證正面',
+                    fileCode: 'ID_CARD_FRONT'
+                },
+                {
+                    fileName: '本人身分證背面',
+                    fileCode: 'ID_CARD_BACK'
+                },
+                {
+                    fileName: '現役軍人眷屬身分證正面',
+                    fileCode: 'MILITARY_FAMILY_ID_CARD_FRONT'
+                },
+                {
+                    fileName: '現役軍人眷屬身分證背面',
+                    fileCode: 'MILITARY_FAMILY_ID_CARD_BACK'
+                },
+                {
+                    fileName: '其他證件',
+                    fileCode: 'OTHER'
+                },
+            ],
             newAttachmentType: -1,
             attachmentOptions: ['農業動力用電主管機關證明文件', '電氣技術人員執照', '門牌整編證明', '扣繳代繳帳號資料或中獎證明', '戶口名簿', '抄表事故聯絡單', '切結書', '其他佐證文件'],
             newCertificateModal: false,
@@ -82,18 +103,18 @@ export default {
             isBlocking: false,
             blockingMsg: null,
             cancelReason: null,
-            scanDataList: []
+            scanDataList: [],
+            needScanFileCodeList: [],
+            needScanFileHint: null,
         }
     },
     methods: {
         init(){
             if(this.restrictMode){
                 this.formPageMode = this.restrictMode;
-                this.showModeSelect = false;        
-                console.log(this.queryMemo);         
+                this.showModeSelect = false;       
             }        
             if(this.queryMemo){
-                console.log(this.queryMemo);
                 this.accountingMemo = this.queryMemo;
             }                  
            
@@ -195,6 +216,10 @@ export default {
                 this.formFileNo = response.restData.formFileNo;
                 this.editedFormFileNo = response.restData.editedFormFileNo;
                 this.accountingMemo = response.restData.accountingMemo;
+                this.needScanFileCodeList = response.restData.needScanFileCodeList;
+
+                // 檢查證件是否已依規範掃描
+                this.checkNeedScanFile();
 
                 // 簽名
                 if(!ValidateUtil.isEmpty(response.restData.customerSign)){
@@ -225,6 +250,7 @@ export default {
                         id: this.certificateNo,
                         fileName: certificate.fileName,
                         originalFileName: certificate.originalFileName,
+                        fileCode: certificate.fileCode,
                         fileNo: certificate.fileNo,
                         filePath: certificate.filePath,
                         imgSrc: certificate.imgSrc,
@@ -329,8 +355,9 @@ export default {
             this.newCertificateType = index;
         },
         addCertificate(){
-            let fileName = this.newCertificateType === 4 ? this.otherCertificate : this.certificateOptions[this.newCertificateType];
-            
+            let fileName = this.newCertificateType === 4 ? this.otherCertificate : this.certificateOptions[this.newCertificateType].fileName;
+            let fileCode = this.certificateOptions[this.newCertificateType].fileCode;
+
             if(!ValidateUtil.isEmpty(this.certificateList)){
                 for(let certificate of this.certificateList){
                     if(fileName == certificate.fileName){
@@ -344,9 +371,13 @@ export default {
                 id: this.certificateNo,
                 // 4: 其他證件，須由使用者輸入證件類別
                 fileName: fileName,
+                originalFileName: null,
+                fileCode: fileCode,
                 fileNo: null,
+                filePath: null,
                 imgSrc: null,
                 isAdditional: true,
+                hasEdit: false,
             });
             this.certificateNo ++;
             this.newCertificateModal = false;
@@ -733,6 +764,36 @@ export default {
         getScanDataList(data){
             this.scanDataList = data;
             // console.log(this.scanDataList);
-        }
+        },
+        checkNeedScanFile(){
+            if(!ValidateUtil.isEmpty(this.needScanFileCodeList)){
+                for (let index in this.needScanFileCodeList) {
+                    let needScanFileCode = this.needScanFileCodeList[index];
+                    if(!ValidateUtil.isEmpty(this.certificateList)){
+                        for (let certificate of this.certificateList) {
+                            // 若已有掃描的證件，將 fileCode 從 List 移除，最後剩下來的就是還沒掃描的
+                            if(!ValidateUtil.isEmpty(needScanFileCode) 
+                                && certificate.fileCode == needScanFileCode 
+                                && ValidateUtil.isEmpty(certificate.fileNo)){
+
+                                this.needScanFileCodeList.splice(index, 1);
+                                index--;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if(!ValidateUtil.isEmpty(this.needScanFileCodeList)){
+                    for (let needScanFileCode of this.needScanFileCodeList) {
+                        for(let certificateOption of this.certificateOptions){
+                            if(certificateOption.fileCode == needScanFileCode){
+                                this.needScanFileHint = this.needScanFileHint ? this.needScanFileHint + "、" + certificateOption.fileName : certificateOption.fileName;
+                            }
+                        }
+                    }
+                }
+            }
+        },
     }
 }

@@ -94,6 +94,11 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-container>
+                <v-row v-if="needScanFileHint" class="mb-2">
+                  <v-col cols="12">
+                    <span class="hint-text">提示：尚須掃描並上傳 {{ needScanFileHint }}</span>
+                  </v-col>
+                </v-row>
                 <v-row>
                   <v-col v-for="(certificate, index) in certificateList" :key="certificate.id" cols="3" class="mb-2">
                     <v-row>
@@ -809,5 +814,10 @@
 
     .cancel-text{
       color: #db6154;
+    }
+
+    .hint-text{
+      color: red;
+      font-size: 24px;
     }
 </style>

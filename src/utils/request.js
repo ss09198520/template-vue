@@ -90,8 +90,8 @@ service.interceptors.response.use(
       // }
       return Promise.reject(new Error(res.rtnMsg || 'Error'))
     } else {
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.restData.code === '400' || res.restData.code === 50012 || res.restData.code === 50014) {
+      // 401:HTTP.UNAUTHORIZED , 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
+      if (res.restData.code === '401' || res.restData.code === 50012 || res.restData.code === 50014) {
         // to re-login
         store.dispatch('user/resetToken').then(() => {
           location.reload()

@@ -43,7 +43,7 @@ const AjaxService = {
 
           // 1.1 回傳資訊判斷是否已登入 (add by john zeng)
           // 無登入權限, 400 導頁,
-          if (res.restData.code === '400' || res.restData.code === 50012 || res.restData.code === 50014) {
+          if (res.restData.code === '401' || res.restData.code === 50012 || res.restData.code === 50014) {
             MessageService.showInfo(res.restData.message , '尚未登入')
             // 清除登入資訊, 導至登入頁
             store.dispatch('user/resetToken').then(() => {

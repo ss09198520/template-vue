@@ -266,7 +266,7 @@
         <span>清空查詢</span>
       </v-tooltip>
     </v-row>
-    <!-- <v-divider class="mt-6 mb-5" /> -->
+
     <hr class="mt-6 mb-5">
     <v-row v-show="true">
       <v-col md="12">
@@ -305,7 +305,7 @@
                   fab
                   x-small
                   color="primary"
-                  @click="editItem(item)"
+                  @click="previewItem(item)"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-eye'" />
@@ -331,11 +331,10 @@
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
-                  class="ma-2"
+                  class="ma-2 error"
                   fab
                   x-small
-                  color="error"
-                  @click="action('deleteMultiMedia',item)"
+                  @click="remove(item)"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-delete'" />
@@ -343,6 +342,8 @@
               </template>
               <span>刪除</span>
             </v-tooltip>
+
+            
           </template>
           <template v-slot:[`item.returnInfo`]="{ item }">
             <v-tooltip v-if="item.returnInfo" top>
@@ -395,6 +396,81 @@
         </div>
       </v-col>
     </v-row>
+
+    <v-dialog
+      v-model="deleteMarqueeModel"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#C62828; color:white;">          
+          確認是否要刪除跑馬燈
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="deleteMarqueeModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            跑馬燈名稱: {{ selectMarquee.marqueeName }}
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="normal"            
+            @click="deleteMarqueeModel = false"
+          >
+            &emsp;取消&emsp;
+          </v-btn>
+          <v-btn              
+            color="primary"            
+            @click="deleteMarquee()"
+          >
+            &emsp;確定&emsp;
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="preViewMarqueeModel"
+      max-width="700"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#283593; color:white;">          
+          跑馬燈預覽
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="preViewMarqueeModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            跑馬燈名稱: {{ selectMarquee.marqueeName }}{{ selectMarquee.animationDuration }}
+            <marquee-text
+              :duration="selectMarquee.animationDuration"
+              :repeat="1"
+              class="marquee"
+            >
+              {{ selectMarquee.marqueeContentHTML }}
+            </marquee-text>
+          </v-row>
+        </v-card-text>
+       
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 
@@ -426,6 +502,11 @@
         itemsListPageCount: 1,
 
         valid: false,
+
+        deleteMarqueeModel:false,
+        preViewMarqueeModel:false,
+        selectIndex: null,
+        selectMarquee:{},
 
         //上架下拉選單
         statusOption: enums.mediaStatusOption,
@@ -543,6 +624,12 @@
         this.editedItem = Object.assign({}, item)
         this.$router.push({path:`${this.$route.matched[0].path}/createMarquee?id=${item.marqueeId}`})
       },
+      previewItem(item) {
+        this.selectMarquee = item;
+        this.preViewMarqueeModel = true;
+        
+       // this.$router.push({path:`${this.$route.matched[0].path}/createMarquee?id=${item.marqueeId}`})
+      },
       viewSchedule() {
         this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
       },
@@ -550,53 +637,56 @@
         this.alertDialog = true
         this.editedIndex = this.itemsCRUD.indexOf(item)
       },
-      remove() {
-        this.itemsCRUD.splice(this.editedIndex, 1)
-        this.close()
+      remove(item) {
+        this.selectMarquee = item;
+        //this.itemsCRUD.splice(this.editedIndex, 1)
+        //this.close()       
+        this.deleteMarqueeModel = true;
       },
+      deleteMarquee(){
 
-         // 送出問卷查詢
+      },
+        // 查詢
       submitSearch() {
-        //console.log(this.postForm)
-        
-        //API post data
-        fetchListMarquee({
-          marqueeName: this.marqueeName, 
-          releaseStartDateFrom: this.releaseStartDateFrom, 
-          releaseStartDateTo: this.releaseStartDateTo, 
-          releaseEndDateFrom: this.releaseEndDateFrom, 
-          releaseEndDateTo: this.releaseEndDateTo, 
-          status: this.status
-        }).then(res => {
-          this.itemsCRUD = [],
-          this.isShow = !this.isShow
-          if((res.restData.marquee).length > 1){
-                      let arrayObj = res.restData.marquee     //處理退件資訊轉換
-                      arrayObj.forEach(item => {
-                        if(item.signStatus==='REJECT'){
-                          Object.assign(item, {returnInfo: {
-                            rejectUser: item.rejectUser,
-                            rejectDate: item.rejectDate,
-                            rejectReason: item.rejectReason,
-                          }});
-                        }
-                      });
+      //console.log(this.postForm)      
+      //API post data
+      fetchListMarquee({
+        marqueeName: this.marqueeName, 
+        releaseStartDateFrom: this.releaseStartDateFrom, 
+        releaseStartDateTo: this.releaseStartDateTo, 
+        releaseEndDateFrom: this.releaseEndDateFrom, 
+        releaseEndDateTo: this.releaseEndDateTo, 
+        status: this.status
+      }).then(res => {
+        this.itemsCRUD = [],
+        this.isShow = !this.isShow
+        if((res.restData.marquee).length >= 1){
+                    let arrayObj = res.restData.marquee     //處理退件資訊轉換
+                    arrayObj.forEach(item => {
+                      if(item.signStatus==='REJECT'){
+                        Object.assign(item, {returnInfo: {
+                          rejectUser: item.rejectUser,
+                          rejectDate: item.rejectDate,
+                          rejectReason: item.rejectReason,
+                        }});
+                      }
+                    });
 
-                    this.itemsCRUD = Object.assign([],arrayObj)
-          }else {
-             this.itemsCRUD = [],
-             MessageService.showSuccess("查無資料");
-          }
-          console.log(this.itemsCRUD)
+                  this.itemsCRUD = Object.assign([],arrayObj)
+        }else {
+            this.itemsCRUD = [],
+            MessageService.showSuccess("查無資料");
+        }
+        console.log(this.itemsCRUD)
 
-        })
-         .catch(error => {
-            //MessageService.showError(error.rtnMsg);
-            this.isSubmited = false;
-            console.error(error);
-          });
+      })
+        .catch(error => {
+          //MessageService.showError(error.rtnMsg);
+          this.isSubmited = false;
+          console.error(error);
+        });
 
-      },
+    },
     }
   }
 </script>

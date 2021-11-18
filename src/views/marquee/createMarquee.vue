@@ -19,7 +19,7 @@
                 :rules="rules.requiredRule.concat(rules.lengthRules)"
                 :hide-details="hideDatails"
                 color="accent"
-                placeholder="請輸入跑馬燈名稱"
+                placeholder="請輸入跑馬燈名稱，跑馬燈名稱不能重複"
                 :counter="maxCharacter"
                 outlined
                 required
@@ -193,7 +193,7 @@
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col cols="9" md="8">
               <quill
-                ref="editor"
+                ref="myQuillEditor"
                 v-model="marqueeHTML"
                 class="quill-marquee"
                 @change="onEditorChange($event)"
@@ -259,7 +259,7 @@ export default {
       duration: 30,
       min: 0,
       max: 60,
-      marqueeName: "123",
+      marqueeName: "台電跑馬燈",
       marqueeHTML: `<p><span class="ql-size-small" style="color: rgb(0, 41, 102); background-color: rgb(204, 224, 245);">結廬在人境，而無車馬喧。</span></p><p><span class="ql-size-small" style="color: rgb(0, 41, 102); background-color: rgb(204, 224, 245);">問君何能爾？心遠地自偏。</span></p>`,
       marqueeText: "",
       marqueeDesc: "",
@@ -291,8 +291,8 @@ export default {
   },
   computed: {
     editor() {
-      return this.$refs.myQuillEditor;
-    },
+        return this.$refs.myQuillEditor.quill
+      },
      isAddButtonDisabled() {
       return !this.valid || this.isSubmited; 
     },
@@ -412,10 +412,9 @@ export default {
       }
     },
     resetForm(){
+      
       this.isSubmited = true;
       this.marqueeName = "";     
-      this.marqueeHTML= "";
-      this.marqueeText = null;
       this.duration = 30;
       this.marqueeDesc = null;
       this.startDate = null;

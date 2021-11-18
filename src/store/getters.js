@@ -4,6 +4,7 @@ const getters = {
   image: state => state.app.image,
   showImage: state => state.app.showImage,
   miniSidebar: state => state.app.miniSidebar,
+  isLoading: state => state.app.isLoading,
   roles: state => state.user.roles,
   token: state => state.user.token,
   avatar: state => state.user.avatar,

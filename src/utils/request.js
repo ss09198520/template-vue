@@ -18,7 +18,8 @@ service.interceptors.request.use(
     // ** do something before request is sent **//
 
     // 使用 Vuetify 的 <v-overlay> <v-progress-circular> 開啟Loading畫面
-    EventBus.publish('toggleLoading', true); /* 開啟loading小圈圈 */
+    // EventBus.publish('toggleLoading', true); /* 開啟loading小圈圈 */
+    store.dispatch('app/toggleLoading' , true)
     LoadingConfig.hasLoader = true;
 
     // if (store.getters.token) {
@@ -39,7 +40,8 @@ service.interceptors.request.use(
     // 3 關掉loading 小圈圈
       LoadingConfig.blockCount = 0;
       if(LoadingConfig.hasLoader){
-        EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+        // EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+        store.dispatch('app/toggleLoading' , false)
         LoadingConfig.hasLoader = false;
       }
     }
@@ -68,7 +70,8 @@ service.interceptors.response.use(
     // 3 關掉loading 小圈圈
       LoadingConfig.blockCount = 0;
       if(LoadingConfig.hasLoader){
-        EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+        // EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+        store.dispatch('app/toggleLoading' , false)
         LoadingConfig.hasLoader = false;
       }
     }
@@ -105,11 +108,11 @@ service.interceptors.response.use(
     // 3 關掉loading 小圈圈
       LoadingConfig.blockCount = 0;
       if(LoadingConfig.hasLoader){
-        EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+        // EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+        store.dispatch('app/toggleLoading' , false)
         LoadingConfig.hasLoader = false;
       }
     }
-
     if (error.response) {
       console.log('err' + error) // for debug
       // Http error code 的處理

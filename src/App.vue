@@ -18,28 +18,17 @@
 </template>
 
 <script>
-import EventBus from '@/assets/services/eventBus.js';
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
 
   },
-  data: () => ({
-    isLoading: false, // 開啟loading畫面
-  }),
-  beforeMount() {
-    this.init();
+  computed: {
+    ...mapGetters([
+      'isLoading',
+    ]),
   },
-  methods: {
-    init() {
-      // 註冊啟動畫面loading監聽事件 (ajax)
-      EventBus.subscriber('toggleLoading',this.toggleLoading);
-    },
-    // 開啟Loading畫面
-    toggleLoading(isLoading){
-      this.isLoading = isLoading;
-    },
-  }
 }
 
 </script>

@@ -14,12 +14,16 @@ const state = {
   image: 'https://demos.creative-tim.com/vue-material-dashboard/img/sidebar-2.32103624.jpg',
   showImage: false,
   miniSidebar: false,
+  isLoading:false //app.vue v-overlay control
 }
 
 
 const mutations = {
   TOGGLE_SIDEBAR: state => {
     state.miniSidebar = !state.miniSidebar
+  },
+  TOGGLE_LOADING: (state, loading) => {
+    state.isLoading = loading
   },
   TOGGLE_DRAWER: state => {
     state.drawer = !state.drawer
@@ -42,6 +46,9 @@ const mutations = {
 const actions = {
   toggleSideBar({ commit }) {
     commit('TOGGLE_SIDEBAR')
+  },
+  toggleLoading({ commit } , loading) {
+    commit('TOGGLE_LOADING' , loading)
   },
   toggleDrawer({ commit }) {
     commit('TOGGLE_DRAWER')

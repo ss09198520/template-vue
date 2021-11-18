@@ -3,6 +3,12 @@ const materialFileTypeOption = [
   { text: '圖片', value: 'image'},
   { text: '影音', value: 'video'},
 ]
+//多媒體類型 ( Sign off page)
+const mediaSignTypeOption = [
+  { text: '節目單', value: 'MEDIA_PROGRAM'},
+  { text: '跑馬燈', value: 'MEDIA_MARQUEE'},
+  { text: '問卷調查', value: 'MEDIA_QUESTIONNAIRE'},
+]
 
 //多媒體類型下拉選單
 const mediaTypeOption = [
@@ -30,4 +36,5 @@ export default {
   mediaStatusOption : mediaStatusOption,
   mediaSignStatusOption : mediaSignStatusOption,
   materialFileTypeOption : materialFileTypeOption,
+  mediaSignTypeOption : mediaSignTypeOption,
 }

@@ -24,7 +24,8 @@ const AjaxService = {
         
         // 使用 Vuetify 的 <v-overlay> <v-progress-circular> 開啟Loading畫面
         if(!noLoading){
-          EventBus.publish('toggleLoading', true); /* 開啟loading小圈圈 */
+          // EventBus.publish('toggleLoading', true); /* 開啟loading小圈圈 */
+          store.dispatch('app/toggleLoading' , true) /* @/sotre/modules/app.js 開啟loading小圈圈 */ 
           LoadingConfig.hasLoader = true;
         }
       }
@@ -80,7 +81,8 @@ const AjaxService = {
           // 3 關掉loading 小圈圈
             LoadingConfig.blockCount = 0;
             if(LoadingConfig.hasLoader){
-              EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+              // EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+              store.dispatch('app/toggleLoading' , false) /* @/sotre/modules/app.js 關閉loading小圈圈 */
               LoadingConfig.hasLoader = false;
             }
           }
@@ -95,7 +97,8 @@ const AjaxService = {
         LoadingConfig.blockCount++; // 加上 ajax 計數器，平行呼叫時才擋得住畫面
          
         if(LoadingConfig.blockCount == 1){
-         EventBus.publish('toggleLoading', true); /* 開啟loading小圈圈 */
+        //  EventBus.publish('toggleLoading', true); /* 開啟loading小圈圈 */
+         store.dispatch('app/toggleLoading' , true) /* @/sotre/modules/app.js 開啟loading小圈圈 */
          LoadingConfig.hasLoader = true;
         }
       }
@@ -139,7 +142,8 @@ const AjaxService = {
             // 3 關掉loading 小圈圈
               LoadingConfig.blockCount = 0;
               if(LoadingConfig.hasLoader){
-                EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+                // EventBus.publish('toggleLoading', false); /* 關閉loading小圈圈 */
+                store.dispatch('app/toggleLoading' , false) /* @/sotre/modules/app.js 關閉loading小圈圈 */
                 LoadingConfig.hasLoader = false;
               }
             }

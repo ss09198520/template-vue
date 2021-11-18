@@ -39,6 +39,7 @@
                 placeholder="節目單類型"
                 dense
                 outlined
+                clearable
                 hide-details
               />
             </v-col>
@@ -52,7 +53,7 @@
             </v-col>
             <v-col cols="3">
               <v-autocomplete
-                v-model="postForm.status"
+                v-model="postForm.signStatus"
                 :items="signStatusOption"
                 clearable
                 item-color="accent"
@@ -70,7 +71,7 @@
             </v-col>
             <v-col cols="3" class="ml-2">
               <v-autocomplete
-                v-model="postForm.signStatus"
+                v-model="postForm.status"
                 :items="statusOption"
                 class="font-bold"
                 color="accent"
@@ -78,6 +79,7 @@
                 placeholder="上架狀態"
                 dense
                 outlined
+                clearable
                 hide-details
               />
             </v-col>
@@ -412,7 +414,8 @@
     releaseStartDateTo: null, 
     releaseEndDateFrom: null, 
     releaseEndDateTo: null, 
-    status: null
+    status: null,
+    signStatus:null
   }
 
   export default {
@@ -533,20 +536,22 @@
       
       //Action:節目單清單查詢
       async fetchProgramList(postData) {
+        //查詢前清空資料
+        this.programs = Object.assign([])
+        this.isShow = false
         
         const data = await fetchProgramList(postData)
+
         // 驗證是否成功
         if (!data.restData.success) {              
           MessageService.showError(data.restData.message,'查詢節目單清單資料');
             return;
         }
-        //查詢前清空資料
-        this.programs = Object.assign([])
-        this.isShow = false
+        this.isShow = true
+        
         // 驗證是否有資料
         if(this.hasResult(data.restData.programs)){
           
-          this.isShow = !this.isShow
           let tmpData = data.restData.programs
           
           //處理退件資訊轉換

@@ -10,7 +10,7 @@ export function initQuestionnaireAnswer(data) {
 
 export function fetchActiveQuestionnaire() {
   return request({
-    url: '/questionnaire/v1/active',
+    url: '/questionnaire/v1/media/active',
     method: 'get',
   })
 }

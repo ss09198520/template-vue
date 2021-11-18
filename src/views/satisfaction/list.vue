@@ -276,7 +276,7 @@
   export default {
     data() {
       return {
-        isShow: true,
+        isShow: false,
         menu: false,
         postForm: Object.assign({}, defaultForm),
         date: new Date().toISOString().substr(0, 10),
@@ -355,7 +355,7 @@
       
       //Action:問卷查詢
       async fetchQuestionnaireList(postData) {
-        
+        this.isShow = false
         const data = await fetchQuestionnaireList(postData)
         // 驗證是否成功
         if (!data.restData.success) {              
@@ -380,7 +380,8 @@
             }
           });
 
-          this.questionnaires =tmpData
+          this.isShow = true
+          this.questionnaires = tmpData
         }
         
         

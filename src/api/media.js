@@ -33,3 +33,22 @@ export function queryMediaSignOff(data) {
     data
   })
 }
+
+export function mediaSignOff(data) {
+  return request({
+    url: '/mediaSign/v1/mediaSignOff',
+    method: 'post',
+    data
+  })
+}
+
+export function downloadMediaSignOffFile(data) {
+  return request({
+    url: '/mediaSign/v1/downloadMediaSignOffFile',
+    method: 'post',
+    responseType: 'blob',
+    data
+  })
+}
+
+

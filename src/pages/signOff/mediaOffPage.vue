@@ -49,8 +49,11 @@
             :page.sync="inquireListPage"
             @page-count="inquireListPageCount = $event"
           >
-            <template v-slot:[`item.mani`]="{ item }">
-              <div v-if="item.mani==true">
+            <template v-slot:[`item.mediaSignType`]="{ item }">
+              {{ mediaSignTypeOption.find(state => { return item.mediaSignType===state.value }).text }}
+            </template>
+            <template v-slot:[`item.mani`]="{ item }">   
+              <div>
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn
@@ -58,16 +61,16 @@
                       fab
                       small
                       color="success"
-                      @click="sign()"
+                      @click="sign(item)"
                       v-on="on"
                     >
                       <v-icon v-text="'mdi-account-check-outline'" />
                     </v-btn>
                   </template>
                   <span>簽核</span>
-                </v-tooltip>                
-              </div>                                                                               
-            </template>         
+                </v-tooltip>
+              </div>
+            </template>
           </v-data-table>
         </v-col>
       </v-row>
@@ -98,13 +101,13 @@
             </v-btn>
           </v-card-title>
 
-          <v-card-text>
+          <v-card-text v-if="selectedSign">
             <v-row class="mt-3">
               <v-col cols="3">
                 上架日期:
               </v-col>
               <v-col>
-                2021-09-15
+                {{ selectedSign.detailData.releaseStartDate }}
               </v-col>
             </v-row>
             <v-row class="mt-3">
@@ -112,23 +115,23 @@
                 下架日期:
               </v-col>
               <v-col>
-                2021-10-15
+                {{ selectedSign.detailData.releaseEndDate }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="3">
-                跑馬燈標題 :
+                {{ mediaSignTypeOption.find(state => { return selectedSign.mediaSignType===state.value }).text }}標題 :
               </v-col>
               <v-col>
-                秋季節約用電宣導
+                {{ selectedSign.mediaSignName }}
               </v-col>
             </v-row>
             <v-row>
               <v-col cols="3">
-                跑馬燈描述 :
+                {{ mediaSignTypeOption.find(state => { return selectedSign.mediaSignType===state.value }).text }}描述 :
               </v-col>
               <v-col>
-                宣導入秋使用節約電力方式
+                {{ selectedSign.detailData.memo }}
               </v-col>
             </v-row>
             <v-row>
@@ -136,7 +139,7 @@
                 單位 :
               </v-col>
               <v-col>
-                台中
+                {{ selectedSign.detailData.region }}
               </v-col>
             </v-row>
             <v-row>
@@ -144,7 +147,7 @@
                 上架人員 :
               </v-col>
               <v-col>
-                王大明
+                {{ selectedSign.detailData.createAuthor }}
               </v-col>
             </v-row>
             <v-row>
@@ -152,7 +155,7 @@
                 送審日期 :
               </v-col>
               <v-col>
-                2021-09-15 13:44
+                {{ selectedSign.createDate }}
               </v-col>
             </v-row>
           </v-card-text>
@@ -163,7 +166,7 @@
             <v-spacer />
             <v-btn
               color="success"              
-              @click="popOut = false"
+              @click="downloadAttachment"
             >
               附件預覽
             </v-btn>
@@ -175,13 +178,13 @@
             </v-btn>
             <v-btn
               color="error"              
-              @click="returnReasonModel = true"
+              @click="rejectReasonModel = true"
             >
               退 件
             </v-btn>
             <v-btn
               color="success"              
-              @click="showMessage('簽核成功')"
+              @click="signSubmit(true)"
             >
               核 准
             </v-btn>
@@ -190,7 +193,7 @@
       </v-dialog>
       <!-- 退件原因 -->
       <v-dialog
-        v-model="returnReasonModel"
+        v-model="rejectReasonModel"
         max-width="600"
       >
         <v-card>
@@ -202,7 +205,7 @@
               icon
               small
               text
-              @click="returnReasonModel = false"
+              @click="rejectReasonModel = false"
             >
               <v-icon> mdi-close </v-icon>
             </v-btn>
@@ -214,6 +217,7 @@
               </v-col>
               <v-col cols="7">
                 <v-text-field
+                  v-model="rejectReason"
                   outlined
                   hide-details                                         
                   dense
@@ -226,7 +230,8 @@
                 退件說明
               </v-col>
               <v-col cols="7">
-                <v-textarea            
+                <v-textarea
+                  v-model="rejectDesc"
                   color="#ADADAD"
                   outlined
                   name="input-7-4"
@@ -240,13 +245,13 @@
           <v-card-actions class="d-end mt-5">
             <v-btn              
               color="normal"            
-              @click="returnReasonModel = false"
+              @click="rejectReasonModel = false"
             >
               &emsp;取消&emsp;
             </v-btn>
             <v-btn              
               color="error"            
-              @click="showMessage('已退件成功')"
+              @click="signSubmit(false)"
             >
               確認退件
             </v-btn>
@@ -281,17 +286,26 @@
 import MessageService from "@/assets/services/message.service";
 import enums from '@/utils/enums'
 import isEmpty from 'lodash/isEmpty'
-import { queryMediaSignOff} from '@/api/media'
+import { queryMediaSignOff , mediaSignOff , downloadMediaSignOffFile} from '@/api/media'
 
-  const defaultQueryForm = {}
+const defaultQueryForm = {}
+
+const defaultMediaSignOffForm = {
+  signOffNo : null,
+  mediaSignId : null,
+  mediaSignType : null,
+  pass: null,
+  rejectReason: null,
+  rejectDesc: null,
+}
 
 export default {
-    data(){
+    
+    data() {
         return{
             //api post data
-            // postForm: Object.assign({}, defaultForm),
-            postQueryForm: Object.assign({},defaultQueryForm),
-            // postQueryProgramForm : Object.assign({} , defaultQueryProgramForm),
+            postQueryForm: {},
+            postMediaSignOffForm: {},
 
             //預設當前頁數
             inquireListPage: 1,
@@ -302,7 +316,13 @@ export default {
             //預設簽核顯示範圍按鈕
             displayAll: true,
             //退件原因說明視窗
-            returnReasonModel: false,
+            rejectReasonModel: false,
+            rejectReason: '',
+            rejectDesc: '',
+
+            //類型對照
+            mediaSignTypeOption: enums.mediaSignTypeOption,
+
             snackbar: false,
             alert: false,
             //
@@ -315,14 +335,9 @@ export default {
                   { text: '申請送審日期', value: 'createDate', align: 'center' },
                   { text: '狀態操作', value: 'mani', align: 'center' },
               ],
-              signList: []
-              // signList:[
-              //     { mani: true, inquireStatus: '申請人主管已簽核', orderId: 'M00024', electNum:'7140000123', inquireUnit:'台中區處', inquireName:'王大明', inquireDate:'2021-09-15 10:00',orderType:'APR0370',orderItems:'夏季輪播跑馬燈', category:'跑馬燈'},
-              //     { mani: true, inquireStatus: '未簽核', orderId: 'P00615', electNum:'7140000456', inquireUnit:'台中區處', inquireName:'李小凡', inquireDate:'2021-09-15 11:21',orderType:'APR0200',orderItems:'夏季宣導文宣影片', category:'節目單'},
-              //     { mani: true, inquireStatus: '未簽核', orderId: 'P00040', electNum:'7140000789', inquireUnit:'台中區處', inquireName:'葉星辰', inquireDate:'2021-09-15 15:36',orderType:'APR0200',orderItems:'秋季季宣導文宣', category:'節目單'},
-              //     { mani: true, inquireStatus: '申請人主管已簽核', orderId: 'S00605', electNum:'7140000888', inquireUnit:'台中區處', inquireName:'趙元智', inquireDate:'2021-09-15 09:45',orderType:'APR0160',orderItems:'客戶觀感調查', category:'滿意度調查'},
-              //     { mani: false, inquireStatus: '簽核完畢', orderId: 'P00619', electNum:'7140000999', inquireUnit:'台中區處', inquireName:'陳立元', inquireDate:'2021-09-15 13:44',orderType:'APR0200',orderItems:'櫃台體驗滿意調查', category:'滿意度調查'},
-              // ],
+            signList: [],
+            selectedSign: null, //選擇要操作的該筆調閱簽核
+            
         }
     },
     mounted() {
@@ -330,22 +345,35 @@ export default {
     },
     methods:{
       init() {
-          this.querySignOffList();
+        //api post data
+        this.postQueryForm = Object.assign({},defaultQueryForm)
+        this.postMediaSignOffForm = Object.assign({},defaultMediaSignOffForm)
+        //
+        this.querySignOffList();
       },
-      sign() {
-          this.popOut = true;
+      reset() {
+        this.rejectReason = ''
+        this.rejectDesc = ''
+        this.popOut = false
+        this.rejectReasonModel = false
+        this.selectedSign = null
       },
-      showMessage(msg) {
-        MessageService.showSuccess(msg + "✓")
-        this.popOut = false;
-        this.returnReasonModel = false;
+      sign(item){
+        this.selectedSign = item;
+        // this.querySignDetail();
+        this.popOut = true;
       },
-      returnSubmit(){
-          this.popOut = false;
-          this.returnReasonModel = false;
-          MessageService.showSuccess("已退件成功✓")
+      downloadAttachment() {
+        this.downloadMediaSignOffFile(this.selectedSign.id)
       },
-      
+      signSubmit(pass){
+        // 驗證
+        if (!pass && isEmpty(this.rejectReason)) {
+            MessageService.showCheckInfo(['退件原因'],'');
+            return;
+        }
+        this.mediaSignOff(pass)
+      },
       /**
        * @param {Object} questionnaire
        * @returns {Object}
@@ -381,15 +409,57 @@ export default {
         if(this.hasResult(data.restData.signList)){
           let tmpData = data.restData.signList
 
-          //處理已選擇素材資訊轉換
-          // if(!isEmpty(this.selectedFiles)) {
-          //   tmpData.forEach(item => {
-          //     ////已選擇一一比對回傳之資料
-          //     item.selected = this.selectedFiles.some(selected => selected.id == item.id) ? true : false
-          //   });
-          // }
           this.signList = tmpData
           this.isShow = true
+        }
+      },
+
+      //Action: 送出簽核
+      async mediaSignOff(pass) {
+
+        let postMediaSignOffData = Object.assign({} , this.defaultMediaSignOffForm)
+        
+        postMediaSignOffData.pass = pass
+        postMediaSignOffData.signOffNo = this.selectedSign.signOffNo
+        postMediaSignOffData.mediaSignId = this.selectedSign.id
+        postMediaSignOffData.mediaSignType = this.selectedSign.mediaSignType
+        postMediaSignOffData.rejectReason = pass ? null : this.rejectReason
+        postMediaSignOffData.rejectDesc = pass ? null : this.rejectDesc
+        
+        const data = await mediaSignOff(postMediaSignOffData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'簽核')
+          return
+        }
+
+        if(data.restData.success){
+          MessageService.showSuccess(pass ? '簽核成功' : '已退件成功')
+          // 重整頁面
+          this.reset()
+          this.init()
+        }else{
+          MessageService.showError(data.restData.message, pass ? '簽核':'退件')
+        }
+      },
+
+      //Action: 送出簽核
+      async downloadMediaSignOffFile(relatedSeq) {
+
+        let postData = {
+          relatedSeq : relatedSeq
+        }
+        
+        const data = await downloadMediaSignOffFile(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'下載附件')
+          return
+        }
+        if(data.restData.success){
+          MessageService.showSuccess('下載附件成功')
+        }else{
+          MessageService.showError('下載附件')
         }
       },
         

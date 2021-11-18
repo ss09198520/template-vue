@@ -75,10 +75,30 @@ service.interceptors.response.use(
         LoadingConfig.hasLoader = false;
       }
     }
+    const { data, headers } = response
+    
+   
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
     
-    if (res.rtnCode !== '00000') {
+    if(headers['content-disposition']){ //判斷檔回傳
+      
+      const fileName = headers['content-disposition'].replace(/\w+;filename=(.*)/, '$1')
+
+      // 此處當返回json文件時需要先對data進行JSON.stringify處理，其他類型文件不用做處理
+      //const blob = new Blob([JSON.stringify(data)], ...)
+      // 下載檔案
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', decodeURI(fileName)); //or any other extension
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+    }else if (res.rtnCode !== '00000') { //正常回傳
+
       MessageService.showSystemError()
       // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
       // if (res.code === '400' || res.code === 50012 || res.code === 50014) {

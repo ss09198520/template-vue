@@ -57,7 +57,7 @@
             </v-col>
             <v-col cols="4">
               <v-select
-                v-model="status"
+                v-model="signStatus"
                 :items="signStatusOption"
                 class="font-bold"
                 color="accent"
@@ -73,7 +73,7 @@
             </v-col>
             <v-col cols="4" class="ml-2">
               <v-select
-                v-model="signStatus"
+                v-model="status"
                 :items="statusOption"
                 class="font-bold"
                 color="accent"
@@ -622,7 +622,7 @@
       editItem(item) {
         this.editedIndex = this.itemsCRUD.indexOf(item)
         this.editedItem = Object.assign({}, item)
-        this.$router.push({path:`${this.$route.matched[0].path}/createMarquee?id=${item.marqueeId}`})
+        this.$router.push({path:`${this.$route.matched[0].path}/editMarquee?id=${item.marqueeId}`})
       },
       previewItem(item) {
         this.selectMarquee = item;
@@ -656,7 +656,8 @@
         releaseStartDateTo: this.releaseStartDateTo, 
         releaseEndDateFrom: this.releaseEndDateFrom, 
         releaseEndDateTo: this.releaseEndDateTo, 
-        status: this.status
+        status: this.status,
+        signStatus: this.signStatus
       }).then(res => {
         this.itemsCRUD = [],
         this.isShow = !this.isShow

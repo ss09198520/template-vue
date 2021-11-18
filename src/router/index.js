@@ -329,16 +329,23 @@ export const constantRoutes = [
       },
       {
         path: 'createMarquee',
-        name: 't-Marquee-Edit',
+        name: 'Marquee-create',
         component: () => import('@/views/marquee/createMarquee'),
         meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
       },
       {
-        path: 't-calendarList',
+        path: 'editMarquee',
+        name: 'Marquee-Edit',
+        component: () => import('@/views/marquee/createMarquee'),
+        hidden: true,
+        meta: { title: '跑馬燈編輯', icon: 'mdi-pencil-box-multiple-outline' }
+      },
+      {
+        path: 'marqueeCalendar',
         name: 't-Marquee-List-Calendar',
         component: () => import('@/views/marquee/t-calendar'),
         hidden: true,
-        meta: { title: 't-跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
+        meta: { title: '跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
       },
       {
         path: 'calendarList',

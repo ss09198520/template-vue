@@ -395,7 +395,9 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 this.empList = response.restData.empRoleList;
                   // 將選取資料重置
                   this.selectRole = [];
-                  this.openSelectBox = null;
+                  this.openSelectBox = null; 
+                  
+                  MessageService.showSuccess('查詢員工角色清單');
     
             },
             // eslint-disable-next-line no-unused-vars
@@ -423,6 +425,8 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 this.selectRole = [];
                 this.openSelectBox = null;
                 item.edit = false;
+
+                MessageService.showSuccess('修改員工角色');
     
             },
             // eslint-disable-next-line no-unused-vars

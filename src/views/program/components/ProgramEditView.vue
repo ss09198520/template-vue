@@ -522,11 +522,12 @@
         postForm: Object.assign({}, defaultForm),
         postQueryForm: Object.assign({},defaultQueryForm),
         postQueryProgramForm : Object.assign({} , defaultQueryProgramForm),
-
+        //審核附件
         attachmentFile: null,
         attachmentList: [],
         dataURL: null,
         signAttachmentFile: null,
+        
         selectedFiles:[],
         programMaterials:[], //set defaultProgramItem
         //素材資料

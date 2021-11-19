@@ -104,6 +104,8 @@
                         </v-col>
                         <v-col>
                           <v-file-input
+                            v-model="attachmentFile"
+                            :rules="rules.requiredRule"
                             :hide-details="hideDatails"
                             label="審 核 附 件 上 傳"
                             color="accent"
@@ -197,7 +199,7 @@
                     class="ma-1"
                     depressed
                     color="primary"
-                    @click="submit"
+                    @click="submit(false)"
                   >
                     暫存
                   </v-btn>
@@ -205,7 +207,7 @@
                     class="ma-1"
                     depressed
                     color="success"
-                    @click="submit"
+                    @click="submit(true)"
                   >
                     送出審核
                   </v-btn>
@@ -223,8 +225,8 @@
   import draggable from 'vuedraggable'
   import MessageService from "@/assets/services/message.service";
   import { initQuestionnaireAnswer , fetchEditQuestionnaire } from '@/api/questionnaire'
+  import isEmpty from 'lodash/isEmpty'
 
-// import isEmpty from 'lodash/isEmpty'
   // let lineEndOptions = Array.apply(null, Array(9)).map((item, i) => {
   //   return i + 2
   // })
@@ -279,8 +281,16 @@
         //日曆
         releaseDateStartMenu: false,
         //日曆 end
-        
-        postForm: Object.assign({}, defaultForm), //Form 送出用
+
+        //API post Data
+        postForm: Object.assign({}, defaultForm),
+
+        //審核附件
+        attachmentFile: null,
+        attachmentList: [],
+        dataURL: null,
+        signAttachmentFile: null,
+
         questionnaire: {
           questionnaireName: '',
           memo: '',
@@ -388,14 +398,28 @@
         this.questionnaire.questions.splice(i, 1)
         this.focusIndex = i === 0 && this.questionnaire.questions.length > 0 ? i : i - 1
       },
+      //附件上傳
+      onUpload() {
+        this.dataURL = null
+        this.signAttachmentFile = null
+        if (this.attachmentFile instanceof Blob){
+          this.reader.readAsDataURL(this.attachmentFile)    
+        }else{
+          this.signAttachmentFile = this.attachmentFile
+          this.dataURL = null
+        }
+      },
       // 送出問卷製作儲存
-      submit() {
+      submit(isSign) {
         //填答時先將資料Assign 進 postForm
         Object.keys(this.questionnaire).filter(key => key in this.postForm).forEach(key => this.postForm[key] = this.questionnaire[key]);
 
         //API post data 
-        const postData = { questionnaire : this.postForm}
-
+        const postData = { 
+          questionnaire : this.postForm,
+          sign : isSign ? true : false, //是否暫存
+        }
+        
         if (this.$refs.questionnaireForm.validate()) {
           console.log(postData)
           this.submitForm(postData)
@@ -408,6 +432,18 @@
         }
       },
 
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+      hasResult (questionnaire) {
+        // 驗證questionnaire是否有資料
+        if(isEmpty(questionnaire) || questionnaire.questions.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
+        }
+        return true
+      },
 
       /**
        * 
@@ -438,6 +474,7 @@
         // 驗證是否有資料
         if(this.hasResult(data.restData.questionnaire)){
           this.questionnaire = data.restData.questionnaire
+          console.log('this.questionnaire' ,this.questionnaire)
           this.hasResult(this.questionnaire)
           this.$nextTick(() => {this.stepEl = 1});
         }

@@ -429,7 +429,7 @@
           </v-btn>
           <v-btn              
             color="primary"            
-            @click="deleteMarquee()"
+            @click="deleteMarquee(selectMarquee.marqueeId)"
           >
             &emsp;確定&emsp;
           </v-btn>
@@ -476,7 +476,7 @@
 
 <script>
   import enums from '@/utils/enums'
-  import { fetchListMarquee } from "@/api/marquee";
+  import { fetchListMarquee, fetchDeleteMarquee } from "@/api/marquee";
   import MessageService from "@/assets/services/message.service";
   export default {
     data() {
@@ -643,7 +643,18 @@
         //this.close()       
         this.deleteMarqueeModel = true;
       },
-      deleteMarquee(){
+      deleteMarquee(item){
+
+        fetchDeleteMarquee({
+          marqueeId: item
+        }).then(res=>{
+          if(res.restData.code == "00000"){
+            
+            this.deleteMarqueeModel = false;
+            MessageService.showSuccess(res.rtnMsg)
+           // .showInfo(res.restData.message,"成功✓");
+          }
+        })
 
       },
         // 查詢

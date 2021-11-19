@@ -18,3 +18,13 @@ export function fetchListMarquee(data) {
     data
   })
 }
+
+
+
+export function fetchDeleteMarquee(data) {
+  return request({
+    url: '/marquee/v1/delete',
+    method: 'post',
+    data
+  })
+}

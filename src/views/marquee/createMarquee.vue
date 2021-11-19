@@ -381,7 +381,7 @@ export default {
                 region: "區處",
                 releaseStartDate: this.startDate,
                 releaseEndDate: this.endDate,
-                sign: isSign ? true : false,          
+                sign: isSign,          
               })
             ],
             {
@@ -393,8 +393,10 @@ export default {
 
         fetchInitMarquee(formData)
           .then(res => {
+            console.log("return")
             if(res.restData.code == "00000"){
-              MessageService.showSuccess(res.rtnMsg);
+              //MessageService.showSuccess("MessageService.showSuccess(res.restData.message)");
+              MessageService.showInfo(res.restData.message,"成功✓");
               this.isSubmited = true;
               console.log("登入成功", res);               
               this.resetForm();
@@ -452,8 +454,6 @@ export default {
         this.isSubmited = false;
       } else {
         this.errMsg.editorData = null;
-        hasCheck = true;
-        this.valid = true;
       }
       console.log(this.marqueeText);
       return hasCheck;

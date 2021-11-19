@@ -237,6 +237,7 @@
               <v-col cols="4">
                 <v-select   
                   v-model="select.division"
+                  :return-object="true"
                   :items="divOption"                
                   color="#ADADAD"
                   outlined
@@ -256,6 +257,7 @@
               <v-col cols="4">
                 <v-select
                   v-model="select.group"
+                  :return-object="true"
                   :items="groupOption"   
                   color="#ADADAD"
                   outlined
@@ -275,6 +277,7 @@
               <v-col cols="4">
                 <v-select
                   v-model="select.section"
+                  :return-object="true"
                   :items="sectionOption"
                   item-text="sectionName"                      
                   outlined
@@ -306,8 +309,8 @@
               <v-btn color="primary" style="margin:5px 0;" @click="selectAll('add')">全選</v-btn>
               <span class="ml-5 font-bold">尚未設定該角色的員工清單</span>
               <v-col style="border:2px solid green; height:260px; overflow-y:scroll; border-radius:5px;">
-                <div v-for="(item, index) in mockChar" :key="index">
-                  <v-btn v-if="!item.isSelected" style="margin: 2px;" @click="toSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>
+                <div v-for="(item, index) in unSettingEmpList" :key="index">
+                  <v-btn style="margin: 2px;" @click="toSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>
                 </div>                            
               </v-col>
               
@@ -316,8 +319,8 @@
               <v-btn color="primary" style="margin:5px 0;" @click="selectAll('clear')">清空</v-btn>
               <span class="ml-5 font-bold">已設定該角色的員工清單</span>
               <v-col style="border:2px solid green; height:260px;overflow-y:scroll; border-radius:5px;">
-                <div v-for="(item, index) in mockChar" :key="index">
-                  <v-btn v-if="item.isSelected" style="margin: 2px;" @click="toNotSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>
+                <div v-for="(item, index) in settingEmpList" :key="index">
+                  <v-btn style="margin: 2px;" @click="toNotSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>
                 </div> 
               </v-col>
             </v-col>                        

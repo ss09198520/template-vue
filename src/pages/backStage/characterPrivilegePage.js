@@ -98,7 +98,12 @@ import ValidateUtil from "@/assets/services/validateUtil";
             group: null,
             section: null,
             role: null,
-        }
+        },
+        settingEmpList:[],
+        oriSettingEmpList:[],
+        unSettingEmpList:[],
+        oriUnsettingEmpList:[],
+
     }
     },
     beforeMount(){
@@ -435,13 +440,14 @@ import ValidateUtil from "@/assets/services/validateUtil";
             });
         },
 
-        // Action:依角色查詢設定的員工清單
+        // Action:依設定角色查詢可設定的員工清單
         queryEmpInfoByRoleCode(){
+            console.log(this.select.section);
             AjaxService.post('/roleAuth/queryEmpInfoByRoleCode',{
                 division: this.select.division.division,
                 group: this.select.group.group,
                 section: (ValidateUtil.isEmpty(this.select.section)? null : this.select.section.sectionCode),
-                roleCode:(ValidateUtil.isEmpty(this.select.role)? null : this.select.role.setRoleCode),
+                roleCode:this.select.role.setRoleCode,
             },
             (response) => {
                 // 驗證是否成功
@@ -450,10 +456,13 @@ import ValidateUtil from "@/assets/services/validateUtil";
                     return;
                 }
 
-                if(!response.restData.success)
-                
-                // 將員工角色資料帶入
-                this.empList = response.restData.empRoleList;
+                // 將已設定及未設定的員工清單帶入
+                this.settingEmpList = [],
+                this.unSettingEmpList = [],
+                this.settingEmpList = response.restData.settingEmpList;
+                this.unSettingEmpList = response.restData.unSettingEmpList;
+
+                MessageService.showSuccess('查詢角色可設定的員工清單');
     
             },
             // eslint-disable-next-line no-unused-vars

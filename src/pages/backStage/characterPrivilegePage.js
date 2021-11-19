@@ -58,7 +58,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             { text: '課別', value: 'sectionName', align: 'center' },
             { text: '資料來源', value: 'settingStyle', align: 'center' },
             { text: '備註', value: 'memo', align: 'center' },
-            { text: '角色', value: 'role', align: 'center',width:'25' }
+            { text: '角色', value: 'role', align: 'center' }
         ],
         //員工清單
         empList: [],
@@ -93,6 +93,17 @@ import ValidateUtil from "@/assets/services/validateUtil";
         setrole: '',
         selectRole:[],
         newAuthList:[],
+        select:{
+            division: null,
+            group: null,
+            section: null,
+            role: null,
+        },
+        settingEmpList:[],
+        oriSettingEmpList:[],
+        unSettingEmpList:[],
+        oriUnsettingEmpList:[],
+
     }
     },
     beforeMount(){
@@ -107,6 +118,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
         //根據選擇的單位顯示可選取組別，再根據選擇的組別顯示可選取課別
         chooseDivision(){
             this.division = this.divOption[0];
+            this.select.division = this.divOption[0];
             for(let i in this.deptList){
                 if(this.division.division === this.deptList[i].divisionCode){
                     for(let index in this.deptList[i].groupSectionList){
@@ -121,6 +133,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             // 若組別資料只有一筆則直接顯示
             if(this.groupOption.length == 1){
                 this.group = this.groupOption[0];
+                this.select.group = this.groupOption[0];
                 this.chooseGroup();
             }
         },
@@ -139,6 +152,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             // 若課別資料只有一筆則直接顯示
             if(this.sectionOption.length == 1){
                 this.section = this.sectionOption[0];
+                this.select.section = this.sectionOption[0];
             }
         },
       
@@ -216,13 +230,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             }
 
             // 將更新的資料打後端更新
-            this.updateEmpRole();
-                                   
-            // 將選取資料重置
-            this.selectRole = [];
-            this.openSelectBox = null;
-            item.edit = false;
-            
+            this.updateEmpRole(item);
         },
         //彈出角色設定視窗
         popOut(editPopOut){
@@ -322,6 +330,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
            // 若單位只有一筆資料，直接帶入組別下拉選單
            if(this.divOption.length == 1){
              this.division = this.divOption[0];
+             this.select.division = this.divOption[0];
              this.chooseDivision();
            }
         },
@@ -389,6 +398,11 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 
                 // 將員工角色資料帶入
                 this.empList = response.restData.empRoleList;
+                  // 將選取資料重置
+                  this.selectRole = [];
+                  this.openSelectBox = null; 
+                  
+                  MessageService.showSuccess('查詢員工角色清單');
     
             },
             // eslint-disable-next-line no-unused-vars
@@ -398,19 +412,26 @@ import ValidateUtil from "@/assets/services/validateUtil";
         },
 
         // Action:修改員工角色
-        updateEmpRole(){
+        updateEmpRole(item){
             AjaxService.post('/roleAuth/updateEmpRole',{
                 newEmpAuthVoList: this.newAuthList,
             },
             (response) => {
                 // 驗證是否成功
                 if (!response.restData.success) {              
-                    MessageService.showError(response.restData.returnMessage,'修改員工角色');
+                    MessageService.showError(response.restData.message,'修改員工角色');
                     return;
                 }
 
                 // 再重新call一次查詢員工資料清單
                 this.queryEmpRoleInfo();
+
+                    // 將選取資料重置
+                this.selectRole = [];
+                this.openSelectBox = null;
+                item.edit = false;
+
+                MessageService.showSuccess('修改員工角色');
     
             },
             // eslint-disable-next-line no-unused-vars
@@ -419,9 +440,35 @@ import ValidateUtil from "@/assets/services/validateUtil";
             });
         },
 
-        // Action:依角色查詢設定的員工清單
+        // Action:依設定角色查詢可設定的員工清單
         queryEmpInfoByRoleCode(){
-            
+            console.log(this.select.section);
+            AjaxService.post('/roleAuth/queryEmpInfoByRoleCode',{
+                division: this.select.division.division,
+                group: this.select.group.group,
+                section: (ValidateUtil.isEmpty(this.select.section)? null : this.select.section.sectionCode),
+                roleCode:this.select.role.setRoleCode,
+            },
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.message,'依角色查詢設定的員工清單');
+                    return;
+                }
+
+                // 將已設定及未設定的員工清單帶入
+                this.settingEmpList = [],
+                this.unSettingEmpList = [],
+                this.settingEmpList = response.restData.settingEmpList;
+                this.unSettingEmpList = response.restData.unSettingEmpList;
+
+                MessageService.showSuccess('查詢角色可設定的員工清單');
+    
+            },
+            // eslint-disable-next-line no-unused-vars
+            (response) => {                
+                MessageService.showSystemError();
+            });
         },
 
         // Action:依角色設定的員工

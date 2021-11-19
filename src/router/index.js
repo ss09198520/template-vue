@@ -279,6 +279,13 @@ export const constantRoutes = [
         meta: { title: '問卷製作', icon: 'mdi-clipboard-text-multiple' }
       },
       {
+        path: 'edit/:id(\\d+)',
+        name: 'Satisfaction-Edit',
+        component: () => import('@/views/satisfaction/edit'),
+        hidden: true,
+        meta: { title: '問卷編輯', icon: 'mdi-clipboard-text-multiple' }
+      },
+      {
         path: 'list',
         name: 'Satisfaction-list',
         component: () => import('@/views/satisfaction/list'),

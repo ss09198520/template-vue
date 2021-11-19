@@ -1,12 +1,12 @@
 <template>
-  <questionnaire-view :is-edit="false" />
+  <questionnaire-view :is-edit="true" />
 </template>
 
 <script>
 import QuestionnaireView from './components/QuestionnaireEditView'
 
 export default {
-  name: 'CreateQuestionnaire',
+  name: 'EditQuestionnaire',
   components: { QuestionnaireView }
 }
 </script>

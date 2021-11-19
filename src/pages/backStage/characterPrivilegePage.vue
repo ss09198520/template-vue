@@ -163,7 +163,7 @@
             <div v-if="openSelectBox == item.empNo" class="d-flex">
               <v-select
                 v-model="selectRole"
-                style="width:min-content; margin:auto;"
+                style="width:200px"
                 multiple
                 :items="roleOption"
                 item-text="setRoleName"
@@ -218,8 +218,9 @@
               </div>                                      
               <v-col cols="4">
                 <v-select
-                  v-model="setrole"                
+                  v-model="select.role"                
                   :items="roleOption"
+                  item-text="setRoleName"
                   outlined
                   hide-details
                   dense
@@ -235,11 +236,12 @@
               </div>
               <v-col cols="4">
                 <v-select   
-                  v-model="division"
+                  v-model="select.division"
                   :items="divOption"                
                   color="#ADADAD"
                   outlined
                   hide-details
+                  item-text="divisionName"
                   dense
                   placeholder="請選擇單位"
                   @change="chooseDivision()"
@@ -253,11 +255,12 @@
               </div>
               <v-col cols="4">
                 <v-select
-                  v-model="group"
+                  v-model="select.group"
                   :items="groupOption"   
                   color="#ADADAD"
                   outlined
                   hide-details
+                  item-text="groupName"
                   dense                
                   placeholder="請選擇組別"
                   @change="chooseDivision()"
@@ -270,8 +273,10 @@
                 課別      
               </div>
               <v-col cols="4">
-                <v-select            
-                  :items="sectionOption"                               
+                <v-select
+                  v-model="select.section"
+                  :items="sectionOption"
+                  item-text="sectionName"                      
                   outlined
                   hide-details
                   dense
@@ -282,7 +287,7 @@
           </div>
           <v-row>
             <v-col>
-              <v-btn class="primary ml-3">查詢</v-btn>
+              <v-btn class="primary ml-3" @click="queryEmpInfoByRoleCode()">查詢</v-btn>
             </v-col>
           </v-row>   
 
@@ -299,14 +304,17 @@
           <v-row style="margin:auto;">
             <v-col>
               <v-btn color="primary" style="margin:5px 0;" @click="selectAll('add')">全選</v-btn>
+              <span class="ml-5 font-bold">尚未設定該角色的員工清單</span>
               <v-col style="border:2px solid green; height:260px; overflow-y:scroll; border-radius:5px;">
                 <div v-for="(item, index) in mockChar" :key="index">
                   <v-btn v-if="!item.isSelected" style="margin: 2px;" @click="toSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>
                 </div>                            
               </v-col>
+              
             </v-col>
             <v-col>
               <v-btn color="primary" style="margin:5px 0;" @click="selectAll('clear')">清空</v-btn>
+              <span class="ml-5 font-bold">已設定該角色的員工清單</span>
               <v-col style="border:2px solid green; height:260px;overflow-y:scroll; border-radius:5px;">
                 <div v-for="(item, index) in mockChar" :key="index">
                   <v-btn v-if="item.isSelected" style="margin: 2px;" @click="toNotSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>

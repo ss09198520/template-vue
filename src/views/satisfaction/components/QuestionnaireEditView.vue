@@ -107,15 +107,22 @@
                             v-model="attachmentFile"
                             :rules="rules.requiredRule"
                             :hide-details="hideDatails"
-                            label="審 核 附 件 上 傳"
+                            placeholder="請選擇上傳附件"
                             color="accent"
                             outlined
                             dense
-                            accept="image/jpg"
                             persistent-hint
                             prepend-inner-icon="mdi-cloud-upload"
                             prepend-icon
+                            accept="application/pdf,application/vnd.ms-excel"
+                            show-size
+                            @change="onUpload"
                           />
+                          <div v-if="!!dataURL" class="t-center">
+                            <v-icon x-large class="mb-2">
+                              mdi-file-document-outline
+                            </v-icon><br>
+                          </div>
                         </v-col>
                       </v-row>
                       <div v-if="!questionnaire.questions.length" class="add-list" color="primary">
@@ -225,6 +232,7 @@
   import draggable from 'vuedraggable'
   import MessageService from "@/assets/services/message.service";
   import { initQuestionnaireAnswer , fetchEditQuestionnaire } from '@/api/questionnaire'
+  import { getFileExtension } from '@/utils/validate'
   import isEmpty from 'lodash/isEmpty'
 
   // let lineEndOptions = Array.apply(null, Array(9)).map((item, i) => {
@@ -233,9 +241,16 @@
 
   const defaultForm = {
     questionnaireName: null,
+    questionnaireId: null,
     memo: null,
     releaseStartDate: null, 
     questions: null
+  }
+
+  const defaultFile = { //sign AttachmentFile
+    originalFileName: null,
+    imgSrc: null,
+    base64: null,
   }
   //固定的答案 
   const defaultAnswers =  [ 
@@ -265,6 +280,7 @@
     },
     data () {
       return {
+        reader: null,
         nowDate: new Date().toISOString().slice(0,10),
         drag: false,
         valid: false,
@@ -377,6 +393,20 @@
             }
           ]
         }
+        // init file reader
+        this.reader = new FileReader();
+        this.reader.onload = () => {
+          // preview data url
+          this.dataURL = this.reader.result
+          // assign file 
+          this.signAttachmentFile = Object.assign({} , defaultFile)
+          this.signAttachmentFile.category = "MEDIA_ATTACHMENT"
+          this.signAttachmentFile.fileName = this.attachmentFile.name.substr(0,this.attachmentFile.name.lastIndexOf("."))
+          this.signAttachmentFile.originalFileName = this.attachmentFile.name
+          this.signAttachmentFile.fileExt = getFileExtension(this.attachmentFile.name)
+          this.signAttachmentFile.fileSize = this.attachmentFile.size
+          this.signAttachmentFile.base64 = this.dataURL.split(",")[1]
+        }
       },
       copyListFn (index) {
         let data = JSON.parse(JSON.stringify(this.questionnaire.questions[index]))
@@ -417,6 +447,7 @@
         //API post data 
         const postData = { 
           questionnaire : this.postForm,
+          signAttachment : isEmpty(this.signAttachmentFile) ? null : this.signAttachmentFile,
           sign : isSign ? true : false, //是否暫存
         }
         
@@ -474,7 +505,12 @@
         // 驗證是否有資料
         if(this.hasResult(data.restData.questionnaire)){
           this.questionnaire = data.restData.questionnaire
-          console.log('this.questionnaire' ,this.questionnaire)
+          //塞入假檔案for 畫面呈現
+          let tmpfile = data.restData.signAttachment.originalFileName
+          this.attachmentFile = new File(["tmp"], tmpfile , {type:"text/plain", lastModified: new Date().getTime()});
+          
+          this.signAttachmentFile = data.restData.signAttachment
+          
           this.hasResult(this.questionnaire)
           this.$nextTick(() => {this.stepEl = 1});
         }

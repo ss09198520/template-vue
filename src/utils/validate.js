@@ -91,7 +91,7 @@ export function isArray(arg) {
  * @returns {Object}
  */
  // eslint-disable-next-line no-unused-vars
- function param2Obj(url) {
+export function param2Obj(url) {
   const search = decodeURIComponent(url.split('?')[1]).replace(/\+/g, ' ')
   if (!search) {
     return {}
@@ -107,4 +107,15 @@ export function isArray(arg) {
     }
   })
   return obj
+}
+
+/**
+ * @param {string} filename
+ * @returns {string}
+ */
+ // eslint-disable-next-line no-unused-vars
+export function getFileExtension(filename){
+  // get file extension
+  const extension = filename.split('.').pop();
+  return "." + extension;
 }

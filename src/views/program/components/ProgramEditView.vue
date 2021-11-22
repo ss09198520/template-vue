@@ -441,6 +441,7 @@
   import MessageService from '@/assets/services/message.service'
   import { fetchProgram, initProgram } from '@/api/program'
   import { listMediaFile } from '@/api/media'
+  import { getFileExtension } from '@/utils/validate'
   import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
   import NotFound from './NotFound.vue'
@@ -613,7 +614,7 @@
           this.signAttachmentFile.category = "MEDIA_ATTACHMENT"
           this.signAttachmentFile.fileName = this.attachmentFile.name.substr(0,this.attachmentFile.name.lastIndexOf("."))
           this.signAttachmentFile.originalFileName = this.attachmentFile.name
-          this.signAttachmentFile.fileExt = this.getFileExtension(this.attachmentFile.name)
+          this.signAttachmentFile.fileExt = getFileExtension(this.attachmentFile.name)
           this.signAttachmentFile.fileSize = this.attachmentFile.size
           this.signAttachmentFile.base64 = this.dataURL.split(",")[1]
         }
@@ -653,11 +654,6 @@
           this.signAttachmentFile = this.attachmentFile
           this.dataURL = null
         }
-      },
-      getFileExtension(filename){
-        // get file extension
-        const extension = filename.split('.').pop();
-        return "." + extension;
       },
       
       // Button Function 開啟選取畫面

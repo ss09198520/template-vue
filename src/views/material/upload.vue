@@ -179,7 +179,8 @@
 
 <script>
   import MessageService from "@/assets/services/message.service";
-  import { uploadFile} from '@/api/media'
+  import { uploadFile } from '@/api/media'
+  import { getFileExtension } from '@/utils/validate'
 
   const defaultForm = {
     materialName: null,
@@ -223,7 +224,7 @@
         this.postForm.file = Object.assign({} , defaultFile)
         this.postForm.file.fileName = this.uploadData.name.substr(0,this.uploadData.name.lastIndexOf("."))
         this.postForm.file.originalFileName = this.uploadData.name
-        this.postForm.file.fileExt = this.getFileExtension(this.uploadData.name)
+        this.postForm.file.fileExt = getFileExtension(this.uploadData.name)
         this.postForm.file.fileSize = this.uploadData.size
         // this.postForm.file.imgSrc = this.reader.result
         this.postForm.file.base64 = this.reader.result.split(",")[1]
@@ -236,11 +237,6 @@
         }else{
           this.imageURL = null
         }
-      },
-      getFileExtension(filename){
-        // get file extension
-        const extension = filename.split('.').pop();
-        return "." + extension;
       },
       submit() {
         

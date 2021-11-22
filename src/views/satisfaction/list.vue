@@ -323,7 +323,7 @@
       editItem(item) {
         this.editedIndex = this.questionnaires.indexOf(item)
         // this.editedItem = Object.assign({}, item)
-        this.$router.push({path:`${this.$route.matched[0].path}/create`})
+        this.$router.push({path: `${this.$route.matched[0].path}/edit/${item.questionnaireId}`})
       },
       viewSchedule() {
         this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})

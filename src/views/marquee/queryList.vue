@@ -479,7 +479,8 @@
   import { fetchListMarquee, fetchDeleteMarquee } from "@/api/marquee";
   import MessageService from "@/assets/services/message.service";
   export default {
-    data() {
+    
+    data(){
       return {
         isShow: false,
         marqueeName: null, 
@@ -604,6 +605,17 @@
         },
       }
     },
+    computed:{
+      // isAddButtonDisabled(){
+      //   let isDisable = false;
+      //   if(this.signStatus =="WAIT"){
+      //      isDisable = true;
+      //   }else if (this.signStatus =="PASS"){
+      //     isDisable = true;
+      //   }
+      //   return isDisable;
+      // }
+    },
     methods: {
       close() {
         this.dialog = false
@@ -622,7 +634,7 @@
       editItem(item) {
         this.editedIndex = this.itemsCRUD.indexOf(item)
         this.editedItem = Object.assign({}, item)
-        this.$router.push({path:`${this.$route.matched[0].path}/editMarquee?id=${item.marqueeId}`})
+        this.$router.push({path:`${this.$route.matched[0].path}/marqueeEdit?id=${item.marqueeId}`})
       },
       previewItem(item) {
         this.selectMarquee = item;
@@ -648,12 +660,16 @@
         fetchDeleteMarquee({
           marqueeId: item
         }).then(res=>{
-          if(res.restData.code == "00000"){
-            
-            this.deleteMarqueeModel = false;
+          this.deleteMarqueeModel = false;
+          if(res.rtnCode == "00000" && res.restData.code =="00000" ){          
             MessageService.showSuccess(res.rtnMsg)
-           // .showInfo(res.restData.message,"成功✓");
-          }
+            this.submitSearch();           
+          }else if(res.restData.code =="20001" ){
+            MessageService.showError(res.restData.message,"刪除")
+          }else{
+            MessageService.showInfo(res.restData.message,  res.restData.code )
+          }          
+        
         })
 
       },
@@ -673,7 +689,7 @@
         this.itemsCRUD = [],
         this.isShow = !this.isShow
         if((res.restData.marquee).length >= 1){
-                    let arrayObj = res.restData.marquee     //處理退件資訊轉換
+                    let arrayObj = res.restData.marquee  
                     arrayObj.forEach(item => {
                       if(item.signStatus==='REJECT'){
                         Object.assign(item, {returnInfo: {

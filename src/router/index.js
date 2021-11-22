@@ -320,12 +320,14 @@ export const constantRoutes = [
         path: 'create',
         name: 'Marquee-Edit',
         component: () => import('@/views/marquee/create'),
+        hidden: true,
         meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
       },
       {
         path: 'list',
         name: 'Marquee-List',
         component: () => import('@/views/marquee/list'),
+        hidden: true,
         meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },
       {
@@ -335,14 +337,14 @@ export const constantRoutes = [
         meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },
       {
-        path: 'createMarquee',
-        name: 'Marquee-create',
+        path: 'marqueeCreate',
+        name: 'MarqueeCreate',
         component: () => import('@/views/marquee/createMarquee'),
         meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
       },
       {
-        path: 'editMarquee',
-        name: 'Marquee-Edit',
+        path: 'marqueeEdit',
+        name: 'MarqueeEdit',
         component: () => import('@/views/marquee/createMarquee'),
         hidden: true,
         meta: { title: '跑馬燈編輯', icon: 'mdi-pencil-box-multiple-outline' }

@@ -1,5 +1,6 @@
 ﻿import request from '@/utils/request'
 
+
 export function fetchInitMarquee(data) {
   return request({
     url: '/marquee/v1/init',
@@ -28,3 +29,13 @@ export function fetchDeleteMarquee(data) {
     data
   })
 }
+
+
+export function fetchQueryMarquee(data) {
+  return request({
+    url: '/marquee/v1/queryById',
+    method: 'post',
+    data
+  })
+}
+

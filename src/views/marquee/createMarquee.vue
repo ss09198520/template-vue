@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="font-bold">跑馬燈製作</h2>
+    <h2 class="font-bold">{{ pageTitle }}</h2>
     <v-row class="ml-10">
       <v-col class="ml-10 font-18px" cols="12">
         <v-form v-model="valid" class="ml-10 font-weight-bold">
@@ -143,6 +143,12 @@
             </v-col>
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
+            <v-col cols="2" md="2"> 審核附件歷史上傳 </v-col>
+            <v-col cols="6" md="6">
+                <a :href="this.attachedFiles">下載確認</a>
+            </v-col>
+          </v-row>
+          <v-row :dense="dense" :no-gutters="noGutters">
             <v-col cols="2" md="2"> 播放速度 </v-col>
             <v-col cols="6" md="6">
               <v-slider
@@ -239,7 +245,7 @@
 </template>
 <script>
 import Quill from "@/components/Quill";
-import { fetchInitMarquee } from "@/api/marquee";
+import { fetchInitMarquee, fetchQueryMarquee } from "@/api/marquee";
 import ValidateUtil from "@/assets/services/validateUtil";
 import MessageService from "@/assets/services/message.service";
 export default {
@@ -250,6 +256,7 @@ export default {
         acceptDate: null,
         editorData: null
       },
+      pageTitle: "跑馬燈製作",
       startDateMenu: false,
       endDateMenu: false,
       startDate: "",
@@ -260,7 +267,7 @@ export default {
       min: 0,
       max: 60,
       marqueeName: "台電跑馬燈",
-      marqueeHTML: `<p><span class="ql-size-small" style="color: rgb(0, 41, 102); background-color: rgb(204, 224, 245);">結廬在人境，而無車馬喧。</span></p><p><span class="ql-size-small" style="color: rgb(0, 41, 102); background-color: rgb(204, 224, 245);">問君何能爾？心遠地自偏。</span></p>`,
+      marqueeHTML: "",
       marqueeText: "",
       marqueeDesc: "",
       attachedFiles: null,
@@ -270,6 +277,7 @@ export default {
       noGutters: false,
       hideDatails: false,
       isSubmited: false,
+      location : "",
       rules: {
         requiredRule: [v => !!v || "此欄位為必填欄位"],
         lengthRules: [
@@ -300,12 +308,50 @@ export default {
       return 600 / this.duration;
     }
   },
+  created(){
+    this.getQueryString('id')
+    console.log("--getQueryString---")
+    console.log(this.location)
+    if(this.location!=="" && this.location!==null){
+        this.queryMarqueeById()
+    }    
+  },
   mounted() {
     console.log("this is current quill instance object", this.editor);
-    this.onEditorChange(this.marqueeHTML);    
-   // this.isAddButtonDisabled();
+    this.onEditorChange(this.marqueeHTML);
   },
   methods: {
+    getQueryString(name){
+       // eslint-disable-next-line no-sparse-arrays
+       this.location = decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ''])[1].replace(/\+/g, '%20')) || null
+    },
+    queryMarqueeById(){
+      fetchQueryMarquee({ marqueeId : this.location })
+          .then(res => {
+            if(res.restData.code == "00000"){
+              let resc =  Object.assign({}, res.restData.marquee);
+              this.pageTitle = "跑馬燈修改";
+              MessageService.showInfo(res.restData.message,"成功✓");
+              this.marqueeName = resc.marqueeName;
+              this.marqueeText = resc.marqueeContent;
+              this.marqueeHTML = resc.marqueeContentHTML;
+              this.duration = resc.animationDuration;
+              this.marqueeDesc = resc.memo;
+              this.startDate  = resc.releaseStartDate;
+              this.endDate = resc.releaseEndDate
+              if(resc.attachedFileName.indexOf("無檔案上傳") < 0){
+                this.attachedFiles = resc.attachedFileName;
+              }
+            }else if (res.restData.code =='20001'){
+              MessageService.showError("查詢失敗",res.restData.message);
+             }          
+          })
+          .catch(error => {
+            this.isSubmited = false;
+            console.error(error);
+          });
+
+    },
     filtersHTML(val) {
       if (val != null && val != "") {
         let reg = /<[^>]+>/g;
@@ -414,7 +460,6 @@ export default {
       }
     },
     resetForm(){
-      
       this.isSubmited = true;
       this.marqueeName = "";     
       this.duration = 30;

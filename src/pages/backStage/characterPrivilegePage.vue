@@ -58,8 +58,8 @@
             item-text="sectionName"
             hide-details
             dense
+            :clearable="true"
             placeholder="請選擇課別"
-            :clearable="(sectionOption.length === 1? false : true)"
           />
         </v-col>
         <v-col cols="1" />
@@ -226,6 +226,7 @@
                   dense
                   placeholder="請選擇角色"
                   return-object
+                  @change="resetSelect()"
                 />            
               </v-col>            
             </v-row>
@@ -238,7 +239,8 @@
                 <v-select   
                   v-model="select.division"
                   :return-object="true"
-                  :items="divOption"                
+                  :items="divOption"
+                  :clearable="(divOption.length === 1? false : true)"           
                   color="#ADADAD"
                   outlined
                   hide-details
@@ -258,7 +260,8 @@
                 <v-select
                   v-model="select.group"
                   :return-object="true"
-                  :items="groupOption"   
+                  :items="groupOption"
+                  :clearable="(groupOption.length === 1? false : true)"       
                   color="#ADADAD"
                   outlined
                   hide-details
@@ -279,11 +282,13 @@
                   v-model="select.section"
                   :return-object="true"
                   :items="sectionOption"
+                  :clearable="(sectionOption.length === 1? false : true)" 
                   item-text="sectionName"                      
                   outlined
                   hide-details
                   dense
                   placeholder="請選擇課別"
+                  @change="resetSelect()"
                 />
               </v-col>            
             </v-row>                     
@@ -310,7 +315,7 @@
               <span class="ml-5 font-bold">尚未設定該角色的員工清單</span>
               <v-col style="border:2px solid green; height:260px; overflow-y:scroll; border-radius:5px;">
                 <div v-for="(item, index) in unSettingEmpList" :key="index">
-                  <v-btn style="margin: 2px;" @click="toSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>
+                  <v-btn style="margin: 2px;" @click="toSelected(item,'unSetting')">{{ item.empNo }}{{ item.empName }}</v-btn>
                 </div>                            
               </v-col>
               
@@ -320,7 +325,7 @@
               <span class="ml-5 font-bold">已設定該角色的員工清單</span>
               <v-col style="border:2px solid green; height:260px;overflow-y:scroll; border-radius:5px;">
                 <div v-for="(item, index) in settingEmpList" :key="index">
-                  <v-btn style="margin: 2px;" @click="toNotSelected(item)">{{ item.empNo }}{{ item.empName }}</v-btn>
+                  <v-btn style="margin: 2px;" @click="toSelected(item,'setting')">{{ item.empNo }}{{ item.empName }}</v-btn>
                 </div> 
               </v-col>
             </v-col>                        
@@ -330,11 +335,18 @@
         <v-card-actions>
           <v-spacer />
           <v-btn
-            color="success"            
-            @click="popOut(editPopOut)"
+            color="normal"            
+            @click="editPopOut = false"
           >
-            確定
+            &emsp;關閉&emsp;
           </v-btn>
+          <v-btn
+            color="success"            
+            @click="editSubmit()"
+          >
+            &emsp;確定&emsp;
+          </v-btn>
+          
         </v-card-actions>
       </v-card>
     </v-dialog>    

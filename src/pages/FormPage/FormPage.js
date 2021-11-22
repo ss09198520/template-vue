@@ -110,7 +110,7 @@ export default {
         }
     },
     methods: {
-        init(){
+        async init(){
             if(this.restrictMode){
                 this.formPageMode = this.restrictMode;
                 this.showModeSelect = false;       
@@ -119,12 +119,12 @@ export default {
                 this.accountingMemo = this.queryMemo;
             }                  
            
-            this.getInitParam();
+            await this.getInitParam();
             this.formInit();
 
             EventBus.subscriber("scan-data-list", this.getScanDataList);
         },
-        getInitParam(){
+        async getInitParam(){
             // 從網址取得參數
             let formParam = CommonService.getURLParamObject();
             let page = CommonService.getURLPage();

@@ -22,13 +22,13 @@ export default {
                 cssMaxHeight: 2000,
                 includeUI: {
                     uiSize: {
-                        width: "1500px",
+                        width: "100%",
                         height: "800px"
                     },
                     menu: ['draw', 'text', 'shape'],
                     theme: {
                         "header.display": "none"
-                    }
+                    },
                 },
                 usageStatistics: false,
                 selectionStyle: {
@@ -46,7 +46,8 @@ export default {
                 // 原套件會根據在同一點停留的時間決定寫出來的粗細，這邊把最大最小寬度調整相同，就可以保證粗細一致
                 minWidth: 5, 
                 maxWidth: 5
-            }
+            },
+            isSign: false,
         }
     },
     created() {
@@ -149,8 +150,8 @@ export default {
                 acceptNum: this.acceptNum,
                 formSeq: this.formSeq,
                 fileNo: this.editedFormFileNo,
-                fileName: "重點說明表單圖片 (" + new Date().toLocaleDateString() +")",
-                originalFileName: "editedForm (" + new Date().toLocaleDateString() +")" + fileExt,
+                fileName: "重點說明表單圖片 (" + new Date().toLocaleDateString().replaceAll('/', '-') +")",
+                originalFileName: "editedForm (" + new Date().toLocaleDateString().replaceAll('/', '-') +")" + fileExt,
                 fileExt: fileExt,
                 category: "EDITED_FORM",
                 file: formImage,

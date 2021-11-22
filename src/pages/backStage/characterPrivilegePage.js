@@ -102,6 +102,12 @@ import ValidateUtil from "@/assets/services/validateUtil";
         settingEmpList:[],
         unSettingEmpList:[],
         allSettingEmpList:[],
+        errMsg:{
+            role:null,
+            division:null,
+            group: null,
+        },
+        requiredArray:[],
 
     }
     },
@@ -115,7 +121,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
         },
 
         //根據選擇的單位顯示可選取組別，再根據選擇的組別顯示可選取課別
-        chooseDivision(){
+        chooseDivision(division){
             this.resetSelect(); // 先將員工角色清單清空
             // 先將組/課選項清空
             this.groupOption = []; 
@@ -123,8 +129,10 @@ import ValidateUtil from "@/assets/services/validateUtil";
             this.group = null;
             this.section = null;
 
+            debugger
+
             for(let i in this.deptList){
-                if(this.division.division === this.deptList[i].divisionCode){
+                if(division.division === this.deptList[i].divisionCode){
                     for(let index in this.deptList[i].groupSectionList){
                         this.groupOption.push({
                             group: this.deptList[i].groupSectionList[index].groupCode,
@@ -135,16 +143,16 @@ import ValidateUtil from "@/assets/services/validateUtil";
             }
         },
 
-        chooseGroup(){
+        chooseGroup(division,group){
             this.resetSelect(); // 先將員工角色清單清空
              // 先將課選項清空
              this.sectionOption = [];
              this.section = null;
 
             for(let i in this.deptList){
-                if(this.division.division === this.deptList[i].divisionCode){
+                if(division.division === this.deptList[i].divisionCode){
                     for(let index in this.deptList[i].groupSectionList){
-                        if(this.group.group === this.deptList[i].groupSectionList[index].groupCode){
+                        if(group.group === this.deptList[i].groupSectionList[index].groupCode){
                             this.sectionOption = this.deptList[i].groupSectionList[index].sectionList;
                         }
                     }
@@ -285,6 +293,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             }
             return false;
         },
+        // 角色設定視窗--全選/全取消按鈕流程
         selectAll(selectType){
             if(selectType == 'add'){
                 for(let i in this.unSettingEmpList){
@@ -300,6 +309,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
         },
         // 整理部門下拉選單
         settingOption(deptOptList){
+            debugger;
            for(let i in deptOptList){
                 this.divOption.push({
                     division:deptOptList[i].divisionCode,
@@ -311,7 +321,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
            if(this.divOption.length == 1){
              this.division = this.divOption[0];
              this.select.division = this.divOption[0];
-             this.chooseDivision();
+             this.chooseDivision(this.division);
            }
         },
 
@@ -353,10 +363,69 @@ import ValidateUtil from "@/assets/services/validateUtil";
             return isValid;
         },
 
+        // 將選擇的員工清單重置
         resetSelect(){
             this.settingEmpList = [];
             this.unSettingEmpList = [];
             this.allSettingEmpList = [];
+        },
+
+        // 關閉視窗-將依角色設定多組員工的資料清空
+        resetModel(){
+            this.editPopOut = false;
+            this.resetSelect();
+           
+            this.errMsg.role = null;
+            this.errMsg.division = null;
+            this.errMsg.group = null;
+            
+            this.select.role = null;
+            this.select.division = null;
+            this.select.group = null;
+            this.select.section = null;
+            
+        },
+
+        // 驗證查詢的條件資料
+        checkSearchInfo(){
+            let isValid = true;
+            this.requiredArray = [];
+
+            if(ValidateUtil.isEmpty(this.select.role)){
+                this.errMsg.role = "請選擇設定角色";
+                this.requiredArray.push('設定角色');
+                isValid = false;
+            } else {
+                this.errMsg.role = null;
+            }
+
+            if(ValidateUtil.isEmpty(this.select.division)){
+                this.errMsg.division = "請選擇單位";
+                this.requiredArray.push('單位');
+                isValid = false;
+            } else {
+                this.errMsg.division = null;
+            }
+
+            if(ValidateUtil.isEmpty(this.select.group)){
+                this.errMsg.group = "請選擇組別";
+                this.requiredArray.push('組別');
+                isValid = false;
+            } else {
+                this.errMsg.group = null;
+            }
+            return isValid;
+        },
+
+        // 送出查詢
+        searchSubmit(){
+            // 驗證是否有選擇角色及部門
+            if(!this.checkSearchInfo()){
+                MessageService.showCheckInfo(this.requiredArray,null);
+                return;
+            }
+            //通過驗證才打後端
+            this.queryEmpInfoByRoleCode()
         },
 
 
@@ -445,7 +514,6 @@ import ValidateUtil from "@/assets/services/validateUtil";
 
         // Action:依設定角色查詢可設定的員工清單
         queryEmpInfoByRoleCode(){
-            console.log(this.select.section);
             AjaxService.post('/roleAuth/queryEmpInfoByRoleCode',{
                 division: this.select.division.division,
                 group: this.select.group.group,
@@ -455,7 +523,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             (response) => {
                 // 驗證是否成功
                 if (!response.restData.success) {              
-                    MessageService.showError(response.restData.message,'依角色查詢設定的員工清單');
+                    MessageService.showNoticeInfo(response.restData.message);
                     return;
                 }
 
@@ -500,7 +568,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
 
                 MessageService.showSuccess('依角色設定員工角色資料');
 
-                this. queryEmpRoleInfo();
+                this. queryEmpRoleInfo(); // 同步更新回畫面清單
     
             },
             // eslint-disable-next-line no-unused-vars

@@ -19,7 +19,7 @@
             item-text="divisionName"
             placeholder="請選擇單位"
             :clearable="(divOption.length === 1? false : true)"
-            @change="chooseDivision()"
+            @change="chooseDivision(division)"
           />
         </v-col>
         <v-col cols="1" />
@@ -39,7 +39,7 @@
             dense
             placeholder="請選擇組別"
             :clearable="(groupOption.length === 1? false : true)"
-            @change="chooseGroup()"
+            @change="chooseGroup(division,group)"
           />
         </v-col>
       </v-row>
@@ -211,9 +211,10 @@
         </v-card-title>
         <v-card-text>
           <div style="margin:10px 12px">
-            <div style="font-weight:bold; font-size:18px; color:black;">步驟一:請選擇角色</div>          
+            <div style="font-weight:bold; font-size:18px; color:black;">步驟一:請選擇角色 </div>          
             <v-row style="margin:auto;">                        
               <div style="font-size:16px; color:black; margin:auto 0;">
+                <span class="red--text">*</span>
                 角色
               </div>                                      
               <v-col cols="4">
@@ -227,13 +228,15 @@
                   placeholder="請選擇角色"
                   return-object
                   @change="resetSelect()"
-                />            
-              </v-col>            
+                />
+              </v-col>
+              <v-col class="mt-2 red--text "> {{ errMsg.role }}</v-col>
             </v-row>
             <div style="font-weight:bold; font-size:18px; color:black;">步驟二:請選擇單位</div>  
             <v-row style="margin: auto;">
               <div style="font-size:16px; color:black; margin:auto 0;">
-                單位            
+                <span class="red--text">*</span>
+                單位    
               </div>
               <v-col cols="4">
                 <v-select   
@@ -247,13 +250,15 @@
                   item-text="divisionName"
                   dense
                   placeholder="請選擇單位"
-                  @change="chooseDivision()"
+                  @change="chooseDivision(select.division)"
                 />
-              </v-col>  
+              </v-col> 
+              <v-col class="mt-2 red--text"> {{ errMsg.division }}</v-col>
             </v-row>    
             <div style="font-weight:bold; font-size:18px; color:black;">步驟三:請選擇組別(若設定組長或組員，選擇至組即可)</div>
             <v-row style="margin: auto;">
               <div style="font-size:16px; color:black; margin:auto 0;">
+                <span class="red--text">*</span>
                 組別              
               </div>
               <v-col cols="4">
@@ -268,9 +273,10 @@
                   item-text="groupName"
                   dense                
                   placeholder="請選擇組別"
-                  @change="chooseDivision()"
+                  @change="chooseGroup(select.division,select.group)"
                 />
               </v-col>
+              <v-col class="mt-2 red--text"> {{ errMsg.group }}</v-col>
             </v-row>
             <div style="font-weight:bold; font-size:18px; color:black;">步驟四:請選擇課別</div>
             <v-row style="margin: auto;">
@@ -282,7 +288,7 @@
                   v-model="select.section"
                   :return-object="true"
                   :items="sectionOption"
-                  :clearable="(sectionOption.length === 1? false : true)" 
+                  :clearable="true" 
                   item-text="sectionName"                      
                   outlined
                   hide-details
@@ -295,7 +301,7 @@
           </div>
           <v-row>
             <v-col>
-              <v-btn class="primary ml-3" @click="queryEmpInfoByRoleCode()">查詢</v-btn>
+              <v-btn class="primary ml-3" @click="searchSubmit()">查詢</v-btn>
             </v-col>
           </v-row>   
 
@@ -336,7 +342,7 @@
           <v-spacer />
           <v-btn
             color="normal"            
-            @click="editPopOut = false"
+            @click="resetModel()"
           >
             &emsp;關閉&emsp;
           </v-btn>

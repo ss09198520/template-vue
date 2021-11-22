@@ -74,6 +74,18 @@ const MessageService = {
             type: 'noti-checkInfo'
         });
     },
+
+    async showNoticeInfo(message){
+        var defaultTitle = "請重新確認";
+
+        Vue.notify({
+            group : 'topRight',
+            title : defaultTitle,
+            // text : '必填：「'+ requiredMsg+'」。' +'格式：「'+formatMsg+'」。',
+            text :message,
+            type: 'noti-checkInfo'
+        });
+    },
 }
 
 export default MessageService;

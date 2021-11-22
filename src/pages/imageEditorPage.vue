@@ -33,6 +33,7 @@
             :custom-style="signaturePadStyle"
             :options="signatureOptions"
           />
+          <span class="hint-text">您的電子簽名僅使用於本表單的各簽名處</span>
         </v-row>
         <v-row justify="center" class="mt-5">
           <v-btn class="big-btn" @click="isSign = false">
@@ -93,5 +94,9 @@
     }
     .big-btn-text{
       font-size: 1.4vw;
+    }
+    .hint-text{
+      color: red;
+      font-size: 32px;
     }
 </style>

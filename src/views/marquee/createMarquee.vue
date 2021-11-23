@@ -418,6 +418,7 @@ export default {
           new Blob(
             [
               JSON.stringify({
+                marqueeId : this.location,
                 marqueeName: this.marqueeName,
                 marqueeType: "一般",
                 marqueeContent: this.marqueeText,
@@ -494,11 +495,11 @@ export default {
       //判斷編輯器內容長度至少大於等於2 初始""\n"
       if (this.marqueeText.length <= 2) {
         this.errMsg.editorData = "跑馬燈內容必填";
-        hasCheck = false;
-        this.valid = false;
-        this.isSubmited = false;
+        //hasCheck = false;
+        //this.valid = false;
+        //this.isSubmited = false;
       } else {
-        this.errMsg.editorData = null;
+        //this.errMsg.editorData = null;
       }
       console.log(this.marqueeText);
       return hasCheck;

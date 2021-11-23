@@ -11,8 +11,8 @@ module.exports = {
   extends: ['plugin:vue/recommended', 'eslint:recommended'],
   rules: {
     'no-unused-vars': 'off',
-    'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // 'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+    // 'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'space-before-function-paren': 'off',
     // "eol-last": 2,
     "vue/max-attributes-per-line": ["error", {

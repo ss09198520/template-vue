@@ -30,7 +30,7 @@ const AjaxService = {
         }
       }
   
-      await axios.post(`${url}`, data, {
+      await axios.post(`${process.env.VUE_APP_BASE_API + url}`, data, {
         headers: {
           // for NSP 大網 Action 辨認小網 Request 
           // 因為服務異動後端用大網 Action, 但大小網 OwnId 來源不同

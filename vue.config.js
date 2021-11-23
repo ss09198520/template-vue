@@ -31,5 +31,5 @@ module.exports = {
         }
     }
   },
-  publicPath : "/"
+  publicPath : "/tpes"
 }

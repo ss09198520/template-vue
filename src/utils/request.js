@@ -4,9 +4,29 @@ import MessageService from '@/assets/services/message.service.js';
 import EventBus from '@/assets/services/eventBus.js';
 import LoadingConfig from '@/assets/constant/loadingConfig.js';
 
+//檢查回傳JSON是否為BLOB
+const isJsonBlob = (data) => data instanceof Blob && data.type === "application/json";
+
+// 將blob物件轉化為json（檔案型別呼叫ajax 取後端的返回值做特殊處理）
+const fileToJson = (file) => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = res => {
+      const { result } = res.target // 得到字串
+      const data = JSON.parse(result) // 解析成json物件
+      console.log(data)
+      resolve(data)
+    } // 成功回傳
+    reader.onerror = err => {
+      reject(err)
+    } // 失敗回傳
+    reader.readAsText(new Blob([file]), 'utf-8') // 按照utf-8編碼解析
+  })
+}
+
 // create an axios instance
 const service = axios.create({
-  // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
   headers: { 'Content-Type': 'application/json' }, //body content type
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 50000 // request timeout
@@ -32,7 +52,6 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    console.log(error) // for debug
 
     //送出請求錯誤後 關閉loading
     LoadingConfig.blockCount--;
@@ -77,7 +96,6 @@ service.interceptors.response.use(
     }
     const { data, headers } = response
     
-   
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
     
@@ -85,8 +103,6 @@ service.interceptors.response.use(
       
       const fileName = headers['content-disposition'].replace(/\w+;filename=(.*)/, '$1')
 
-      // 此處當返回json文件時需要先對data進行JSON.stringify處理，其他類型文件不用做處理
-      //const blob = new Blob([JSON.stringify(data)], ...)
       // 下載檔案
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement('a');
@@ -97,6 +113,13 @@ service.interceptors.response.use(
       link.remove();
       window.URL.revokeObjectURL(url);
 
+    }else if (isJsonBlob(res)) { //正常回傳
+      
+      let message = this.fileToJson(response.data)
+      console.log(message)
+    
+      MessageService.showSystemError()
+      return Promise.reject(new Error(res.rtnMsg || 'Error'))
     }else if (res.rtnCode !== '00000') { //正常回傳
 
       MessageService.showSystemError()
@@ -121,7 +144,6 @@ service.interceptors.response.use(
     }
   },
   error => {
-    
     //送出請求錯誤後 關閉loading
     LoadingConfig.blockCount--;
     if(LoadingConfig.blockCount <= 0){
@@ -134,7 +156,6 @@ service.interceptors.response.use(
       }
     }
     if (error.response) {
-      console.log('err' + error) // for debug
       // Http error code 的處理
       switch (error.response.status) {
         case 404:
@@ -142,7 +163,6 @@ service.interceptors.response.use(
           MessageService.showError('你要找的頁面不存在');
           break
         case 500:
-          console.log('系統發生問題')
           MessageService.showSystemError();
           break
         default:
@@ -150,7 +170,6 @@ service.interceptors.response.use(
           MessageService.showSystemError();
       }
     } else {
-      console.log('錯誤訊息 : ' + error) // for debug
       MessageService.showError('接收伺服器回應發生錯誤' ,'');
     }
     return Promise.reject(error)

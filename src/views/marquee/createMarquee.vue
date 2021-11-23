@@ -145,7 +145,7 @@
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col cols="2" md="2"> 審核附件歷史上傳 </v-col>
             <v-col cols="6" md="6">
-                <a :href="this.attachedFiles">下載確認</a>
+              <a :href="this.attachedFiles">下載確認</a>
             </v-col>
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">

@@ -442,7 +442,7 @@
       
       remove() {
         let itemId = this.mediaFiles[this.editedIndex].id
-        this.deleteMediaFile(itemId)
+        this.deleteMediaFile(itemId , this.editedIndex)
         this.close()
       },
       preview(e) {
@@ -528,7 +528,7 @@
       },
 
       //Action:素材刪除
-      async deleteMediaFile(id) {
+      async deleteMediaFile(id , removeIndex) {
         
         const data = await deleteFile(id)
         // 驗證是否成功
@@ -538,7 +538,7 @@
         }
         MessageService.showSuccess('刪除成功' + "✓")
         //刪除畫面資料
-        this.mediaFiles.splice(this.editedIndex, 1)
+        this.mediaFiles.splice(removeIndex, 1)
 
       },
     }

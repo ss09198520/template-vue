@@ -136,55 +136,6 @@ export default{
           
         },
 
-
-        // Action:取得表單檔案資料
-        queryFormInfo(){
-            // AjaxService.post('/tpesForm/queryMyFormInit',{
-            //     seq: this.selectItem.seq,  // 表單流水號
-            // },
-            // (response) => {
-            //     // 驗證是否成功
-            //     if (!response.resultMessage.success) {              
-            //         MessageService.showError(response.resultMessage.returnMessage,'取得表單檔案資料');
-            //         return;
-            //     }
-
-            //     // 將取得的資料放進前端參數中
-            
-            // },
-            // // eslint-disable-next-line no-unused-vars
-            // (response) => {                
-            //     MessageService.showSystemError();
-            // });
-
-        },
-
-        // Action:儲存表單檔案資料
-        updateFormInfo(){
-            // AjaxService.post('/tpesForm/queryMyFormInit',{
-            //     // seq: this.selectItem.seq,  // 表單流水號
-            //     // 檔案資料
-            // },
-            // (response) => {
-            //     // 驗證是否成功
-            //     if (!response.resultMessage.success) {              
-            //         MessageService.showError(response.resultMessage.returnMessage,'儲存表單檔案資料');
-            //         return;
-            //     }
-
-            //     // 完成
-            //     MessageService.showSuccess('儲存表單檔案資料');
-            
-            // },
-            // // eslint-disable-next-line no-unused-vars
-            // (response) => {                
-            //     MessageService.showSystemError();
-            // });            
-        },
-
-
-
-
         /**
          * 
          * Ajax end 

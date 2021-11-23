@@ -180,7 +180,7 @@
                 max-width="200px"     
               >
                 <h2 class="font-bold">退件報表</h2>
-                <span style="font-size:96px;">{{ numberOf.numberOfReturnReport }}</span>
+                <span style="font-size:96px;">{{ numberOf.numberOfRejectReport }}</span>
                 <span style="font-size:30px;">件</span>
               </v-card>
             </v-col>

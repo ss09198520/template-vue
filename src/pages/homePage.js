@@ -101,7 +101,7 @@ export default {
                     this.showCounts.mySignOffSeal = true;
                 }
                 // 判斷我的簽核區-調閱申請待簽核
-                if(roleList[index].roleCode === 'AUTH04' || roleList[index].roleCode === 'AUTH06'){            
+                if(roleList[index].roleCode === 'AUTH04' || roleList[index].roleCode === 'AUTH07'){            
                     this.showCounts.mySignOffReadApply = true;
                 }
                 // 判斷我的簽核區-退件報表待簽核

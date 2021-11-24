@@ -44,7 +44,8 @@
             </v-col>
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
-            <v-col cols="2" md="2"> 上架日期 
+            <v-col cols="2" md="2">
+              上架日期
               <span class="red--text ml-2">*</span>
             </v-col>
             <v-col cols="6" class="d-flex">
@@ -142,10 +143,17 @@
               />
             </v-col>
           </v-row>
-          <v-row :dense="dense" :no-gutters="noGutters">
-            <v-col cols="2" md="2"> 審核附件歷史上傳 </v-col>
-            <v-col cols="6" md="6">
+          <v-row
+            v-if="location !== null"
+            :dense="dense"
+            :no-gutters="noGutters"
+          >
+            <v-col cols="2" md="2"> 審核附件歷史上傳 </v-col>          
+            <v-col v-if="!isAttachedFiles" cols="6" md="6">
               <a :href="attachedFiles">下載確認</a>
+            </v-col>
+             <v-col v-else-if="isAttachedFiles" cols="6" md="6">
+              {{attachedFiles}}
             </v-col>
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
@@ -181,7 +189,7 @@
               >
                 {{ marqueeHTML }}
               </marquee-text>
-            </v-col>           
+            </v-col>
           </v-row>
           <v-row>
             <v-col
@@ -190,9 +198,8 @@
               md="10"
               style="margin-top: -25px"
             >
-              <span
-                class="red--text font-14px"
-              >*錯誤提示：{{ errMsg.editorData }}
+              <span class="red--text font-14px">
+                *錯誤提示：{{ errMsg.editorData }}
               </span>
             </v-col>
           </v-row>
@@ -209,12 +216,7 @@
 
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col class="d-flex justify-end" cols="8" md="8">
-              <v-btn 
-                class="ma-1" 
-                outlined 
-                color="accent" 
-                @click="resetForm"
-              >
+              <v-btn class="ma-1" outlined color="accent" @click="resetForm">
                 取消
               </v-btn>
               <v-btn
@@ -277,7 +279,7 @@ export default {
       noGutters: false,
       hideDatails: false,
       isSubmited: false,
-      location : "",
+      location: "",
       rules: {
         requiredRule: [v => !!v || "此欄位為必填欄位"],
         lengthRules: [
@@ -298,59 +300,63 @@ export default {
     };
   },
   computed: {
+    isAttachedFiles() {
+      let isTrue = true;
+      if (this.attachedFiles !== null) {
+        isTrue = this.attachedFiles.includes("無檔案上傳");
+      } else {
+        isTrue = false;
+      }
+      return isTrue;
+    },
     editor() {
-        return this.$refs.myQuillEditor.quill
-      },
-     isAddButtonDisabled() {
-      return !this.valid || this.isSubmited; 
+      return this.$refs.myQuillEditor.quill;
+    },
+    isAddButtonDisabled() {
+      return !this.valid || this.isSubmited;
     },
     animationDuration() {
       return 600 / this.duration;
     }
   },
-  created(){
-    this.getQueryString('id')
-    console.log("--getQueryString---")
-    console.log(this.location)
-    if(this.location!=="" && this.location!==null){
-        this.queryMarqueeById()
-    }    
+  created() {
+    this.getQueryString("id");  
+    if (this.location !== "" && this.location !== null) {
+      this.queryMarqueeById();
+    }
   },
   mounted() {
     console.log("this is current quill instance object", this.editor);
     this.onEditorChange(this.marqueeHTML);
   },
   methods: {
-    getQueryString(name){
-       // eslint-disable-next-line no-sparse-arrays
-       this.location = decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ''])[1].replace(/\+/g, '%20')) || null
+    getQueryString(name) {
+      // eslint-disable-next-line no-sparse-arrays
+      this.location = decodeURIComponent((new RegExp("[?|&]" + name + "=" + "([^&;]+?)(&|#|;|$)").exec(location.href) || [, ""])[1].replace(/\+/g, "%20")) || null;
     },
-    queryMarqueeById(){
-      fetchQueryMarquee({ marqueeId : this.location })
-          .then(res => {
-            if(res.restData.code == "00000"){
-              let resc =  Object.assign({}, res.restData.marquee);
-              this.pageTitle = "跑馬燈修改";
-              MessageService.showInfo(res.restData.message,"成功✓");
-              this.marqueeName = resc.marqueeName;
-              this.marqueeText = resc.marqueeContent;
-              this.marqueeHTML = resc.marqueeContentHTML;
-              this.duration = resc.animationDuration;
-              this.marqueeDesc = resc.memo;
-              this.startDate  = resc.releaseStartDate;
-              this.endDate = resc.releaseEndDate
-              if(resc.attachedFileName.indexOf("無檔案上傳") < 0){
-                this.attachedFiles = resc.attachedFileName;
-              }
-            }else if (res.restData.code =='20001'){
-              MessageService.showError("查詢失敗",res.restData.message);
-             }          
-          })
-          .catch(error => {
-            this.isSubmited = false;
-            console.error(error);
-          });
-
+    queryMarqueeById() {
+      fetchQueryMarquee({ marqueeId: this.location })
+        .then(res => {
+          if (res.restData.code == "00000") {
+            let resc = Object.assign({}, res.restData.marquee);
+            this.pageTitle = "跑馬燈修改";
+            MessageService.showInfo(res.restData.message, "成功✓");
+            this.marqueeName = resc.marqueeName;
+            this.marqueeText = resc.marqueeContent;
+            this.marqueeHTML = resc.marqueeContentHTML;
+            this.duration = resc.animationDuration;
+            this.marqueeDesc = resc.memo;
+            this.startDate = resc.releaseStartDate;
+            this.endDate = resc.releaseEndDate;
+            this.attachedFiles = resc.attachedFileName;
+          } else if (res.restData.code == "20001") {
+            MessageService.showError("查詢失敗", res.restData.message);
+          }
+        })
+        .catch(error => {
+          this.isSubmited = false;
+          console.error(error);
+        });
     },
     filtersHTML(val) {
       if (val != null && val != "") {
@@ -418,7 +424,7 @@ export default {
           new Blob(
             [
               JSON.stringify({
-                marqueeId : this.location,
+                marqueeId: this.location,
                 marqueeName: this.marqueeName,
                 marqueeType: "一般",
                 marqueeContent: this.marqueeText,
@@ -428,7 +434,7 @@ export default {
                 region: "區處",
                 releaseStartDate: this.startDate,
                 releaseEndDate: this.endDate,
-                sign: isSign,          
+                sign: isSign
               })
             ],
             {
@@ -440,18 +446,18 @@ export default {
 
         fetchInitMarquee(formData)
           .then(res => {
-            console.log("return")
-            if(res.restData.code == "00000"){
+            console.log("return");
+            if (res.restData.code == "00000") {
               //MessageService.showSuccess("MessageService.showSuccess(res.restData.message)");
-              MessageService.showInfo(res.restData.message,"成功✓");
+              MessageService.showInfo(res.restData.message, "成功✓");
               this.isSubmited = true;
-              console.log("登入成功", res);               
+              console.log("登入成功", res);
               this.resetForm();
               console.log(this.isSubmited);
-              this.isSubmited = false;  
-            }else if (res.restData.code =='20001'){
-              MessageService.showError("儲存失敗",res.restData.message);
-             }          
+              this.isSubmited = false;
+            } else if (res.restData.code == "20001") {
+              MessageService.showError("儲存失敗", res.restData.message);
+            }
           })
           .catch(error => {
             //MessageService.showError(error.rtnMsg);
@@ -460,23 +466,23 @@ export default {
           });
       }
     },
-    resetForm(){
+    resetForm() {
       this.isSubmited = true;
-      this.marqueeName = "";     
+      this.marqueeName = "";
       this.duration = 30;
       this.marqueeDesc = null;
       this.startDate = null;
       this.endDate = null;
-      this.attachedFiles =null;
+      this.attachedFiles = null;
     },
     validate() {
-      this.$refs.form.validate()
+      this.$refs.form.validate();
     },
-    reset () {
-        this.$refs.form.reset()
-      },
+    reset() {
+      this.$refs.form.reset();
+    },
     resetValidation() {
-      this.$refs.form.resetValidation()
+      this.$refs.form.resetValidation();
     },
     decrementDuration() {
       //減慢播放

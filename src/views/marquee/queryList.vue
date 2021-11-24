@@ -45,6 +45,7 @@
                 dense
                 outlined
                 hide-details
+                clearable
               />
             </v-col>
           </v-row>
@@ -63,6 +64,7 @@
                 color="accent"
                 item-color="accent"
                 placeholder="狀態"
+                clearable
                 dense
                 outlined
                 hide-details
@@ -79,6 +81,7 @@
                 color="accent"
                 item-color="accent"
                 placeholder="上架狀態"
+                clearable
                 dense
                 outlined
                 hide-details
@@ -257,7 +260,7 @@
             fab
             small
             color="accent"
-            @click="isShow = false"
+            @click="resetForm"
             v-on="on"
           >
             <v-icon>mdi-refresh</v-icon>
@@ -490,7 +493,7 @@
         releaseEndDateFrom: null, 
         releaseEndDateTo: null,
         status: null,
-        signStatus: "",
+        signStatus: null,
         //日曆開關
         releaseStartDateFromMenu: false,
         releaseStartDateToMenu: false,
@@ -639,11 +642,10 @@
       previewItem(item) {
         this.selectMarquee = item;
         this.preViewMarqueeModel = true;
-        
        // this.$router.push({path:`${this.$route.matched[0].path}/createMarquee?id=${item.marqueeId}`})
       },
       viewSchedule() {
-        this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
+        this.$router.push({path:`${this.$route.matched[0].path}/marqueeCalendar`})
       },
       deleteItem(item) {
         this.alertDialog = true
@@ -655,8 +657,16 @@
         //this.close()       
         this.deleteMarqueeModel = true;
       },
+      resetForm() {
+        this.marqueeName = null, 
+        this.releaseStartDateFrom = null, 
+        this.releaseStartDateTo = null, 
+        this.releaseEndDateFrom = null, 
+        this.releaseEndDateTo = null, 
+        this.status = null, 
+        this.signStatus = null
+        },
       deleteMarquee(item){
-
         fetchDeleteMarquee({
           marqueeId: item
         }).then(res=>{
@@ -686,7 +696,7 @@
         status: this.status,
         signStatus: this.signStatus
       }).then(res => {
-        this.itemsCRUD = [],
+        this.itemsCRUD = [];
         this.isShow = !this.isShow
         if((res.restData.marquee).length >= 1){
                     let arrayObj = res.restData.marquee  

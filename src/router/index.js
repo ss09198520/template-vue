@@ -423,6 +423,18 @@ export const constantRoutes = [
         name: 'Setting',
         component: () => import('@/pages/backStage/backStageSettingPage.vue'),
         meta: { title: '後台資訊設定區', icon: 'mdi-cog-outline' }
+      },
+      {
+        path: 'pmcVersionUpload',
+        name: 'pmcVersionUpload',
+        component: () => import('@/pages/backStage/pmcVersionUpload.vue'),
+        meta: { title: 'PMC 版本上傳', icon: 'mdi-cog-outline' }
+      },
+      {
+        path: 'pmcComputerList',
+        name: 'pmcComputerList',
+        component: () => import('@/pages/backStage/pmcComputerList.vue'),
+        meta: { title: 'PMC 版本查詢', icon: 'mdi-cog-outline' }
       }
     ]
   },

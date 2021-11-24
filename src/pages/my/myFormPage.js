@@ -53,8 +53,7 @@ export default{
         action(type,item){
             this.selectItem = item;
             // 抓出選的是第幾筆
-            this.selectIndex = this.formList.indexOf(item);            
-            this.queryFormInfo();
+            this.selectIndex = this.formList.indexOf(item);
 
             // 帶入受理編號
             this.formParam = {

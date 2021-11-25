@@ -480,7 +480,14 @@ export const constantRoutes = [
         name: 'CancelForm',
         component: () => import('@/pages/FormPage/FormPage.vue'),
         meta: { title: 'TPES Form', icon: 'mdi-file-document' }
-      }
+      },
+      // external file
+      {
+        path: '/externalFile',
+        name: 'externalFile',
+        component: () => import('@/pages/externalFile/viewExternalFile.vue'),
+        meta: { title: 'viewFile', icon: 'mdi-file-document' }
+      },
     ]
   }
 ]

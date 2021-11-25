@@ -1,5 +1,6 @@
 import MessageService from "@/assets/services/message.service";
 import ValidateUtil from "@/assets/services/validateUtil";
+import AjaxService from "@/assets/services/ajax.service";
 
 export default {
     name: 'LeaveDetail',
@@ -47,6 +48,7 @@ export default {
             },
             requiredArray:[],
             formatArray:[],
+            hasMgmtAuth: false,
             
         }
     },
@@ -91,14 +93,44 @@ export default {
         changeEmp(){
             this.agentList = [];
             for(let i in this.empList){
-                if(this.selectEmp.isMgmt === this.empList[i].isMgmt && this.empList[i].empNo !== this.selectEmp.empNo){                        
+                if(this.selectEmp.isMgmt === this.empList[i].isMgmt 
+                    && this.empList[i].empNo !== this.selectEmp.empNo){
+
                     this.agentList.push({                            
                         empNo:this.empList[i].empNo,                        
                         empName:this.empList[i].empName,
                         isMgmt:this.empList[i].isMgmt,
                         dept:this.empList[i].dept,
+                        deptName: this.empList[i].deptName,
                     })            
                 } 
+
+                if(this.selectEmp.isMgmt){
+                    if(this.selectEmp.isMgmt === this.empList[i].isMgmt 
+                        && this.empList[i].empNo !== this.selectEmp.empNo){
+    
+                        this.agentList.push({                            
+                            empNo:this.empList[i].empNo,                        
+                            empName:this.empList[i].empName,
+                            isMgmt:this.empList[i].isMgmt,
+                            dept:this.empList[i].dept,
+                            deptName: this.empList[i].deptName,
+                        })            
+                    } 
+
+                } else {
+                    if(this.selectEmp.isMgmt === this.empList[i].isMgmt 
+                        && this.empList[i].empNo !== this.selectEmp.empNo
+                        && this.empList[i].dept === this.selectEmp.dept){    
+                        this.agentList.push({                            
+                            empNo:this.empList[i].empNo,                        
+                            empName:this.empList[i].empName,
+                            isMgmt:this.empList[i].isMgmt,
+                            dept:this.empList[i].dept,
+                            deptName: this.empList[i].deptName,
+                        })            
+                    } 
+                }
             }
 
             // 驗證員工
@@ -213,31 +245,27 @@ export default {
          * 
         */
 
-        // Action: 頁面初始化
+        // Action: 代理申請初始化資料
         queryLeaveInit(){
-            // 先放Mock資料-員工清單
-            let  empList = [
-                {empNo:'015212001', empName:'王大維',isMgmt:true,dept:'業務組'},
-                {empNo:'015213001', empName:'林文琪',isMgmt:true,dept:'東山服務所'},
-                {empNo:'015214001', empName:'張佑臻',isMgmt:true,dept:'大里服務中心'},
-                {empNo:'015214020', empName:'許家騏',isMgmt:false,dept:'大里服務中心'},
-                {empNo:'015214021', empName:'連映菲',isMgmt:false,dept:'大里服務中心'},                
-            ];
-
-            // 先放Mock資料-操作人目前狀態
-            let empInfo = {
-                status:'請假中',
-                agent:'1050334015',
-                agentName:'王大明',
-                nextLeaveStartDate:'2021-10-12 08:00',
-                nextLeaveEndDate:'2021-10-12 18:00',
-                nextAgent:'1050334018',
-                nextAgentName:'趙元智',
-            };
-
-            this.empList = empList;
-            this.empInfo = empInfo;
-            this.oriEmpList = JSON.parse(JSON.stringify(this.empList));
+            AjaxService.post('/inquireLeave/queryInquireLeaveInit',{},
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.resultMessage.returnMessage,'代理申請初始化資料');
+                    return;
+                }
+    
+                // 將取得的資料放進前端參數中
+                this.empList = response.restData.empList;
+                this.empInfo = response.restData.empInfo;
+                this.hasMgmtAuth = response.restData.hasMgmtAuth;
+                this.oriEmpList = JSON.parse(JSON.stringify(this.empList));
+    
+            },
+            // eslint-disable-next-line no-unused-vars
+            (response) => {                
+                MessageService.showSystemError();
+            });
 
 
         },

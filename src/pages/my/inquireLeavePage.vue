@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h2 class="font-bold">代理申請</h2>
-    <div class="ml-10">
+    <div v-if="hasMgmtAuth" class="ml-10">
       <div class="font-18px font-bold">
         <v-row align="center">  
           <v-col cols="1">       
@@ -20,11 +20,11 @@
               @change="changeEmp()"
             >
               <template v-slot:selection="data">
-                <span>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.dept }})</span>
+                <span>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.deptName }})</span>
               </template>
               <template v-slot:item="data">
                 <template>
-                  <v-list-item-content>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.dept }})</v-list-item-content>
+                  <v-list-item-content>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.deptName }})</v-list-item-content>
                 </template>
               </template>
             </v-select>
@@ -47,11 +47,11 @@
               @change="checkAgent()"
             >
               <template v-slot:selection="data">
-                <span>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.dept }})</span>
+                <span>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.deptName }})</span>
               </template>
               <template v-slot:item="data">
                 <template>
-                  <v-list-item-content>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.dept }})</v-list-item-content>
+                  <v-list-item-content>{{ data.item.empNo }}&nbsp;{{ data.item.empName }}({{ data.item.deptName }})</v-list-item-content>
                 </template>
               </template>
             </v-select>
@@ -197,44 +197,55 @@
         </v-row>
       </div>
     </div>
-    <hr class="mt-6 mb-5">
-    <v-row class="ml-5">
-      <h3 class="font-bold">個人資訊</h3>
-    </v-row>
-    <div class="ml-10">
-      <div class="font-18px">
-        <v-row align="center">   
-          <v-col cols="2" class="font-bold">       
-            目前狀態
-          </v-col>          
-          <v-col cols="3">
-            {{ empInfo.status }}
-          </v-col>
-        </v-row>
-        <v-row align="center">   
-          <v-col cols="2" class="font-bold">       
-            代理人
-          </v-col>          
-          <v-col cols="3">
-            {{ empInfo.agent }}&emsp;{{ empInfo.agentName }}
-          </v-col>
-        </v-row>
-        <v-row align="center">   
-          <v-col cols="2" class="font-bold">       
-            下一次請假時間
-          </v-col>          
-          <v-col cols="3">
-            {{ empInfo.nextLeaveStartDate }}~{{ empInfo.nextLeaveEndDate }}
-          </v-col>
-        </v-row>
-        <v-row align="center">   
-          <v-col cols="2" class="font-bold">       
-            下一次請假代理人
-          </v-col>          
-          <v-col cols="3">
-            {{ empInfo.nextAgent }}&emsp;{{ empInfo.nextAgentName }}
-          </v-col>
-        </v-row>
+    <hr v-if="hasMgmtAuth" class="mt-6 mb-5">
+    <div class="mt-10">
+      <v-row class="ml-5">
+        <h3 class="font-bold">個人資訊</h3>
+      </v-row>
+      <div class="ml-10">
+        <div class="font-18px">
+          <v-row align="center">   
+            <v-col cols="2" class="font-bold mt-5">       
+              目前狀態
+            </v-col>          
+            <v-col cols="3">
+              {{ empInfo.status }}
+            </v-col>
+          </v-row>
+          <v-row align="center">   
+            <v-col cols="2" class="font-bold">       
+              代理人
+            </v-col>          
+            <v-col v-if="empInfo.agent != null" cols="3">
+              {{ empInfo.agent }}&emsp;{{ empInfo.agentName }}
+            </v-col>
+            <v-col v-if="empInfo.agent == null" cols="3">
+              無
+            </v-col>
+          </v-row>
+          <v-row align="center">   
+            <v-col cols="2" class="font-bold">       
+              下一次請假時間
+            </v-col> 
+            <v-col v-if="empInfo.agentName != null" cols="3">
+              {{ empInfo.nextLeaveStartDate }}~{{ empInfo.nextLeaveEndDate }}
+            </v-col>
+            <v-col v-if="empInfo.agentName == null" cols="3">
+              無請假紀錄
+            </v-col>
+          </v-row>
+          <v-row align="center">   
+            <v-col cols="2" class="font-bold">       
+              下一次請假代理人
+            </v-col>          
+            <v-col v-if="empInfo.nextAgent != null" cols="3">
+              {{ empInfo.nextAgent }}&emsp;{{ empInfo.nextAgentName }}
+            </v-col>
+            <v-col v-if="empInfo.nextAgent == null" cols="3">
+              無請假紀錄
+            </v-col>
+          </v-row>
+        </div>
       </div>
     </div>
   </v-container>

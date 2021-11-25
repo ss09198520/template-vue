@@ -22,7 +22,7 @@
                     ? false
                     : true
                 "
-                @change="chooseDivision()"
+                @change="chooseDivision(searchParam.divisionCode)"
               />
             </v-col>
             <v-col cols="1" md="1"> 組別 </v-col>
@@ -40,7 +40,7 @@
                 :clearable="
                   groupList != null && groupList.length === 1 ? false : true
                 "
-                @change="chooseGroup()"
+                @change="chooseGroup(searchParam.divisionCode,searchParam.groupCode)"
               />
             </v-col>
           </v-row>
@@ -83,6 +83,25 @@
             </v-col>
           </v-row>
           <v-row class="d-flex justify-start mt-3">
+            <v-col cols="1" md="1"> 類型 </v-col>
+            <v-col cols="4" md="3">
+              <v-select
+                v-model="searchParam.pmcType"
+                :items="pmcTypeList"
+                color="accent"
+                outlined
+                hide-details
+                dense
+                item-value="typeCode"
+                item-text="typeName"
+                placeholder="請選擇 PMC 類型    "
+                :clearable="
+                  pmcTypeList != null && pmcTypeList.length === 1
+                    ? false
+                    : true
+                "
+              />
+            </v-col>
             <v-col cols="1" md="1"> Host </v-col>
             <v-col cols="4" md="3">
               <v-text-field
@@ -92,9 +111,12 @@
                 placeholder="請輸入 Hostname"
                 outlined
                 dense
+                style="height: 40px;"
               />
             </v-col>
-            <v-col cols="5" md="4" style="margin-top: 10px">
+          </v-row>
+          <v-row class="d-flex justify-start mt-3">
+              <v-col cols="9" md="8" style="margin-top: 10px">
               <v-row class="d-flex justify-end">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
@@ -181,6 +203,11 @@ export default {
       divisionList: [],
       groupList: [],
       sectionList: [],
+      pmcTypeNameMap:{},
+      divsionNameMap:{},
+      groupNameMap:{},
+      sectionNameMap:{},
+      pmcStatusNameMap:{},
       pmcStatusList: [],
       pmcComputerList: [],
       tableSetting: {
@@ -224,13 +251,19 @@ export default {
           value: "versionMd5",
           align: "center",
         },
+        {
+          text: "PMC 類型",
+          value: "pmcType",
+          align: "center",
+        },
       ],
       searchParam: {
-        division: null,
-        group: null,
-        section: null,
+        divisionCode: null,
+        groupCode: null,
+        sectionCode: null,
         hostName: null,
-        pmcStatus: null,
+        statusCode: null,
+        pmcType: null,
       },
     };
   },
@@ -246,11 +279,10 @@ export default {
         .then((res) => {
           if (res.rtnCode == "00000") {
             // set dropdown list data
-            // this.pmcTypeList = res.restData.pmcTypeList; 待確認是否要保留
+            this.pmcTypeList = res.restData.pmcTypeList;
             this.divisionList = res.restData.divisionList;
-            this.groupList = res.restData.groupList;
-            this.sectionList = res.restData.sectionList;
             this.pmcStatusList = res.restData.pmcStatusList;
+            this.initNameMap();
           } else {
             MessageService.showError(res.rtnMsg);
           }
@@ -260,13 +292,74 @@ export default {
           console.log(error);
         });
     },
+    
+    initNameMap() {
+        // reset data 
+        this.divsionNameMap = {};
+        this.groupNameMap = {};
+        this.sectionNameMap = {};
+        this.pmcStatusNameMap = {};
+        this.pmcTypeNameMap = {};
+        if(!ValidateUtil.isEmpty(this.divisionList)){
+            // list to map
+            let divCode = '';   
+            let grpCode = '';
+            let secCode = ''
+            for(let i in this.divisionList){
+                const dCode = this.divisionList[i].divisionCode;
+                const dName = this.divisionList[i].divisionName;
+                divCode = dCode;
+                console.log('[' + divCode +"] [" + dName + "]")
+                this.divsionNameMap[dCode] = dName;
+                for(let index in this.divisionList[i].groupSectionList){
+                    const gCode = this.divisionList[i].groupSectionList[index].groupCode;
+                    const gName = this.divisionList[i].groupSectionList[index].groupName;
+                    grpCode = dCode + gCode;
+                    console.log('|---- [' + grpCode +"] [" + gName + "]")
+                    this.groupNameMap[grpCode] = gName;
+                    // initSectionMap
+                    for(let idx in this.divisionList[i].groupSectionList[index].sectionList){
+                        const sCode = this.divisionList[i].groupSectionList[index].sectionList[idx].sectionCode;
+                        const sName = this.divisionList[i].groupSectionList[index].sectionList[idx].sectionName;
+                        secCode = dCode + gCode + sCode
+                        console.log('|     |------ [' + secCode +"] [" + sName + "]")
+                        this.sectionNameMap[secCode] = sName;
+                    }
+                }
+            }
+            console.log(this.divsionNameMap)
+            console.log(this.groupNameMap)
+            console.log(this.sectionNameMap)
+        }
+        if(!ValidateUtil.isEmpty(this.pmcStatusList)){
+            this.pmcStatusList.forEach( s => this.pmcStatusNameMap[s.statusCode] = s.statusName)
+        }
+        if(!ValidateUtil.isEmpty(this.pmcTypeList)){
+            this.pmcTypeList.forEach( s => this.pmcTypeNameMap[s.typeCode] = s.typeName)
+        }
+    },
 
     queryPmcComputer() {
       // 送後端API
       fetchSearchPmcComputerList(this.searchParam)
         .then((res) => {
           if (res.rtnCode == "00000") {
-            this.pmcComputerList = res.restData.pmcComputerList;
+            this.pmcComputerList = res.restData.pmcComputerList;    
+            this.pmcComputerList.forEach(
+                v => {
+                    let dCode = v.division;
+                    let gCode = dCode + v.group;
+                    let sCode = gCode + v.section;
+                    console.log(dCode);
+                    console.log(gCode);
+                    console.log(sCode);
+                    if(!ValidateUtil.isEmpty(this.divsionNameMap[dCode])) v.division = this.divsionNameMap[dCode];
+                    if(!ValidateUtil.isEmpty(this.groupNameMap[gCode])) v.group = this.groupNameMap[gCode];
+                    if(!ValidateUtil.isEmpty(this.sectionNameMap[sCode])) v.section = this.sectionNameMap[sCode];
+                    if(!ValidateUtil.isEmpty(this.pmcStatusNameMap[v.status])) v.status = this.pmcStatusNameMap[v.status];
+                    if(!ValidateUtil.isEmpty(this.pmcTypeNameMap[v.pmcType])) v.pmcType = this.pmcTypeNameMap[v.pmcType];
+                }
+            )
           } else {
             MessageService.showError(res.rtnMsg);
           }
@@ -280,13 +373,49 @@ export default {
     resetSearchParam() {
       // 清空查詢條件
       this.searchParam = {
-        division: null,
-        group: null,
-        section: null,
+        divisionCode: null,
+        groupCode: null,
+        sectionCode: null,
         hostName: null,
-        pmcStatus: null,
+        statusCode: null,
+        pmcType: null,
       };
       this.pmcComputerList = [];
+    },
+
+    chooseDivision(division){
+        // 先將組/課選項清空
+        this.groupList = []; 
+        this.sectionList = [];
+        this.searchParam.groupCode = null;
+        this.searchParam.sectionCode = null;
+        
+        for(let i in this.divisionList){
+            if(division === this.divisionList[i].divisionCode){
+                for(let index in this.divisionList[i].groupSectionList){
+                    this.groupList.push({
+                        groupCode: this.divisionList[i].groupSectionList[index].groupCode,
+                        groupName: this.divisionList[i].groupSectionList[index].groupName,
+                    })
+                }
+            }
+        }
+    },
+
+    chooseGroup(division,group){
+        // 先將課選項清空
+        this.sectionList = [];
+        this.searchParam.sectionCode = null;
+
+        for(let i in this.divisionList){
+            if(division === this.divisionList[i].divisionCode){
+                for(let index in this.divisionList[i].groupSectionList){
+                    if(group === this.divisionList[i].groupSectionList[index].groupCode){
+                        this.sectionList = this.divisionList[i].groupSectionList[index].sectionList;
+                    }
+                }
+            }
+        }
     },
   },
 };

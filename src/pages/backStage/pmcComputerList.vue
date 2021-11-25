@@ -22,7 +22,7 @@
                     ? false
                     : true
                 "
-                @change="chooseDivision()"
+                @change="chooseDivision(searchParam.divisionCode)"
               />
             </v-col>
             <v-col cols="1" md="1"> 組別 </v-col>
@@ -40,7 +40,7 @@
                 :clearable="
                   groupList != null && groupList.length === 1 ? false : true
                 "
-                @change="chooseGroup()"
+                @change="chooseGroup(searchParam.divisionCode,searchParam.groupCode)"
               />
             </v-col>
           </v-row>
@@ -83,6 +83,25 @@
             </v-col>
           </v-row>
           <v-row class="d-flex justify-start mt-3">
+            <v-col cols="1" md="1"> 類型 </v-col>
+            <v-col cols="4" md="3">
+              <v-select
+                v-model="searchParam.pmcType"
+                :items="pmcTypeList"
+                color="accent"
+                outlined
+                hide-details
+                dense
+                item-value="typeCode"
+                item-text="typeName"
+                placeholder="請選擇 PMC 類型    "
+                :clearable="
+                  pmcTypeList != null && pmcTypeList.length === 1
+                    ? false
+                    : true
+                "
+              />
+            </v-col>
             <v-col cols="1" md="1"> Host </v-col>
             <v-col cols="4" md="3">
               <v-text-field
@@ -92,9 +111,12 @@
                 placeholder="請輸入 Hostname"
                 outlined
                 dense
+                style="height: 40px;"
               />
             </v-col>
-            <v-col cols="5" md="4" style="margin-top: 10px">
+          </v-row>
+          <v-row class="d-flex justify-start mt-3">
+              <v-col cols="9" md="8" style="margin-top: 10px">
               <v-row class="d-flex justify-end">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
@@ -224,13 +246,19 @@ export default {
           value: "versionMd5",
           align: "center",
         },
+        {
+          text: "PMC 類型",
+          value: "pmcType",
+          align: "center",
+        },
       ],
       searchParam: {
-        division: null,
-        group: null,
-        section: null,
+        divisionCode: null,
+        groupCode: null,
+        sectionCode: null,
         hostName: null,
-        pmcStatus: null,
+        statusCode: null,
+        pmcType: null,
       },
     };
   },
@@ -246,10 +274,8 @@ export default {
         .then((res) => {
           if (res.rtnCode == "00000") {
             // set dropdown list data
-            // this.pmcTypeList = res.restData.pmcTypeList; 待確認是否要保留
+            this.pmcTypeList = res.restData.pmcTypeList;
             this.divisionList = res.restData.divisionList;
-            this.groupList = res.restData.groupList;
-            this.sectionList = res.restData.sectionList;
             this.pmcStatusList = res.restData.pmcStatusList;
           } else {
             MessageService.showError(res.rtnMsg);
@@ -280,13 +306,48 @@ export default {
     resetSearchParam() {
       // 清空查詢條件
       this.searchParam = {
-        division: null,
-        group: null,
-        section: null,
+        divisionCode: null,
+        groupCode: null,
+        sectionCode: null,
         hostName: null,
-        pmcStatus: null,
+        statusCode: null,
+        pmcType: null,
       };
       this.pmcComputerList = [];
+    },
+
+    chooseDivision(division){
+        // 先將組/課選項清空
+        this.groupList = []; 
+        this.sectionList = [];
+        this.searchParam.groupCode = null;
+        this.searchParam.sectionCode = null;
+        for(let i in this.divisionList){
+            if(division === this.divisionList[i].divisionCode){
+                for(let index in this.divisionList[i].groupSectionList){
+                    this.groupList.push({
+                        groupCode: this.divisionList[i].groupSectionList[index].groupCode,
+                        groupName: this.divisionList[i].groupSectionList[index].groupName,
+                    })
+                }
+            }
+        }
+    },
+
+    chooseGroup(division,group){
+        // 先將課選項清空
+        this.sectionList = [];
+        this.searchParam.sectionCode = null;
+
+        for(let i in this.divisionList){
+            if(division === this.divisionList[i].divisionCode){
+                for(let index in this.divisionList[i].groupSectionList){
+                    if(group === this.divisionList[i].groupSectionList[index].groupCode){
+                        this.sectionList = this.divisionList[i].groupSectionList[index].sectionList;
+                    }
+                }
+            }
+        }
     },
   },
 };

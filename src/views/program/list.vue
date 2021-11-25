@@ -320,6 +320,7 @@
                   fab
                   x-small
                   color="success"
+                  :disabled="!allowEdit(item.signStatus)"
                   @click="editItem(item)"
                   v-on="on"
                 >
@@ -484,6 +485,9 @@
       }
     },
     methods: {
+      allowEdit(signStatus) {
+        return (/(DRAFT|REJECT)$/i).test(signStatus)
+      },
       previewItem(item) {
         this.$router.push({path:`/media/preview/questionnaire/${item.questionnaireId}`})
       },
@@ -495,7 +499,13 @@
       },
       editItem(item) {
         // this.editedItem = Object.assign({}, item)
-        this.$router.push({path: `${this.$route.matched[0].path}/edit/${item.programId}`})
+        if(this.allowEdit(item.signStatus)){
+          this.$router.push({path: `${this.$route.matched[0].path}/edit/${item.programId}`})
+        } else {
+          MessageService.showNoticeInfo('無法編輯節目狀態為:' + this.signStatusOption.find(state => { return item.signStatus===state.value }).text);
+          return
+        }
+
       },
       viewSchedule() {
         this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})

@@ -388,6 +388,29 @@
               {{ item.active ? 'mdi-checkbox-marked-circle':'mdi-minus-circle' }}
             </v-icon>
           </template>
+                    <!-- 上架狀態 -->
+          <template v-slot:[`item.status`]="{ item }">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="d-flex justify-center"
+                  :color="item.status==='ACTIVE' ? 'green darken-2':''"
+                  v-on="on"
+                >
+                  {{ statusOption.find(state => { return item.status===state.value }).icon }}
+                </v-icon>
+              </template>
+              {{ statusOption.find(state => { return item.status===state.value }).text }}
+            </v-tooltip>
+          </template>
+          <!-- 簽核狀態 -->
+          <template v-slot:[`item.signStatus`]="{ item }">
+            {{ signStatusOption.find(state => { return item.signStatus===state.value }).text }}
+          </template>
+          <!-- 節目單類型 -->
+          <template v-slot:[`item.programType`]="{ item }">
+            {{ programTypeOption.find(type => { return item.programType===type.value }).text }}
+          </template>
         </v-data-table>
         <!-- 選頁 -->
         <div class="mt-2">
@@ -689,6 +712,7 @@
       //API post data
       fetchListMarquee({
         marqueeName: this.marqueeName, 
+        marqueeType: this.marqueeType,
         releaseStartDateFrom: this.releaseStartDateFrom, 
         releaseStartDateTo: this.releaseStartDateTo, 
         releaseEndDateFrom: this.releaseEndDateFrom, 

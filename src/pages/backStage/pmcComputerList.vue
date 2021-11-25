@@ -106,7 +106,7 @@
             <v-col cols="4" md="3">
               <v-text-field
                 v-model="searchParam.hostName"
-                hideDatails
+                hide-datails
                 color="accent"
                 placeholder="請輸入 Hostname"
                 outlined
@@ -116,7 +116,7 @@
             </v-col>
           </v-row>
           <v-row class="d-flex justify-start mt-3">
-              <v-col cols="9" md="8" style="margin-top: 10px">
+            <v-col cols="9" md="8" style="margin-top: 10px">
               <v-row class="d-flex justify-end">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">
@@ -154,7 +154,7 @@
         </v-form>
       </v-col>
     </v-row>
-    <hr class="mt-6 mb-5" />
+    <hr class="mt-6 mb-5">
     <v-row>
       <v-col md="12">
         <v-data-table
@@ -171,8 +171,7 @@
           hide-default-footer
           no-data-text="查無資料"
           @page-count="tableSetting.pageCount = $event"
-        >
-        </v-data-table>
+        />
         <div class="mt-2">
           <v-pagination
             v-model="tableSetting.curPage"

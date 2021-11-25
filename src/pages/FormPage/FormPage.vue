@@ -238,7 +238,7 @@
                         <v-checkbox 
                           v-if="checkIsWord(attachment)"
                           v-model="attachment.needSeal" 
-                          :disabled="formPageMode != 'edit'"
+                          :disabled="formPageMode != 'edit' || attachment.canOnlyView"
                           class="mt-0" 
                           label="套印專用章" 
                           color="success" 

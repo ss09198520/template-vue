@@ -351,8 +351,8 @@ export const constantRoutes = [
       },
       {
         path: 'marqueeCalendar',
-        name: 't-Marquee-List-Calendar',
-        component: () => import('@/views/marquee/t-calendar'),
+        name: 'Marquee-Calendar',
+        component: () => import('@/views/marquee/calendarList'),
         hidden: true,
         meta: { title: '跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
       },

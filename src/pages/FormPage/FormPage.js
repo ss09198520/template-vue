@@ -107,6 +107,7 @@ export default {
             needScanFileCodeList: [],
             needScanFileHint: null,
             isAgentNeedScanAttach: false,
+            maxSignVersion: 0,
         }
     },
     methods: {
@@ -183,6 +184,7 @@ export default {
             
             let param = {
                 acceptNum: this.acceptNum,
+                fmbhNo: this.fmbhNo,
                 formType: this.formType,
                 apitCod: this.apitCod,
                 applyType: this.applyType,
@@ -219,6 +221,7 @@ export default {
                 this.accountingMemo = response.restData.accountingMemo;
                 this.needScanFileCodeList = response.restData.needScanFileCodeList;
                 this.isAgentNeedScanAttach = response.restData.agentNeedScanAttach;
+                this.maxSignVersion = response.restData.maxSignVersion;
 
                 // 檢查證件是否已依規範掃描
                 this.checkNeedScanFile();
@@ -291,7 +294,7 @@ export default {
         },
         openFormSignPage(){
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-            this.formSignPage = window.open("/#/imageEditor", '表單及簽名', config);
+            this.formSignPage = window.open("/tpes/#/imageEditor", '表單及簽名', config);
 
             // 若為取消需將模式傳給簽名頁做取消簽名
             if(this.formPageMode == "cancel"){
@@ -310,6 +313,7 @@ export default {
             this.formSignPage.editedFormFileNo = this.editedFormFileNo;
             this.formSignPage.acceptNum = this.acceptNum;
             this.formSignPage.formSeq = this.formSeq;
+            this.formSignPage.maxSignVersion = this.maxSignVersion;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
 
             try {

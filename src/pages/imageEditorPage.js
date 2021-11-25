@@ -48,6 +48,7 @@ export default {
                 maxWidth: 5
             },
             isSign: false,
+            maxSignVersion: 1,
         }
     },
     created() {
@@ -58,6 +59,7 @@ export default {
             this.acceptNum = window.acceptNum;
             this.formSeq = window.formSeq;
             this.mode = window.mode;
+            this.maxSignVersion = window.maxSignVersion;
 
             this.queryFormImage();
         });
@@ -195,6 +197,7 @@ export default {
                 category: (this.mode == "cancel") ? "CANCEL_SIGN" : "SIGN",
                 file: data,
                 needSeal: false,
+                version: this.maxSignVersion + 1,
             };
 
             AjaxService.post("/tpesForm/uploadFile", vin, 

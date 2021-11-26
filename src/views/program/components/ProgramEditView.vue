@@ -527,6 +527,7 @@
         attachmentFile: null,
         attachmentList: [],
         dataURL: null,
+        signAttachmentFileId: null,
         signAttachmentFile: null,
         
         selectedFiles:[],
@@ -611,6 +612,7 @@
           
           // assign file 
           this.signAttachmentFile = Object.assign({} , defaultFile)
+          this.signAttachmentFile.id = this.signAttachmentFileId 
           this.signAttachmentFile.category = "MEDIA_ATTACHMENT"
           this.signAttachmentFile.fileName = this.attachmentFile.name.substr(0,this.attachmentFile.name.lastIndexOf("."))
           this.signAttachmentFile.originalFileName = this.attachmentFile.name
@@ -809,6 +811,7 @@
           this.attachmentFile = new File(["tmp"], tmpfile , {type:"text/plain", lastModified: new Date().getTime()});
           
           this.signAttachmentFile = data.restData.signAttachment
+          this.signAttachmentFileId = data.restData.signAttachment.id
           console.log(this.signAttachmentFile)
           
           this.isShowSelected = true

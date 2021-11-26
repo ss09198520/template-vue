@@ -152,8 +152,8 @@
             <v-col v-if="!isAttachedFiles" cols="6" md="6">
               <a :href="attachedFiles">下載確認</a>
             </v-col>
-             <v-col v-else-if="isAttachedFiles" cols="6" md="6">
-              {{attachedFiles}}
+            <v-col v-else-if="isAttachedFiles" cols="6" md="6">
+              {{ attachedFiles }}
             </v-col>
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">

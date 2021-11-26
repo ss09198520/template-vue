@@ -306,6 +306,7 @@
         attachmentList: [],
         dataURL: null,
         signAttachmentFile: null,
+        signAttachmentFileId: null,
 
         questionnaire: {
           questionnaireName: '',
@@ -400,6 +401,7 @@
           this.dataURL = this.reader.result
           // assign file 
           this.signAttachmentFile = Object.assign({} , defaultFile)
+          this.signAttachmentFile.id = this.signAttachmentFileId 
           this.signAttachmentFile.category = "MEDIA_ATTACHMENT"
           this.signAttachmentFile.fileName = this.attachmentFile.name.substr(0,this.attachmentFile.name.lastIndexOf("."))
           this.signAttachmentFile.originalFileName = this.attachmentFile.name
@@ -510,7 +512,7 @@
           this.attachmentFile = new File(["tmp"], tmpfile , {type:"text/plain", lastModified: new Date().getTime()});
           
           this.signAttachmentFile = data.restData.signAttachment
-          
+          this.signAttachmentFileId = data.restData.signAttachment.id
           this.hasResult(this.questionnaire)
           this.$nextTick(() => {this.stepEl = 1});
         }

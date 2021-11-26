@@ -248,6 +248,108 @@
         </div>
       </div>
     </div>
-  </v-container>
+    <!-- 代理超過兩層的提醒視窗 -->
+    <v-dialog
+      v-model="alert.overTwoTiers"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          提醒
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="alert.overTwoTiers = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px red--text">
+          <v-row class="mt-6 ml-1 font-bold">
+            {{ alert.overTwoTiersMsg }}
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="primary"            
+            @click="alert.overTwoTiers = false"
+          >
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 選擇的代理人在該請假範圍也請假提醒視窗 -->
+    <v-dialog
+      v-model="alert.isAgentLeave"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          提醒
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="alert.isAgentLeave = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px red--text">
+          <v-row class="mt-6 ml-1 font-bold">
+            {{ alert.isAgentLeaveMsg }}
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="primary"            
+            @click="alert.isAgentLeave = false"
+          >
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <!-- 該代理人以代理超過兩位員工提醒視窗 -->
+    <v-dialog
+      v-model="alert.agentOverTwice"
+      max-width="500"
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          提醒
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="alert.agentOverTwice = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px red--text">
+          <v-row class="mt-6 ml-1 font-bold">
+            {{ alert.agentOverTwiceMsg }}
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn              
+            color="primary"            
+            @click="alert.agentOverTwice = false"
+          >
+            確定
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-container>  
 </template>
 <script src="./inquireLeavePage.js" />

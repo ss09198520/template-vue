@@ -2,12 +2,13 @@ import MessageService from "@/assets/services/message.service";
 import ValidateUtil from "@/assets/services/validateUtil";
 import AjaxService from "@/assets/services/ajax.service";
 
+
 export default {
     name: 'LeaveDetail',
     props: {
     
     },
-    beforeMount() {
+    mounted() {
         this.init();
     },
    
@@ -49,6 +50,16 @@ export default {
             requiredArray:[],
             formatArray:[],
             hasMgmtAuth: false,
+
+            empApplicationInfo: {}, //要傳到後端的代理申請資料,
+            alert:{
+                overTwoTiers: false,
+                overTwoTiersMsg: null,
+                isAgentLeave: false,
+                isAgentLeaveMsg: null,
+                agentOverTwice: false,
+                agentOverTwiceMsg: null,
+            }
             
         }
     },
@@ -79,11 +90,13 @@ export default {
                 i=i+4;
             }
         },
+        // 變更請假代理起日
         changeStartDate(){
             if(this.startDate != '' && this.startHour != '' && this.startMin != ''){
                 this.leaveStartDate = this.startDate +' '+ this.startHour +':'+ this.startMin+':00'; // 組合開始日期
             }
         },
+        // 變更請假代理迄日
         changeEndDate(){
             if(this.endDate != '' && this.endHour != '' && this.endMin != ''){
                 this.leaveEndDate = this.endDate +' '+ this.endHour +':'+ this.endMin+':00'; // 組合開始日期
@@ -119,8 +132,7 @@ export default {
                     } 
 
                 } else {
-                    if(this.selectEmp.isMgmt === this.empList[i].isMgmt 
-                        && this.empList[i].empNo !== this.selectEmp.empNo
+                    if(this.empList[i].empNo !== this.selectEmp.empNo
                         && this.empList[i].dept === this.selectEmp.dept){    
                         this.agentList.push({                            
                             empNo:this.empList[i].empNo,                        
@@ -137,6 +149,7 @@ export default {
             this.checkEmp();
         },
 
+        // 點擊代理申請按鈕
         submit(){
             this.requiredArray = [];
             this.formatArray = [];
@@ -144,15 +157,31 @@ export default {
             if(!this.validInput()){
                 MessageService.showCheckInfo(this.requiredArray,this.formatArray);
             } else {
-                this.createLeave();
-                this.resetVal();
+                // 整理代理申請資料
+                this.empApplicationInfo.applicant = this.selectEmp.empNo;
+                this.empApplicationInfo.applicantName = this.selectEmp.empName;
+                this.empApplicationInfo.agent = this.selectAgent.empNo;
+                this.empApplicationInfo.agentName = this.selectAgent.empName;
+                this.empApplicationInfo.startDate = this.leaveStartDate;
+                this.empApplicationInfo.endDate = this.leaveEndDate;
+
+                // 將資料送進後端
+                this.createAgentLeave();
+                
             }
         },
 
         // 驗證請假人
         checkEmp(){
             let hasCheck = true;
+            
+            // 將可請假名單整理成map
+            let oriEmpMap = new Map();
+            for(let i in this.oriEmpList){
+                oriEmpMap.set(this.oriEmpList[i].empNo,this.oriEmpList[i]);
+            }
 
+            // 判斷是否沒有選擇請假人
             if(ValidateUtil.isEmpty(this.selectEmp)){
                 hasCheck = false;
                 this.requiredArray.push('請假人');
@@ -161,11 +190,25 @@ export default {
                 this.errMsg.selectEmp = null;
             }
 
+            // 判斷選擇的請假人是否有在後端來的資料當中
+            if(ValidateUtil.isEmpty(oriEmpMap.get(this.selectEmp.empNo))){
+                hasCheck = false;
+                this.formatArray.push('請假人');
+                this.errMsg.selectEmp = '請假人不在可設定清單中';
+            } else {
+                this.errMsg.selectEmp = null;
+            }
+
             return hasCheck;
         },
         // 驗證代理人
         checkAgent(){
-            let hasCheck = true;
+            let hasCheck = true;             
+            // 將可請假名單整理成map
+            let oriEmpMap = new Map();
+            for(let i in this.oriEmpList){
+                oriEmpMap.set(this.oriEmpList[i].empNo,this.oriEmpList[i]);
+            }
 
             if(ValidateUtil.isEmpty(this.selectAgent)){
                 hasCheck = false;
@@ -175,8 +218,17 @@ export default {
                 this.errMsg.selectAgent = null;
             }
 
+            // 判斷選擇的代理人是否有在後端來的資料當中
+            if(ValidateUtil.isEmpty(oriEmpMap.get(this.selectAgent.empNo))){
+                hasCheck = false;
+                this.formatArray.push('代理人');
+                this.errMsg.selectAgent = '代理人不在可設定清單中';
+            } else {
+                this.errMsg.selectAgent = null;
+            }
             return hasCheck;
         },
+
         // 驗證日期範圍
         checkDate(){
             let hasCheck = true;
@@ -239,6 +291,19 @@ export default {
             this.endMin = null;
         },
 
+        openAlertNotice(type){
+            if(type == 'overTwoTiersAgent'){
+                this.alert.overTwoTiersMsg = "該員工在該請假範圍已代理超過兩層員工的請假申請";
+                this.alert.overTwoTiers = true;
+            } else if(type == 'isAgentLeave'){
+                this.alert.isAgentLeaveMsg = "目前所選擇的代理人在該請假範圍有請假紀錄，建議改選其他代理人";
+                this.alert.isAgentLeave = true;
+            } else {
+                this.alert.agentOverTwiceMsg = "目前所選擇的代理人在該請假範圍中已代理超過兩位員工，建議改選其他代理人";
+                this.alert.agentOverTwice = true;
+            }
+        },
+
         /** 
          * 
          * Ajax start
@@ -271,18 +336,47 @@ export default {
         },
 
         // Action: 申請請假代理
-        createLeave(){
-            // vin
-            // empNo: this.selectEmp.empNo,
-            // empName: this.selectEmp.empNo,
-            // agent: this.selectAgent.agent,
-            // agentName: this.selectAgent.agentName,
-            // startDate: this.leaveStartDate,
-            // endDate: this.leaveEndDate,
-            // oriEmpList: this.oriEmpList,
+        createAgentLeave(){
+            AjaxService.post('/inquireLeave/createAgentLeave',
+            {
+                empApplicationInfo: this.empApplicationInfo,
+            },
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.message,'申請請假代理');
+                    return;
+                }
 
-            MessageService.showSuccess('申請請假代理');
+                // 判斷請假人在該請假範圍已有代理申請紀錄
+                if(response.restData.hasLeaveRecord){
+                    MessageService.showNoticeInfo('請假人在該請假區間已有代理請假紀錄，請重新選擇');
+                    return;
+                }
 
+                // 判斷該代理員工平行代理超過兩位員工
+                if(response.restData.hasAgentOverTwice){
+                    this.openAlertNotice('agentOverTwice');
+                }
+                
+                // 判斷該員工是否超過兩層代理
+                if(response.restData.hasOverTwoTiersAgent){
+                    this.openAlertNotice('overTwoTiersAgent');
+                }
+
+                // 判斷該代理員工是否在請假範圍也有請假紀錄
+                if(response.restData.isAgentLeave){
+                    this.openAlertNotice('isAgentLeave');
+                }
+    
+                // 將取得的資料放進前端參數中    
+                MessageService.showSuccess('申請請假代理');
+                this.resetVal();
+            },
+            // eslint-disable-next-line no-unused-vars
+            (response) => {                
+                MessageService.showSystemError();
+            });
 
         },
 

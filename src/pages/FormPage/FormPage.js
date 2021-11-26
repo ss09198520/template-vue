@@ -541,7 +541,11 @@ export default {
                 MessageService.showSuccess("儲存成功");
 
                 if(this.restrictMode){
-                    //當點擊儲存按鈕，則通知父層可關閉
+                    // 開啟滿意度調查頁
+                    let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
+                    window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '滿意度調查', config);
+                    
+                    // 當點擊儲存按鈕，則通知父層可關閉
                     this.$emit("saveFile");
                 }
                 else{

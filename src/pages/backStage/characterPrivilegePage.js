@@ -129,8 +129,6 @@ import ValidateUtil from "@/assets/services/validateUtil";
             this.group = null;
             this.section = null;
 
-            debugger
-
             for(let i in this.deptList){
                 if(division.division === this.deptList[i].divisionCode){
                     for(let index in this.deptList[i].groupSectionList){
@@ -309,7 +307,6 @@ import ValidateUtil from "@/assets/services/validateUtil";
         },
         // 整理部門下拉選單
         settingOption(deptOptList){
-            debugger;
            for(let i in deptOptList){
                 this.divOption.push({
                     division:deptOptList[i].divisionCode,

@@ -71,7 +71,8 @@ export default {
             viewImageSrc: "",
             showModeSelect: true,
             accountingMemo: "",
-            newCertificateType: -1,
+            setCertificateType: -1,
+            selectedCertificate: {},
             certificateOptions: [
                 {
                     fileName: '本人身分證正面',
@@ -95,8 +96,8 @@ export default {
                 },
             ],
             newAttachmentType: -1,
-            attachmentOptions: ['農業動力用電主管機關證明文件', '電氣技術人員執照', '門牌整編證明', '扣繳代繳帳號資料或中獎證明', '抄表事故聯絡單', '切結書', '其他佐證文件'],
-            newCertificateModal: false,
+            attachmentOptions: ['農業動力用電主管機關證明文件', '電氣技術人員執照', '門牌整編證明', '扣繳代繳帳號資料或中獎證明', '抄表事故聯絡單', '切結書'],
+            setCertificateModal: false,
             newAttachmentModal: false,
             otherCertificate: '',
             otherAttachment: '',
@@ -108,6 +109,7 @@ export default {
             needScanFileHint: null,
             isAgentNeedScanAttach: false,
             maxSignVersion: 0,
+            isLoading: false,
         }
     },
     methods: {
@@ -343,56 +345,62 @@ export default {
             this.formSignPage.close();
             this.isFormSignPageOpened = false;
         },
-        cleanCertificateImg(certificate) {
-            certificate.imgSrc = null;
-        },
         deleteCertificate(index){
             this.certificateList.splice(index, 1);
         },
         deleteAttachment(index){
             this.attachmentList.splice(index, 1);
         },
-        openNewCertificateModal(){
-            this.newCertificateModal = true;
+        openSetCertificateModal(certificate){
+            this.setCertificateModal = true;
             this.otherCertificate = '';
-            this.newCertificateType = -1;
+            this.setCertificateType = -1;
+            this.selectedCertificate = certificate;
         },
         selectCertificate(index){
-            this.newCertificateType = index;
+            this.setCertificateType = index;
         },
-        addCertificate(){
-            let fileName = this.newCertificateType == this.certificateOptions.length ? this.otherCertificate : this.certificateOptions[this.newCertificateType].fileName;
-            let fileCode = this.newCertificateType == this.certificateOptions.length ? "OTHER" : this.certificateOptions[this.newCertificateType].fileCode;
+        setCertificate(){
+            let fileName = this.setCertificateType == this.certificateOptions.length ? this.otherCertificate : this.certificateOptions[this.setCertificateType].fileName;
+            let fileCode = this.setCertificateType == this.certificateOptions.length ? "OTHER" : this.certificateOptions[this.setCertificateType].fileCode;
 
-            if(!ValidateUtil.isEmpty(this.certificateList)){
-                for(let certificate of this.certificateList){
-                    if(fileName == certificate.fileName){
-                        MessageService.showInfo("不可加入已有相同名稱的證件");
-                        return;
-                    }
-                }
+            this.selectedCertificate.fileName = fileName;
+            this.selectedCertificate.fileCode = fileCode;
+            this.setCertificateModal = false;
+        },
+        addCertificate(base64){
+            let fileExt = null;
+
+            if(base64.charAt(0) == "/"){
+                fileExt = "jpg";
             }
+            else if(base64.charAt(0) == "i"){
+                fileExt = "png";
+            }
+
+            if(ValidateUtil.isEmpty(fileExt)) return;
 
             this.certificateList.push({
                 id: this.certificateNo,
                 // 其他證件，須由使用者輸入證件類別
-                fileName: fileName,
-                originalFileName: null,
-                fileCode: fileCode,
+                fileName: null,
+                originalFileName: "certificate_" + this.certificateNo + " (" + moment(new Date).format('YYYY-MM-DD') + ")." + fileExt,
+                fileCode: null,
                 fileNo: null,
                 filePath: null,
-                imgSrc: null,
+                imgSrc: "data:image/" + fileExt + ";base64," + base64,
                 isAdditional: true,
                 hasEdit: false,
             });
-            this.certificateNo ++;
-            this.newCertificateModal = false;
+            this.certificateNo++;
+            this.setCertificateModal = false;
         },
-        scanCertificate(certificate){
+        scanCertificate(){
             try {
+                this.isLoading = true;
                 PMCService.callWebScanAdapter();
-                certificate.hasEdit = true;
             } catch (error) {
+                this.isLoading = false;
                 MessageService.showError("PMC 未開啟或異常", "PMC ");
             }
         },
@@ -496,7 +504,30 @@ export default {
             this.showModeSelect = false;
             setTimeout(() => this.showModeSelect = true, 5000);
         },
+        validateCertifate(){
+            if(!ValidateUtil.isEmpty(this.certificateList)){
+                for(let indexA in this.certificateList){
+                    if(ValidateUtil.isEmpty(this.certificateList[indexA].fileName)){
+                        MessageService.showInfo("尚有證件未輸入名稱");
+                        return false;
+                    }
+
+                    for(let indexB in this.certificateList){
+                        if(indexA != indexB && this.certificateList[indexA].fileName == this.certificateList[indexB].fileName){
+                            MessageService.showInfo("證件不可有相同的名稱");
+                            return false;
+                        }
+                    }
+                }
+            }
+
+            return true;
+        },
         save(){
+            if(!this.validateCertifate()){
+                return;
+            }
+
             let vin = this.setSaveFormVin();
 
             AjaxService.post("/tpesForm/save", vin, 
@@ -533,14 +564,14 @@ export default {
             if(!ValidateUtil.isEmpty(this.certificateList)){
                 for(let certificate of this.certificateList){
                     // 新增
-                    if(ValidateUtil.isEmpty(certificate.fileNo) && !ValidateUtil.isEmpty(certificate.base64)){
+                    if(ValidateUtil.isEmpty(certificate.fileNo) && !ValidateUtil.isEmpty(certificate.imgSrc)){
                         addFileList.push({
                             category: "CERTIFICATE",
                             fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
                             fileName: certificate.fileName,
-                            originalFileName: certificate.fileName,
-                            fileExt: this.getFileExt(certificate.fileName),
-                            base64: certificate.base64.split(",")[1],
+                            originalFileName: certificate.originalFileName,
+                            fileExt: this.getFileExt(certificate.originalFileName),
+                            base64: certificate.imgSrc.split(",")[1],
                             formSeq: this.formSeq
                         });
                     }
@@ -551,9 +582,9 @@ export default {
                             category: "CERTIFICATE",
                             fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
                             fileName: certificate.fileName,
-                            originalFileName: certificate.fileName,
-                            fileExt: this.getFileExt(certificate.fileName),
-                            base64: ValidateUtil.isEmpty(certificate.base64) ? null : certificate.base64.split(",")[1],
+                            originalFileName: certificate.originalFileName,
+                            fileExt: this.getFileExt(certificate.originalFileName),
+                            base64: ValidateUtil.isEmpty(certificate.imgSrc) ? null : certificate.imgSrc.split(",")[1],
                             formSeq: this.formSeq
                         });
                     }
@@ -769,7 +800,14 @@ export default {
         },
         getScanDataList(data){
             this.scanDataList = data;
-            // console.log(this.scanDataList);
+            
+            if(!ValidateUtil.isEmpty(this.scanDataList)){
+                for(let scanData of this.scanDataList){
+                    this.addCertificate(scanData.BASE64STR);
+                }
+            }
+
+            this.isLoading = false;
         },
         checkNeedScanFile(){
             this.needScanFileHint = "";
@@ -802,6 +840,48 @@ export default {
                     }
                 }
             }
+        },
+        chooseCertificateType(certificate){
+            if(!ValidateUtil.isEmpty(certificate.fileName)){
+                for(let certificateOption of this.certificateOptions){
+                    if(certificateOption.fileName == certificate.fileName){
+                        certificate.fileCode = certificateOption.fileCode;
+                        break;
+                    }
+                }
+            }
+        },
+        querySign(){
+            this.customerSign = {};
+            this.cancelSign = {};
+
+            let param = {
+                formSeq: this.formSeq,
+            }
+
+            AjaxService.post("/tpesForm/querySign", param, 
+            (response) => {
+                // 驗證是否成功
+                if (!response.restData.success) {              
+                    MessageService.showError(response.restData.message,'取得簽名圖片');
+                    return;
+                }
+
+                // 簽名
+                if(!ValidateUtil.isEmpty(response.restData.customerSign)){
+                    this.customerSign = response.restData.customerSign;
+                }
+
+                // 取消簽名
+                if(!ValidateUtil.isEmpty(response.restData.cancelSign)){
+                    this.cancelSign = response.restData.cancelSign;
+                }
+
+            },
+            (error) => {
+                MessageService.showSystemError();
+                console.log(error);
+            });
         },
     }
 }

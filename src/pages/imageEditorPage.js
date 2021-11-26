@@ -1,5 +1,6 @@
 import 'tui-color-picker/dist/tui-color-picker.css';
 import 'tui-image-editor/dist/tui-image-editor.css';
+import moment from 'moment';
 import ImageEditor from '@toast-ui/vue-image-editor/src/ImageEditor.vue';
 import AjaxService from '@/assets/services/ajax.service.js';
 import MessageService from "@/assets/services/message.service";
@@ -152,8 +153,8 @@ export default {
                 acceptNum: this.acceptNum,
                 formSeq: this.formSeq,
                 fileNo: this.editedFormFileNo,
-                fileName: "重點說明表單圖片 (" + new Date().toLocaleDateString().replaceAll('/', '-') +")",
-                originalFileName: "editedForm (" + new Date().toLocaleDateString().replaceAll('/', '-') +")" + fileExt,
+                fileName: "重點說明表單圖片 (" + moment(new Date).format('YYYY-MM-DD') +")",
+                originalFileName: "editedForm (" + moment(new Date).format('YYYY-MM-DD') +")" + fileExt,
                 fileExt: fileExt,
                 category: "EDITED_FORM",
                 file: formImage,

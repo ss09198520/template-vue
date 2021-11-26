@@ -4,6 +4,10 @@
     <div v-if="isBlocking" class="blocking-area">
       <span class="blocking-text" v-html="blockingMsg" />
     </div>
+    <!-- loading -->
+    <v-overlay :value="isLoading" z-index="5000">
+      <v-progress-circular indeterminate size="64" />
+    </v-overlay>
     <v-container>
       <v-row>
         <v-col v-show="showModeSelect" cols="3">
@@ -63,7 +67,7 @@
                     </div>
                   </div>
                   <div class="w-60 t-center ma-auto">
-                    <v-btn color="info" text @click="formInit()">
+                    <v-btn color="info" text @click="querySign()">
                       重新整理
                       <v-icon
                         right
@@ -103,7 +107,37 @@
                   <v-col v-for="(certificate, index) in certificateList" :key="certificate.id" cols="3" class="mb-2">
                     <v-row>
                       <v-col cols="12" style="text-align: center;">
-                        <h3>{{ certificate.fileName }}</h3>
+                        <v-btn
+                          v-if="certificate.isAdditional && !certificate.fileName"
+                          depressed
+                          color="primary"
+                          @click="openSetCertificateModal(certificate)"
+                        >
+                          設定類型
+                          <v-icon
+                            right
+                            dark
+                          >
+                            mdi-lead-pencil
+                          </v-icon>
+                        </v-btn>
+                        <div v-else-if="certificate.isAdditional" class="d-center">
+                          <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                              <h3>
+                                <a 
+                                  v-bind="attrs"
+                                  v-on="on"
+                                  @click="openSetCertificateModal(certificate)"
+                                >
+                                  {{ certificate.fileName }}
+                                </a>
+                              </h3>
+                            </template>
+                            <span>修改證件類型</span>
+                          </v-tooltip>
+                        </div>
+                        <h3 v-else>{{ certificate.fileName }}</h3>
                       </v-col>
                     </v-row>
                     <v-row>
@@ -118,7 +152,7 @@
                     </v-row>
                     <v-row>
                       <v-col v-if="formPageMode == 'edit'" cols="6" class="t-center">
-                        <v-btn v-if="certificate.isAdditional" depressed color="error" @click="deleteCertificate(index)">
+                        <v-btn depressed color="error" @click="deleteCertificate(index)">
                           刪除
                           <v-icon
                             right
@@ -127,28 +161,8 @@
                             mdi-delete
                           </v-icon>
                         </v-btn>
-                        <v-btn v-else depressed color="error" :disabled="!certificate.imgSrc" @click="cleanCertificateImg(certificate)">
-                          清空
-                          <v-icon
-                            right
-                            dark
-                          >
-                            mdi-delete
-                          </v-icon>
-                        </v-btn>
                       </v-col>
-                      <v-col v-if="formPageMode == 'edit'" cols="6" class="t-center">
-                        <v-btn depressed color="primary" @click="scanCertificate(certificate)">
-                          掃描
-                          <v-icon
-                            right
-                            dark
-                          >
-                            mdi-scanner
-                          </v-icon>
-                        </v-btn>
-                      </v-col>
-                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view'" cols="12" class="t-center">
+                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'edit'" :cols="(formPageMode == 'edit' ? 6 : 12)" class="t-center">
                         <v-btn depressed color="normal" :disabled="!certificate.imgSrc" @click="viewImage(certificate)">
                           檢視
                           <v-icon
@@ -164,18 +178,25 @@
                   <v-col v-if="formPageMode == 'edit'" cols="3" class="add-attachment-area d-center">
                     <v-row>
                       <v-col cols="12" class="d-center">
-                        <v-btn
-                          class="mx-2"
-                          fab
-                          dark
-                          depressed
-                          color="primary"
-                          @click="openNewCertificateModal()"
-                        >
-                          <v-icon dark>
-                            mdi-plus
-                          </v-icon>
-                        </v-btn>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              class="mx-2"
+                              fab
+                              dark
+                              depressed
+                              color="primary"
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="scanCertificate()"
+                            >
+                              <v-icon dark>
+                                mdi-scanner
+                              </v-icon>
+                            </v-btn>
+                          </template>
+                          <span>掃描證件</span>
+                        </v-tooltip>
                       </v-col>
                     </v-row>
                   </v-col>
@@ -305,19 +326,26 @@
                   <v-col cols="3" class="add-attachment-area d-center">
                     <v-row>
                       <v-col cols="12" class="d-center">
-                        <v-btn
-                          v-if="formPageMode == 'edit'"
-                          class="mx-2"
-                          fab
-                          dark
-                          depressed
-                          color="primary"
-                          @click="openNewAttachmentModal()"
-                        >
-                          <v-icon dark>
-                            mdi-plus
-                          </v-icon>
-                        </v-btn>
+                        <v-tooltip top>
+                          <template v-slot:activator="{ on, attrs }">
+                            <v-btn
+                              v-if="formPageMode == 'edit'"
+                              class="mx-2"
+                              fab
+                              dark
+                              depressed
+                              color="primary"
+                              v-bind="attrs"
+                              v-on="on"
+                              @click="openNewAttachmentModal()"
+                            >
+                              <v-icon dark>
+                                mdi-plus
+                              </v-icon>
+                            </v-btn>
+                          </template>
+                          <span>新增附件</span>
+                        </v-tooltip>
                       </v-col>
                     </v-row>
                   </v-col>
@@ -447,7 +475,7 @@
     >
       <v-card>
         <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">
-          {{ viewImageTitle }}
+          {{ viewImageTitle ? viewImageTitle : "檢視" }}
         </v-card-title>
         
         <v-card-text class="d-center">
@@ -466,11 +494,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <!-- 新增證件 modal -->
+    <!-- 設定證件 modal -->
     <v-dialog 
-      v-model="newCertificateModal" 
+      v-model="setCertificateModal" 
       transition="dialog-bottom-transition"
-      width="50vw"
+      width="70vw"
     >
       <v-card>
         <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">
@@ -480,7 +508,7 @@
           <v-row class="ma-3">
             <div v-for="(option, index) in certificateOptions" :key="option.fileCode">
               <v-chip
-                v-if="newCertificateType === index"
+                v-if="setCertificateType === index"
                 label 
                 x-large 
                 class="ma-2" 
@@ -496,7 +524,7 @@
           </v-row>
           <v-row class="ma-3">
             <v-chip
-              v-if="newCertificateType === certificateOptions.length"
+              v-if="setCertificateType === certificateOptions.length"
               label 
               x-large 
               class="ma-2" 
@@ -514,15 +542,16 @@
         <v-card-actions>
           <v-spacer />
           <v-btn
-            @click="newCertificateModal = false"
+            @click="setCertificateModal = false"
           >
             &emsp;關閉&emsp;
           </v-btn>
           <v-btn
             color="success"
-            @click="addCertificate()"
+            :disabled="setCertificateType == -1 || (setCertificateType === certificateOptions.length && !otherCertificate)"
+            @click="setCertificate()"
           >
-            &emsp;新增&emsp;
+            &emsp;確定&emsp;
           </v-btn>
         </v-card-actions>
       </v-card>
@@ -581,6 +610,7 @@
           </v-btn>
           <v-btn
             color="success"
+            :disabled="newAttachmentType == -1"
             @click="addAttachment()"
           >
             &emsp;新增&emsp;

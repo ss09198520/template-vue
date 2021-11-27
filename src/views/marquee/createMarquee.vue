@@ -426,7 +426,7 @@ export default {
               JSON.stringify({
                 marqueeId: this.location,
                 marqueeName: this.marqueeName,
-                marqueeType: "一般",
+                marqueeType: "GENERAL",
                 marqueeContent: this.marqueeText,
                 marqueeContentHTML: this.marqueeHTML,
                 animationDuration: this.duration,

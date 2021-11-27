@@ -25,8 +25,8 @@ const mediaStatusOption = [
 const mediaSignStatusOption = [
   { text: '暫存', value: 'DRAFT'},
   { text: '退件', value: 'REJECT'},
-  { text: '審核中', value: 'WAIT'},
-  { text: '審核中', value: 'PROGRESS'},
+  { text: '審核中Level-1', value: 'WAIT'},
+  { text: '審核中Level-2', value: 'PROGRESS'},
   { text: '審核完成', value: 'PASS'},
 ]
 

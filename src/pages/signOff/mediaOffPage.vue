@@ -168,7 +168,7 @@
               color="success"              
               @click="downloadAttachment"
             >
-              附件預覽
+              附件下載
             </v-btn>
             <v-btn
               color="primary"              

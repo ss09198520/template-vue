@@ -722,7 +722,7 @@
       }).then(res => {
         this.itemsCRUD = [];
         this.isShow = !this.isShow
-        if((res.restData.marquee).length >= 1){
+        if(res.restData.marquee !== null || res.restData.marquee.length >= 1){
                     let arrayObj = res.restData.marquee  
                     arrayObj.forEach(item => {
                       if(item.signStatus==='REJECT'){

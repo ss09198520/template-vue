@@ -140,6 +140,7 @@
                 show-size
                 counter
                 chips
+                @keydown="resetAttachedFiles(true)"
               />
             </v-col>
           </v-row>
@@ -150,10 +151,10 @@
           >
             <v-col cols="2" md="2"> 審核附件歷史上傳 </v-col>          
             <v-col v-if="!isAttachedFiles" cols="6" md="6">
-              <a :href="attachedFiles">下載確認</a>
+              <a @click="downloadAttachedFiles">下載查看附件</a>
             </v-col>
             <v-col v-else-if="isAttachedFiles" cols="6" md="6">
-              {{ attachedFiles }}
+              {{ nullAattachedFiles }}
             </v-col>
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
@@ -206,8 +207,9 @@
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col cols="9" md="8">
               <quill
-                ref="myQuillEditor"
+                ref="editor"
                 v-model="marqueeHTML"
+                :p-value="marqueeHTML"
                 class="quill-marquee"
                 @change="onEditorChange($event)"
               />
@@ -248,12 +250,28 @@
 <script>
 import Quill from "@/components/Quill";
 import { fetchInitMarquee, fetchQueryMarquee } from "@/api/marquee";
+import { downloadMediaSignOffFile} from '@/api/media';
 import ValidateUtil from "@/assets/services/validateUtil";
 import MessageService from "@/assets/services/message.service";
 export default {
-  components: { Quill },
+  components: { 
+    Quill , 
+    },
+  props: {
+    id: {
+      type: String,
+      default: function() {
+        return 'quill-vue' + +new Date() + ((Math.random() * 10).toFixed(0) + '')
+      }
+    },
+    value: {
+      type: String,
+      default: ''
+    },
+  },
   data() {
     return {
+      content: this.value,
       errMsg: {
         acceptDate: null,
         editorData: null
@@ -273,6 +291,7 @@ export default {
       marqueeText: "",
       marqueeDesc: "",
       attachedFiles: null,
+      nullAattachedFiles: null,
       fontColor: "#000000",
       backgroundColor: "#ffffff",
       dense: false,
@@ -303,14 +322,14 @@ export default {
     isAttachedFiles() {
       let isTrue = true;
       if (this.attachedFiles !== null) {
-        isTrue = this.attachedFiles.includes("無檔案上傳");
+         isTrue = this.nullAattachedFiles.includes("無檔案上傳");
       } else {
         isTrue = false;
       }
       return isTrue;
     },
     editor() {
-      return this.$refs.myQuillEditor.quill;
+      return this.$refs.Quill;
     },
     isAddButtonDisabled() {
       return !this.valid || this.isSubmited;
@@ -324,6 +343,7 @@ export default {
     if (this.location !== "" && this.location !== null) {
       this.queryMarqueeById();
     }
+    else this.$router.push({ path: '/marquee/marqueeCreate'})
   },
   mounted() {
     console.log("this is current quill instance object", this.editor);
@@ -338,20 +358,33 @@ export default {
       fetchQueryMarquee({ marqueeId: this.location })
         .then(res => {
           if (res.restData.code == "00000") {
-            let resc = Object.assign({}, res.restData.marquee);
+                let fileName = null;
+                let result = Object.assign({}, res.restData.marquee); 
+                let resultSign =    Object.assign({}, res.restData.signAttachment); 
+              if(result.attachedFileName !=="無檔案上傳"){
+                 fileName = new File(["queryFile"], resultSign.originalFileName,);
+              }        
             this.pageTitle = "跑馬燈修改";
             MessageService.showInfo(res.restData.message, "成功✓");
-            this.marqueeName = resc.marqueeName;
-            this.marqueeText = resc.marqueeContent;
-            this.marqueeHTML = resc.marqueeContentHTML;
-            this.duration = resc.animationDuration;
-            this.marqueeDesc = resc.memo;
-            this.startDate = resc.releaseStartDate;
-            this.endDate = resc.releaseEndDate;
-            this.attachedFiles = resc.attachedFileName;
+            this.marqueeName = result.marqueeName;
+            this.content=result.marqueeContentHTML;
+            this.marqueeText = result.marqueeContent;
+            this.marqueeHTML = result.marqueeContentHTML;
+            this.duration = result.animationDuration;
+            this.marqueeDesc = result.memo;
+            this.startDate = result.releaseStartDate;
+            this.endDate = result.releaseEndDate;
+            this.attachedFiles = fileName;
+            this.nullAattachedFiles = result.attachedFileName;
+            //result.attachedFileName;
           } else if (res.restData.code == "20001") {
             MessageService.showError("查詢失敗", res.restData.message);
+            this.$router.push({ path: '/marquee/queryList'})
+          }else{
+             MessageService.showError("查詢失敗", res.restData.message);
+             this.$router.push({ path: '/marquee/queryList'})
           }
+
         })
         .catch(error => {
           this.isSubmited = false;
@@ -404,7 +437,9 @@ export default {
       }
       return hasCheck;
     },
-
+    downloadAttachedFiles(){
+      downloadMediaSignOffFile({relatedSeq: this.location});
+    },
     submit(isSign) {
       //if (this.$refs.form.validate()) {
       var formData = new FormData();
@@ -448,12 +483,9 @@ export default {
           .then(res => {
             console.log("return");
             if (res.restData.code == "00000") {
-              //MessageService.showSuccess("MessageService.showSuccess(res.restData.message)");
               MessageService.showInfo(res.restData.message, "成功✓");
               this.isSubmited = true;
-              console.log("登入成功", res);
               this.resetForm();
-              console.log(this.isSubmited);
               this.isSubmited = false;
             } else if (res.restData.code == "20001") {
               MessageService.showError("儲存失敗", res.restData.message);
@@ -465,6 +497,10 @@ export default {
             console.error(error);
           });
       }
+    },
+    resetAttachedFiles(){
+     
+
     },
     resetForm() {
       this.isSubmited = true;

@@ -221,7 +221,7 @@
       </v-tooltip>
     </v-row>
 
-    <hr class="mt-6 mb-5" />
+    <hr class="mt-6 mb-5">
     <v-row v-show="true">
       <v-col md="12">
         <v-data-table
@@ -244,9 +244,8 @@
             <v-dialog v-model="alertDialog" :max-width="250">
               <v-card>
                 <v-card-title 
-                class="justify-center"
-                  >Are you sure?</v-card-title
-                >
+                  class="justify-center"
+                >Are you sure?</v-card-title>
                 <v-card-text />
                 <v-card-actions class="justify-center">
                   <v-btn
@@ -346,7 +345,7 @@
               }}
             </v-icon>
           </template>
-           <!-- 上架狀態 -->
+          <!-- 上架狀態 -->
           <template v-slot:[`item.status`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
@@ -612,6 +611,7 @@ export default {
     previewItem(item) {
       this.selectMarquee = item;
       this.preViewMarqueeModel = true;
+      
       // this.$router.push({path:`${this.$route.matched[0].path}/createMarquee?id=${item.marqueeId}`})
     },
     viewSchedule() {

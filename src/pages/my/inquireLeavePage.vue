@@ -216,7 +216,7 @@
             <v-col cols="2" class="font-bold">       
               代理人
             </v-col>          
-            <v-col v-if="empInfo.agent != null" cols="3">
+            <v-col v-if="empInfo.agent !== null" cols="3">
               {{ empInfo.agent }}&emsp;{{ empInfo.agentName }}
             </v-col>
             <v-col v-if="empInfo.agent == null" cols="3">
@@ -227,10 +227,10 @@
             <v-col cols="2" class="font-bold">       
               下一次請假時間
             </v-col> 
-            <v-col v-if="empInfo.agentName != null" cols="3">
+            <v-col v-if="empInfo.nextAgent != null" cols="3">
               {{ empInfo.nextLeaveStartDate }}~{{ empInfo.nextLeaveEndDate }}
             </v-col>
-            <v-col v-if="empInfo.agentName == null" cols="3">
+            <v-col v-if="empInfo.nextAgent == null" cols="3">
               無請假紀錄
             </v-col>
           </v-row>

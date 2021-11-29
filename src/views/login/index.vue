@@ -102,7 +102,7 @@
           this.$store.dispatch('user/login', this.loginForm) // 請看src/store/modules/user.js 內 login
             .then(() => {
               console.log('login success redirect to',this.redirect)
-              this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              this.$router.push({ path: '/', query: this.otherQuery })
               // 取動態Menu
               this.getAuthMenu();
             })

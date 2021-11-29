@@ -79,7 +79,7 @@ const CommonService = {
             privilegeCode =  ['P019'];
         } else if(url.includes('satisfaction/edit/:id)')){
             privilegeCode =  ['P019'];
-        } else if(url.includes('satisfaction/list')){ // 名稱一樣?
+        } else if(url.includes('satisfaction/list')){
             privilegeCode =  ['P020'];
         } else if(url.includes('/media/preview/questionnaire/:id')){
             privilegeCode =  ['P020'];

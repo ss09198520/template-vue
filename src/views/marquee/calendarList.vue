@@ -139,7 +139,7 @@
           :color="color"
           :event-overlap-mode="mode"
           :events="events"
-          @change="getEvents(status)"
+          @change="getEvents('2021-11')"
         >
           <template v-slot:activator="{ on }">
             <div
@@ -156,6 +156,7 @@
 </template>
 
 <script>
+import { fetchActiveMarquee } from "@/api/marquee"; 
   const weekdaysDefault = [0, 1, 2, 3, 4, 5, 6]
 
   export default {
@@ -215,7 +216,15 @@
           this.$refs.startMenu.save(this.start);        
       },
       getEvents (status) {
-        const events = []
+        fetchActiveMarquee({
+          region: null,
+          releaseMonth: status
+        }).then((res) => {
+          console.log(res.restData)
+        }).catch((error) => {
+          console.log(error)
+        });
+        /*const events = []
         events.push( 
                   {   name: '省電教學-1',
                       type: '一般',
@@ -432,9 +441,9 @@
                       start: '2021-10-24', // new Date(`${start.date}T00:00:00`),
                       end: '2021-10-29', // new Date(`${end.date}T23:59:59`),
                       timed: false,
-                    },                    
-        )
-
+                    },    */                
+        //)
+        /*
         let statusArray = status.split(':');
         console.log('-----------------statusArray-----------------');
         console.log(statusArray);
@@ -478,12 +487,13 @@
        this.events =eventTemp;
 
         console.log("this.events")
-        console.log(this.events) 
+        console.log(this.events) */
       },
 
       rnd (a, b) {
         return Math.floor((b - a + 1) * Math.random()) + a
       },
+      
     } 
   }
 </script>

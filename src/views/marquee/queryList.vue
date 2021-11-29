@@ -417,7 +417,7 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="preViewMarqueeModel" max-width="700">
+    <v-dialog v-model="preViewMarqueeModel" max-width="12800">
       <v-card>
         <v-card-title
           class="text-h5 lighten-2"

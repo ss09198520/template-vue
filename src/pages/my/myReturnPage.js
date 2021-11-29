@@ -16,8 +16,8 @@ export default {
     },
     data() {
         return {
-            numberOfReject:2,
-            multimediaReject: 3,
+            numberOfReject:0,
+            multimediaReject: 0,
             formHeaders: [
                 { text: '受理編號', value: 'acceptNum', align: 'center',width:'10%' },
                 { text: '契約種類', value: 'contractType', align: 'center',width:'10%' },

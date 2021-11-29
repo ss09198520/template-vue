@@ -678,6 +678,7 @@ export default {
                 addFileList: addFileList,
                 modifyFileList: modifyFileList,
                 deleteFileList: deleteFileList,
+                isAddAttachment: this.isAddAttachment,
             };
 
             return vin;

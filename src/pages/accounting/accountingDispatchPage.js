@@ -7,7 +7,7 @@ export default {
   props: {
   
   },
-  beforeMount(){
+  mounted(){
     this.init();
   },
   data() {
@@ -873,19 +873,29 @@ export default {
     /* 驗證電號 selectItem:選到的電號,item:類型,listName:清單名稱,type:起號還是迄號*/
      checkElectric(selectItem,item,listName,type){
 
+      // 驗證是否空值
        this.checkRequired();
-
-       let selectIndex = null;
-
-       // 取出是第幾筆的電號資料
+       
+      // 取出是第幾筆的電號資料
+      let selectIndex = null;
       if(!ValidateUtil.isEmpty(selectItem)){
         selectIndex = this.dispatchInfo[listName].indexOf(selectItem);
+      }
+      
+      // 判斷電號範圍是否有輸入電號，有輸入才判斷是否加0或9
+      if(!ValidateUtil.isEmpty(selectItem[type])){
+        // 起號自動補0
+          if(type == 'start'){
+            selectItem.start = this.paddingZero(selectItem.start,11);
+          // 迄號自動補9
+          } else if(type == 'end'){
+            selectItem.end = this.paddingNine(selectItem.end,11);
+          }
       }
 
       // 驗證電號格式
       if(!ValidateUtil.validateEletricNums(selectItem[type])){
-        console.log(selectItem[type]);
-        
+        console.log(selectItem[type]);        
         return;
       }
 
@@ -900,6 +910,24 @@ export default {
           }
 
      },
+
+     paddingZero(str,lenght){
+      if(str.length >= lenght){
+        return str;
+      } else{
+        return this.paddingZero(str+"0",lenght);
+      }
+    },
+
+    paddingNine(str,lenght){
+      if(str.length >= lenght){
+        return str;
+      } else{
+        return this.paddingNine(str+"9",lenght);
+      }
+    },
+
+    
 
     // 驗證傳入參數的電號範圍是否重複
     checkElectricRange(dispatchList){

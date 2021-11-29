@@ -55,6 +55,9 @@
 
 <script>
   import MessageService from "@/assets/services/message.service";
+  import AjaxService from "@/assets/services/ajax.service";
+  import ValidateUtil from "@/assets/services/validateUtil";
+
 	export default {
 		data() {
 			return {
@@ -76,6 +79,7 @@
     watch: {
       $route: {
         handler: function(route) {
+          console.log(route);
           const query = route.query
           if (query) {
             this.redirect = query.redirect
@@ -99,11 +103,62 @@
             .then(() => {
               console.log('login success redirect to',this.redirect)
               this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+              // 取動態Menu
+              this.getAuthMenu();
             })
             .catch((error) => {
               MessageService.showError(error.message , '登入系統')
             })
         }
+      },
+      // 取得動態menu
+      getAuthMenu(){
+         AjaxService.post('/menuAuth/queryAuthMenu',{},
+              (response) => {
+                  // 驗證是否成功
+                  if (!response.restData.success) {              
+                      MessageService.showError(response.restData.message,'查詢角色設定下拉選單');
+                      return;
+                  }
+
+                  // 判斷要開的權限頁面，修改hidden為false
+                  // this.$router.options.routes[5].children[0].hidden = true;
+                  let routes = this.$router.options.routes;
+
+                  // 取出資料
+                  let menuAuthMap = response.restData.menuAuthMap;
+
+                  // 先重置Menu全部變成隱藏
+                   for(let i in routes){
+                       routes[i].hidden = true;
+                      for(let index in routes[i].children){
+                        routes[i].children[index].hidden = true;
+                      }
+                   }
+
+                  // 判斷是否符合權限menu，有就把hidden變成false
+                  for(let i in routes){
+                     for(let index in routes[i].privilegeCode){
+                          if(!ValidateUtil.isEmpty(menuAuthMap[routes[i].privilegeCode[index]])){
+                            routes[i].hidden = false;
+                            break;
+                          }
+                      }
+                      for(let index in routes[i].children){                         
+                           for( let privilegeIndex in routes[i].children[index].privilegeCode){
+                              if(!ValidateUtil.isEmpty(menuAuthMap[routes[i].children[index].privilegeCode[privilegeIndex]])){
+                                routes[i].children[index].hidden = false;
+                              }
+                           
+                          }
+                      }
+                   }  
+                   this.$forceUpdate();    
+              },
+              // eslint-disable-next-line no-unused-vars
+              (response) => {                
+                  MessageService.showSystemError();
+              });
       },
       getOtherQuery(query) {
         return Object.keys(query).reduce((acc, cur) => {

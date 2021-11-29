@@ -3,6 +3,7 @@ import store from '@/store'
 import MessageService from '@/assets/services/message.service.js';
 import EventBus from '@/assets/services/eventBus.js';
 import LoadingConfig from '@/assets/constant/loadingConfig.js';
+import CommonService from './common.service';
 
 const AjaxService = {
     /**
@@ -29,6 +30,14 @@ const AjaxService = {
           LoadingConfig.hasLoader = true;
         }
       }
+
+      console.log(process);
+
+      // 將頁面權限代碼傳到後端
+      let pagePrivilegeCode = null;
+      pagePrivilegeCode = CommonService.getPrivilege(location.href); 
+      data.pagePrivilegeCode = pagePrivilegeCode;
+      
   
       await axios.post(`${process.env.VUE_APP_BASE_API + url}`, data, {
         headers: {
@@ -46,6 +55,13 @@ const AjaxService = {
           if (res.restData.code === '401' || res.restData.code === 50012 || res.restData.code === 50014) {
             MessageService.showInfo(res.restData.message , '尚未登入')
             // 清除登入資訊, 導至登入頁
+            store.dispatch('user/resetToken').then(() => {
+              location.reload()
+            })
+          //無該頁面權限，顯示提示訊息
+          } else if(res.restData.code === '403'){
+             MessageService.showInfo(res.restData.message , '無該頁面操作權限');
+             // 清除登入資訊, 導至登入頁
             store.dispatch('user/resetToken').then(() => {
               location.reload()
             })

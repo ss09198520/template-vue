@@ -93,47 +93,63 @@ export const constantRoutes = [
     redirect: "/myWorkSpace/myForm",
     component: Layout,
     name: "My WorkSpace",
+    privilegeCode: ['P000','P001','P002','P003','P004','P005','P006','P007'],
+    hidden: true,
     meta: { title: '我的工作區', icon: 'mdi-account' },
     children: [
       {
         path: '/homePage',
-        redirect: "/",                
+        redirect: "/",
+        privilegeCode: ['P000'],
+        hidden: true,           
         component: () => import('@/pages/homePage.vue'),
         meta: { title: '首頁', icon: 'mdi-account' }
       },
       {
         path: 'myFormPage',
         name: 'MyFormPage',
+        privilegeCode: ['P001'],
+        hidden:true,
         component: () => import('@/pages/my/myFormPage.vue'),
         meta: { title: '我的表單', icon: 'mdi-file-document-outline' }
       },
       {
         path: 'myReturn',
         name: 'MyReturn',
+        privilegeCode: ['P002','P003'],
+        hidden:true,
         component: () => import('@/pages/my/myReturnPage.vue'),
         meta: { title: '我的退件區', icon: 'mdi-alert' }
       },
       {
         path: 'inquireReadPage',
         name: 'InquireReadPage',
+        privilegeCode: ['P004'],
+        hidden:true,
         component: () => import('@/pages/my/inquireReadPage.vue'),
         meta: { title: '調閱申請', icon: 'mdi-book-arrow-left' }
       },
       {
         path: 'myRead',
         name: 'MyRead',
+        hidden:true,
+        privilegeCode: ['P005'],
         component: () => import('@/pages/my/myReadPage.vue'),
         meta: { title: '我的調閱區', icon: 'mdi-book-arrow-down' }
       },
       {
         path: 'leaveSearch',
         name: 'LeaveSearch',
+        privilegeCode: ['P006'],
+        hidden:true,
         component: () => import('@/pages/my/leaveSearchPage.vue'),
         meta: { title: '請假清單', icon: 'mdi-account-arrow-right-outline' }
       },
       {
         path: 'inquireLeave',
         name: 'InquireLeave',
+        privilegeCode: ['P007'],
+        hidden:true,
         component: () => import('@/pages/my/inquireLeavePage.vue'),
         meta: { title: '代理申請', icon: 'mdi-account-box-outline' }
       },
@@ -143,22 +159,30 @@ export const constantRoutes = [
     path: "/signOff",
     component: Layout,
     name: "Sign off",
+    privilegeCode: ['P008','P009','P010','P011','P012'],
+    hidden: true,
     meta: { title: '簽核區', icon: 'mdi-pencil' },
     children: [
       {
         path: 'readSignOff',
         name: 'ReadSignOff',
+        privilegeCode: ['P008'],
+        hidden:true,
         component: () => import('@/pages/signOff/readSignOffPage.vue'),
         meta: { title: '調閱簽核', icon: 'mdi-pencil' }
       },      
       {
         path: 'sealSignOff',
         name: 'SealSignOff',
+        privilegeCode: ['P009'],
+        hidden:true,
         component: () => import('@/pages/signOff/sealSignOffPage.vue'),
         meta: { title: '專用章簽核', icon: 'mdi-pencil' }
       },{
         path: 'mediaOffPage',
         name: 'MediaSignOff',
+        privilegeCode: ['P010','P011','P012'],
+        hidden:true,
         component: () => import('@/pages/signOff/mediaOffPage'),
         meta: { title: '多媒體簽核', icon: 'mdi-pencil' }
       },
@@ -168,29 +192,39 @@ export const constantRoutes = [
     path: "/accounting",
     component: Layout,
     name: "Accounting",
+    privilegeCode: ['P013','P014','P015','P016'],
+    hidden: true,
     meta: { title: '核算區', icon: 'mdi-account-multiple' },
     children: [
       {
         path: 'accountingDispatchPage',
         name: 'AccountingDispatchPage',
+        privilegeCode: ['P013'],
+        hidden:true,
         component: () => import('@/pages/accounting/accountingDispatchPage.vue'),
         meta: { title: '核算派工設定', icon: 'mdi-account-multiple' }
       },
       {
         path: 'myWaitingAccounting',
         name: 'MyWaitingAccounting',
+        privilegeCode: ['P014'],
+        hidden:true,
         component: () => import('@/pages/accounting/myWaitingAccountingPage.vue'),
         meta: { title: '待核算', icon: 'mdi-checkbox-blank-outline' }
       },
       {
         path: 'myWaitingArchieve',
         name: 'MyWaitingArchieve',
+        privilegeCode: ['P015'],
+        hidden:true,
         component: () => import('@/pages/accounting/myWaitingArchievePage.vue'),
         meta: { title: '待歸檔', icon: 'mdi-checkbox-blank-outline' }
       },
       {
         path: 'unDispatch',
         name: 'UnDispatch',
+        privilegeCode: ['P016'],
+        hidden:true,
         component: () => import('@/pages/accounting/unDispatchPage.vue'),
         meta: { title: '未分派區', icon: 'mdi-checkbox-blank-outline' }
       }
@@ -200,47 +234,63 @@ export const constantRoutes = [
     path: '/report',
     component: Layout,
     name: "報表區",
+    privilegeCode: ['P025','P026','P027','P028'],
+    hidden: true,
     meta: { title: '報表區', icon: 'mdi-text-box' },
     children: [
       {
         path: 'rejectReport',
         name: 'RejectReport',
+        privilegeCode: ['P025'],
+        hidden:true,
         component: () => import('@/pages/report/rejectReportPage.vue'),
         meta: { title: '退件報表', icon: 'mdi-alert' }
       },
       {
         path: 'readReport',
         name: 'ReadReport',
+        privilegeCode: ['P026'],
+        hidden:true,
         component: () => import('@/pages/report/readReportPage.vue'),
         meta: { title: '調閱清單', icon: 'mdi-clipboard-search' }
       },
       {
         path: 'satisfyReport/search',
         name: 'Satisfaction-Report',
+        privilegeCode: ['P027'],
+        hidden:true,
         component: () => import('@/views/satisfaction/report'),
         meta: { title: '滿意度報表', icon: 'mdi-clipboard-search' }
       },
       {
         path: 'satisfyReport/month',
         name: 'Satisfaction-Report-Monthly',
+        privilegeCode: ['P028'],
+        hidden:true,
         component: () => import('@/views/satisfaction/reportMonth'),
         meta: { title: '滿意度各區處報表(月)', icon: 'mdi-clipboard-search' }
       },
       {
         path: 'satisfyReport/week',
         name: 'Satisfaction-Report-Weekly',
+        privilegeCode: ['P029'],
+        hidden:true,
         component: () => import('@/views/satisfaction/reportWeek'),
         meta: { title: '滿意度個人摘要(週)', icon: 'mdi-clipboard-search' }
       },
       {
         path: 'satisfyReport/reportDynamicRegion',
         name: 'Satisfaction-Report-Dynamic-RegionMonthly',
+        privilegeCode: [],
+        hidden:true,
         component: () => import('@/views/satisfaction/reportDynamicRegion'),
         meta: { title: '滿意度區處報表(自訂查詢區間)', icon: 'mdi-clipboard-search' }
       },
       {
         path: 't-satisfyReport/reportDynamicPersonal',
         name: 'Satisfaction-Report-Dynamic-PersonalWeekly',
+        privilegeCode: [],
+        hidden:true,
         component: () => import('@/views/satisfaction/reportDynamicPersonal'),
         meta: { title: '不滿意度個人動態查詢(自訂區間與%數)', icon: 'mdi-clipboard-search' }
       }
@@ -251,16 +301,22 @@ export const constantRoutes = [
     name: 'MaterialPages',
     component: Layout,
     redirect: '/material/upload',
+    privilegeCode: ['P021','P022'],
+    hidden: true,
     meta: { title: '素材管理', icon: 'mdi-tooltip-image-outline' },
     children: [
       {
         path: 'upload',
         name: 'material-upload',
+        privilegeCode: ['P021'],
+        hidden: true,
         component: () => import('@/views/material/upload'),
         meta: { title: '素材上傳', icon: 'mdi-cloud-upload', },
       },{
         path: 'list',
         name: 'material-list',
+        privilegeCode: ['P022'],
+        hidden: true,
         component: () => import('@/views/material/list'),
         meta: { title: '素材總覽', icon: 'mdi-magnify', },
       }
@@ -270,11 +326,15 @@ export const constantRoutes = [
     path: '/satisfaction',
     component: Layout,
     name: 'SatisfactionPages',
+    privilegeCode: ['P019','P020'],
+    hidden: true,
     meta: { title: '滿意度調查', icon: 'mdi-clipboard-text-multiple' },
     children: [
       {
         path: 'create',
         name: 'Satisfaction-create',
+        privilegeCode: ['P019'],
+        hidden: true,
         component: () => import('@/views/satisfaction/create'),
         meta: { title: '問卷製作', icon: 'mdi-clipboard-text-multiple' }
       },
@@ -282,12 +342,16 @@ export const constantRoutes = [
         path: 'edit/:id(\\d+)',
         name: 'Satisfaction-Edit',
         component: () => import('@/views/satisfaction/edit'),
+        privilegeCode: ['P019'],
+        // hidden: true,
         hidden: true,
         meta: { title: '問卷編輯', icon: 'mdi-clipboard-text-multiple' }
       },
       {
         path: 'list',
         name: 'Satisfaction-list',
+        privilegeCode: ['P020'],
+        hidden: true,
         component: () => import('@/views/satisfaction/list'),
         meta: { title: '問卷查詢', icon: 'mdi-clipboard-text-search' }
       },
@@ -297,13 +361,17 @@ export const constantRoutes = [
     path: '/media/preview',
     component: Layout,
     name: 'PreviewPages',
+    privilegeCode: ['P020'],
     hidden: true,
+    //hidden: true,
     meta: { title: '多媒體預覽頁面', icon: 'mdi-clipboard-text-multiple' },
     children: [
       {
         path: 'questionnaire/:id(\\d+)',
         component: () => import('@/views/satisfaction/preview'),
         name: 'Satisfaction-preview',
+        privilegeCode: ['P020'],
+        // hidden: true,
         hidden: true,
         meta: { title: '問卷預覽', icon: 'mdi-pencil-box-multiple-outline' },
       },
@@ -314,6 +382,8 @@ export const constantRoutes = [
     redirect: '/marquee/create',
     component: Layout,
     name: 'MarqueePages',
+    privilegeCode: ['P017','P18'],
+    hidden:true,
     meta: { title: '跑馬燈管理', icon: 'mdi-clipboard-play-multiple' },
     children: [
       {
@@ -321,31 +391,41 @@ export const constantRoutes = [
         name: 'Marquee-Edit',
         component: () => import('@/views/marquee/create'),
         hidden: true,
+        // hidden: true,
+        privilegeCode: ['P017'],
         meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
       },
       {
         path: 'list',
         name: 'Marquee-List',
         component: () => import('@/views/marquee/list'),
+        // hidden: true,
         hidden: true,
+        privilegeCode: ['P018'],
         meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },
       {
         path: 'queryList',
         name: 'Marquee-Query-List',
+        privilegeCode: ['P018'],
+        hidden: true,
         component: () => import('@/views/marquee/queryList'),
         meta: { title: '跑馬燈查詢', icon: 'mdi-magnify' }
       },
       {
         path: 'marqueeCreate',
         name: 'MarqueeCreate',
+        privilegeCode: ['P017'],
+        hidden: true,
         component: () => import('@/views/marquee/createMarquee'),
         meta: { title: '跑馬燈製作', icon: 'mdi-pencil-box-multiple-outline' }
       },
       {
         path: 'marqueeEdit',
         name: 'MarqueeEdit',
+        privilegeCode: ['P017'],
         component: () => import('@/views/marquee/createMarquee'),
+        // hidden: true,
         hidden: true,
         meta: { title: '跑馬燈編輯', icon: 'mdi-pencil-box-multiple-outline' }
       },
@@ -353,13 +433,17 @@ export const constantRoutes = [
         path: 'marqueeCalendar',
         name: 'Marquee-Calendar',
         component: () => import('@/views/marquee/calendarList'),
+        // hidden: true,
         hidden: true,
+        privilegeCode: [],
         meta: { title: '跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
       },
       {
         path: 'calendarList',
         name: 'Marquee-List-Calendar',
         component: () => import('@/views/marquee/calendar'),
+        privilegeCode: [],
+        // hidden: true,
         hidden: true,
         meta: { title: '跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
       }
@@ -370,11 +454,15 @@ export const constantRoutes = [
     redirect: '/program/create',
     component: Layout,
     name: 'ProgramPages',
+    privilegeCode: ['P023','P024'],
+    hidden:true,
     meta: { title: '節目管理', icon: 'mdi-video-box' },
     children: [
       {
         path: 'create',
         name: 'Program-Create',
+        privilegeCode: ['P023'],
+        hidden:true,
         component: () => import('@/views/program/create'),
         meta: { title: '節目單製作', icon: 'mdi-movie-edit' }
       },
@@ -382,12 +470,16 @@ export const constantRoutes = [
         path: 'edit/:id(\\d+)',
         name: 'Program-Edit',
         component: () => import('@/views/program/edit'),
+        // hidden: true,
         hidden: true,
+        privilegeCode: ['P023'],
         meta: { title: '節目單編輯', icon: 'mdi-movie-edit' }
       },
       {
         path: 'list',
         name: 'Program-List',
+        privilegeCode: ['P024'],
+        hidden:true,
         component: () => import('@/views/program/list'),
         meta: { title: '節目單查詢', icon: 'mdi-magnify' }
       },
@@ -395,6 +487,8 @@ export const constantRoutes = [
         path: 'calendarList',
         name: 'Program-List-Calendar',
         component: () => import('@/views/program/calendar'),
+        privilegeCode: [],
+        // hidden: true,
         hidden: true,
         meta: { title: '節目單行事曆', icon: 'mdi-pencil-box-multiple-outline' },
       }
@@ -404,25 +498,33 @@ export const constantRoutes = [
     path: '/backStage',
     component: Layout,
     name: '後台管理',
+    privilegeCode: ['P030','P031'],
+    hidden:true,
     meta : { title: '後台管理', icon: 'mdi-cog-outline' },
     children: [
       {
         path: 'privilegeSetting',
         name: 'PrivilegeSetting',
+        privilegeCode: ['P030'],
+        hidden:true,
         component: () => import('@/pages/backStage/privilegeSettingPage.vue'),
         meta: { title: '權限設定', icon: 'mdi-account-multiple' }
       },
       {
         path: 'characterPrivilege',
         name: 'CharacterPrivilege',
+        privilegeCode: ['P031'],
+        hidden:true,
         component: () => import('@/pages/backStage/characterPrivilegePage.vue'),
         meta: { title: '角色設定', icon: 'mdi-account-multiple' }
       },
       {
         path: 'setting',
         name: 'Setting',
+        privilegeCode: ['P032'],
+        hidden: true,
         component: () => import('@/pages/backStage/backStageSettingPage.vue'),
-        meta: { title: '後台資訊設定區', icon: 'mdi-cog-outline' }
+        meta: { title: '後台參數檢視區', icon: 'mdi-cog-outline' }
       },
       {
         path: 'pmcVersionUpload',

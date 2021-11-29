@@ -911,6 +911,7 @@ export default {
 
      },
 
+     // 判斷電號範圍是否有輸入電號，有輸入才判斷是否加0
      paddingZero(str,lenght){
       if(str.length >= lenght){
         return str;
@@ -919,6 +920,7 @@ export default {
       }
     },
 
+    // 判斷電號範圍是否有輸入電號，有輸入才判斷是否加9
     paddingNine(str,lenght){
       if(str.length >= lenght){
         return str;

@@ -224,6 +224,110 @@
         <span class="ml-2">URL: http://10.16.9.126:8080/SSO_WEBSERVICE/services/SSOPWDCHECK_X2</span>
       </v-row>
 
+      <v-row>
+        <h1>Test NCPS API - TPES_01 (取得登記單檔案)</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes01Req.region"
+          label="DITR_NO (區處代碼)"
+          placeholder="DITR_NO (區處代碼)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes01Req.acceptNum"
+          label="FM_NO (受理號碼)"
+          placeholder="FM_NO (受理號碼)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes01Req.fmbhNo"
+          label="FMBH_NO (受理分號)"
+          placeholder="FMBH_NO (受理分號)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes01Req.apitCod"
+          label="APIT_COD (申請項目編號)"
+          placeholder="APIT_COD (申請項目編號)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-btn @click="tpes01()">submit</v-btn>
+        <span class="ml-2">URL: http://10.209.5.125/66/api/TRE0000/TPES_01/</span>
+      </v-row>
+
+      <v-row>
+        <h1>Test NCPS API - TPES_02 (核算退件通知)</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes02Req.region"
+          label="DITR_NO (區處代碼)"
+          placeholder="DITR_NO (區處代碼)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes02Req.acceptNum"
+          label="FM_NO (受理號碼)"
+          placeholder="FM_NO (受理號碼)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes02Req.fmbhNo"
+          label="FMBH_NO (受理分號)"
+          placeholder="FMBH_NO (受理分號)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes02Req.backReason"
+          label="BACK_REASON (核算退件原因)"
+          placeholder="BACK_REASON (核算退件原因)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-btn @click="tpes02()">submit</v-btn>
+        <span class="ml-2">URL: http://10.209.5.125/66/api/TRE0000/TPES_02/</span>
+      </v-row>
+
+      <v-row>
+        <h1>Test NCPS API - TPES_03 (核算確認歸檔通知)</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes03Req.region"
+          label="DITR_NO (區處代碼)"
+          placeholder="DITR_NO (區處代碼)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes03Req.acceptNum"
+          label="FM_NO (受理號碼)"
+          placeholder="FM_NO (受理號碼)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-text-field
+          v-model="tpes03Req.fmbhNo"
+          label="FMBH_NO (受理分號)"
+          placeholder="FMBH_NO (受理分號)"
+        />
+      </v-row>
+      <v-row class="marginLeft">
+        <v-btn @click="tpes03()">submit</v-btn>
+        <span class="ml-2">URL: http://10.209.5.125/66/api/TRE0000/TPES_03/</span>
+      </v-row>
+
     </v-container>
     <v-dialog id="importWordModal" v-model="importWordModalShow" width="370">
       <v-card>
@@ -333,6 +437,23 @@ export default {
               timestamp: null,
               apX: null,
               userX: null
+            },
+            tpes01Req: {
+              region: null,
+              acceptNum: null,
+              fmbhNo: null,
+              apitCod: null,
+            },
+            tpes02Req: {
+              region: null,
+              acceptNum: null,
+              fmbhNo: null,
+              backReason: null,
+            },
+            tpes03Req: {
+              region: null,
+              acceptNum: null,
+              fmbhNo: null,
             }
         }
     },
@@ -453,6 +574,45 @@ export default {
           this.responseStr = "";
 
           AjaxService.post("/test/getResult", this.getResultReq, 
+            (response) => {
+                this.responseStr = response.restData;
+                this.responseModalShow = true;
+            },
+            (error) => {
+                this.responseStr = error;
+                this.responseModalShow = true;
+            });
+        },
+        tpes01(){
+          this.responseStr = "";
+
+          AjaxService.post("/test/TPES_01", this.tpes01Req, 
+            (response) => {
+                this.responseStr = response.restData;
+                this.responseModalShow = true;
+            },
+            (error) => {
+                this.responseStr = error;
+                this.responseModalShow = true;
+            });
+        },
+        tpes02(){
+          this.responseStr = "";
+
+          AjaxService.post("/test/TPES_02", this.tpes02Req, 
+            (response) => {
+                this.responseStr = response.restData;
+                this.responseModalShow = true;
+            },
+            (error) => {
+                this.responseStr = error;
+                this.responseModalShow = true;
+            });
+        },
+        tpes03(){
+          this.responseStr = "";
+
+          AjaxService.post("/test/TPES_03", this.tpes03Req, 
             (response) => {
                 this.responseStr = response.restData;
                 this.responseModalShow = true;

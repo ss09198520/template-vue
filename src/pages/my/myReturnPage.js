@@ -65,7 +65,9 @@ export default {
             certificateList:[],
             selectItem:{},
             formParam: {},
-            formKey: 0,
+            formKey: 0,            
+            hasReturnAuth: false,
+            haseMediaReturnAuth:false,
         }
     },
     methods: {
@@ -139,7 +141,7 @@ export default {
         (response) => {
             // 驗證是否成功
             if (!response.restData.success) {              
-                MessageService.showError(response.resultMessage.returnMessage,'查詢我的退件資料');
+                MessageService.showError(response.restData.message,'查詢我的退件資料');
                 return;
             }
              // 驗證formList是否有資料
@@ -151,6 +153,15 @@ export default {
             // 將取得的資料放進前端參數中
             this.formList = response.restData.formList;
             this.numberOfReject = response.restData.numberOfReject;
+
+            if(!ValidateUtil.isEmpty(response.restData.authList)){
+              for(let i in response.restData.authList){
+                if(response.restData.authList[i] == 'AUTH07' || response.restData.authList[i] == 'AUTH15'){
+                  this.hasReturnAuth = true;
+                  break;
+                }
+              }
+            }
 
         },
         // eslint-disable-next-line no-unused-vars

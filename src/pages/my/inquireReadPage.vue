@@ -1,7 +1,5 @@
 <template>
   <v-container>
-    <v-btn class="ma-2" :class="{'primary': User == 'guest'}" @click="User = 'guest'">角色：核算課長/調閱管理員</v-btn>
-    <v-btn class="ma-2" :class="{'primary': User == 'TPESUser'}" @click="User = 'TPESUser'">角色：TPES使用者</v-btn>
     <div v-if="User != 'TPESUser'">
       <h2 class="font-bold">案件查詢</h2>      
       <div class="ml-10 font-18px font-bold">        

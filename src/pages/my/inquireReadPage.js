@@ -202,6 +202,7 @@ export default{
                             this.readAudienceList.push({empNo: reader.empNo, empName: reader.name});
                         }
                     }
+                    this.User = response.restData.userType;
                 }else{
                     MessageService.showError(response.restData.message, "初始化");
                 }

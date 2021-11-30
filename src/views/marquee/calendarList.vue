@@ -37,7 +37,7 @@
         :items="statusOptions"
         class="font-weight-bold"
         label="狀態"
-        @change="getEvents(status)"
+        @change="getEvents(status,start)"
       />
       <v-menu
         ref="startMenu"
@@ -105,21 +105,6 @@
           />
           <span class="font-weight-bold mr-3"> {{ selfColors.text }}</span>          
         </v-col>
-        <!-- <v-col
-          v-for="selfColors in selfColor"
-          :key="selfColors.text"
-          cols="12" 
-          md="12"
-          class="pt-2 pb-0"
-        >
-          <v-list-item-avatar           
-            tile
-            size="20"
-            :color="selfColors.value"
-            class="ml-0 mt-1"
-          />
-          <span class="font-weight-bold mr-3"> 業務處-{{ selfColors.text }}</span>          
-        </v-col> -->
       </v-row>
     </v-flex>
     <v-flex
@@ -139,7 +124,7 @@
           :color="color"
           :event-overlap-mode="mode"
           :events="events"
-          @change="getEvents('2021-11')"
+          @change="getEvents(status,start)"
         >
           <template v-slot:activator="{ on }">
             <div
@@ -157,6 +142,8 @@
 
 <script>
 import { fetchActiveMarquee } from "@/api/marquee"; 
+import MessageService from "@/assets/services/message.service";
+
   const weekdaysDefault = [0, 1, 2, 3, 4, 5, 6]
 
   export default {
@@ -164,7 +151,7 @@ import { fetchActiveMarquee } from "@/api/marquee";
     data: () => ({
       dark: false,
       startMenu: false,
-      start: '2021-10-01',
+      start: '2021-11-01',
       events: [],
       more: false,
       mode: 'column',
@@ -203,7 +190,6 @@ import { fetchActiveMarquee } from "@/api/marquee";
       }
     },
     methods: {
-
        setToday () {
          function pad2(n) {  return (n < 10 ? '0' : '') + n;}
           let date = new Date();
@@ -215,17 +201,33 @@ import { fetchActiveMarquee } from "@/api/marquee";
           this.start = this.focus;
           this.$refs.startMenu.save(this.start);        
       },
-      getEvents (status) {
+      getEvents (status,start) {
+
+        let str = start.substring(0, 7);
+        console.log(str);
+
         fetchActiveMarquee({
           region: null,
-          releaseMonth: status
+          releaseMonth: str
         }).then((res) => {
-          console.log(res.restData)
+           const reslut =  JSON.parse(JSON.stringify( res.restData.marqueeBeanList));
+           const keyMap = { marqueeName: 'name', releaseStartDate:'start', releaseEndDate:'end'}
+           let objs = {}
+         
+           reslut.map((item) => {
+           objs = Object.keys(item).reduce((newData, key) => {
+              const newKey = keyMap[key] || key
+              newData[newKey] = item[key]
+              return newData
+            }, {})
+            this.events.push(objs)
+            })
+           MessageService.showInfo(res.restData.message, "成功✓");           
         }).catch((error) => {
           console.log(error)
         });
         /*const events = []
-        events.push( 
+          events.push( 
                   {   name: '省電教學-1',
                       type: '一般',
                       detail: '日光節約時間',
@@ -241,7 +243,8 @@ import { fetchActiveMarquee } from "@/api/marquee";
                       end: '2021-09-28', // new Date(`${end.date}T23:59:59`),
                       timed: false,
                     },
-                                      {   name: '省電教學-2',
+                    {   
+                      name: '省電教學-2',
                       type: '一般',
                       detail: '日光節約時間',
                       content: '純文字',
@@ -270,8 +273,7 @@ import { fetchActiveMarquee } from "@/api/marquee";
                       start: '2021-09-28', // new Date(`${start.date}T00:00:00`),
                       end: '2021-10-01', // new Date(`${end.date}T23:59:59`),
                       timed: false,
-                    },
-                                                          {   name: '省電教學-4',
+                    },{   name: '省電教學-4',
                       type: '一般',
                       detail: '日光節約時間',
                       content: '純文字',
@@ -286,7 +288,8 @@ import { fetchActiveMarquee } from "@/api/marquee";
                       end: '2021-10-15', // new Date(`${end.date}T23:59:59`),
                       timed: false,
                     },
-                      {   name: '省電教學-5',
+                      {
+                      name: '省電教學-5',
                       type: '一般',
                       detail: '日光節約時間',
                       content: '純文字',
@@ -301,7 +304,8 @@ import { fetchActiveMarquee } from "@/api/marquee";
                       end: '2021-10-01', // new Date(`${end.date}T23:59:59`),
                       timed: false,
                     },
-                      {   name: '省電教學-6',
+                      {   
+                      name: '省電教學-6',
                       type: '一般',
                       detail: '日光節約時間',
                       content: '純文字',
@@ -448,7 +452,7 @@ import { fetchActiveMarquee } from "@/api/marquee";
         console.log('-----------------statusArray-----------------');
         console.log(statusArray);
 
-        let eventTemp =  events.filter(function (el) {
+        let eventTemp =  this.events.filter(function (el) {
           if(status == "請選擇")
            return el.status !== status
           else if (status == "上架" || status == "下架")

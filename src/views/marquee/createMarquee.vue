@@ -286,6 +286,7 @@ export default {
       duration: 30,
       min: 0,
       max: 60,
+      fileNo:null,
       marqueeName: "台電跑馬燈",
       marqueeHTML: "",
       marqueeText: "",
@@ -361,9 +362,10 @@ export default {
                 let fileName = null;
                 let result = Object.assign({}, res.restData.marquee);
             this.pageTitle = "跑馬燈修改";
-            MessageService.showInfo(res.restData.message, "成功✓");
+            MessageService.showInfo(res.restData.message, "成功✓");            
+            
             this.marqueeName = result.marqueeName;
-            this.content=result.marqueeContentHTML;
+            this.content = result.marqueeContentHTML;
             this.marqueeText = result.marqueeContent;
             this.marqueeHTML = result.marqueeContentHTML;
             this.duration = result.animationDuration;
@@ -372,6 +374,7 @@ export default {
             this.endDate = result.releaseEndDate;
             if(res.restData.signAttachment !== null){
               let resultSign = Object.assign({}, res.restData.signAttachment);
+              this.fileNo = resultSign.id;
               fileName = new File(["queryFile"], resultSign.originalFileName,);
               this.attachedFiles = fileName;
               this.nullAattachedFiles = result.attachedFileName;
@@ -463,6 +466,7 @@ export default {
             [
               JSON.stringify({
                 marqueeId: this.location,
+                fileNo: this.fileNo,
                 marqueeName: this.marqueeName,
                 marqueeType: "GENERAL",
                 marqueeContent: this.marqueeText,

@@ -157,7 +157,7 @@ export default {
             this.memo = item.memo;
           // 帶入受理編號
           this.formParam = {
-            fmNo: item.acceptNum
+            FM_NO: item.acceptNum
         };
         this.formKey++;
           // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄(Action)

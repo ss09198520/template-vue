@@ -72,7 +72,7 @@ export default{
         browserOrder(item){
             this.selectItem = item;
             this.formParam = {
-                fmNo: item.acceptNum
+                FM_NO: item.acceptNum
             };
             this.browserModel = true;
             this.formKey ++;

@@ -583,6 +583,12 @@ export const constantRoutes = [
         component: () => import('@/pages/FormPage/FormPage.vue'),
         meta: { title: 'TPES Form', icon: 'mdi-file-document' }
       },
+      {
+        path: '/tpesForm/viewForm',
+        name: 'ViewForm',
+        component: () => import('@/pages/FormPage/FormPage.vue'),
+        meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+      },
       // external file
       {
         path: '/externalFileView',

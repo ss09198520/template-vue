@@ -17,6 +17,16 @@ export default {
     mounted() {
         this.init();
     },
+    created(){
+        // 關閉前確認
+        window.addEventListener('beforeunload', function (e) {
+            e.preventDefault(); 
+            e.returnValue = '';
+        });
+    },
+    beforeDestroy(){
+        window.removeEventListener('beforeunload');
+    },
     data() {
         return {
             empNo: null,
@@ -138,30 +148,30 @@ export default {
             }
 
             if(!ValidateUtil.isEmpty(formParam)){
-                this.empNo = formParam.empNo;
-                this.region = formParam.region;
-                this.acceptNum = formParam.fmNo;
-                this.fmbhNo = formParam.fmbhNo;
-                this.formType = formParam.formType;
-                this.apitCod = formParam.apitCod;
-                this.applyType = formParam.applyType;
-                this.uniformNum = formParam.uniformNum;
-                this.isAgent = formParam.isAgent;
-                this.custName = formParam.custName;
-                this.contractType = formParam.contractType;
-                this.electricNum = formParam.electricNum;
-                this.computeDate = formParam.computeDate;
-                this.acceptDept = formParam.acceptDept;
+                this.empNo = formParam.EMP_NO;
+                this.region = formParam.REGION;
+                this.acceptNum = formParam.FM_NO;
+                this.fmbhNo = formParam.FMBH_NO;
+                this.formType = formParam.FORM_TYPE;
+                this.apitCod = formParam.APIT_COD;
+                this.applyType = formParam.APPLY_TYPE;
+                this.uniformNum = formParam.UNIFORM_NUM;
+                this.isAgent = formParam.IS_AGENT;
+                this.custName = formParam.CUST_NAME;
+                this.contractType = formParam.CONTRACT_TYPE;
+                this.electricNum = formParam.ELECTRIC_NUM;
+                this.computeDate = formParam.COMPUTE_DATE;
+                this.acceptDept = formParam.ACCEPT_DEPT;
                 this.acceptDeptName = formParam.acceptDeptName;
                 this.acceptUser = formParam.acceptUser;
                 this.acceptUserName = formParam.acceptUserName;
                 this.acceptDate = formParam.acceptDate;
                 this.acceptItem = formParam.acceptItem;
-                this.isUpdate = formParam.isUpdate;
-                this.isAddAttachment = formParam.isAddAttachment;
-                this.isAffidavit = formParam.isAffidavit;
-                this.uploadNo = formParam.uploadNo;
-                this.cancelReason = formParam.cancelReason;
+                this.isUpdate = formParam.IS_UPDATE;
+                this.isAddAttachment = formParam.IS_ADD_ATTACHMENT;
+                this.isAffidavit = formParam.IS_AFFIDAVIT;
+                this.uploadNo = formParam.UPLOAD_NO;
+                this.cancelReason = formParam.CANCEL_REASON;
                 
                 this.formPageMode = ValidateUtil.isEmpty(formParam.formPageMode) ? this.formPageMode : formParam.formPageMode;
             }
@@ -173,6 +183,10 @@ export default {
             }
             else if(page == "cancelForm_cust"){
                 this.formPageMode = "cancel";
+                this.showModeSelect = false;
+            }
+            else if(page == "viewForm"){
+                this.formPageMode = "view";
                 this.showModeSelect = false;
             }
         },
@@ -384,7 +398,7 @@ export default {
 
             // 套浮水印
             this.addWaterMark(imgSrc).then(({data}) => {
-                
+
                 this.certificateList.push({
                     id: this.certificateNo,
                     // 其他證件，須由使用者輸入證件類別

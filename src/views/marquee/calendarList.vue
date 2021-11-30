@@ -223,8 +223,15 @@ import MessageService from "@/assets/services/message.service";
                   return el.status == "ACTIVE"
                 else if (status == "下架")
                   return el.status =="CLOSE"
-                else if (statusArray[0] == "未上架" && (statusArray[1] == "退件" ||statusArray[1] == "審核中"|| statusArray[1] == "審核完成" || statusArray[1] == "草稿"))
-                  return el.status == "WAIT" &&  (el.signStatus == "REJECT" ||el.signStatus == "WAIT"|| el.signStatus == "PROGRESS" || el.signStatus == "DRAFT");
+                else if (statusArray[0] == "未上架" && statusArray[1] == "退件")
+                  return (el.status == "WAIT" &&  el.signStatus == "REJECT");
+                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核中")
+                  return (el.status == "WAIT" &&  el.signStatus == "WAIT");
+                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核完成" )
+                  return (el.status == "WAIT" &&  el.signStatus == "PROGRESS" );
+                else if (statusArray[0] == "未上架" &&  statusArray[1] == "草稿")
+                  return (el.status == "WAIT" &&  el.signStatus == "DRAFT");
+              
               });
 
              for(let i=0; i< eventTemp.length; i++){

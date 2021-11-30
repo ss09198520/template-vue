@@ -2,7 +2,7 @@
   <quill-editor
     :id="quillId"
     ref="vueQuillEditor"
-    v-model="content"
+    :value="content"
     :options="editorOption" 
     @blur="onEditorBlur($event)"
     @focus="onEditorFocus($event)"
@@ -30,14 +30,14 @@ export default {
         return 'quill-vue' + +new Date() + ((Math.random() * 10).toFixed(0) + '')
       }
     },
-    value: {
+    content: {
       type: String,
       default: ''
     },
   },
   data() {
     return {
-      content: this.value,
+      // content: this.value,
       hasChange: false,
       hasInit: false,
       quillId: this.id,

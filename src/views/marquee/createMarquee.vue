@@ -208,8 +208,7 @@
             <v-col cols="9" md="8">
               <quill
                 ref="editor"
-                v-model="marqueeHTML"
-                :p-value="marqueeHTML"
+                :content="marqueeHTML"
                 class="quill-marquee"
                 @change="onEditorChange($event)"
               />
@@ -257,18 +256,6 @@ export default {
   components: { 
     Quill , 
     },
-  props: {
-    id: {
-      type: String,
-      default: function() {
-        return 'quill-vue' + +new Date() + ((Math.random() * 10).toFixed(0) + '')
-      }
-    },
-    value: {
-      type: String,
-      default: ''
-    },
-  },
   data() {
     return {
       content: this.value,
@@ -288,7 +275,7 @@ export default {
       max: 60,
       fileNo:null,
       marqueeName: "台電跑馬燈",
-      marqueeHTML: "",
+      marqueeHTML: `<p><span style="background-color: rgb(204, 224, 245);">走過了深山古道 </span></p><p><span style="background-color: rgb(255, 235, 204);">尋一身寂寥</span></p>`,
       marqueeText: "",
       marqueeDesc: "",
       attachedFiles: null,

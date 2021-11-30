@@ -50,6 +50,8 @@ export default {
             },
             isSign: false,
             maxSignVersion: 1,
+            empNo: null,
+            region: null,
         }
     },
     created() {
@@ -61,6 +63,8 @@ export default {
             this.formSeq = window.formSeq;
             this.mode = window.mode;
             this.maxSignVersion = window.maxSignVersion;
+            this.empNo = window.empNo;
+            this.region = window.region;
 
             this.queryFormImage();
         });
@@ -78,7 +82,9 @@ export default {
             let param = {
                 fileNo: this.formFileNo,
                 signFileNo: this.signFileNo,
-                formSeq: this.formSeq
+                formSeq: this.formSeq,
+                empNo: this.empNo,
+                region: this.region,
             }
 
             AjaxService.post("/tpesForm/queryFormImage", param, 

@@ -19,13 +19,10 @@ export default {
     },
     created(){
         // 關閉前確認
-        window.addEventListener('beforeunload', function (e) {
-            e.preventDefault(); 
-            e.returnValue = '';
-        });
-    },
-    beforeDestroy(){
-        window.removeEventListener('beforeunload');
+        // window.addEventListener('beforeunload', function (e) {
+        //     e.preventDefault(); 
+        //     e.returnValue = '';
+        // });
     },
     data() {
         return {
@@ -120,6 +117,7 @@ export default {
             isAgentNeedScanAttach: false,
             maxSignVersion: 0,
             isLoading: false,
+            encryptedParam: null,
         }
     },
     methods: {
@@ -130,7 +128,7 @@ export default {
             }        
             if(this.queryMemo){
                 this.accountingMemo = this.queryMemo;
-            }                  
+            }
            
             await this.getInitParam();
             this.formInit();
@@ -162,16 +160,17 @@ export default {
                 this.electricNum = formParam.ELECTRIC_NUM;
                 this.computeDate = formParam.COMPUTE_DATE;
                 this.acceptDept = formParam.ACCEPT_DEPT;
-                this.acceptDeptName = formParam.acceptDeptName;
-                this.acceptUser = formParam.acceptUser;
-                this.acceptUserName = formParam.acceptUserName;
-                this.acceptDate = formParam.acceptDate;
-                this.acceptItem = formParam.acceptItem;
+                this.acceptDeptName = formParam.ACCEPT_DEPT_NAME;
+                this.acceptUser = formParam.ACCEPT_USER;
+                this.acceptUserName = formParam.ACCEPT_USER_NAME;
+                this.acceptDate = formParam.ACCEPT_DATE;
+                this.acceptItem = formParam.ACCEPT_ITEM;
                 this.isUpdate = formParam.IS_UPDATE;
                 this.isAddAttachment = formParam.IS_ADD_ATTACHMENT;
                 this.isAffidavit = formParam.IS_AFFIDAVIT;
                 this.uploadNo = formParam.UPLOAD_NO;
                 this.cancelReason = formParam.CANCEL_REASON;
+                this.encryptedParam = formParam.encryptedParam;
                 
                 this.formPageMode = ValidateUtil.isEmpty(formParam.formPageMode) ? this.formPageMode : formParam.formPageMode;
             }
@@ -180,19 +179,22 @@ export default {
             if(page == "createForm"){
                 this.formPageMode = "edit";
                 this.showModeSelect = false;
+                this.$emit("showOnlyContent");
             }
             else if(page == "cancelForm_cust"){
                 this.formPageMode = "cancel";
                 this.showModeSelect = false;
+                this.$emit("showOnlyContent");
             }
             else if(page == "viewForm"){
                 this.formPageMode = "view";
                 this.showModeSelect = false;
+                this.$emit("showOnlyContent");
             }
         },
         formInit(){
             // 驗證是否有受理編號，若無直接擋件
-            if(ValidateUtil.isEmpty(this.acceptNum)){
+            if(ValidateUtil.isEmpty(this.acceptNum) && ValidateUtil.isEmpty(this.encryptedParam)){
                 this.isBlocking = true;
                 this.blockingMsg = "查無受理編號";
                 return;
@@ -221,6 +223,9 @@ export default {
                 isAffidavit: this.isAffidavit,
                 uploadNo: this.uploadNo,
                 formPageMode: this.formPageMode,
+                empNo: this.empNo,
+                region: this.region,
+                encryptedParam: this.encryptedParam,
             }
 
             AjaxService.post("/tpesForm/init", param, 
@@ -238,6 +243,9 @@ export default {
                 this.needScanFileCodeList = response.restData.needScanFileCodeList;
                 this.isAgentNeedScanAttach = response.restData.agentNeedScanAttach;
                 this.maxSignVersion = response.restData.maxSignVersion;
+
+                // 若為加密參數進件，放入解密後才有的參數
+                this.setDescryptedParam(response.restData);
 
                 // 檢查證件是否已依規範掃描
                 this.checkNeedScanFile();
@@ -260,6 +268,23 @@ export default {
                 MessageService.showSystemError();
                 console.log(error);
             });
+        },
+        setDescryptedParam(data){
+            if(!ValidateUtil.isEmpty(data.empNo)){
+                this.empNo = data.empNo;
+            }
+            if(!ValidateUtil.isEmpty(data.region)){
+                this.region = data.region;
+            }
+            if(!ValidateUtil.isEmpty(data.acceptNum)){
+                this.acceptNum = data.acceptNum;
+            }
+            if(!ValidateUtil.isEmpty(data.cancelReason)){
+                this.cancelReason = data.cancelReason;
+            }
+            if(!ValidateUtil.isEmpty(data.isAddAttachment)){
+                this.isAddAttachment = data.isAddAttachment;
+            }
         },
         setCertificateList(certificateList){
             this.certificateList = [];
@@ -330,6 +355,8 @@ export default {
             this.formSignPage.acceptNum = this.acceptNum;
             this.formSignPage.formSeq = this.formSeq;
             this.formSignPage.maxSignVersion = this.maxSignVersion;
+            this.formSignPage.empNo = this.empNo;
+            this.formSignPage.region = this.region;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
 
             try {
@@ -752,6 +779,8 @@ export default {
                 acceptNum: this.acceptNum,
                 cancelSignBase64: this.cancelSign.imgSrc.split(",")[1],
                 cancelReason: this.cancelReason,
+                empNo: this.empNo,
+                region: this.region,
             };
 
             AjaxService.post("/tpesForm/custCancelForm", vin, 

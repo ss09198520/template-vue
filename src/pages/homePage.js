@@ -22,6 +22,8 @@ export default {
                 myReturnMedia: false,
                 myRead:false,
                 myAccounting: false,
+                hasAccounting:false,
+                hasCalculate:false,
                 mySignOffSeal: false,
                 mySignOffReadApply: false,
                 mySignOffReadList:false,
@@ -93,8 +95,16 @@ export default {
                     this.showCounts.myRead = true;
                 } 
                 // 判斷我的核算區
-                if(roleList[index].roleCode === 'AUTH07' || roleList[index].roleCode === 'AUTH15'){            
+                if(roleList[index].roleCode === 'AUTH07' || roleList[index].roleCode === 'AUTH15' || roleList[index].roleCode === 'AUTH20'){            
                     this.showCounts.myAccounting = true;
+                    // 判斷是否為核算員或核算課長權限
+                    if(roleList[index].roleCode === 'AUTH07' || roleList[index].roleCode === 'AUTH15'){
+                        this.showCounts.hasAccounting = true;
+                    }
+                    // 判斷是否為檢算員權限
+                    if(roleList[index].roleCode === 'AUTH20'){
+                        this.showCounts.hasCalculate = true;
+                    }
                 } 
                 // 判斷我的簽核區-專用章待簽核
                 if(roleList[index].roleCode === 'AUTH04' || roleList[index].roleCode === 'AUTH07'){            

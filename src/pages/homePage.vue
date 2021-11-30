@@ -103,7 +103,7 @@
           我的核算區
         </h1>      
         <v-row class="ml-10">        
-          <v-col cols="2">
+          <v-col v-if="showCounts.hasAccounting" cols="2">
             <v-card
               elevation="6"                        
               class="font-bold t-center"
@@ -114,7 +114,18 @@
               <span style="font-size:30px;">件</span>
             </v-card>
           </v-col>
-          <v-col cols="2">
+          <v-col v-if="showCounts.hasCalculate" cols="2">
+            <v-card
+              elevation="6"                        
+              class="font-bold t-center"
+              max-width="200px"       
+            >
+              <h2 class="font-bold">可檢算</h2>
+              <span style="font-size:96px;">{{ numberOf.numberOfCalculate }}</span>
+              <span style="font-size:30px;">件</span>
+            </v-card>
+          </v-col>
+          <v-col v-if="showCounts.hasAccounting" cols="2">
             <v-card
               elevation="6"
                         
@@ -126,7 +137,7 @@
               <span style="font-size:30px;">件</span>
             </v-card>
           </v-col>
-          <v-col cols="2">
+          <v-col v-if="showCounts.hasAccounting" cols="2">
             <v-card
               elevation="6"
                         

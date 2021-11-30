@@ -585,8 +585,8 @@ export const constantRoutes = [
       },
       // external file
       {
-        path: '/externalFile',
-        name: 'externalFile',
+        path: '/externalFileView',
+        name: 'externalFileView',
         component: () => import('@/pages/externalFile/viewExternalFile.vue'),
         meta: { title: 'viewFile', icon: 'mdi-file-document' }
       },

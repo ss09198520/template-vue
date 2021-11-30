@@ -257,8 +257,7 @@ export default {
     Quill , 
     },
   data() {
-    return {
-      content: this.value,
+    return {      
       errMsg: {
         acceptDate: null,
         editorData: null

@@ -150,10 +150,10 @@
             :no-gutters="noGutters"
           >
             <v-col cols="2" md="2"> 審核附件歷史上傳 </v-col>          
-            <v-col v-if="!isAttachedFiles" cols="6" md="6">
+            <v-col v-if="nullAattachedFiles!=='無檔案上傳'" cols="6" md="6">
               <a @click="downloadAttachedFiles">下載查看附件</a>
             </v-col>
-            <v-col v-else-if="isAttachedFiles" cols="6" md="6">
+            <v-col v-if="nullAattachedFiles=='無檔案上傳'" cols="6" md="6">
               {{ nullAattachedFiles }}
             </v-col>
           </v-row>
@@ -322,7 +322,7 @@ export default {
     isAttachedFiles() {
       let isTrue = true;
       if (this.attachedFiles !== null) {
-         isTrue = this.nullAattachedFiles.includes("無檔案上傳");
+         isTrue = true;
       } else {
         isTrue = false;
       }
@@ -359,11 +359,7 @@ export default {
         .then(res => {
           if (res.restData.code == "00000") {
                 let fileName = null;
-                let result = Object.assign({}, res.restData.marquee); 
-                let resultSign =    Object.assign({}, res.restData.signAttachment); 
-              if(result.attachedFileName !=="無檔案上傳"){
-                 fileName = new File(["queryFile"], resultSign.originalFileName,);
-              }        
+                let result = Object.assign({}, res.restData.marquee);
             this.pageTitle = "跑馬燈修改";
             MessageService.showInfo(res.restData.message, "成功✓");
             this.marqueeName = result.marqueeName;
@@ -374,8 +370,15 @@ export default {
             this.marqueeDesc = result.memo;
             this.startDate = result.releaseStartDate;
             this.endDate = result.releaseEndDate;
-            this.attachedFiles = fileName;
-            this.nullAattachedFiles = result.attachedFileName;
+            if(res.restData.signAttachment !== null){
+              let resultSign = Object.assign({}, res.restData.signAttachment);
+              fileName = new File(["queryFile"], resultSign.originalFileName,);
+              this.attachedFiles = fileName;
+              this.nullAattachedFiles = result.attachedFileName;
+            }else{
+              this.attachedFiles = null;
+              this.nullAattachedFiles = "無檔案上傳";
+            }           
             //result.attachedFileName;
           } else if (res.restData.code == "20001") {
             MessageService.showError("查詢失敗", res.restData.message);

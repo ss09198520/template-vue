@@ -380,20 +380,27 @@ export default {
 
             if(ValidateUtil.isEmpty(fileExt)) return;
 
-            this.certificateList.push({
-                id: this.certificateNo,
-                // 其他證件，須由使用者輸入證件類別
-                fileName: null,
-                originalFileName: "certificate_" + this.certificateNo + " (" + moment(new Date).format('YYYY-MM-DD') + ")." + fileExt,
-                fileCode: null,
-                fileNo: null,
-                filePath: null,
-                imgSrc: "data:image/" + fileExt + ";base64," + base64,
-                isAdditional: true,
-                hasEdit: false,
+            let imgSrc = "data:image/" + fileExt + ";base64," + base64;
+
+            // 套浮水印
+            this.addWaterMark(imgSrc).then(({data}) => {
+                
+                this.certificateList.push({
+                    id: this.certificateNo,
+                    // 其他證件，須由使用者輸入證件類別
+                    fileName: null,
+                    originalFileName: "certificate_" + this.certificateNo + " (" + moment(new Date).format('YYYY-MM-DD') + ")." + fileExt,
+                    fileCode: null,
+                    fileNo: null,
+                    filePath: null,
+                    imgSrc: data,
+                    isAdditional: true,
+                    hasEdit: false,
+                });
+
+                this.certificateNo++;
+                this.setCertificateModal = false;
             });
-            this.certificateNo++;
-            this.setCertificateModal = false;
         },
         scanCertificate(){
             try {
@@ -462,12 +469,6 @@ export default {
                 if(this.selectedAttachment.file.type.indexOf("image") > -1){
                     // 不套浮水印
                     this.selectedAttachment.imgSrc = e.target.result;
-
-                    // 套浮水印
-                    // this.addWaterMark(e.target.result).then(({data}) => {
-                    //     this.selectedAttachment.base64 = data;
-                    //     this.selectedAttachment.imgSrc = data;
-                    // });
                 }
             };
             reader.readAsDataURL(this.selectedAttachment.file);

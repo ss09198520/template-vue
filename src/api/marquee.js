@@ -39,3 +39,11 @@ export function fetchQueryMarquee(data) {
   })
 }
 
+export function fetchActiveMarquee(data) {
+  return request({
+    url: '/marquee/v1/active',
+    method: 'post',
+    data
+  })
+}
+

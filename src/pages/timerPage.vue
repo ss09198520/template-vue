@@ -328,6 +328,22 @@
         <span class="ml-2">URL: http://10.209.5.125/66/api/TRE0000/TPES_03/</span>
       </v-row>
 
+      <v-row>
+        <h1>Test Batch</h1>
+      </v-row>
+      <v-row class="marginLeft" style="display: flex; align-items: center;">
+        <span class="mr-2">sendWaitArchiveToNCPS (待歸檔送件至NCPS)</span>
+        <v-btn @click="sendWaitArchiveToNCPS()">start</v-btn>
+      </v-row>
+      <v-row class="marginLeft mt-7" style="display: flex; align-items: center;">
+        <span class="mr-2">updateTpesFromPis (PIS API員工資料查詢並更新TPES員工與角色)</span>
+        <v-btn @click="updateTpesFromPis()">start</v-btn>
+      </v-row>
+      <v-row class="marginLeft mt-7" style="display: flex; align-items: center;">
+        <span class="mr-2">updateAgentApplicationFromLts (LTS API 從差假管理系統取得人員差勤資料並更新到代理申請table中 Batch)</span>
+        <v-btn @click="updateAgentApplicationFromLts()">start</v-btn>
+      </v-row>
+
     </v-container>
     <v-dialog id="importWordModal" v-model="importWordModalShow" width="370">
       <v-card>
@@ -391,6 +407,7 @@
 <script>
 import AjaxService from '@/assets/services/ajax.service.js';
 import PMCService from '@/assets/services/pmc.service.js';
+import MessageService from '@/assets/services/message.service';
 
 export default {
     name: 'StylePromo',
@@ -622,6 +639,33 @@ export default {
                 this.responseModalShow = true;
             });
         },
+        sendWaitArchiveToNCPS(){
+          AjaxService.post("/batch/sendWaitArchiveToNCPS", {}, 
+            (response) => {
+                MessageService.showSuccess("成功");
+            },
+            (error) => {
+                MessageService.showError("失敗");
+            });
+        },
+        updateTpesFromPis(){
+          AjaxService.post("/batch/updateTpesFromPis", {}, 
+            (response) => {
+                MessageService.showSuccess("成功");
+            },
+            (error) => {
+                MessageService.showError("失敗");
+            });
+        },
+        updateAgentApplicationFromLts(){
+          AjaxService.post("/batch/updateAgentApplicationFromLts", {}, 
+            (response) => {
+                MessageService.showSuccess("成功");
+            },
+            (error) => {
+                MessageService.showError("失敗");
+            });
+        }
     }
 }
 </script>

@@ -13,7 +13,7 @@ export default {
     data() {
         return {
             mode: "edit",
-            formFileNo: null,
+            formImgFileNo: null,
             editedFormFileNo: null,
             signFileNo: null,
             acceptNum: null,
@@ -56,7 +56,7 @@ export default {
     },
     created() {
         this.$nextTick(() => {
-            this.formFileNo = window.formFileNo;
+            this.formImgFileNo = window.formImgFileNo;
             this.editedFormFileNo = window.editedFormFileNo;
             this.signFileNo = window.signFileNo;
             this.acceptNum = window.acceptNum;
@@ -80,7 +80,7 @@ export default {
     methods: {
         queryFormImage(){
             let param = {
-                fileNo: this.formFileNo,
+                fileNo: this.formImgFileNo,
                 signFileNo: this.signFileNo,
                 formSeq: this.formSeq,
                 empNo: this.empNo,

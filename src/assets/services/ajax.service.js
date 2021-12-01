@@ -118,8 +118,13 @@ const AjaxService = {
          LoadingConfig.hasLoader = true;
         }
       }
+
+      // 將頁面權限代碼傳到後端
+      let pagePrivilegeCode = null;
+      pagePrivilegeCode = CommonService.getPrivilege(location.href); 
+      data.pagePrivilegeCode = pagePrivilegeCode;
   
-      axios.post(`${url}`, data, {
+      axios.post(`${process.env.VUE_APP_BASE_API + url}`, data, {
           responseType: 'arraybuffer'
         })
         .then((response) => {

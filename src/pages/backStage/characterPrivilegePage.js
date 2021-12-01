@@ -102,7 +102,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
         sectionList:[],
         serviceOfficeList:[],
         selectEmpRole:null,
-        selectRoleList: null,
+        selectSectionList: null,
 
     }
     },
@@ -155,11 +155,14 @@ import ValidateUtil from "@/assets/services/validateUtil";
         },      
         modifyrole(item){
             let roleList = [];
-            this.selectRole = [];                                  
+            this.selectRole = [];                           
             
             // 取出選擇到的員工角色清單
             for(let i in item.roleList){
-                roleList.push(item.roleList[i].roleName);
+                // 排除重複的角色設定(受理部門主管或服務中心主任)
+                if(roleList.indexOf(item.roleList[i].roleName) < 0){
+                    roleList.push(item.roleList[i].roleName);
+                }
             }
             // 將選到的員工放進selectEmp參數中
             if(this.selectEmp == null){
@@ -468,9 +471,6 @@ import ValidateUtil from "@/assets/services/validateUtil";
 
          // 判斷若依員工設定角色有選到受理部門主管或是服務中心主任，則跳出視窗讓使用者輸入他是要設定哪個服務中心or服務所的---Ellie待測
          openSelectSectionModel(selectRole,item){
-
-                this.selectRoleList
-
             
                 // 將新選擇的角色清單加進Map
                 let newSelectRoleMap = new Map();
@@ -534,15 +534,14 @@ import ValidateUtil from "@/assets/services/validateUtil";
                         }
                     }
                 }
-
-                this.selectRoleList = this.serviceOfficeList
+              
       
                 // 將更新過的選項更新回oriSelectRole中
                 this.oriSelectRole = JSON.parse(JSON.stringify(selectRole));
 
         },
 
-        // 若要設定受理部門主管or服務中心主任需判斷是否有選擇要設定的課別，若沒選課別則元下拉選單會取消選取，若有選則會選取
+        // 若要設定受理部門主管or服務中心主任需判斷是否有選擇要設定的課別，若沒選課別則原下拉選單會取消選取，若有選則會選取
         submitSelectSection(){
 
             let hasSelectSection = false;
@@ -561,9 +560,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 if(index > 0){
                     this.selectRole.splice(index,1);
                 }
-            }
-
-            
+            }         
 
             // 將更新過的選項更新回oriSelectRole中
             this.oriSelectRole = JSON.parse(JSON.stringify(this.selectRole));
@@ -723,6 +720,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             });
         },
 
+       
 
         /**
          * Ajax End

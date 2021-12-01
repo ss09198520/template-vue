@@ -364,7 +364,7 @@ export default {
         this.popOut = true;
       },
       downloadAttachment() {
-        this.downloadMediaSignOffFile(this.selectedSign.id)
+        this.downloadMediaSignOffFile(this.selectedSign)
       },
       signSubmit(pass){
         // 驗證
@@ -444,10 +444,11 @@ export default {
       },
 
       //Action: 送出簽核
-      async downloadMediaSignOffFile(relatedSeq) {
+      async downloadMediaSignOffFile(item) {
 
         let postData = {
-          relatedSeq : relatedSeq
+          relatedSeq : item.id,
+          mediaSignType : item.mediaSignType
         }
         
         const data = await downloadMediaSignOffFile(postData)

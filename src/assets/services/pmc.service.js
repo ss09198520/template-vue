@@ -39,6 +39,23 @@ class PMCService {
             // console.log('RESULT_CODE:' + json.RESULT_CODE);
             // console.log('DeviceName:' + json.DeviceName);
             // console.log('RESULT_MESSAGE:' + json.RESULT_MESSAGE);
+
+            if(json.RESULT_CODE === 'FAIL') {
+                // $.gritter.add({
+                //     // (string | mandatory) the heading of the notification
+                //     title: '錯誤!',
+                //     // (string | mandatory) the text inside the notification
+                //     text: 'PMC回傳:'+json.RESULT_MESSAGE,
+                //     // (string | optional) the image to display on the left
+                //     image: 'images/error.png',
+                //     // (bool | optional) if you want it to fade out on its own or just sit there
+                //     sticky: false,
+                //     // (int | optional) the time you want it to be alive for before fading out
+                //     time: ''
+                // });
+
+                EventBus.publish("scan-error", json.RESULT_MESSAGE);
+            }
             
             if(json.DeviceName === 'WebScanAdapter') {
                 for (var i = 0; i < json.ADAPTER_DATA.length; i++) {

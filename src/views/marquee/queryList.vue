@@ -296,7 +296,7 @@
                   class="ma-2 error"
                   fab
                   x-small
-                  :disabled="item.signStatus == 'WAIT' || item.signStatus == 'PROGRESS' || item.signStatus == 'PASS'"
+                  :disabled="item.signStatus == 'WAIT' || item.signStatus == 'PROGRESS' || item.signStatus == 'PASS' || item.marqueeType == 'DEFAULT' "
                   @click="remove(item)"
                   v-on="on"
                 >

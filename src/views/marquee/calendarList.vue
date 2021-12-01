@@ -236,7 +236,7 @@ import MessageService from "@/assets/services/message.service";
              for(let i=0; i< eventTemp.length; i++){
               //  if(eventTemp[i].region == "區處"){
                 if(eventTemp[i].status == "ACTIVE"){
-                  Object.assign(eventTemp[i], {color: 'grey lighten-1'});                
+                  Object.assign(eventTemp[i], {color: 'green darken-2'});                
                 }else if (eventTemp[i].status == "CLOSE"){
                    Object.assign(eventTemp[i], {color: 'grey darken-1'});                   
                 }else if(eventTemp[i].status == "WAIT" && eventTemp[i].signStatus=="REJECT"){

@@ -122,7 +122,10 @@
               <span class="red--text font-14px">{{ errMsg.acceptDate }}</span>
             </v-col>
           </v-row>
-          <v-row :dense="dense" :no-gutters="noGutters">
+          <v-row 
+            v-if="marqueeType !== 'DEFAULT'"
+            :dense="dense"
+            :no-gutters="noGutters">
             <v-col cols="2" md="2"> 審核附件上傳 </v-col>
             <v-col cols="6" md="6">
               <v-file-input
@@ -144,8 +147,14 @@
               />
             </v-col>
           </v-row>
+          <v-row 
+            v-if="location !== null && marqueeType == 'DEFAULT'"
+            :dense="dense"
+            :no-gutters="noGutters">
+            <v-col cols="7" md="7" class="red--text ml-2"> *預設跑馬燈送出後將隨時生效，無審核流程。 </v-col>
+          </v-row>          
           <v-row
-            v-if="location !== null"
+            v-if="location !== null && marqueeType !== 'DEFAULT'"
             :dense="dense"
             :no-gutters="noGutters"
           >
@@ -177,7 +186,7 @@
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col cols="2" md="2">
-              樣式預覽   {{ duration }} | {{animationDuration}}
+              樣式預覽
               <span class="red--text ml-2">*</span>
             </v-col>
             <v-col cols="6" md="6">
@@ -215,7 +224,7 @@
             </v-col>
           </v-row>
 
-          <v-row :dense="dense" :no-gutters="noGutters">
+          <v-row v-if="marqueeType !== 'DEFAULT'" :dense="dense" :no-gutters="noGutters">
             <v-col class="d-flex justify-end" cols="8" md="8">
               <v-btn class="ma-1" outlined color="accent" @click="resetForm">
                 取消
@@ -238,6 +247,19 @@
                 @click="submit(true)"
               >
                 送出審核
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row v-if="marqueeType == 'DEFAULT'" :dense="dense" :no-gutters="noGutters">
+            <v-col class="d-flex justify-end" cols="8" md="8">
+              <v-btn
+                class="ma-1"
+                depressed
+                color="success"
+                :disabled="!valid"
+                @click="submit(true)"
+              >
+                確認送出
               </v-btn>
             </v-col>
           </v-row>
@@ -277,6 +299,7 @@ export default {
       marqueeHTML: `<p><span style="background-color: rgb(204, 224, 245);">走過了深山古道 </span></p><p><span style="background-color: rgb(255, 235, 204);">尋一身寂寥</span></p>`,
       marqueeText: "",
       marqueeDesc: "",
+      marqueeType: "",
       attachedFiles: null,
       nullAattachedFiles: null,
       fontColor: "#000000",
@@ -351,6 +374,7 @@ export default {
             MessageService.showInfo(res.restData.message, "成功✓");
             this.marqueeName = result.marqueeName;
             this.content = result.marqueeContentHTML;
+            this.marqueeType = result.marqueeType;
             this.marqueeText = result.marqueeContent;
             this.marqueeHTML = result.marqueeContentHTML;
             this.animationDuration = result.animationDuration;
@@ -358,8 +382,6 @@ export default {
             this.startDate = result.releaseStartDate;
             this.endDate = result.releaseEndDate;
             if(res.restData.signAttachment !== null){
-              console.log("---------------------res.restData.signAttachment res.restData.signAttachment------------------------------------")
-              console.log(res.restData.signAttachment  !== null);
               let resultSign = Object.assign({}, res.restData.signAttachment);
               this.fileNo = resultSign.id;
               fileName = new File(["queryFile"], resultSign.originalFileName,);
@@ -377,7 +399,6 @@ export default {
              MessageService.showError("查詢失敗", res.restData.message);
              this.$router.push({ path: '/marquee/queryList'})
           }
-
         })
         .catch(error => {
           this.isSubmited = false;
@@ -446,7 +467,7 @@ export default {
         // for (let file in this.attachedFiles) {
         //   formData.append("attachedFiles", file);
         // }
-
+        
         if (this.attachedFiles) {
           formData.append("attachedFiles", this.attachedFiles);
         }
@@ -458,7 +479,7 @@ export default {
                 marqueeId: this.location,
                 fileNo: this.fileNo,
                 marqueeName: this.marqueeName,
-                marqueeType: "GENERAL",
+                marqueeType : this.marqueeType =='' ? 'GENERAL': this.marqueeType  ,
                 marqueeContent: this.marqueeText,
                 marqueeContentHTML: this.marqueeHTML,
                 animationDuration: this.animationDuration,

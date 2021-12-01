@@ -125,7 +125,8 @@
           <v-row 
             v-if="marqueeType !== 'DEFAULT'"
             :dense="dense"
-            :no-gutters="noGutters">
+            :no-gutters="noGutters"
+          >
             <v-col cols="2" md="2"> 審核附件上傳 </v-col>
             <v-col cols="6" md="6">
               <v-file-input
@@ -150,7 +151,8 @@
           <v-row 
             v-if="location !== null && marqueeType == 'DEFAULT'"
             :dense="dense"
-            :no-gutters="noGutters">
+            :no-gutters="noGutters"
+          >
             <v-col cols="7" md="7" class="red--text ml-2"> *預設跑馬燈送出後將隨時生效，無審核流程。 </v-col>
           </v-row>          
           <v-row

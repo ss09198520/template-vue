@@ -16,3 +16,10 @@ export const authUser = param => request.post('/api/authenticate', param)
       method: 'post'
     })
   }
+  export function getAuthMenu() {
+    return request({
+      url: `/menuAuth/queryAuthMenu`,
+      method: 'post',
+    })
+  }
+  

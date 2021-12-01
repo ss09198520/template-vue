@@ -104,7 +104,7 @@
               console.log('login success redirect to',this.redirect)
               this.$router.push({ path: '/', query: this.otherQuery })
               // 取動態Menu
-              this.getAuthMenu();
+              // this.getAuthMenu(); //改由permission.js 來呼叫getAuthRoles 取得權限 由generateRoutes 來加入route 修正F5後左邊menu消失以及避免輸入網址可進入網頁
             })
             .catch((error) => {
               MessageService.showError(error.message , '登入系統')

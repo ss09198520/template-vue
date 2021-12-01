@@ -1,5 +1,4 @@
-// import { login, logout, getInfo } from '@/api/user'
-import { login,getInfo,logout} from '@/api/user'
+import { login,getInfo,logout , getAuthMenu} from '@/api/user'
 import { getToken, setToken , removeToken } from '@/utils/auth'
 import router, { resetRouter } from '@/router'
 
@@ -66,20 +65,19 @@ const actions = {
   },
 
   // get user info
-  getInfo({ commit }) {
-    return new Promise((resolve) => {
-      // getInfo(state.token).then(response => {
-        // const { data } = response
-        // if (!data) {
-        //   reject('Verification failed, please Login again.')
-        // }
+  getAuthRoles({ commit }) {
+    return new Promise((resolve,reject) => {
+      getAuthMenu().then(response => {
 
-        // const { roles, name, avatar, introduction } = data
+        // 驗證是否成功
+        if (!response.restData.success) {              
+          // MessageService.showError(response.restData.message,'查詢角色設定下拉選單');
+          reject('查詢角色設定下拉選單異常')
+        }
 
-        // roles must be a non-empty array
-        // if (!roles || roles.length <= 0) {
-        //   reject('getInfo: roles must be a non-null array!')
-        // }
+        // 取出資料
+        let menuAuthRolesMap = Object.keys(response.restData.menuAuthMap);
+        
         let tokenInfo = getToken()
         
         if (tokenInfo) {
@@ -89,13 +87,13 @@ const actions = {
           commit('SET_EMPNO', empInfo.empNo)
         }
 
-        commit('SET_ROLES', ['admin'])
+        commit('SET_ROLES', menuAuthRolesMap)
         commit('SET_AVATAR', 'avatar')
         
-        resolve({'roles':['admin']})
-      // }).catch(error => {
-        // reject(error)
-      // })
+        resolve( {'roles' : menuAuthRolesMap } )
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 

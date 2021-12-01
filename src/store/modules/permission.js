@@ -5,13 +5,13 @@ import { asyncRoutes, constantRoutes } from '@/router'
  * @param roles
  * @param route
  */
-// function hasPermission(roles, route) {
-//   if (route.meta && route.meta.roles) {
-//     return roles.some(role => route.meta.roles.includes(role))
-//   } else {
-//     return true
-//   }
-// }
+function hasPermission(roles, route) {
+  if (route.privilegeCode) {
+    return roles.some(role => route.privilegeCode.includes(role))
+  } else {
+    return true
+  }
+}
 
 /**
  * Filter asynchronous routing tables by recursion
@@ -23,12 +23,12 @@ export function filterAsyncRoutes(routes, roles) {
 
   routes.forEach(route => {
     const tmp = { ...route }
-    //TODO if (hasPermission(roles, tmp)) {
+    if (hasPermission(roles, tmp)) {
       if (tmp.children) {
         tmp.children = filterAsyncRoutes(tmp.children, roles)
       }
       res.push(tmp)
-    // }
+    }
   })
 
   return res

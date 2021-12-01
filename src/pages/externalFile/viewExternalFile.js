@@ -63,7 +63,7 @@ export default {
                 uploadNo: this.uploadNo
             }
 
-            AjaxService.post("/viewUplpadFile/viewUplpadFileByUploadNo", param, 
+            AjaxService.post("/viewUploadFile/viewUploadFileByUploadNo", param, 
             (response) => {
                 // 驗證是否成功
                 if (response.restData.success) {        

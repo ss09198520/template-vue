@@ -20,9 +20,7 @@ class WS {
         console.log("PmcControllerTestPageWs: OnDisconnect");
 
         console.log('Socket is closed. Reconnect will be attempted in 1 second.');
-        setTimeout(function() {
-            this.CheckAndReconnect();
-        }, 1000);
+        setTimeout(this.CheckAndReconnect(), 1000);
     }
 
     // default empty callback

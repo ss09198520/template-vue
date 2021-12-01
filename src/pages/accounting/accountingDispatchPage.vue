@@ -267,7 +267,7 @@
                       />
                       <span style="margin: 10px;" :class="dispatchInfo.dispatchType!==0? '':'disable-text'">
                         包制
-                        <span class="red--text font-12px ml-4">{{ errorMsg.packageNum }}</span>
+                        <span v-if="dispatchInfo.usePackage" class="red--text font-12px ml-4">{{ errorMsg.packageNum }}</span>
                       </span>
                     </v-row>
                     <v-row v-for="(packageNum, index) in dispatchInfo.packageNumList" :key="packageNum+index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
@@ -330,7 +330,7 @@
                       />
                       <span style="margin: 10px;" :class="dispatchInfo.dispatchType!==0? '':'disable-text'">
                         高壓
-                        <span class="red--text font-12px ml-4">{{ errorMsg.highVoltageNum }}</span>
+                        <span v-if="dispatchInfo.useHighVoltage" class="red--text font-12px ml-4">{{ errorMsg.highVoltageNum }}</span>
                       </span>        
                     </v-row>
                     <v-row v-for="(highVoltageNum, index) in dispatchInfo.highVoltageNumList" :key="index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
@@ -394,7 +394,7 @@
                           :disabled="dispatchInfo.dispatchType !== 1" 
                         />
                         <span style="margin-left: 10px; width: 40px;" :class="dispatchInfo.dispatchType!==0? '':'disable-text'">表制 </span>                 
-                        <span class="red--text font-12px ml-4">{{ errorMsg.meterType != null? errorMsg.meterType: errorMsg.meterElectricNum != null? errorMsg.meterElectricNum: errorMsg.meterCompute != null? errorMsg.meterCompute : null }}</span>
+                        <span v-if="dispatchInfo.useMeter" class="red--text font-12px ml-4">{{ errorMsg.meterType != null? errorMsg.meterType: errorMsg.meterElectricNum != null? errorMsg.meterElectricNum: errorMsg.meterCompute != null? errorMsg.meterCompute : null }}</span>
                       </v-row>
                       <v-row v-for="(meterElectricNum, index) in dispatchInfo.meterElectricNumList" :key="index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
                         <div v-if="index == 0">

@@ -26,24 +26,11 @@ import ValidateUtil from "@/assets/services/validateUtil";
             {group: null, groupName: null},            
         ],
         groupOption: [],
-        taichungGroupOption: [
-            { text: '業務組', value: '1'},
-            { text: '電費組', value: '2'},
-        ],
-        fonyuenGroupOption:[
-            { text: '業務組', value: '1'},
-        ],
-        mainGroupOption: [
-            { text: '行銷組', value: '3'},        
-        ],
         //課別
         section: [
             {section: null, sectionName: null},
         ],
         sectionOption: [],
-        electricBillSectionOption:[
-            { text: '核算課', value: '15'},
-        ],
         //角色別
         role: [
             {setRoleCode: null, setRoleName: null},            
@@ -108,6 +95,14 @@ import ValidateUtil from "@/assets/services/validateUtil";
             group: null,
         },
         requiredArray:[],
+        settingSectionModel:false,
+        openSectionSelect: false,
+        settingDeptName: null,
+        oriSelectRole: null,
+        sectionList:[],
+        serviceOfficeList:[],
+        selectEmpRole:null,
+        selectRoleList: null,
 
     }
     },
@@ -157,8 +152,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 }
             }
 
-        },
-      
+        },      
         modifyrole(item){
             let roleList = [];
             this.selectRole = [];                                  
@@ -174,14 +168,18 @@ import ValidateUtil from "@/assets/services/validateUtil";
             this.selectEmp.edit = false;            
             item.edit = true;
             this.openSelectBox = item.empNo;
-            // 比對角色下拉選項，那些是已經設定的角色          
+            // 比對角色下拉選項，那些是已經設定的角色  
             for(let i = 0; i < this.roleOption.length; i++){
                 for(let j = 0; j < roleList.length; j++){
                     if(this.roleOption[i].setRoleName == roleList[j]){
-                        this.selectRole.push(this.roleOption[i]);                        
+                        this.selectRole.push(this.roleOption[i]);              
                     }
                 }                               
-            }                    
+            }
+
+            // this.oriSelectRole = JSON.parse(JSON.stringify(this.selectRole));
+
+            
             this.selectEmp = item;       
         },
         submit(item){
@@ -224,6 +222,32 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 }
             }
 
+            // 將選到的要設定的課別放進去
+            let settingSection = [];
+            for(let i in this.serviceOfficeList){
+                if(this.serviceOfficeList[i].select){
+                    settingSection.push(this.serviceOfficeList[i].deptNum);
+                }
+            }
+            
+            let authIndex = null;
+
+            for(let i in this.newAuthList){
+                if(this.newAuthList[i].roleCode == 'AUTH04' || this.newAuthList[i].roleCode == 'AUTH09'){
+                    authIndex = this.newAuthList.indexOf(this.newAuthList[i]);
+                    for(let y in settingSection){
+                        this.newAuthList.push({
+                            empNo: this.newAuthList[i].empNo,
+                            empName:this.newAuthList[i].empName,
+                            roleCode:this.newAuthList[i].roleCode,
+                            roleName:this.newAuthList[i].roleName,
+                            settingDeptNum: settingSection[y],
+                        })
+                    }
+                    this.newAuthList.splice(authIndex,1);
+                }
+            }
+
             // 驗證是否沒有要更改的資料
             let requiredArray = [];
             if(ValidateUtil.isEmpty(this.newAuthList)){
@@ -246,27 +270,23 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 MessageService.showError('驗證要設定的員工清單不符合清單資料','依角色設定員工資料');
                 return;
             }
-            console.log(this.select.role.setRoleCode);
             // 打後端更新員工角色
             this.updateEmpRoleByRoleCode();
         },
 
         //選擇新增角色
-        toSelected(item,settingType){
-            
+        toSelected(item,settingType){            
             let selectIndex = 0;
             if (settingType == 'unSetting'){
                 // 取出選擇要移動到設定區的那筆員工在unSettingEmpList中的位置
                 selectIndex = this.unSettingEmpList.indexOf(item);   
-                console.log(selectIndex);
                 // 從unSettingEmpList中移除該筆員工資料
                 this.unSettingEmpList.splice(selectIndex, 1);
                 // 將該筆員工資料移到「settingList」中
                 this.settingEmpList.push(item);
             } else {
                 // 取出選擇要移動到設定區的那筆員工在settingEmpList中的位置
-                selectIndex = this.settingEmpList.indexOf(item);   
-                console.log(selectIndex);
+                selectIndex = this.settingEmpList.indexOf(item);
                 // 從settingEmpList中移除該筆員工資料
                 this.settingEmpList.splice(selectIndex, 1);
                 // 將該筆員工資料移到「unSettingList」中
@@ -275,7 +295,6 @@ import ValidateUtil from "@/assets/services/validateUtil";
 
         },
         cancelMod(title){
-            console.log(title);
             for(let i = 0; i < this.modroleTitle.length; i++){
                 if(this.modroleTitle[i] == title){
                     this.modroleTitle.splice(i, 1);                                           
@@ -365,6 +384,15 @@ import ValidateUtil from "@/assets/services/validateUtil";
             this.settingEmpList = [];
             this.unSettingEmpList = [];
             this.allSettingEmpList = [];
+            
+        },
+
+        checkSetSection(){
+            if(this.select.role.setRoleCode == 'AUTH04' || this.select.role.setRoleCode == 'AUTH09'){
+                this.openSectionSelect = true;
+            } else {
+                this.openSectionSelect = false;
+            }
         },
 
         // 關閉視窗-將依角色設定多組員工的資料清空
@@ -425,6 +453,112 @@ import ValidateUtil from "@/assets/services/validateUtil";
             this.queryEmpInfoByRoleCode()
         },
 
+         // 判斷若依員工設定角色有選到受理部門主管或是服務中心主任，則跳出視窗讓使用者輸入他是要設定哪個服務中心or服務所的---Ellie待測
+         openSelectSectionModel(selectRole,item){
+
+                this.selectRoleList
+
+            
+                // 將新選擇的角色清單加進Map
+                let newSelectRoleMap = new Map();
+                if(!ValidateUtil.isEmpty(selectRole)){
+                    for(let i in selectRole){
+                        newSelectRoleMap.set(selectRole[i].setRoleCode,selectRole[i]);
+                    }
+                }
+    
+                // 將原有選擇的角色清單加進Map
+                let oriSelectRoleMap = new Map();
+                if(!ValidateUtil.isEmpty(this.oriSelectRole)){
+                    for(let i in this.oriSelectRole){
+                        oriSelectRoleMap.set(this.oriSelectRole[i].setRoleCode,this.oriSelectRole[i]);
+                    }
+    
+                }
+                // 若為新增角色為受理部門主管or服務中心主任的
+                for(let i in selectRole){
+                    if(ValidateUtil.isEmpty(oriSelectRoleMap.get(selectRole[i].setRoleCode)) && (selectRole[i].setRoleCode == 'AUTH04' || selectRole[i].setRoleCode == 'AUTH09')){
+                        this.settingSectionModel = true;
+                        if(selectRole[i].setRoleCode == 'AUTH04'){
+                            this.settingDeptName = '受理部門主管';
+                        } else {
+                            this.settingDeptName = '服務中心主任';
+                        }
+                        // selectRole = this.oriSelectRole;
+                        this.selectEmpRole = selectRole[i]; // 把該員工要新增的角色先記錄下來，待後續視窗跳出，若欲設定的課別有選取要設定的課別，則將該筆角色新增到selectRole中
+                        break;                    
+                    }
+                }
+    
+                // 若原本的角色就有受理部門主管or服務中心主任的 
+                for(let i in this.oriSelectRole){
+                    if(ValidateUtil.isEmpty(newSelectRoleMap.get(this.oriSelectRole[i].setRoleCode)) && (this.oriSelectRole[i].setRoleCode == 'AUTH04' || this.oriSelectRole[i].setRoleCode == 'AUTH09')){
+                        this.settingSectionModel = true;
+                        
+                        
+                        if(this.oriSelectRole.setRoleCode == 'AUTH04'){
+                            this.settingDeptName = '受理部門主管';
+                        } else {
+                            this.settingDeptName = '服務中心主任';
+                        }
+                        this.selectEmpRole = this.oriSelectRole[i]; // 把該員工要移除的角色先記錄下來，待後續視窗跳出，若欲設定的課別皆取消則將該筆角色從selectRole中移除
+                        break;          
+                    }
+                }
+    
+                // 判斷若修改受理部門主管or服務中心主任
+                for(let i in this.serviceOfficeList){
+                    this.serviceOfficeList[i].select = false;
+                }
+    
+                let settingSectionList = item.roleList;
+                for(let i in settingSectionList){
+                    for(let y in this.serviceOfficeList){
+                        if(settingSectionList[i].roleCode == 'AUTH04' || settingSectionList[i].roleCode == 'AUTH09'){
+                            if(settingSectionList[i].settingDeptNum == this.serviceOfficeList[y].deptNum){
+                                this.serviceOfficeList[y].select = true;
+                            }
+                        }
+                    }
+                }
+
+                this.selectRoleList = this.serviceOfficeList
+      
+                // 將更新過的選項更新回oriSelectRole中
+                this.oriSelectRole = JSON.parse(JSON.stringify(selectRole));
+
+        },
+
+        // 若要設定受理部門主管or服務中心主任需判斷是否有選擇要設定的課別，若沒選課別則元下拉選單會取消選取，若有選則會選取
+        submitSelectSection(){
+
+            let hasSelectSection = false;
+            for(let i in this.serviceOfficeList){
+                if(this.serviceOfficeList[i].select){
+                    hasSelectSection = true;
+                    break;
+                }   
+            }
+            let index = this.selectRole.indexOf(this.selectEmpRole);
+            if(hasSelectSection){
+                if(index < 0) {
+                    this.selectRole.push(this.selectEmpRole);
+                }
+            } else {
+                if(index > 0){
+                    this.selectRole.splice(index,1);
+                }
+            }
+
+            
+
+            // 將更新過的選項更新回oriSelectRole中
+            this.oriSelectRole = JSON.parse(JSON.stringify(this.selectRole));
+
+            // 關閉視窗
+            this.settingSectionModel = false;
+            
+        },
 
         /**
          * Ajax Start
@@ -443,6 +577,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 this.roleOption = response.restData.authList;// 將角色下拉選單帶入  
                 this.deptList = response.restData.deptList;// 部門下拉選單資料帶入
                 this.settingOption(response.restData.deptList);// 整理部門下拉選單
+                this.serviceOfficeList = response.restData.serviceOfficeList
                 
       
               },
@@ -573,8 +708,6 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 MessageService.showSystemError();
             });
         },
-
-
 
 
         /**

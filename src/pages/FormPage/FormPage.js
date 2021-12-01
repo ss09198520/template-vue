@@ -39,7 +39,7 @@ export default {
             panel: [0, 1, 2, 3],
             imgSrcPrefix: "data:image/jpeg;base64,",
             formSeq: null,          // 表單流水號
-            formFileNo: null,       // 表單檔案編號
+            formImgFileNo: null,       // 表單檔案編號
             editedFormFileNo: null, // 已編輯的表單檔案編號
             acceptNum: null,        // 受理編號
             fmbhNo: null,           // 受理分號
@@ -134,6 +134,7 @@ export default {
             this.formInit();
 
             EventBus.subscriber("scan-data-list", this.getScanDataList);
+            EventBus.subscriber("scan-error", this.showScanErrorMsg);
         },
         async getInitParam(){
             // 從網址取得參數
@@ -239,7 +240,7 @@ export default {
                 }
 
                 this.formSeq = response.restData.formSeq;
-                this.formFileNo = response.restData.formFileNo;
+                this.formImgFileNo = response.restData.formImgFileNo;
                 this.editedFormFileNo = response.restData.editedFormFileNo;
                 this.accountingMemo = response.restData.accountingMemo;
                 this.needScanFileCodeList = response.restData.needScanFileCodeList;
@@ -352,7 +353,7 @@ export default {
                 this.formSignPage.signFileNo = this.customerSign.fileNo;
             }
 
-            this.formSignPage.formFileNo = this.formFileNo;
+            this.formSignPage.formImgFileNo = this.formImgFileNo;
             this.formSignPage.editedFormFileNo = this.editedFormFileNo;
             this.formSignPage.acceptNum = this.acceptNum;
             this.formSignPage.formSeq = this.formSeq;
@@ -859,6 +860,10 @@ export default {
             }
 
             this.isLoading = false;
+        },
+        showScanErrorMsg(msg){
+            this.isLoading = false;
+            MessageService.showError("PMC 回傳: " + msg);
         },
         checkNeedScanFile(){
             this.needScanFileHint = "";

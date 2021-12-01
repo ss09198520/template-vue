@@ -230,8 +230,7 @@ import MessageService from "@/assets/services/message.service";
                 else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核完成" )
                   return (el.status == "WAIT" &&  el.signStatus == "PROGRESS" );
                 else if (statusArray[0] == "未上架" &&  statusArray[1] == "草稿")
-                  return (el.status == "WAIT" &&  el.signStatus == "DRAFT");
-              
+                  return (el.status == "WAIT" &&  el.signStatus == "DRAFT");              
               });
 
              for(let i=0; i< eventTemp.length; i++){
@@ -251,40 +250,9 @@ import MessageService from "@/assets/services/message.service";
                 }
         }
              this.events =  eventTemp;
-
-
         }).catch((error) => {
           console.log(error)
         });
-        
-
-
-        //console.log(Object.assign(eventTemp[1], {color: "blue"}));
-        /*
-        for(let i=0; i< eventTemp.length; i++){
-            if(eventTemp[i].region == "區處"){
-                if(eventTemp[i].status == "上架"){
-                  Object.assign(eventTemp[i], {color: 'indigo'});                
-                }else if (eventTemp[i].status == "下架"){
-                   Object.assign(eventTemp[i], {color: 'grey darken-1'});                   
-                }else if(eventTemp[i].status == "未上架" && eventTemp[i].signStatus=="退件"){
-                  Object.assign(eventTemp[i], {color: 'red darken-4'});                    
-                }else if(eventTemp[i].status == "未上架" && eventTemp[i].signStatus=="審核中"){
-                   Object.assign(eventTemp[i], {color: 'lime darken-3'});
-                }else if(eventTemp[i].status == "未上架" && eventTemp[i].signStatus=="審核完成"){                    
-                    Object.assign(eventTemp[i], {color: 'light-green darken-3'});
-                }
-
-            }
-
-        }
-        console.log('-----------------eventTemp-----------------');
-        console.log(eventTemp);
-        
-       this.events =eventTemp;
-
-        console.log("this.events")
-        console.log(this.events) */
       },
 
       rnd (a, b) {

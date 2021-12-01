@@ -150,7 +150,7 @@
             :no-gutters="noGutters"
           >
             <v-col cols="2" md="2"> 審核附件歷史上傳 </v-col>          
-            <v-col v-if="nullAattachedFiles!=='無檔案上傳'" cols="6" md="6">
+            <v-col v-if=" nullAattachedFiles !=='無檔案上傳'" cols="6" md="6">
               <a @click="downloadAttachedFiles">下載查看附件</a>
             </v-col>
             <v-col v-if="nullAattachedFiles=='無檔案上傳'" cols="6" md="6">
@@ -177,7 +177,7 @@
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col cols="2" md="2">
-              樣式預覽
+              樣式預覽   {{ duration }} | {{animationDuration}}
               <span class="red--text ml-2">*</span>
             </v-col>
             <v-col cols="6" md="6">
@@ -348,22 +348,23 @@ export default {
                 let fileName = null;
                 let result = Object.assign({}, res.restData.marquee);
             this.pageTitle = "跑馬燈修改";
-            MessageService.showInfo(res.restData.message, "成功✓");            
-            
+            MessageService.showInfo(res.restData.message, "成功✓");
             this.marqueeName = result.marqueeName;
             this.content = result.marqueeContentHTML;
             this.marqueeText = result.marqueeContent;
             this.marqueeHTML = result.marqueeContentHTML;
-            this.duration = result.animationDuration;
+            this.animationDuration = result.animationDuration;
             this.marqueeDesc = result.memo;
             this.startDate = result.releaseStartDate;
             this.endDate = result.releaseEndDate;
             if(res.restData.signAttachment !== null){
+              console.log("---------------------res.restData.signAttachment res.restData.signAttachment------------------------------------")
+              console.log(res.restData.signAttachment  !== null);
               let resultSign = Object.assign({}, res.restData.signAttachment);
               this.fileNo = resultSign.id;
               fileName = new File(["queryFile"], resultSign.originalFileName,);
               this.attachedFiles = fileName;
-              this.nullAattachedFiles = result.attachedFileName;
+              this.nullAattachedFiles = fileName;
             }else{
               this.attachedFiles = null;
               this.nullAattachedFiles = "無檔案上傳";
@@ -430,7 +431,10 @@ export default {
       return hasCheck;
     },
     downloadAttachedFiles(){
-      downloadMediaSignOffFile({relatedSeq: this.location});
+      downloadMediaSignOffFile({
+           mediaSignType: "MEDIA_MARQUEE",
+           relatedSeq: this.location
+        });
     },
     submit(isSign) {
       //if (this.$refs.form.validate()) {
@@ -457,7 +461,7 @@ export default {
                 marqueeType: "GENERAL",
                 marqueeContent: this.marqueeText,
                 marqueeContentHTML: this.marqueeHTML,
-                animationDuration: this.duration,
+                animationDuration: this.animationDuration,
                 memo: this.marqueeDesc,
                 region: "區處",
                 releaseStartDate: this.startDate,
@@ -485,7 +489,6 @@ export default {
             }
           })
           .catch(error => {
-            //MessageService.showError(error.rtnMsg);
             this.isSubmited = false;
             console.error(error);
           });

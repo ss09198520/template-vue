@@ -41,7 +41,7 @@ export function fetchQueryMarquee(data) {
 
 export function fetchActiveMarquee(data) {
   return request({
-    url: '/marquee/v1/active',
+    url: '/marquee/v1/media/active',
     method: 'post',
     data
   })

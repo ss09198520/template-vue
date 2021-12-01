@@ -423,6 +423,19 @@ import ValidateUtil from "@/assets/services/validateUtil";
             } else {
                 this.errMsg.role = null;
             }
+            // 若選擇的角色為受理部門主管or服務中心主任，則須在驗證是否有選擇要設定的角色部門
+            if(!ValidateUtil.isEmpty(this.select.role) 
+                && (this.select.role.setRoleCode == 'AUTH04' || this.select.role.setRoleCode == 'AUTH09')){
+                if(ValidateUtil.isEmpty(this.select.roleDept)){
+                    this.errMsg.role = "請選擇設定的部門";
+                    this.requiredArray.push('設定角色部門');
+                    isValid = false;
+                } else {
+                    this.errMsg.role = null;
+                }
+
+            }
+
 
             if(ValidateUtil.isEmpty(this.select.division)){
                 this.errMsg.division = "請選擇單位";
@@ -651,6 +664,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 group: this.select.group.group,
                 section: (ValidateUtil.isEmpty(this.select.section)? null : this.select.section.sectionCode),
                 roleCode:this.select.role.setRoleCode,
+                deptNum: (ValidateUtil.isEmpty(this.select.roleDept)? null : this.select.roleDept.deptNum),
             },
             (response) => {
                 // 驗證是否成功

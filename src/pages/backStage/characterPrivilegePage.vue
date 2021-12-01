@@ -212,7 +212,8 @@
         </v-card-title>
         <v-card-text>
           <div style="margin:10px 12px">
-            <div style="font-weight:bold; font-size:18px; color:black;">步驟一:請選擇角色 </div>          
+            <div style="font-weight:bold; font-size:18px; color:black;">步驟一:請選擇角色 </div> 
+            <v-row><v-col cols="" class="mt-2 red--text"> {{ errMsg.role }}</v-col></v-row>        
             <v-row style="margin:auto;">                        
               <div style="font-size:16px; color:black;" class="mt-5">
                 <span class="red--text">*</span>
@@ -232,23 +233,24 @@
                 />
               </v-col>
               <div v-if="openSectionSelect" style="font-size:16px; color:black;" class="mt-5">
+                <span class="red--text">*</span>
                 設定部門
               </div>
               <v-col v-if="openSectionSelect" cols="4">
                 <v-select
-                  v-model="select.role"                
-                  :items="sectionOption"
-                  item-text="sectionName"
+                  v-model="select.roleDept"                
+                  :items="serviceOfficeList"
+                  item-text="deptName"
+                  item-value="deptNum"
                   outlined
                   hide-details
                   dense
-                  placeholder="請選擇角色"
+                  placeholder="請選擇設定部門"
                   return-object
-                  @change="resetSelect()"
-                />
-                <v-col v-if="errMsg.role != null" cols="2" class="mt-2 red--text "> {{ errMsg.role }}</v-col>
-              </v-col></v-row>
-            <div style="font-weight:bold; font-size:18px; color:black;">步驟二:請選擇單位</div>  
+                /></v-col>
+            </v-row>
+            <div style="font-weight:bold; font-size:18px; color:black;">步驟二:請選擇單位</div> 
+            <v-row><v-col class="mt-2 red--text"> {{ errMsg.division }}</v-col></v-row>
             <v-row style="margin: auto;">
               <div style="font-size:16px; color:black; margin:auto 0;">
                 <span class="red--text">*</span>
@@ -269,9 +271,9 @@
                   @change="chooseDivision(select.division)"
                 />
               </v-col> 
-              <v-col class="mt-2 red--text"> {{ errMsg.division }}</v-col>
             </v-row>    
             <div style="font-weight:bold; font-size:18px; color:black;">步驟三:請選擇組別(若設定組長或組員，選擇至組即可)</div>
+            <v-row><v-col class="mt-2 red--text"> {{ errMsg.group }}</v-col></v-row>
             <v-row style="margin: auto;">
               <div style="font-size:16px; color:black; margin:auto 0;">
                 <span class="red--text">*</span>
@@ -292,7 +294,6 @@
                   @change="chooseGroup(select.division,select.group)"
                 />
               </v-col>
-              <v-col class="mt-2 red--text"> {{ errMsg.group }}</v-col>
             </v-row>
             <div style="font-weight:bold; font-size:18px; color:black;">步驟四:請選擇課別</div>
             <v-row style="margin: auto;">

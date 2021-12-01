@@ -231,7 +231,9 @@ export default {
             AjaxService.post("/tpesForm/init", param, 
             (response) => {
                 // 驗證是否成功
-                if (!response.restData.success) {              
+                if (!response.restData.success) {
+                    this.isBlocking = true;
+                    this.blockingMsg = response.restData.message;
                     MessageService.showError(response.restData.message,'表單初始化');
                     return;
                 }

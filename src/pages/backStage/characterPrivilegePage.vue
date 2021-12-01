@@ -141,7 +141,7 @@
             <!--隱藏被選擇的欄位 -->
             <div v-if="!item.edit" class="d-flex">
               <div style="width:250px; margin: auto; text-overflow: ellipsis; overflow: hidden; white-space:nowrap;">
-                <div v-for="(role,index) in item.roleList" :key="index">{{ role.roleName }}</div>
+                <div v-for="(role,index) in item.roleNameList" :key="index">{{ role }}</div>
               </div>              
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
@@ -167,7 +167,8 @@
                 multiple
                 :items="roleOption"
                 item-text="setRoleName"
-                return-object        
+                return-object
+                @change="openSelectSectionModel(selectRole,item)"
               >
                 <template v-slot:selection="{ item, index }">
                   <span v-if="index < maxDisplay">{{ item.setRoleName }} &nbsp;</span>
@@ -213,7 +214,7 @@
           <div style="margin:10px 12px">
             <div style="font-weight:bold; font-size:18px; color:black;">步驟一:請選擇角色 </div>          
             <v-row style="margin:auto;">                        
-              <div style="font-size:16px; color:black; margin:auto 0;">
+              <div style="font-size:16px; color:black;" class="mt-5">
                 <span class="red--text">*</span>
                 角色
               </div>                                      
@@ -227,11 +228,26 @@
                   dense
                   placeholder="請選擇角色"
                   return-object
-                  @change="resetSelect()"
+                  @change="resetSelect(),checkSetSection()"
                 />
               </v-col>
-              <v-col class="mt-2 red--text "> {{ errMsg.role }}</v-col>
-            </v-row>
+              <div v-if="openSectionSelect" style="font-size:16px; color:black;" class="mt-5">
+                設定部門
+              </div>
+              <v-col v-if="openSectionSelect" cols="4">
+                <v-select
+                  v-model="select.role"                
+                  :items="sectionOption"
+                  item-text="sectionName"
+                  outlined
+                  hide-details
+                  dense
+                  placeholder="請選擇角色"
+                  return-object
+                  @change="resetSelect()"
+                />
+                <v-col v-if="errMsg.role != null" cols="2" class="mt-2 red--text "> {{ errMsg.role }}</v-col>
+              </v-col></v-row>
             <div style="font-weight:bold; font-size:18px; color:black;">步驟二:請選擇單位</div>  
             <v-row style="margin: auto;">
               <div style="font-size:16px; color:black; margin:auto 0;">
@@ -355,7 +371,46 @@
           
         </v-card-actions>
       </v-card>
-    </v-dialog>    
+    </v-dialog>
+    <!-- 選擇組別 -->
+    <v-dialog
+      v-model="settingSectionModel"
+      max-width="800"
+      persistent
+    >
+      <v-card>
+        <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+          請選擇{{ settingDeptName }}要設定的課別
+          <v-spacer />
+        </v-card-title>
+        <v-card-text>
+          <!-- 放內容 -->
+          <div class="mt-5 font-bold">
+            <v-row>
+              <v-col v-for="(section,index) in serviceOfficeList" :key="index" cols="4">
+                <v-checkbox
+                  v-model="section.select"
+                  class="font-bold"
+                  :label="section.deptName"
+                  :value="false"
+                />
+              </v-col>
+            </v-row>
+          </div>
+        </v-card-text>
+        <v-divider />
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="success"            
+            @click="submitSelectSection()"
+          >
+            &emsp;確定&emsp;
+          </v-btn>
+          
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 

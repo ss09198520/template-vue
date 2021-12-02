@@ -387,6 +387,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             this.settingEmpList = [];
             this.unSettingEmpList = [];
             this.allSettingEmpList = [];
+            this.select.roleDept = [];
             
         },
 

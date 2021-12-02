@@ -16,7 +16,7 @@
             <v-expansion-panel-content>
               <v-container>
                 <v-row>
-                  <v-col v-for="(file, index) in fileList" :key="file.id" cols="5" class="mb-2">
+                  <v-col v-for="(file) in fileList" :key="file.id" cols="5" class="mb-2">
                     <v-row>
                       <v-col cols="5" class="mb-2">
                         <v-row>

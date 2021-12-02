@@ -386,9 +386,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
         resetSelect(){
             this.settingEmpList = [];
             this.unSettingEmpList = [];
-            this.allSettingEmpList = [];
-            this.select.roleDept = [];
-            
+            this.allSettingEmpList = [];            
         },
 
         checkSetSection(){
@@ -396,6 +394,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 this.openSectionSelect = true;
             } else {
                 this.openSectionSelect = false;
+                this.select.roleDept = [];
             }
         },
 
@@ -702,6 +701,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 addEmpRoleList: this.settingEmpList,
                 deleteEmpRoleList: this.unSettingEmpList,
                 settingRoleCode: this.select.role.setRoleCode,
+                settingDeptNum: (ValidateUtil.isEmpty(this.select.roleDept)? null : this.select.roleDept.deptNum),
             },
             (response) => {
                 // 驗證是否成功

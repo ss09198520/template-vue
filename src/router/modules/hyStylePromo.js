@@ -27,30 +27,6 @@ const hyStylePromoRouter = {
       component: () => import('@/pages/imageEditorPage.vue'),
       meta: { title: 'imageEditor', icon: 'mdi-image' }
     },
-    {
-      path: '/tpesForm',
-      name: 'TpesForm',
-      component: () => import('@/pages/FormPage/FormPage.vue'),
-      meta: { title: 'TPES Form', icon: 'mdi-file-document' }
-    },
-    {
-      path: '/tpesForm/createForm',
-      name: 'CreateForm',
-      component: () => import('@/pages/FormPage/FormPage.vue'),
-      meta: { title: 'TPES Form', icon: 'mdi-file-document' }
-    },
-    {
-      path: '/tpesForm/cancelForm_cust',
-      name: 'CancelForm',
-      component: () => import('@/pages/FormPage/FormPage.vue'),
-      meta: { title: 'TPES Form', icon: 'mdi-file-document' }
-    },
-    {
-      path: '/tpesForm/viewForm',
-      name: 'ViewForm',
-      component: () => import('@/pages/FormPage/FormPage.vue'),
-      meta: { title: 'TPES Form', icon: 'mdi-file-document' }
-    },
     // external file
     {
       path: '/externalFileView',

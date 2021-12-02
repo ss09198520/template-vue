@@ -94,7 +94,35 @@ export const constantRoutes = [
     hidden: true,
     meta: { title: '客戶填答問卷頁面', icon: 'mdi-pencil-box-multiple-outline' },
   },
-  
+  //TPES Form
+  {
+    path: '/tpesForm',
+    name: 'TpesForm',
+    component: () => import('@/pages/FormPage/FormPage.vue'),
+    hidden: true,
+    meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+  },
+  {
+    path: '/tpesForm/createForm',
+    name: 'CreateForm',
+    component: () => import('@/pages/FormPage/FormPage.vue'),
+    hidden: true,
+    meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+  },
+  {
+    path: '/tpesForm/cancelForm_cust',
+    name: 'CancelForm',
+    component: () => import('@/pages/FormPage/FormPage.vue'),
+    hidden: true,
+    meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+  },
+  {
+    path: '/tpesForm/viewForm',
+    name: 'ViewForm',
+    component: () => import('@/pages/FormPage/FormPage.vue'),
+    hidden: true,
+    meta: { title: 'TPES Form', icon: 'mdi-file-document' }
+  },
 ]
 
 /**

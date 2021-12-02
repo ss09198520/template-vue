@@ -96,6 +96,7 @@ const actions = {
           commit('SET_EMPNO', empInfo.empNo)
           if(authToken[0]){
             empInfo.authTokens = authToken
+            empInfo.privileges = Object.keys(menuAuthRolesMap)
             setToken(empInfo)
             commit('SET_TOKEN', empInfo)
           }

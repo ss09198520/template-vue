@@ -71,26 +71,39 @@ const actions = {
 
         // 驗證是否成功
         if (!response.restData.success) {              
-          // MessageService.showError(response.restData.message,'查詢角色設定下拉選單');
           reject('查詢角色設定下拉選單異常')
         }
 
         // 取出資料
-        let menuAuthRolesMap = Object.keys(response.restData.menuAuthMap);
-        
+        let menuAuthRolesMap = response.restData.menuAuthMap;
+        let rolesMap = Object.keys(menuAuthRolesMap).reduce((items, roles) => {
+          items.push(Object.assign(menuAuthRolesMap[roles]))
+          return items
+        }, [])
+
+        let authToken = rolesMap.reduce((items, role) => {
+          if(role.roleCode && items.indexOf(role.roleCode) <0 ) {//避免P000 以及重複
+            items.push(role.roleCode)
+          }
+          return items
+        }, [])
+
         let tokenInfo = getToken()
-        
         if (tokenInfo) {
           let empInfo = JSON.parse(tokenInfo)
           commit('SET_LOGIN' , true)
           commit('SET_NAME', empInfo.empName)
           commit('SET_EMPNO', empInfo.empNo)
+          if(authToken[0]){
+            empInfo.authTokens = authToken
+            setToken(empInfo)
+            commit('SET_TOKEN', empInfo)
+          }
         }
 
-        commit('SET_ROLES', menuAuthRolesMap)
-        commit('SET_AVATAR', 'avatar')
-        
-        resolve( {'roles' : menuAuthRolesMap } )
+        commit('SET_ROLES', rolesMap)
+        // commit('SET_AVATAR', 'avatar')
+        resolve( {'roles' : rolesMap } )
       }).catch(error => {
         reject(error)
       })

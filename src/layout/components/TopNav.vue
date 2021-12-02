@@ -86,7 +86,9 @@
           <template v-if="isLogin">
             <v-list dense>
               <v-list-item>
-                <v-list-item-avatar />
+                <v-list-item-avatar>
+                  <v-icon>mdi-account-circle</v-icon>
+                </v-list-item-avatar>
 
                 <v-list-item-content>
                   <v-list-item-title>{{ empName }} </v-list-item-title>

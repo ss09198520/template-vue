@@ -180,7 +180,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 }                               
             }
 
-            // this.oriSelectRole = JSON.parse(JSON.stringify(this.selectRole));
+            this.oriSelectRole = JSON.parse(JSON.stringify(this.selectRole));
 
             
             this.selectEmp = item;       
@@ -471,7 +471,6 @@ import ValidateUtil from "@/assets/services/validateUtil";
 
          // 判斷若依員工設定角色有選到受理部門主管或是服務中心主任，則跳出視窗讓使用者輸入他是要設定哪個服務中心or服務所的---Ellie待測
          openSelectSectionModel(selectRole,item){
-            
                 // 將新選擇的角色清單加進Map
                 let newSelectRoleMap = new Map();
                 if(!ValidateUtil.isEmpty(selectRole)){
@@ -524,6 +523,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                     this.serviceOfficeList[i].select = false;
                 }
     
+                // 若為受理部門主管or服務中心主任，需判斷是否原本有設定該角色，並判斷是那些部門
                 let settingSectionList = item.roleList;
                 for(let i in settingSectionList){
                     for(let y in this.serviceOfficeList){
@@ -537,7 +537,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
               
       
                 // 將更新過的選項更新回oriSelectRole中
-                this.oriSelectRole = JSON.parse(JSON.stringify(selectRole));
+                // this.oriSelectRole = JSON.parse(JSON.stringify(selectRole));
 
         },
 

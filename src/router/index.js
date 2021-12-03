@@ -123,6 +123,12 @@ export const constantRoutes = [
     hidden: true,
     meta: { title: 'TPES Form', icon: 'mdi-file-document' }
   },
+  {
+    path: '/imageEditor',
+    name: 'ImageEditor',
+    component: () => import('@/pages/imageEditorPage.vue'),
+    meta: { title: 'imageEditor', icon: 'mdi-image' }
+  },
 ]
 
 /**

@@ -16,7 +16,7 @@
             </v-col>
             <v-col cols="3" class="d-flex">
               <v-menu
-                v-model="startDate"
+                v-model="startDateMenu"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -25,24 +25,25 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="before7"
+                    v-model="postForm.startDate"
                     append-icon="mdi-calendar"
                     readonly
                     outlined
                     dense
                     hide-details
+                    :clearable="true"
                     v-bind="attrs"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
-                  v-model="before7"
-                  @input="startDate = false"
+                  v-model="postForm.startDate"
+                  @input="startDateMenu = false"
                 />
               </v-menu>
               <div class="mt-1">~</div>
               <v-menu
-                v-model="endDate"
+                v-model="endDateMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -50,20 +51,21 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="date"
+                    v-model="postForm.endDate"
                     append-icon="mdi-calendar"
                     readonly
                     outlined
                     dense
                     hide-details
+                    :clearable="true"
                     v-bind="attrs"
                     style="padding-top: 0;"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
-                  v-model="date"
-                  @input="endDate = false"
+                  v-model="postForm.endDate"
+                  @input="endDateMenu = false"
                 />
               </v-menu>
             </v-col>
@@ -75,12 +77,13 @@
                     fab
                     small
                     color="primary"
+                    @click="submitSearch"
                     v-on="on"
                   >
                     <v-icon v-text="'mdi-magnify'" />
                   </v-btn>
                 </template>
-                <span>{{ searchText }}</span>
+                <span>查詢</span>
               </v-tooltip>
             </v-col>
           </v-row>
@@ -99,8 +102,8 @@
       <v-col md="12">
         <v-data-table
           item-key="id"
-          :headers="headerCRUD"
-          :items="itemsCRUD"
+          :headers="header"
+          :items="reports"
           :items-per-page="itemsPerPage"
           :page.sync="itemsListPage"
           :footer-props="{
@@ -112,21 +115,22 @@
           no-data-text="查無資料"
           @page-count="itemsListPageCount = $event"
         >
-          <template v-slot:[`item.download`]="{ item }">
+          <template v-slot:[`item.fileId`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
-                  :disabled="!item.download"
+                  :disabled="!item.fileId"
                   class="ma-2"
                   fab
                   small
                   color="primary"
+                  @click="downloadReport(item)"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-file-download-outline'" />
                 </v-btn>
               </template>
-              <span v-text="item.download ? '下載檔案' : '無報表資料' " />
+              <span v-text="item.fileId ? '下載檔案' : '無報表資料' " />
             </v-tooltip>
           </template>
         </v-data-table>
@@ -144,45 +148,60 @@
 </template>
 
 <script>
+  import MessageService from "@/assets/services/message.service";
+  import { fetchQuestionnaireReportList ,downloadSatisfactionReportFile} from '@/api/questionnaireReport'
+  import isEmpty from 'lodash/isEmpty'
+
+  const defaultForm = {
+    startDate: null, 
+    endDate: null, 
+    category: 'QUESTIONNAIRE_REPORT_WEEKLY',
+  }
+  
   export default {
     data() {
       return {
-        isShow: true,
-        // menu: false,
-        // date: new Date().toISOString().substr(0, 10),
+        //api post data
+        postForm: Object.assign({}, defaultForm),
+
+        isShow: false,
+
         //分頁
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
         //分頁 end
-        releaseDateStartMenu: false,
-        releaseDateStart: '',
-        releaseDateEndMenu: false,
-        releaseDateEnd: '',
-        sunsetDateStartMenu: false,
-        sunsetDateStart: '',
-        sunsetDateEndMenu: false,
-        sunsetDateEnd: '',
-        headerCRUD: [
-          {
-            text: '區處',
-            value: 'region',
-            align: 'center'
-          },
-          {
-            text: '報表產出時間',
-            value: 'signOffDate1',
-            align: 'center'
-          },
-          {
-            text: '下載',
-            value: 'download',
-            width: '10%',
-            align: 'center'
-            
-          },
-          
+        //日曆開關
+        startDateMenu: false,
+        endDateMenu: false,
+        
+        reports : [],
+        header: [
+          { text: '報表名稱', value: 'reportName', align: 'center' },
+          { text: '報表資料日期區間', value: 'dataDate', align: 'center' },
+          { text: '報表產出時間', value: 'createDate', align: 'center' },
+          { text: '下載', value: 'fileId', width: '10%', align: 'center' },
         ],
+        // headerCRUD: [
+        //   {
+        //     text: '區處',
+        //     value: 'region',
+        //     align: 'center'
+        //   },
+        //   {
+        //     text: '報表產出時間',
+        //     value: 'signOffDate1',
+        //     align: 'center'
+        //   },
+        //   {
+        //     text: '下載',
+        //     value: 'download',
+        //     width: '10%',
+        //     align: 'center'
+            
+        //   },
+          
+        // ],
         itemsCRUD: [
           {signOff: false, readMonth: '2021/08', region: '台中', signOffDate1: '2021/09/06 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
           {signOff: true, readMonth: '2021/09', region: '台中', signOffDate1: '2021/09/13 14:14:42', signOffDate2: '', signOffDate3: '', download: true},
@@ -191,58 +210,85 @@
           {signOff: false, readMonth: '2021/08', region: '台中', signOffDate1: '2021/10/04 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
           {signOff: true, readMonth: '2021/09', region: '台中', signOffDate1: '2021/10/11 14:14:42', signOffDate2: '', signOffDate3: '', download: true}
         ],
-        defaultItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
-        // CRUD
         dialog: false,
         alertDialog: false,
-        editedIndex: -1,
-        editedItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
       }
     },
     methods: {
-      close() {
-        this.dialog = false
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-        this.alertDialog = false
+      //下載報表
+      downloadReport(item) {
+        this.downloadSatisfactionReportFile(item)
       },
-      save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.itemsCRUD[this.editedIndex], this.editedItem)
-        } else {
-          this.itemsCRUD.push(this.editedItem)
+      // 送出問卷查詢
+      submitSearch() {
+        console.log(this.postForm)
+        //API post data
+        this.fetchQuestionnaireReportList(this.postForm)
+      },
+
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+      hasResult (dataList) {
+        // 驗證是否有資料
+        if(isEmpty(dataList) || dataList.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
         }
-        this.close()
+        return true
       },
-      editItem(item) {
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.$router.push({path:`${this.$route.matched[0].path}/create`})
+
+      /**
+       * 
+       * Ajax start 
+       * 
+       **/
+      
+      //Action:報表清單查詢
+      async fetchQuestionnaireReportList(postData) {
+        //查詢前清空資料
+        this.reports = Object.assign([])
+        this.isShow = false
+        
+        const data = await fetchQuestionnaireReportList(postData)
+
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢報表清單資料');
+            return;
+        }
+        this.isShow = true
+        
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.reports)){
+          
+          let tmpData = data.restData.reports
+          
+          this.reports = tmpData
+        }
+        console.log('this.reports',this.reports)
       },
-      viewSchedule() {
-        this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
-      },
-      deleteItem(item) {
-        this.alertDialog = true
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-      },
-      remove() {
-        this.itemsCRUD.splice(this.editedIndex, 1)
-        this.close()
+
+      //Action: 下載報表
+      async downloadSatisfactionReportFile(item) {
+
+        let postData = {
+          fileId : item.fileId,
+          category : item.category
+        }
+        
+        const data = await downloadSatisfactionReportFile(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'下載報表')
+          return
+        }
+        if(data.restData.success){
+          MessageService.showSuccess('下載報表成功')
+        }else{
+          MessageService.showError('下載報表')
+        }
       },
     }
   }

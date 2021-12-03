@@ -16,7 +16,7 @@
             </v-col>
             <v-col cols="2" class="d-flex mt-2 ">
               <v-menu
-                v-model="startDate"
+                v-model="startDateMenu"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -25,20 +25,21 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="before7"
+                    v-model="postForm.startDate"
                     append-icon="mdi-calendar"
                     readonly
                     outlined
                     dense
                     hide-details
+                    :clearable="true"
                     v-bind="attrs"
                     v-on="on"
                   />
                 </template>
                 <v-date-picker
-                  v-model="before7"
+                  v-model="postForm.startDate"
                   type="month"
-                  @input="startDate = false"
+                  @input="startDateMenu = false"
                 />
               </v-menu>
             </v-col>
@@ -50,12 +51,13 @@
                     fab
                     small
                     color="primary"
+                    @click="submitSearch"
                     v-on="on"
                   >
                     <v-icon v-text="'mdi-magnify'" />
                   </v-btn>
                 </template>
-                <span>{{ searchText }}</span>
+                <span>查詢</span>
               </v-tooltip>
             </v-col>
             <v-col v-if="isRegion==0" cols="4">
@@ -102,9 +104,9 @@
     <v-row v-show="isShow">
       <v-col md="12">
         <v-data-table
-          item-key="id"
-          :headers="headerCRUD"
-          :items="itemsCRUD"
+          item-key="fileId"
+          :headers="header"
+          :items="reports"
           :items-per-page="itemsPerPage"
           :page.sync="itemsListPage"
           :footer-props="{
@@ -116,21 +118,22 @@
           no-data-text="查無資料"
           @page-count="itemsListPageCount = $event"
         >
-          <template v-slot:[`item.download`]="{ item }">
+          <template v-slot:[`item.fileId`]="{ item }">
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
-                  :disabled="!item.download"
+                  :disabled="!item.fileId"
                   class="ma-2"
                   fab
                   small
                   color="primary"
+                  @click="downloadReport(item)"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-file-download-outline'" />
                 </v-btn>
               </template>
-              <span v-text="item.download ? '下載檔案' : '無報表資料' " />
+              <span v-text="item.fileId ? '下載檔案' : '無報表資料' " />
             </v-tooltip>
           </template>
         </v-data-table>
@@ -148,105 +151,118 @@
 </template>
 
 <script>
+  import MessageService from "@/assets/services/message.service";
+  import { fetchQuestionnaireReportList , downloadSatisfactionReportFile} from '@/api/questionnaireReport'
+  import isEmpty from 'lodash/isEmpty'
+
+  const defaultForm = {
+    startDate: null, 
+    category: 'QUESTIONNAIRE_REPORT_MONTHLY',
+  }
   export default {
     data() {
       return {
+        //api post data
+        postForm: Object.assign({}, defaultForm),
         isRegion: 1, // 1區處、else業務處
-        isShow: true,
-        // menu: false,
-        // date: new Date().toISOString().substr(0, 10),
+        isShow: false,
         //分頁
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
         //分頁 end
-        //日曆
-        releaseDateStartMenu: false,
-        releaseDateStart: '',
-        releaseDateEndMenu: false,
-        releaseDateEnd: '',
-        sunsetDateStartMenu: false,
-        sunsetDateStart: '',
-        sunsetDateEndMenu: false,
-        sunsetDateEnd: '',
+
+        //日曆開關
+        startDateMenu: false,
+        endDateMenu: false,
+
         //日曆 end
-        headerCRUD: [
-         
-          {
-            text: '報表產出月份',
-            value: 'readMonth',
-            align: 'center'
-          },
-          {
-            text: '報表產出時間',
-            value: 'signOffDate1',
-            align: 'center'
-          },
-          {
-            text: '下載',
-            value: 'download',
-            width: '10%',
-            align: 'center'
-            
-          },
-          
+        reports : [],
+        header: [
+          { text: '報表名稱', value: 'reportName', align: 'center' },
+          { text: '報表資料月份', value: 'dataDate', align: 'center' },
+          { text: '報表產出時間', value: 'createDate', align: 'center' },
+          { text: '下載', value: 'fileId', width: '10%', align: 'center' },
         ],
-        itemsCRUD: [
-          {signOff: false, readMonth: '2021/08', signOffDate1: '2021/09/01 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
-          {signOff: true, readMonth: '2021/09',  signOffDate1: '2021/10/01 14:14:42', signOffDate2: '', signOffDate3: '', download: true}
-        ],
-        defaultItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
         // CRUD
         dialog: false,
         alertDialog: false,
-        editedIndex: -1,
-        editedItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
       }
     },
     methods: {
-      close() {
-        this.dialog = false
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-        this.alertDialog = false
+      downloadReport(item) {
+        this.downloadSatisfactionReportFile(item)
       },
-      save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.itemsCRUD[this.editedIndex], this.editedItem)
-        } else {
-          this.itemsCRUD.push(this.editedItem)
+      // 送出問卷查詢
+      submitSearch() {
+        console.log(this.postForm)
+        //API post data
+        this.fetchQuestionnaireReportList(this.postForm)
+      },
+
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+      hasResult (dataList) {
+        // 驗證是否有資料
+        if(isEmpty(dataList) || dataList.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
         }
-        this.close()
+        return true
       },
-      editItem(item) {
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.$router.push({path:`${this.$route.matched[0].path}/create`})
+
+      /**
+       * 
+       * Ajax start 
+       * 
+       **/
+      
+      //Action:報表清單查詢
+      async fetchQuestionnaireReportList(postData) {
+        //查詢前清空資料
+        this.reports = Object.assign([])
+        this.isShow = false
+        
+        const data = await fetchQuestionnaireReportList(postData)
+
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢報表清單資料');
+            return;
+        }
+        this.isShow = true
+        
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.reports)){
+          
+          let tmpData = data.restData.reports
+          
+          this.reports = tmpData
+        }
+        console.log('this.reports',this.reports)
       },
-      viewSchedule() {
-        this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
-      },
-      deleteItem(item) {
-        this.alertDialog = true
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-      },
-      remove() {
-        this.itemsCRUD.splice(this.editedIndex, 1)
-        this.close()
+
+      //Action: 下載報表
+      async downloadSatisfactionReportFile(item) {
+
+        let postData = {
+          fileId : item.fileId,
+          category : item.category
+        }
+        
+        const data = await downloadSatisfactionReportFile(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'下載報表')
+          return
+        }
+        if(data.restData.success){
+          MessageService.showSuccess('下載報表成功')
+        }else{
+          MessageService.showError('下載報表')
+        }
       },
     }
   }

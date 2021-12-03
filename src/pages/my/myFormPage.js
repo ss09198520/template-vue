@@ -124,7 +124,7 @@ export default{
                 this.formList = response.restData.formList;
                 this.numberOfAccept = response.restData.numberOfAccept;
                 this.numberOfAgent = response.restData.numberOfAgent;
-                // 從後端取得案件清單，先複製一份，先暫時放init，之後會移到ajax打後端後取得資料直接複製
+                // 從後端取得案件清單，先複製一份
                 this.oriFormList = JSON.parse(JSON.stringify(response.restData.formList));
 
             },

@@ -21,12 +21,6 @@ const hyStylePromoRouter = {
       component: () => import('@/pages/timerPage'),
       meta: { title: 'timer', icon: 'mdi-clock-outline' }
     },
-    {
-      path: '/imageEditor',
-      name: 'ImageEditor',
-      component: () => import('@/pages/imageEditorPage.vue'),
-      meta: { title: 'imageEditor', icon: 'mdi-image' }
-    },
     // external file
     {
       path: '/externalFileView',

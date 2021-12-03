@@ -12,15 +12,14 @@ const fileToJson = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = res => {
-      const { result } = res.target // 得到字串
-      const data = JSON.parse(result) // 解析成json物件
+      const data = JSON.parse(res.target.result) // 解析成json物件
       console.log(data)
       resolve(data)
     } // 成功回傳
     reader.onerror = err => {
       reject(err)
     } // 失敗回傳
-    reader.readAsText(new Blob([file]), 'utf-8') // 按照utf-8編碼解析
+    reader.readAsText(file, 'utf-8') // 按照utf-8編碼解析
   })
 }
 
@@ -114,9 +113,24 @@ service.interceptors.response.use(
       window.URL.revokeObjectURL(url);
 
     }else if (isJsonBlob(res)) { //正常回傳
-      
-      let message = this.fileToJson(response.data)
-      console.log(message)
+      // 認 Header 的 content-type，判斷要跳訊息還是要下載檔案
+      const contentType = response.headers['content-type'];
+      if (contentType.indexOf('json') !== -1) {
+        let fr = new FileReader();
+        fr.onload = function() {
+          let data
+          data = JSON.parse(this.result)  
+          if (data.restData.code === '401') {
+            // to re-login
+            store.dispatch('user/resetToken').then(() => {
+              location.reload()
+            })
+          }
+        };
+        fr.readAsText(res)
+
+        return data
+      }
     
       MessageService.showSystemError()
       return Promise.reject(new Error(res.rtnMsg || 'Error'))

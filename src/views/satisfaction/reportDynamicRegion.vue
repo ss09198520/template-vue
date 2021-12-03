@@ -17,7 +17,7 @@
 
             <v-col cols="4" class="d-flex">
               <v-menu
-                v-model="startDate"
+                v-model="startDateMenu"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -26,7 +26,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="before7"
+                    v-model="postForm.startDate"
                     append-icon="mdi-calendar"
                     readonly
                     outlined
@@ -37,13 +37,13 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="before7"
-                  @input="startDate = false"
+                  v-model="postForm.startDate"
+                  @input="startDateMenu = false"
                 />
               </v-menu>
               <div class="mt-3">~</div>
               <v-menu
-                v-model="endDate"
+                v-model="endDateMenu"
                 :close-on-content-click="false"
                 transition="scale-transition"
                 offset-y
@@ -51,7 +51,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="date"
+                    v-model="postForm.endDate"
                     append-icon="mdi-calendar"
                     readonly
                     outlined
@@ -63,26 +63,10 @@
                   />
                 </template>
                 <v-date-picker
-                  v-model="date"
-                  @input="endDate = false"
+                  v-model="postForm.endDate"
+                  @input="endDateMenu = false"
                 />
               </v-menu>
-            </v-col>
-            <v-col v-if="isRegion==1" cols="1">
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-btn
-                    class="ma-3"
-                    fab
-                    small
-                    color="primary"
-                    v-on="on"
-                  >
-                    <v-icon v-text="'mdi-magnify'" />
-                  </v-btn>
-                </template>
-                <span>{{ searchText }}</span>
-              </v-tooltip>
             </v-col>
             <v-col cols="3" class="ml-2" color="red">
               * 查詢區間於6個月內
@@ -107,184 +91,120 @@
         查詢下載結果
       </v-col>
       <v-col cols="8" class="ml-2 ">        
-        <v-btn      
+        <v-btn 
+          v-if="isRegion==1"
           class="ml-3 ma-2"
-          fab
-          small
           color="primary"
+          @click="submitSearch(false)"
           v-on="on"
         > 
-          <v-icon v-text="'mdi-file-download-outline'" />
+          查詢下載結果<v-icon v-text="'mdi-file-download-outline'" />
+        </v-btn>
+        <v-btn 
+          v-if="isRegion==0"
+          class="ml-3 ma-2"
+          color="primary"
+          @click="submitSearch(true)"
+        >
+          查詢全區處 <v-icon v-text="'mdi-file-download-outline'" />
+        </v-btn>
+        <v-btn
+          v-if="isRegion==0"
+          class="ml-3 ma-2"
+          color="primary"
+          @click="submitSearch(false)"
+        >
+          查詢業務處彙總 <v-icon v-text="'mdi-file-download-outline'" />
         </v-btn>
       </v-col>
-      <!-- <v-col cols="2" class="ml-2 ">
-          查詢下載結果
-        </v-col>
-        <v-col cols="6" class="ml-2 ">
-          區處 or 全區處
-          <v-btn
-            class="ma-2"
-            fab
-            small
-            color="primary"
-            v-on="on"
-          >
-            <v-icon v-text="'mdi-file-download-outline'" />          
-          </v-btn>
-        </v-col>-->
-
-     
+      
     </v-row>
 
-    <v-row v-show="isShow">
-      <v-col md="12">
-        <v-data-table
-          item-key="id"
-          :headers="headerCRUD"
-          :items="itemsCRUD"
-          :items-per-page="itemsPerPage"
-          :page.sync="itemsListPage"
-          :footer-props="{
-            showFirstLastPage: true,
-          }"
-          disable-sort
-          class="font-weight-bold elevation-1"
-          hide-default-footer
-          no-data-text="查無資料"
-          @page-count="itemsListPageCount = $event"
-        >
-          <template v-slot:[`item.download`]="{ item }">
-            <v-tooltip top>
-              <template v-slot:activator="{ on }">
-                <v-btn
-                  :disabled="!item.download"
-                  class="ma-2"
-                  fab
-                  small
-                  color="primary"
-                  v-on="on"
-                >
-                  <v-icon v-text="'mdi-file-download-outline'" />
-                </v-btn>
-              </template>
-              <span v-text="item.download ? '下載檔案' : '無報表資料' " />
-            </v-tooltip>
-          </template>
-        </v-data-table>
-        <!-- 選頁 -->
-        <div class="mt-2">
-          <v-pagination
-            v-model="itemsListPage"
-            color="#2F59C4"
-            :length="itemsListPageCount"
-          />
-        </div>
-      </v-col>
-    </v-row>
   </v-container>
 </template>
 
 <script>
+
+  import MessageService from "@/assets/services/message.service";
+  import { geneDynaRegionSatisfactionReport} from '@/api/questionnaireReport'
+  import isEmpty from 'lodash/isEmpty'
+
+  const defaultForm = {
+    allRegion: false ,
+    startDate: null, 
+    endDate: null,
+  }
+
   export default {
     data() {
       return {
-        isRegion: 0, // 1區處、else業務處
+        isRegion: 1, // 1區處、else業務處
         isShow: false,
-        // menu: false,
-        // date: new Date().toISOString().substr(0, 10),
+        //api post data
+        postForm: Object.assign({}, defaultForm),
+
         //分頁
         itemsPerPage: 10,
         itemsListPage: 1,
         itemsListPageCount: 1,
         //分頁 end
-        releaseDateStartMenu: false,
-        releaseDateStart: '',
-        releaseDateEndMenu: false,
-        releaseDateEnd: '',
-        sunsetDateStartMenu: false,
-        sunsetDateStart: '',
-        sunsetDateEndMenu: false,
-        sunsetDateEnd: '',
-        headerCRUD: [
-          {
-            text: '區處',
-            value: 'region',
-            align: 'center'
-          },
-          {
-            text: '報表產出時間',
-            value: 'signOffDate1',
-            align: 'center'
-          },
-          {
-            text: '下載',
-            value: 'download',
-            width: '10%',
-            align: 'center'
-            
-          },
-          
-        ],
-        itemsCRUD: [
-          {signOff: false, readMonth: '2021/08', region: '台中', signOffDate1: '2021/09/06 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
-          {signOff: true, readMonth: '2021/09', region: '台中', signOffDate1: '2021/09/13 14:14:42', signOffDate2: '', signOffDate3: '', download: true},
-          {signOff: false, readMonth: '2021/08', region: '台中', signOffDate1: '2021/09/24 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
-          {signOff: true, readMonth: '2021/09', region: '台中', signOffDate1: '2021/09/27 14:14:42', signOffDate2: '', signOffDate3: '', download: false},
-          {signOff: false, readMonth: '2021/08', region: '台中', signOffDate1: '2021/10/04 13:00:26', signOffDate2: '2021/09/02 10:36:53', signOffDate3: '2021/09/02 14:42:51', download: true},
-          {signOff: true, readMonth: '2021/09', region: '台中', signOffDate1: '2021/10/11 14:14:42', signOffDate2: '', signOffDate3: '', download: true}
-        ],
-        defaultItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
+        //日曆開關
+        startDateMenu: false,
+        endDateMenu: false,
+
         // CRUD
         dialog: false,
         alertDialog: false,
-        editedIndex: -1,
-        editedItem: {
-          name: '',
-          scp_id: '',
-          marquee_content: '',
-          division:'',
-          ondate: 0,
-          pages: 0,
-        },
       }
     },
     methods: {
-      close() {
-        this.dialog = false
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-        this.alertDialog = false
+
+      // 送出問卷查詢
+      submitSearch(isAllRegion) {
+        this.postForm.allRegion = isAllRegion
+        console.log(this.postForm)
+        //API post data
+        this.geneDynaRegionSatisfactionReport(this.postForm)
       },
-      save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.itemsCRUD[this.editedIndex], this.editedItem)
-        } else {
-          this.itemsCRUD.push(this.editedItem)
+
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+      hasResult (dataList) {
+        // 驗證是否有資料
+        if(isEmpty(dataList) || dataList.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
         }
-        this.close()
+        return true
       },
-      editItem(item) {
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-        this.editedItem = Object.assign({}, item)
-        this.$router.push({path:`${this.$route.matched[0].path}/create`})
-      },
-      viewSchedule() {
-        this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
-      },
-      deleteItem(item) {
-        this.alertDialog = true
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-      },
-      remove() {
-        this.itemsCRUD.splice(this.editedIndex, 1)
-        this.close()
+
+      /**
+       * 
+       * Ajax start 
+       * 
+       **/
+      
+      //Action:動態報表資料查詢
+      async geneDynaRegionSatisfactionReport(postData) {
+        //查詢前清空資料
+        const data = await geneDynaRegionSatisfactionReport(postData)
+
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢動態報表資料');
+            return;
+        }
+        this.isShow = true
+        
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.reports)){
+          
+          let tmpData = data.restData.reports
+          
+          this.reports = tmpData
+        }
       },
     }
   }

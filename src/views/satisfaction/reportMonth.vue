@@ -51,7 +51,7 @@
                     fab
                     small
                     color="primary"
-                    @click="submitSearch"
+                    @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY')"
                     v-on="on"
                   >
                     <v-icon v-text="'mdi-magnify'" />
@@ -61,31 +61,26 @@
               </v-tooltip>
             </v-col>
             <v-col v-if="isRegion==0" cols="4">
-              <v-tooltip top>
-                <template v-slot:activator="{ on }">
-                  <v-row
-                    align="center"
-                    justify="space-around"
-                  >
-                    <v-btn
-                      depressed
-                      color="primary"
-                      v-on="on"
-                    >
-                      查詢多區處 <v-icon v-text="'mdi-magnify'" />
-                    </v-btn>
-                    <v-btn
-                      class="mt-1"
-                      depressed
-                      color="primary"
-                      v-on="on"
-                    >
-                      查詢業務處彙總 <v-icon v-text="'mdi-magnify'" />
-                    </v-btn>
-                  </v-row>
-                </template>
-               
-              </v-tooltip>
+              <v-row
+                align="center"
+                justify="space-around"
+              >
+                <v-btn
+                  depressed
+                  color="primary"
+                  @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY_ALL')"
+                >
+                  查詢多區處 <v-icon v-text="'mdi-magnify'" />
+                </v-btn>
+                <v-btn
+                  class="mt-1"
+                  depressed
+                  color="primary"
+                  @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY')"
+                >
+                  查詢業務處彙總 <v-icon v-text="'mdi-magnify'" />
+                </v-btn>
+              </v-row>
             </v-col>
           </v-row>
           <v-row>
@@ -164,7 +159,7 @@
       return {
         //api post data
         postForm: Object.assign({}, defaultForm),
-        isRegion: 1, // 1區處、else業務處
+        isRegion: 0, // 1區處、else業務處
         isShow: false,
         //分頁
         itemsPerPage: 10,
@@ -194,8 +189,10 @@
         this.downloadSatisfactionReportFile(item)
       },
       // 送出問卷查詢
-      submitSearch() {
-        console.log(this.postForm)
+      submitSearch(reportType) {
+        if(reportType){
+          this.postForm.category = reportType
+        }
         //API post data
         this.fetchQuestionnaireReportList(this.postForm)
       },
@@ -241,7 +238,6 @@
           
           this.reports = tmpData
         }
-        console.log('this.reports',this.reports)
       },
 
       //Action: 下載報表

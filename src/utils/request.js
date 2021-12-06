@@ -98,19 +98,20 @@ service.interceptors.response.use(
     const res = response.data
     // if the custom code is not 20000, it is judged as an error.
     
-    if(headers['content-disposition']){ //判斷檔回傳
-      
-      const fileName = headers['content-disposition'].replace(/\w+;filename=(.*)/, '$1')
-
-      // 下載檔案
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', decodeURI(fileName)); //or any other extension
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(url);
+    if(headers['content-disposition']){ //判斷檔案回傳
+      // 1. 處理正常回傳 
+      if (response && response.headers && response.data) { //fix xss
+        const fileName = headers['content-disposition'].replace(/\w+;filename=(.*)/, '$1')
+        // 下載檔案
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', decodeURI(fileName)); //or any other extension
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(url);
+      }
 
     }else if (isJsonBlob(res)) { //正常回傳
       // 認 Header 的 content-type，判斷要跳訊息還是要下載檔案

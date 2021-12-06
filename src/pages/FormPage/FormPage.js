@@ -364,6 +364,7 @@ export default {
             this.formSignPage.empNo = this.empNo;
             this.formSignPage.region = this.region;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
+            this.formSignPage.addEventListener("beforeunload", this.formSignPageClosed);
 
             try {
                 // 將畫面顯示改為同步
@@ -390,7 +391,7 @@ export default {
                 return;
             }
             this.formSignPage.close();
-            this.isFormSignPageOpened = false;
+            this.formSignPageClosed();
         },
         deleteCertificate(index){
             this.certificateList.splice(index, 1);

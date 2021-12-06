@@ -22,7 +22,8 @@ export default {
                { text: '申請調閱人員', value: 'applier', align: 'center' },
                { text: '申請調閱日期', value: 'readDateStr', align: 'center' },
                { text: '整理號碼', value: 'archiveNum', align: 'center' },
-               { text: '受理項目', value: 'acceptItem', align: 'center' },                
+               { text: '受理項目', value: 'acceptItem', align: 'center' },
+               { text: '備註', value: 'memo', align: 'center' },                
                { text: '狀態操作', value: 'mani', align: 'center' }
             ],
             signList:[],

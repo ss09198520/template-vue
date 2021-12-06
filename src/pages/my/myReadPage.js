@@ -21,6 +21,7 @@ export default{
             formListPageCount: 0,
             formListHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
+                { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '受理日期', value: 'acceptDateStr', align: 'center' },
                 { text: '歸檔日期', value: 'archiveDateStr', align: 'center' },
                 { text: '調閱狀態', value: 'status', align: 'center' },            

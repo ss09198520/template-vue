@@ -13,7 +13,7 @@ export default {
     },
     data() {
         return {
-            numOfUndispatch: 4,
+            numOfUndispatch: 0,
             unDispatchHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
                 { text: '整理號碼', value: 'archieveNum', align: 'center' },

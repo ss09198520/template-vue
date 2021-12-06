@@ -16,7 +16,7 @@ export default {
     },
     data() {
         return {            
-            User: 'auditer',
+            User: '',
             numOfAccounting: null,
             accoutingHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center',width:'10%' },
@@ -52,6 +52,9 @@ export default {
             formParam:{},
             formKey: 0,
             accnting: '',
+            hasAccountingAuth: false,
+            auditor: false,
+            checker: false,
             computeDateOption:[
                 {text:'01',value:'01'},
                 {text:'02',value:'02'},
@@ -168,7 +171,8 @@ export default {
           this.queryAccoutingData();
           this.selectItem.seq = item.seq;  
           this.selectItem.formSeq = item.formSeq;     
-          this.selectItem.accnting = item.accnting;   
+          this.selectItem.accnting = item.accnting;  
+          this.selectItem.acceptNum = item.acceptNum; 
           this.accountingDialog = true;
 
         },
@@ -247,7 +251,7 @@ export default {
         queryAccoutingInit(){
 
             let numOfAccounting = '';
-            // 模擬從後端取到的假資料            
+                     
             AjaxService.post('/waitAccounting/init',
             {
                        
@@ -261,6 +265,27 @@ export default {
                     ) {
                     if (ValidateUtil.isEmpty(response.restData.initWaitAccountingListVo)) {                        
                         MessageService.showInfo('查無資料');
+                        if(!ValidateUtil.isEmpty(response.restData.authList)){
+                            for(let i in response.restData.authList){
+                                if(response.restData.authList[i] == 'AUTH15' || response.restData.authList[i] == 'AUTH20'){
+                                    this.hasAccountingAuth = true;
+                                    console.log(this.hasAccountingAuth);
+                                    break;
+                                }
+                            }
+                            for(let i in response.restData.authList){
+                                if(response.restData.authList[i] == 'AUTH15'){
+                                    this.auditor = true;
+                                    break;
+                                }
+                            }
+                            for(let i in response.restData.authList){
+                                if(response.restData.authList[i] == 'AUTH20'){
+                                    this.checker = true;
+                                    break;
+                                }
+                            }
+                        }         
                     } else {                                                                                                             
                         this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
                         response.restData.initWaitAccountingListVo.forEach((element) => {
@@ -273,7 +298,28 @@ export default {
                             if(element.isAgentForm){
                                 element.isAgent = true;
                             }                  
-                        });                        
+                        });  
+                        if(!ValidateUtil.isEmpty(response.restData.authList)){
+                            for(let i in response.restData.authList){
+                                if(response.restData.authList[i] == 'AUTH15' || response.restData.authList[i] == 'AUTH20'){
+                                    this.hasAccountingAuth = true;
+                                    console.log(this.hasAccountingAuth);
+                                    break;
+                                }
+                            }
+                            for(let i in response.restData.authList){
+                                if(response.restData.authList[i] == 'AUTH15'){
+                                    this.auditor = true;
+                                    break;
+                                }
+                            }
+                            for(let i in response.restData.authList){
+                                if(response.restData.authList[i] == 'AUTH20'){
+                                    this.checker = true;
+                                    break;
+                                }
+                            }
+                        }                      
                         numOfAccounting = response.restData.initWaitAccountingListVo.length;                                               
                     }
                 } else {
@@ -467,9 +513,10 @@ export default {
 
             const AuditAccountingReq = {
                 seq: this.selectItem.seq,
-                formSeq: this.selectItem.formSeq,                
+                formSeq: this.selectItem.formSeq,
                 memo: this.memo,
                 accnting: this.selectItem.accnting,
+                acceptNum: this.selectItem.acceptNum,
                 rejectReason: this.rejectReason,
                 rejectDesc: this.rejectDesc,
             };

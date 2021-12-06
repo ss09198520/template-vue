@@ -150,7 +150,33 @@ export default{
         // agent: this.agent,
         // agentName: this.agentName,
         // dataSource: this.dataSource.value,
-
+        // AjaxService.post('//',
+        // {
+                   
+        // },
+        // (response) => {
+        //     if (response != null &&
+        //         response != undefined &&                    
+        //         response.restData.message != null &&
+        //         response.restData.message != undefined &&
+        //         response.restData.success
+        //         ) {
+        //         if (ValidateUtil.isEmpty(response.restData.returnReasonVoList)) {                        
+        //             MessageService.showInfo('查無資料');
+        //         } else {                                                                                                                                            
+        //             reasonList = response.restData.returnReasonVoList;
+        //             this.reasonList = reasonList;
+        //         }
+        //     } else {
+        //       //接後端候要放errorMsg
+        //       //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+        //     }
+        // },
+        //     (response) => { // server 出錯才會進入
+        //         // server error                    
+        //         MessageService.showSystemError(response.restData.code);
+        //     }
+        // );
 
          // 模擬資料
          let leaveList = [
@@ -161,7 +187,7 @@ export default{
                 { seq:4, empNo: '1050331-001', empName: '蔡政揚', startDate:'2021-09-14 08:00',endDate:'2021-09-14 17:00', agent:'1050330-001', agentName:'梁朝偉',dept: '東山服務所',isMgmn:true, dataSource:'差假管理系統'},
                 { seq:5, empNo: '1050331-002', empName: '張芊芊', startDate:'2021-09-12 08:00',endDate:'2021-09-12 17:00', agent:'1050331-003', agentName:'江舒語',dept: '東山服務所',isMgmn:false, dataSource:'人工設定'},
                 { seq:6, empNo: '1050331-003', empName: '江舒語', startDate:'2021-09-29 08:00',endDate:'2021-09-29 12:00', agent:'1050331-002', agentName:'張芊芊',dept: '東山服務所',isMgmn:false, dataSource:'差假管理系統'},
-                { seq:7, empNo: '1050331-003', empName: '江舒語', startDate:'2021-11-28 08:00',endDate:'2021-11-28 17:00', agent:'1050331-002', agentName:'張芊芊',dept: '東山服務所',isMgmn:false, dataSource:'差假管理系統'},
+                { seq:7, empNo: '1050331-003', empName: '江舒語', startDate:'2021-12-28 08:00',endDate:'2021-12-28 17:00', agent:'1050331-002', agentName:'張芊芊',dept: '東山服務所',isMgmn:false, dataSource:'差假管理系統'},
             ];
          this.leaveList = leaveList;
          MessageService.showSuccess('查詢請假清單');

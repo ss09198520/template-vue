@@ -57,7 +57,8 @@ export default {
         // Action:查詢初始化
         queryArchieveInit(){
             // 取得所有待歸檔資料
-
+            
+            console.log(parseInt(new Date() - new Date('2021/11/17 15:11:22')) / 1000 / 60 / 60);
             AjaxService.post('/waitArchive/init',
             {
                        
@@ -71,12 +72,17 @@ export default {
                     ) {
                     if (ValidateUtil.isEmpty(response.restData.initWaitArchiveListVo)) {                        
                         MessageService.showInfo('查無資料');
-                    } else {           
-                        console.log(response);                                                             
+                    } else {
+                        console.log(response);
                         this.archieveList = Object.assign(response.restData.initWaitArchiveListVo);                        
-                        response.restData.initWaitArchiveListVo.forEach((element) => {
-                            element.action = true;
-                        });                                                                                       
+                                      
+                        response.restData.initWaitArchiveListVo.forEach((element) => {                             
+                            let createHours = parseInt(new Date().getTime() - Date.parse(element.createDate)) / 1000 / 60 / 60; 
+                            console.log(createHours);                                                      
+                            if(createHours <= 4){
+                                element.action = true;
+                            }                            
+                        });    
                     }
                 } else {
                   //接後端候要放errorMsg

@@ -39,7 +39,7 @@ export default {
             accountingList:[],
             selectIndex: null,
             //操作者角色
-            User: 'manager',
+            User: 'employee',
             formSeq: null,
             seq: null,
             requiredArray:[],
@@ -110,11 +110,11 @@ export default {
                     if (ValidateUtil.isEmpty(response.restData.initUndispatchListVo)) {                        
                         MessageService.showInfo('查無資料');
                     } else {           
-                        console.log(response);                                                             
                         this.unDispatchList = Object.assign(response.restData.initUndispatchListVo);                        
                         response.restData.initUndispatchListVo.forEach((element) => {
                             element.action = true;
-                        });                                                                                       
+                        });
+                        this.User = response.restData.userType;                                                                                       
                     }
                 } else {
                   //接後端候要放errorMsg

@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <v-container>
-      <v-btn class="ma-2" :class="{'primary': User == 'manager'}" @click="User = 'manager'">角色：核算課長</v-btn>
-      <v-btn class="ma-2" :class="{'primary': User == 'employee'}" @click="User = 'employee'">角色：核算課課員</v-btn>
+      <!-- <v-btn class="ma-2" :class="{'primary': User == 'manager'}" @click="User = 'manager'">角色：核算課長</v-btn>
+      <v-btn class="ma-2" :class="{'primary': User == 'employee'}" @click="User = 'employee'">角色：核算課課員</v-btn> -->
       <div class="d-flex w-100" style="margin-top: 20px;">
         <div class="block mr-5 w-100">
           <div>

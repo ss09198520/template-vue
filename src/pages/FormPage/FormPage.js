@@ -724,6 +724,8 @@ export default {
                 modifyFileList: modifyFileList,
                 deleteFileList: deleteFileList,
                 isAddAttachment: this.isAddAttachment,
+                empNo: this.empNo,
+                region: this.region,
             };
 
             return vin;

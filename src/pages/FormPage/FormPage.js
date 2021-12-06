@@ -364,6 +364,7 @@ export default {
             this.formSignPage.empNo = this.empNo;
             this.formSignPage.region = this.region;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
+            this.formSignPage.addEventListener("beforeunload", this.formSignPageClosed);
 
             try {
                 // 將畫面顯示改為同步

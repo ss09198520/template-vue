@@ -882,6 +882,14 @@ export default {
         selectIndex = this.dispatchInfo[listName].indexOf(selectItem);
       }
       
+      // 驗證電號格式
+      if(!ValidateUtil.validateEletricNums(selectItem[type])){
+        console.log(selectItem[type]);
+        this.errorMsg[item] = '電號資料僅接受數字';
+        this.formatArray.push('電號資料');        
+        return;
+      }
+
       // 判斷電號範圍是否有輸入電號，有輸入才判斷是否加0或9
       if(!ValidateUtil.isEmpty(selectItem[type])){
         // 起號自動補0
@@ -893,11 +901,6 @@ export default {
           }
       }
 
-      // 驗證電號格式
-      if(!ValidateUtil.validateEletricNums(selectItem[type])){
-        console.log(selectItem[type]);        
-        return;
-      }
 
       // 驗證電號範圍
       if(!ValidateUtil.isEmpty(this.dispatchInfo[listName][selectIndex].start) 

@@ -67,7 +67,7 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
-            契約種類
+            卡別
           </v-col>
           <v-col            
             cols="3"   
@@ -470,7 +470,7 @@
         </v-row>
         <v-row align="center">
           <v-col cols="1">
-            契約種類
+            卡別
           </v-col>
           <v-col
             cols="3"

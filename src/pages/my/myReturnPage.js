@@ -19,8 +19,8 @@ export default {
             numberOfReject:0,
             multimediaReject: 0,
             formHeaders: [
-                { text: '受理編號', value: 'acceptNum', align: 'center',width:'10%' },
-                { text: '契約種類', value: 'contractType', align: 'center',width:'10%' },
+                { text: '受理號碼', value: 'acceptNum', align: 'center',width:'10%' },
+                { text: '卡別', value: 'contractType', align: 'center',width:'10%' },
                 { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center',width:'10%'},
                 { text: '計算日', value: 'computeDate', align: 'center',width:'10%' },

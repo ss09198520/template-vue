@@ -27,7 +27,7 @@ export default{
                 { text: '調閱狀態', value: 'status', align: 'center' },            
                 { text: '退件原因', value: 'rejectReason', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
-                { text: '契約種類', value: 'contractType', align: 'center' },
+                { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '整理號碼', value: 'archiveNum', align: 'center' },
                 { text: '受理項目', value: 'acceptItem', align: 'center' },                
                 { text: '狀態操作', value: 'action', align: 'center' }

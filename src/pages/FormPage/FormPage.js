@@ -478,6 +478,11 @@ export default {
                 }
             }
 
+            if(ValidateUtil.isEmpty(fileName)){
+                MessageService.showInfo("需輸入附件名稱");
+                return;
+            }
+
             this.attachmentList.push({
                 id: this.attachmentNo,
                 // 其他佐證文件，須由使用者輸入附件類別

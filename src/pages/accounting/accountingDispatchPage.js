@@ -43,7 +43,7 @@ export default {
         accountingName: '',
         // 檢算員
         calculateName: '',
-        // 派工方式 0: 直接以電號分派 / 1: 依契約種類設定分派
+        // 派工方式 0: 直接以電號分派 / 1: 依卡別設定分派
         dispatchType: null,
         // 包制
         usePackage: false,
@@ -381,24 +381,24 @@ export default {
 
     // 整理取出的資料
     sortDispatchData(dispatchList){
-      let electricNumList = [];         // 不論契約種類 電號範圍清單
-      let packageNumList = [];          // 契約種類-包制 電號範圍清單
-      let highVoltageNumList = [];      // 契約種類-高壓 電號範圍清單
-      let meterElectricNumList = [];    // 契約種類-表制 電號範圍清單
-      let computeDateList = [];         // 契約種類-表制 計算日清單
-      let hasPackage = false;           // 是否有契約種類-包制的資料 
-      let hasHighVoltage = false;       // 是否有契約種類-高壓的資料 
-      let hasMeter = false;             // 是否有契約種類-表制的資料 
-      let meterType = null;             // 在契約種類-表制中是否有選擇電號(0)還是計算日(1) 
+      let electricNumList = [];         // 不論卡別 電號範圍清單
+      let packageNumList = [];          // 卡別-包制 電號範圍清單
+      let highVoltageNumList = [];      // 卡別-高壓 電號範圍清單
+      let meterElectricNumList = [];    // 卡別-表制 電號範圍清單
+      let computeDateList = [];         // 卡別-表制 計算日清單
+      let hasPackage = false;           // 是否有卡別-包制的資料 
+      let hasHighVoltage = false;       // 是否有卡別-高壓的資料 
+      let hasMeter = false;             // 是否有卡別-表制的資料 
+      let meterType = null;             // 在卡別-表制中是否有選擇電號(0)還是計算日(1) 
 
       // 先將視窗資料給預設設定
       this.resetDialogData();
 
-      // 判斷為契約種類還是無限定，V無限定/H高壓/P包制/F表制
+      // 判斷為卡別還是無限定，V無限定/H高壓/P包制/F表制
       if(dispatchList[0].type === 'V'){
-        this.dispatchInfo.dispatchType = 0;  //不論契約種類
+        this.dispatchInfo.dispatchType = 0;  //不論卡別
       } else {
-        this.dispatchInfo.dispatchType = 1;  //有契約種類
+        this.dispatchInfo.dispatchType = 1;  //有卡別
       }
 
       // 判斷是哪種電號及計算日
@@ -481,7 +481,7 @@ export default {
 
     // 整理Input資料
     /**
-     * 1.契約種類有分為兩類:純電號or契約種類 包制,高壓,表制，只能二選一設定
+     * 1.卡別有分為兩類:純電號or卡別 包制,高壓,表制，只能二選一設定
      * 2.可接受多組電號範圍
      * 3.表制又分為電號/計算日，只能二選一設定 
      * 
@@ -497,7 +497,7 @@ export default {
       }
 
       // 將電號整理並放到dispatchList中      
-      // 無契約種類-純電號
+      // 無卡別-純電號
       if(this.dispatchInfo.dispatchType === 0 && this.dispatchInfo.electricNumList.length > 0) {
           for(let i in this.dispatchInfo.electricNumList){
             // 判斷電號起訖號是否都有值
@@ -516,7 +516,7 @@ export default {
                 })            
               }
           }
-      // 有契約種類類別
+      // 有卡別類別
       } else if(this.dispatchInfo.dispatchType === 1 ){
          // 包制
         if(this.dispatchInfo.usePackage && this.dispatchInfo.packageNumList.length > 0) {
@@ -733,7 +733,7 @@ export default {
 
       let checkElectric = true;
 
-      // 確認是否有選擇契約種類
+      // 確認是否有選擇卡別
       if(ValidateUtil.isEmpty(this.dispatchInfo.dispatchType)){
         this.errorMsg.classType = '請選擇分派班別設定';
         this.requiredArray.push('分派班別');
@@ -742,7 +742,7 @@ export default {
         this.errorMsg.classType = null;
       }
 
-      // 選擇不限契約種類，是否有選擇電號
+      // 選擇不限卡別，是否有選擇電號
       if(this.dispatchInfo.dispatchType == 0 && this.dispatchInfo.electricNumList.length >= 1){
         for(let i in this.dispatchInfo.electricNumList){
           if(ValidateUtil.isEmpty(this.dispatchInfo.electricNumList[i].start) 
@@ -763,14 +763,14 @@ export default {
         this.errorMsg.electricNum = null;
       }
 
-      // 選擇契約種類是否有選擇電號
+      // 選擇卡別是否有選擇電號
         if(this.dispatchInfo.dispatchType == 1 
           && !this.dispatchInfo.usePackage 
           && !this.dispatchInfo.useHighVoltage 
           && !this.dispatchInfo.useMeter){
             
-            this.errorMsg.contractType = '請選擇契約種類';
-            this.requiredArray.push('契約種類');
+            this.errorMsg.contractType = '請選擇卡別';
+            this.requiredArray.push('卡別');
             checkEmpty = false;
         } else {
             this.errorMsg.contractType = null;
@@ -970,7 +970,7 @@ export default {
       return electricRange;     
     },
 
-    // 修改不論契約種類or依契約種類設定選項，會將另一邊的錯誤訊息清空
+    // 修改不論卡別or依卡別設定選項，會將另一邊的錯誤訊息清空
     changeDispatchType(type){
       if(type === 'non') {
           this.errorMsg.contractType = null;

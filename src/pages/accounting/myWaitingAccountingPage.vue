@@ -181,7 +181,7 @@
             </v-col>
             <v-col cols="1" />
             <v-col cols="1">
-              契約種類
+              卡別
             </v-col>                                             
             <v-col
               cols="3"
@@ -198,7 +198,7 @@
                 :clearable="true"
                 class="my-auto"
                 color="#ADADAD"
-                placeholder="請選擇契約種類"
+                placeholder="請選擇卡別"
               />
             </v-col>
             <v-col cols="3" />

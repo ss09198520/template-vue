@@ -28,7 +28,7 @@ export default {
                 { text: '電號', value: 'electricNum', align: 'center',width:'5%'  },
                 { text: '待核算累積日數', value: 'cumulativeDay', align: 'center',width:'5%'  },
                 { text: '派工日期', value: 'dispatchDate', align: 'center',width:'10%'  },
-                { text: '契約種類', value: 'contractType', align: 'center',width:'10%' },
+                { text: '卡別', value: 'contractType', align: 'center',width:'10%' },
                 { text: '整理號碼', value: 'archiveNum', align: 'center',width:'10%' },
                 { text: '檢視註記', value: 'hasView', align: 'center',width:'5%'},
                 { text: '代理件', value: 'isAgent', align: 'center',width:'5%' },
@@ -106,7 +106,7 @@ export default {
                 archiveNum: null,        //整理號碼
                 dispatchStartDate: null,  //派工日期開始
                 dispatchEndDate: null,    //派工日期結束
-                contractType: null,       //契約種類
+                contractType: null,       //卡別
                 caseType: null            //代理件顯示
             },
             memo: null,

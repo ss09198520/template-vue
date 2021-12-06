@@ -18,7 +18,7 @@ export default {
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
                 { text: '整理號碼', value: 'archieveNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
-                { text: '契約種類', value: 'contractType', align: 'center' },
+                { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '計算日', value: 'computeDate', align: 'center' },
                 { text: '受理日期', value: 'acceptDate', align: 'center' },

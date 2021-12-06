@@ -30,7 +30,7 @@ export default{
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
                 { text: '電號', value: 'electricNum', align: 'center' },
-                { text: '契約種類', value: 'contractType', align: 'center' },
+                { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '整理號碼', value: 'archiveNum', align: 'center' },
                 { text: '申請日期', value: 'acceptDateStr', align: 'center' },
                 { text: '歸檔日期', value: 'archiveDateStr', align: 'center' },            

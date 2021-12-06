@@ -200,7 +200,7 @@
                 <span class="red--text font-12px ml-4">{{ errorMsg.classType }}</span>
               </v-row>
               <v-radio-group v-model="dispatchInfo.dispatchType">
-                <v-radio label="不論契約種類，皆以電號設定分派班別。" @click="changeDispatchType('non')" />
+                <v-radio label="不論卡別，皆以電號設定分派班別。" @click="changeDispatchType('non')" />
                 <span class="red--text font-12px ml-4">{{ errorMsg.electricNum }}</span>
                 <v-row v-for="(electricNum, index) in dispatchInfo.electricNumList" :key="index" style="margin: 0 10px 10px 0;" align="center">
                   <div style="height: 10px; width: 15px;" />
@@ -251,7 +251,7 @@
                     </v-btn>
                   </v-col>
                 </v-row>
-                <v-radio label="依契約種類設定分派班別：" @click="changeDispatchType()" />
+                <v-radio label="依卡別設定分派班別：" @click="changeDispatchType()" />
                 <span class="red--text font-12px ml-4">{{ errorMsg.contractType }}</span>
                 
                 <!-- 包制 -->

@@ -146,6 +146,7 @@
   import MessageService from "@/assets/services/message.service";
   import { geneDynaSatisfactionReport} from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
+  import enums from '@/utils/enums'
 
   const defaultForm = {
     startDate: null, 
@@ -156,7 +157,7 @@
   export default {
     data() {
       return {
-        isRegion: 1, // 1區處、else業務處
+        isRegion: false, // true區處、false業務處
         isShow: false,
         //api post data
         postForm: Object.assign({}, defaultForm),
@@ -175,8 +176,11 @@
         alertDialog: false,
       }
     },
+    mounted() { //initial data
+      const token = this.$store.getters.token;
+      this.isRegion = !token.authTokens.some(authCode => enums.salesTeamAuthCode.includes(authCode)) //不再業務處AuthCode內即為區處人員
+    },
     methods: {
-
       // 送出問卷查詢
       submitSearch() {
         console.log(this.postForm)

@@ -92,7 +92,7 @@
       </v-col>
       <v-col cols="8" class="ml-2 ">        
         <v-btn 
-          v-if="isRegion==1"
+          v-if="isRegion"
           class="ml-3 ma-2"
           color="primary"
           @click="submitSearch(false)"
@@ -101,7 +101,7 @@
           查詢下載結果<v-icon v-text="'mdi-file-download-outline'" />
         </v-btn>
         <v-btn 
-          v-if="isRegion==0"
+          v-if="!isRegion"
           class="ml-3 ma-2"
           color="primary"
           @click="submitSearch(true)"
@@ -109,7 +109,7 @@
           查詢全區處 <v-icon v-text="'mdi-file-download-outline'" />
         </v-btn>
         <v-btn
-          v-if="isRegion==0"
+          v-if="!isRegion"
           class="ml-3 ma-2"
           color="primary"
           @click="submitSearch(false)"
@@ -128,6 +128,7 @@
   import MessageService from "@/assets/services/message.service";
   import { geneDynaRegionSatisfactionReport} from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
+  import enums from '@/utils/enums'
 
   const defaultForm = {
     allRegion: false ,
@@ -138,11 +139,10 @@
   export default {
     data() {
       return {
-        isRegion: 1, // 1區處、else業務處
+        isRegion: false, // true區處、false業務處
         isShow: false,
         //api post data
         postForm: Object.assign({}, defaultForm),
-
         //分頁
         itemsPerPage: 10,
         itemsListPage: 1,
@@ -156,6 +156,10 @@
         dialog: false,
         alertDialog: false,
       }
+    },
+    mounted() { //initial data
+      const token = this.$store.getters.token;
+      this.isRegion = !token.authTokens.some(authCode => enums.salesTeamAuthCode.includes(authCode)) //不再業務處AuthCode內即為區處人員
     },
     methods: {
 

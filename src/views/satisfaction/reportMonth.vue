@@ -43,7 +43,7 @@
                 />
               </v-menu>
             </v-col>
-            <v-col v-if="isRegion==1" cols="1">
+            <v-col v-if="isRegion" cols="1">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -60,7 +60,7 @@
                 <span>查詢</span>
               </v-tooltip>
             </v-col>
-            <v-col v-if="isRegion==0" cols="4">
+            <v-col v-if="!isRegion" cols="4">
               <v-row
                 align="center"
                 justify="space-around"
@@ -149,6 +149,7 @@
   import MessageService from "@/assets/services/message.service";
   import { fetchQuestionnaireReportList , downloadSatisfactionReportFile} from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
+  import enums from '@/utils/enums'
 
   const defaultForm = {
     startDate: null, 
@@ -157,9 +158,9 @@
   export default {
     data() {
       return {
+        isRegion: false, // true區處、false業務處
         //api post data
         postForm: Object.assign({}, defaultForm),
-        isRegion: 0, // 1區處、else業務處
         isShow: false,
         //分頁
         itemsPerPage: 10,
@@ -183,6 +184,10 @@
         dialog: false,
         alertDialog: false,
       }
+    },
+    mounted() { //initial data
+      const token = this.$store.getters.token;
+      this.isRegion = !token.authTokens.some(authCode => enums.salesTeamAuthCode.includes(authCode)) //不再業務處AuthCode內即為區處人員
     },
     methods: {
       downloadReport(item) {

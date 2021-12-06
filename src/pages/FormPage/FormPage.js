@@ -132,7 +132,7 @@ export default {
             }
            
             await this.getInitParam();
-            this.formInit();
+            this.formInit(true);
 
             EventBus.subscriber("scan-data-list", this.getScanDataList);
             EventBus.subscriber("scan-error", this.showScanErrorMsg);
@@ -194,7 +194,7 @@ export default {
                 this.$emit("showOnlyContent");
             }
         },
-        formInit(){
+        formInit(needValidateTime){
             // 驗證是否有受理編號，若無直接擋件
             if(ValidateUtil.isEmpty(this.acceptNum) && ValidateUtil.isEmpty(this.encryptedParam)){
                 this.isBlocking = true;
@@ -228,6 +228,7 @@ export default {
                 empNo: this.empNo,
                 region: this.region,
                 encryptedParam: this.encryptedParam,
+                needValidateTime: needValidateTime
             }
 
             AjaxService.post("/tpesForm/init", param, 
@@ -382,7 +383,7 @@ export default {
             }
 
             this.isFormSignPageOpened = false;
-            this.formInit();
+            this.formInit(false);
         },
         closeFormSignPage(){
             if(!this.formSignPage) {
@@ -597,7 +598,7 @@ export default {
                 }
                 else{
                     // 重新查詢一次
-                    this.formInit();
+                    this.formInit(false);
                 }
             },
             (error) => {

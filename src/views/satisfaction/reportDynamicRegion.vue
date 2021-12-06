@@ -11,11 +11,11 @@
             class="d-flex justify-start mt-2"
             align="center"
           >
-            <v-col cols="2" class="ml-2 ">
+            <v-col cols="1" class="ml-2">
               查詢日期
             </v-col>
 
-            <v-col cols="4" class="d-flex">
+            <v-col cols="3" class="d-flex">
               <v-menu
                 v-model="startDateMenu"
                 :close-on-content-click="false"
@@ -68,14 +68,14 @@
                 />
               </v-menu>
             </v-col>
-            <v-col cols="3" class="ml-2" color="red">
+            <v-col cols="3" class="ml-2">
               * 查詢區間於6個月內
             </v-col>
           </v-row>
           <v-row>
-            <v-col cols="11" />
-            <v-col>
-              <!-- <v-btn color="primary" class="ml-3" @click="search()">{{ searchText }}</v-btn> -->
+            <v-col cols="1" />
+            <v-col cols="3" class="d-flex">
+              <span class="red--text font-12px">{{ errorMsg.dateInfo }}</span>
             </v-col>
           </v-row>
         </v-form>
@@ -125,7 +125,8 @@
 
 <script>
 
-  import MessageService from "@/assets/services/message.service";
+  import MessageService from "@/assets/services/message.service"
+  import moment from 'moment'
   import { geneDynaRegionSatisfactionReport} from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
   import enums from '@/utils/enums'
@@ -140,6 +141,7 @@
     data() {
       return {
         isRegion: false, // true區處、false業務處
+        valid: false,
         isShow: false,
         //api post data
         postForm: Object.assign({}, defaultForm),
@@ -155,6 +157,10 @@
         // CRUD
         dialog: false,
         alertDialog: false,
+
+        errorMsg:{
+          dateInfo:null,
+        },
       }
     },
     mounted() { //initial data
@@ -162,13 +168,40 @@
       this.isRegion = !token.authTokens.some(authCode => enums.salesTeamAuthCode.includes(authCode)) //不再業務處AuthCode內即為區處人員
     },
     methods: {
+      
+      // 驗證是否欄位是否合法
+      checkRequired(){
+        //無任何條件且日期間隔大於183
+        if(isEmpty(this.postForm.startDate) && isEmpty(this.postForm.endDate)){
+          this.errorMsg.dateInfo = '需填入查詢時間，最多可查詢半年內之資料'
+          this.valid = false
+          return
+        }
+        //無任何條件且日期間隔大於183
+        else if(moment(this.postForm.endDate).diff(moment(this.postForm.startDate), 'days') > 183){
+          this.errorMsg.dateInfo = '查詢時間錯誤，日期區間需介於6個月內'
+          this.valid = false
+          return
+        }
+        else if(isEmpty(this.postForm.startDate) || isEmpty(this.postForm.endDate)){
+          this.errorMsg.dateInfo ='查詢時間錯誤需填入正確起訖'
+          this.valid = false
+          return
+        }
+
+        this.valid = true
+        this.errorMsg.dateInfo = null
+      },
 
       // 送出問卷查詢
       submitSearch(isAllRegion) {
         this.postForm.allRegion = isAllRegion
-        console.log(this.postForm)
-        //API post data
-        this.geneDynaRegionSatisfactionReport(this.postForm)
+        
+        this.checkRequired()
+        if (this.valid) {
+          //API post data
+          this.geneDynaRegionSatisfactionReport(this.postForm)
+        }
       },
 
       /**

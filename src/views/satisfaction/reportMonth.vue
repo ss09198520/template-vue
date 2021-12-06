@@ -60,27 +60,23 @@
                 <span>查詢</span>
               </v-tooltip>
             </v-col>
-            <v-col v-if="!isRegion" cols="4">
-              <v-row
-                align="center"
-                justify="space-around"
+            <v-col cols="8" class="ml-2 ">        
+              <v-btn 
+                v-if="!isRegion"
+                class="ml-3 ma-2"
+                color="primary"
+                @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY_ALL')"
               >
-                <v-btn
-                  depressed
-                  color="primary"
-                  @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY_ALL')"
-                >
-                  查詢多區處 <v-icon v-text="'mdi-magnify'" />
-                </v-btn>
-                <v-btn
-                  class="mt-1"
-                  depressed
-                  color="primary"
-                  @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY')"
-                >
-                  查詢業務處彙總 <v-icon v-text="'mdi-magnify'" />
-                </v-btn>
-              </v-row>
+                查詢全區處 <v-icon v-text="'mdi-file-download-outline'" />
+              </v-btn>
+              <v-btn
+                v-if="!isRegion"
+                class="ml-3 ma-2"
+                color="primary"
+                @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY')"
+              >
+                查詢業務處彙總 <v-icon v-text="'mdi-file-download-outline'" />
+              </v-btn>
             </v-col>
           </v-row>
           <v-row>
@@ -89,8 +85,6 @@
               <!-- <v-btn color="primary" class="ml-3" @click="search()">{{ searchText }}</v-btn> -->
             </v-col>
           </v-row>
-          
-          
         </v-form>
       </v-col>
     </v-row>
@@ -195,6 +189,7 @@
       },
       // 送出問卷查詢
       submitSearch(reportType) {
+        
         if(reportType){
           this.postForm.category = reportType
         }

@@ -6,7 +6,7 @@
         class="ml-10 font-18px"
         cols="12"
       >
-        <v-form class="font-weight-bold">
+        <v-form ref="form" v-model="valid" class="font-weight-bold">
           <v-row
             class="d-flex justify-start"
             align="center"
@@ -161,6 +161,7 @@
                 />
               </v-menu>
             </v-col>
+            <span class="red--text font-12px">{{ errorMsg.dateInfo }}</span>  
           </v-row>
         </v-form>
       </v-col>
@@ -222,7 +223,8 @@
 </template>
 
 <script>
-  import MessageService from "@/assets/services/message.service";
+  import MessageService from "@/assets/services/message.service"
+  import moment from 'moment'
   import { listSatisfactionRawData } from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
 
@@ -241,6 +243,7 @@
         //api post data
         postForm: Object.assign({}, defaultForm),
 
+        valid: false,
         isShow: false,
         isDownload: false,
         
@@ -253,42 +256,69 @@
         dialog: false,
         alertDialog: false,
         editedIndex: -1,
+        
+        errorMsg:{
+          dateInfo:null,
+        },
       }
     },
     methods: {
-      close() {
-        this.dialog = false
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-        this.alertDialog = false
-      },
-      save() {
-        if (this.editedIndex > -1) {
-          Object.assign(this.itemsCRUD[this.editedIndex], this.editedItem)
-        } else {
-          this.itemsCRUD.push(this.editedItem)
-        }
-        this.close()
-      },
       goWeek() {
         this.$router.push({path:`${this.$route.matched[0].path}/satisfyReport/month`})
       },
       goMonth() {
         this.$router.push({path:`${this.$route.matched[0].path}/satisfyReport/week`})
       },
-      deleteItem(item) {
-        this.alertDialog = true
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-      },
-      remove() {
-        this.itemsCRUD.splice(this.editedIndex, 1)
-        this.close()
-      },
       // 送出問卷查詢下載
       submitDownload() {
         console.log(this.postForm)
-        //API post data
-        this.downloadSatisfactionReportFile(this.postForm)
+        
+        // 驗證必填欄位是否為空值
+        this.checkRequired()
+        if (this.valid) {
+          //API post data
+          this.downloadSatisfactionReportFile(this.postForm)
+        }
+      },
+
+      // 驗證是否欄位是否合法
+      checkRequired(){
+        let allEmpty = true
+        Object.keys(this.postForm).forEach(key => {
+          if(key!='startDate' && key!='endDate' && key!='category') {
+            if(!isEmpty(this.postForm[key])) allEmpty = false
+          }
+        });
+        //無任何條件且日期間隔大於183
+        if(allEmpty  && isEmpty(this.postForm.startDate) && isEmpty(this.postForm.endDate)){
+          this.errorMsg.dateInfo = '至少需填入查詢時間，最多可查詢半年內之資料'
+          this.valid = false
+          return
+        }
+        //無任何條件且日期間隔大於183
+        else if(allEmpty && moment(this.postForm.endDate).diff(moment(this.postForm.startDate), 'days') > 183){
+          this.errorMsg.dateInfo = '查詢時間錯誤，最多可查詢半年內之資料'
+          this.valid = false
+          return
+        }
+        //有任一條件但查詢起訖皆為空
+        else if(!allEmpty && isEmpty(this.postForm.startDate) && isEmpty(this.postForm.endDate)){
+          this.errorMsg.dateInfo ='查詢時間錯誤，最多可查詢兩年內之資料'
+          this.valid = false
+          return
+        } 
+        else if(!allEmpty && moment(this.postForm.endDate).diff(moment(this.postForm.startDate), 'days') > 730){
+          this.errorMsg.dateInfo ='查詢時間錯誤，最多可查詢兩年內之資料'
+          this.valid = false
+          return
+        }
+        else if(isEmpty(this.postForm.startDate) || isEmpty(this.postForm.endDate)){
+          this.errorMsg.dateInfo ='查詢時間錯誤需填入正確起訖'
+          this.valid = false
+          return
+        }
+        this.valid = true
+        this.errorMsg.dateInfo = null
       },
 
       /**

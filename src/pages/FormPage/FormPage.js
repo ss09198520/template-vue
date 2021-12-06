@@ -118,6 +118,7 @@ export default {
             maxSignVersion: 0,
             isLoading: false,
             encryptedParam: null,
+            empName: null,
         }
     },
     methods: {
@@ -246,6 +247,7 @@ export default {
                 this.needScanFileCodeList = response.restData.needScanFileCodeList;
                 this.isAgentNeedScanAttach = response.restData.agentNeedScanAttach;
                 this.maxSignVersion = response.restData.maxSignVersion;
+                this.empName = response.restData.empName;
 
                 // 若為加密參數進件，放入解密後才有的參數
                 this.setDescryptedParam(response.restData);
@@ -726,6 +728,7 @@ export default {
                 isAddAttachment: this.isAddAttachment,
                 empNo: this.empNo,
                 region: this.region,
+                empName: this.empName,
             };
 
             return vin;

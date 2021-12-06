@@ -165,6 +165,8 @@ export default {
                 category: "EDITED_FORM",
                 file: formImage,
                 needSeal: false,
+                empNo: this.empNo,
+                region: this.region,
             };
 
             await AjaxService.post("/tpesForm/uploadFile", vin, 
@@ -205,6 +207,8 @@ export default {
                 file: data,
                 needSeal: false,
                 version: this.maxSignVersion + 1,
+                empNo: this.empNo,
+                region: this.region,
             };
 
             AjaxService.post("/tpesForm/uploadFile", vin, 

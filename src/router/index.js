@@ -188,7 +188,7 @@ export const asyncRoutes = [
       {
         path: 'myReturn',
         name: 'MyReturn',
-        privilegeCode: ['P002','P003'],
+        privilegeCode: ['P002','P003','AUTH12','AUTH13'],
         component: () => import('@/pages/my/myReturnPage.vue'),
         meta: { title: '我的退件區', icon: 'mdi-alert' }
       },

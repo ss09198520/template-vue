@@ -102,7 +102,7 @@
               class="elevation-1"
               @page-count="multimediFormListPageCount = $event"
             >
-              <template v-slot:item.sendNumber="{ item }">
+              <template v-slot:[`item.sendNumber`]="{ item }">
                 <v-tooltip top>
                   <template v-slot:activator="{ on }">        
                     <a href="javascript:void(0)" style="text-decoration:underline;" @click="openFormHistory(item)" v-on="on">{{ item.sendNumber }}</a>
@@ -112,13 +112,16 @@
               </template>
 
               <!-- 原受理人號碼+姓名 -->
-              <template v-slot:item.sender="{ item }"> 
+              <template v-slot:[`item.sender`]="{ item }"> 
                 <!-- {{ item.sender }}
               <br> -->
                 {{ item.senderName }}
               </template>
+              <template v-slot:[`item.mediaType`]="{ item }">
+                {{ mediaSignTypeOption.find(state => { return item.mediaType===state.value }).text }}
+              </template>
 
-              <template v-slot:item.action="{ item }">
+              <template v-slot:[`item.action`]="{ item }">
                 <v-tooltip v-if="item.edit" top>
                   <template v-slot:activator="{ on }">
                     <v-btn

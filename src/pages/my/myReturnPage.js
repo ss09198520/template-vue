@@ -2,6 +2,8 @@ import MessageService from "@/assets/services/message.service";
 import formPage from "../FormPage/FormPage.vue";
 import AjaxService from "@/assets/services/ajax.service";
 import ValidateUtil from "@/assets/services/validateUtil";
+import { queryMediaReturnList} from '@/api/media'
+import enums from '@/utils/enums'
 
 export default {
     name: 'MyReturn',
@@ -12,6 +14,13 @@ export default {
     
     },
     beforeMount() { // 在這裡做初始化, 勿刪
+      const token = this.$store.getters.token;
+      this.hasReturnAuth = token.authTokens.some(authCode => this.returnAuthCode.includes(authCode))
+      this.haseMediaReturnAuth = token.authTokens.some(authCode => this.mediaTeamAuthCode.includes(authCode))
+      //u can show token info on console
+      // console.log('token' ,token)
+      
+      //初始化頁面資料
       this.init();
     },
     data() {
@@ -35,13 +44,13 @@ export default {
             formList: [],
             // 多媒體參數命名待確認 尚不更動
             multimediHeaders: [
-                { text: '送件編號', value: 'sendNumber', align: 'center' },
-                { text: '退件日期', value: 'returnDate', align: 'center' },
-                { text: '退件原因', value: 'reason', align: 'center' },
-                { text: '退件說明', value: 'desc', align: 'center' },  
-                { text: '送審項目', value: 'sendItem', align: 'center' },          
-                { text: '送件人', value: 'sender', align: 'center' },
-                { text: '退件人', value: 'returner', align: 'center' },
+                { text: '內 容 名 稱', value: 'mediaName', align: 'center' },
+                { text: '退件日期', value: 'rejectDate', align: 'center' },
+                { text: '退件原因', value: 'rejectReason', align: 'center',sortable: false,},
+                { text: '退件說明', value: 'rejectDesc', align: 'center',sortable: false, },  
+                { text: '送審項目', value: 'mediaType', align: 'center' },          
+                { text: '送件人', value: 'createAuthor', align: 'center' },
+                { text: '退件人', value: 'rejectUser', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
             multimediFormList: [],
@@ -68,12 +77,27 @@ export default {
             formKey: 0,            
             hasReturnAuth: false,
             haseMediaReturnAuth:false,
+            mediaTeamAuthCode: [
+              'AUTH12', //多媒體設定-業務處
+              'AUTH13',	//多媒體設定-區處
+            ],
+            returnAuthCode: [
+              'AUTH07', //核算課長
+              'AUTH15', //核算員
+            ],
+
+            //類型對照
+            mediaSignTypeOption: enums.mediaSignTypeOption,
         }
     },
     methods: {
       init(){
-        this.queryReturnForm();
-        this.queryMediaReturnInit();
+        if(this.hasReturnAuth){
+          this.queryReturnForm();
+        }
+        if(this.haseMediaReturnAuth){
+          this.queryMediaReturnInit();
+        }
       },
         action(type,item){
           // 抓出選的是第幾筆
@@ -128,6 +152,19 @@ export default {
           this.formHistoryModel = true;
       },
 
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+       hasResult (dataList) {
+        // 驗證questionnaire是否有資料
+        if(ValidateUtil.isEmpty(dataList) || dataList.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
+        }
+        return true
+      },
+
       /** 
        * 
        * Ajax Start
@@ -174,32 +211,52 @@ export default {
 
       // Action: (多媒體案件)頁面初始化
       queryMediaReturnInit(){
+        this.queryMediaReturnList()
         // 模擬取回資料
-        let multimediFormList = [
-          { action: true, 
-            edit: true, 
-            cancel: true, 
-            sendNumber: 'M00001', 
-            returnDate: '2021-09-10 15:00', 
-            reason: '文字修改', 
-            desc: '文字錯誤請重新修改', 
-            sendItem: '跑馬燈', 
-            sender: '1050330001', 
-            senderName: '林美美',
-            returner:'甘仙文',
-            formHistoryList:[
-              '2021-09-14 14:20:14 退件中 (0151230020 吳靜)',
-              '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
-              '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',    
-            ],
-          },
-          { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '影片、圖片錯誤', desc: '文字錯誤請重新修改', sendItem: '節目單', sender: '1050330002', senderName: '王曉花',returner:'駱文成',formHistoryList:[] },
-          { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '滿意度調查', sender: '1050330003', senderName: '李小凡',returner:'蔡又新',formHistoryList:[] }
-        ];
+        // let multimediFormList = [
+        //   { action: true, 
+        //     edit: true, 
+        //     cancel: true, 
+        //     sendNumber: 'M00001', 
+        //     returnDate: '2021-09-10 15:00', 
+        //     reason: '文字修改', 
+        //     desc: '文字錯誤請重新修改', 
+        //     sendItem: '跑馬燈', 
+        //     sender: '1050330001', 
+        //     senderName: '林美美',
+        //     returner:'甘仙文',
+        //     formHistoryList:[
+        //       '2021-09-14 14:20:14 退件中 (0151230020 吳靜)',
+        //       '2021-09-14 13:50:14 核算分派 (0151230001 陳婷婷)',
+        //       '2021-09-14 13:20:14 案件成立 (0151230011 鍾書文)',    
+        //     ],
+        //   },
+        //   { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '影片、圖片錯誤', desc: '文字錯誤請重新修改', sendItem: '節目單', sender: '1050330002', senderName: '王曉花',returner:'駱文成',formHistoryList:[] },
+        //   { action: true, edit: true, cancel: true, sendNumber: 'P00001', returnDate: '2021-09-10 15:00', reason: '文字修改', desc: '文字錯誤請重新修改', sendItem: '滿意度調查', sender: '1050330003', senderName: '李小凡',returner:'蔡又新',formHistoryList:[] }
+        // ];
         
-        this.multimediFormList = multimediFormList;
+        // this.multimediFormList = multimediFormList;
       },
 
+      //Action:簽核查詢
+      async queryMediaReturnList() {
+        
+        const data = await queryMediaReturnList()
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢退件資料');
+            return;
+        }
+        //查詢前清空資料
+        this.multimediFormList = Object.assign([])
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.returnList)){
+          let tmpData = data.restData.returnList
+
+          this.multimediFormList = tmpData
+          this.multimediaReject = tmpData.length
+        }
+      },
       // 取得表單資料
       queryRetrnInfo(){
         // Vin參數

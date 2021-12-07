@@ -96,6 +96,7 @@
                   dense
                   row
                   :rules="[v => !!v || '必須選擇一種上傳格式']"
+                  @change="validate"
                 >
                   <v-radio
                     label="純圖檔"
@@ -138,10 +139,11 @@
                   show-size
                   color="accent"
                   accept="image/jpeg, image/png, image/jpg, video/*"
-                  hint="(.jpg、.png，最多不超過 50MB)"
+                  hint="(.jpg、.png、影音，最多不超過 30MB)"
                   persistent-hint
                   prepend-inner-icon="mdi-cloud-upload"
                   prepend-icon
+                  :rules="rules.filesSizeRules.concat([checkFileExt])"
                   @change="getImagePreviews()"
                 />
                 <v-img v-if="!!imageURL" :src="imageURL" />
@@ -209,8 +211,7 @@
         rules: {
           requiredRule: [v => !!v || '此欄位為必填欄位'],
           lengthRules: [v => (v && v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
-          videoSizeRules: [v => !!v || v.size < 50000000 || 'Avatar size should be less than 50 MB!',],
-          iamgeSizeRules: [v => !!v || v.size < 10000000 || 'Avatar size should be less than 10 MB!',],
+          filesSizeRules: [ v => !v || v.size < 30e6 || "檔案大小超過 30 MB!" ],
         },
       }
     },
@@ -231,6 +232,22 @@
       })
     },
     methods: {
+      checkFileExt(file) {
+        if(this.postForm.materialType == 'image'){
+          return this.isImage(file.name) ? true : '圖片格式錯誤'
+        } else if(this.postForm.materialType == 'video'){
+          return this.isVideo(file.name) ? true : '影音格式錯誤'
+        }
+
+        return true
+      },
+      isImage(filename) {
+        return (/\.(jpg|jpeg|tiff|png)$/i).test(filename)
+      },
+      isVideo(filename) {
+        return (/\.(mp4)$/i).test(filename)
+      },
+
       getImagePreviews() {    
         if (this.uploadData instanceof Blob){
           this.reader.readAsDataURL(this.uploadData)    
@@ -241,9 +258,9 @@
       submit() {
         
         if (this.$refs.form.validate()) {
-          console.log(this.postForm)
+          // console.log(this.postForm)
           
-          this.submitForm(this.postForm)
+          // this.submitForm(this.postForm)
         }
       },
       validate() {

@@ -159,7 +159,7 @@
         this.focusIndex = i
       },
       setAnswerValue (questionId,answerId,answerLabel,answerValue) {
-        console.log('question.questionId:' , questionId , 'answer.answerId:' , answerId , 'answer.value:' , answerValue)
+        // console.log('question.questionId:' , questionId , 'answer.answerId:' , answerId , 'answer.value:' , answerValue)
         const question = this.postForm.questions.find((value) => value.questionId===questionId)
         question.userAnswerId = answerId
         question.userAnswerLabel = answerLabel

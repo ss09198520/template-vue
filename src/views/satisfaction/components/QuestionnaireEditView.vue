@@ -105,7 +105,7 @@
                         <v-col>
                           <v-file-input
                             v-model="attachmentFile"
-                            :rules="rules.requiredRule"
+                            :rules="rules.requiredRule.concat(rules.filesSizeRules)"
                             :hide-details="hideDatails"
                             placeholder="請選擇上傳附件"
                             color="accent"
@@ -114,7 +114,7 @@
                             persistent-hint
                             prepend-inner-icon="mdi-cloud-upload"
                             prepend-icon
-                            accept="application/pdf,application/vnd.ms-excel"
+                            accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf ,application/vnd.ms-excel"
                             show-size
                             @change="onUpload"
                           />
@@ -287,8 +287,9 @@
         rules: {
           requiredRule: [v => !!v || '此欄位為必填欄位'],
           lengthRules: [v => (v && v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
-          videoSizeRules: [v => !!v || v.size < 50000000 || 'Avatar size should be less than 50 MB!',],
-          iamgeSizeRules: [v => !!v || v.size < 10000000 || 'Avatar size should be less than 10 MB!',],
+          videoSizeRules: [v => !!v || v.size < 50e6 || '檔案大小超過 50 MB!',],
+          iamgeSizeRules: [v => !!v || v.size < 10e6 || '檔案大小超過 10 MB!',],
+          filesSizeRules: [ v => !v || v.size < 25e6 || "檔案大小超過 30 MB!" ],
         },
 
         auth: false,  

@@ -390,6 +390,7 @@ export default {
                 return;
             }
             this.formSignPage.close();
+            this.isFormSignPageOpened = false;
         },
         deleteCertificate(index){
             this.certificateList.splice(index, 1);

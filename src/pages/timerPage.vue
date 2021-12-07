@@ -343,6 +343,10 @@
         <span class="mr-2">updateAgentApplicationFromLts (LTS API 從差假管理系統取得人員差勤資料並更新到代理申請table中 Batch)</span>
         <v-btn @click="updateAgentApplicationFromLts()">start</v-btn>
       </v-row>
+      <v-row class="marginLeft mt-7" style="display: flex; align-items: center;">
+        <span class="mr-2">confirmArchive (取得 NBS 變動失敗清單)</span>
+        <v-btn @click="confirmArchive()">start</v-btn>
+      </v-row>
 
     </v-container>
     <v-dialog id="importWordModal" v-model="importWordModalShow" width="370">
@@ -659,6 +663,15 @@ export default {
         },
         updateAgentApplicationFromLts(){
           AjaxService.post("/batch/updateAgentApplicationFromLts", {}, 
+            (response) => {
+                MessageService.showSuccess("成功");
+            },
+            (error) => {
+                MessageService.showError("失敗");
+            });
+        },
+        confirmArchive(){
+          AjaxService.post("/batch/confirmArchive", {}, 
             (response) => {
                 MessageService.showSuccess("成功");
             },

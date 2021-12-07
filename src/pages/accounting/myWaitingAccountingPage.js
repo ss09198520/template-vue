@@ -248,10 +248,7 @@ export default {
          **/
 
         // Action:頁面初始化
-        queryAccoutingInit(){
-
-            let numOfAccounting = 0;
-                     
+        queryAccoutingInit(){                     
             AjaxService.post('/waitAccounting/init',
             {
                        
@@ -319,7 +316,7 @@ export default {
                                 }
                             }
                         }                      
-                        numOfAccounting = response.restData.initWaitAccountingListVo.length;                                               
+                        this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                                               
                     }
                 } else {
                   //接後端候要放errorMsg
@@ -330,12 +327,7 @@ export default {
                     // server error                    
                     MessageService.showSystemError(response.restData.code);
                 }
-            );      
-
-            // // 整理案件資料
-            // this.setAccountInfo(accoutingList);
-            // 取出後端參數
-            this.numOfAccounting = numOfAccounting;
+            );
         },
 
         // 取得退件視窗的下拉選單清單
@@ -399,7 +391,6 @@ export default {
                 contractType: this.searchForm.contractType,
                 caseType: this.searchForm.caseType,
             };
-            let numOfAccounting = 0;
             AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,
             (response) => {
                 if (response != null &&
@@ -423,7 +414,7 @@ export default {
                                 element.isAgent = true;
                             }                  
                         });                        
-                        numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
+                        this.numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
                         MessageService.showSuccess('依條件查詢待核算資料成功');                                       
                     }
                 } else {
@@ -436,16 +427,6 @@ export default {
                     MessageService.showSystemError(response.restData.code);
                 }
             );
-             // 模擬從後端取到的假資料
-            let accoutingList = [
-                
-            ];
-            
-
-            // 整理案件資料
-            this.setAccountInfo(accoutingList);
-            // 取出後端參數
-            this.numOfAccounting = numOfAccounting;
         },
 
         // Action:查詢待審核案件資料

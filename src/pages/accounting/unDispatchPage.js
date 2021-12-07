@@ -114,7 +114,8 @@ export default {
                         response.restData.initUndispatchListVo.forEach((element) => {
                             element.action = true;
                         });
-                        this.User = response.restData.userType;                                                                                       
+                        this.User = response.restData.userType;
+                        this.numOfUndispatch = response.restData.initUndispatchListVo.length;                                                                            
                     }
                 } else {
                   //接後端候要放errorMsg

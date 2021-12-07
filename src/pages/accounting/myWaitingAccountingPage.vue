@@ -2,8 +2,6 @@
   <v-app>
     <v-container>
       <div v-if="hasAccountingAuth == true">
-        <v-btn class="ma-2" :class="{'primary': User == 'auditer'}" @click="User = 'auditer'">角色：核算員</v-btn>
-        <v-btn class="ma-2" :class="{'primary': User == 'checker'}" @click="User = 'checker'">角色：檢算員</v-btn>
         <div class="d-flex w-100" style="margin-top: 20px;">
           <div class="block mr-5 w-100">
             <div>

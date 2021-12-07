@@ -193,7 +193,7 @@ export default {
 
             if(!ValidateUtil.isEmpty(response.restData.authList)){
               for(let i in response.restData.authList){
-                if(response.restData.authList[i] == 'AUTH07' || response.restData.authList[i] == 'AUTH15'){
+                if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07' || response.restData.authList[i] == 'AUTH15'){
                   this.hasReturnAuth = true;
                   break;
                 }

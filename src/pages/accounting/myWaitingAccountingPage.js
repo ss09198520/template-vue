@@ -17,7 +17,7 @@ export default {
     data() {
         return {            
             User: '',
-            numOfAccounting: null,
+            numOfAccounting: 0,
             accoutingHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center',width:'10%' },
                 { text: '受理日期', value: 'acceptDate', align: 'center',width:'10%'  },
@@ -250,7 +250,7 @@ export default {
         // Action:頁面初始化
         queryAccoutingInit(){
 
-            let numOfAccounting = '';
+            let numOfAccounting = 0;
                      
             AjaxService.post('/waitAccounting/init',
             {
@@ -266,23 +266,22 @@ export default {
                     if (ValidateUtil.isEmpty(response.restData.initWaitAccountingListVo)) {                        
                         MessageService.showInfo('查無資料');
                         if(!ValidateUtil.isEmpty(response.restData.authList)){
+                            // 根據使用者角色決定頁面顯示
                             for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH15' || response.restData.authList[i] == 'AUTH20'){
-                                    this.hasAccountingAuth = true;
-                                    console.log(this.hasAccountingAuth);
-                                    break;
-                                }
-                            }
-                            for(let i in response.restData.authList){
+                                // 核算員
                                 if(response.restData.authList[i] == 'AUTH15'){
                                     this.auditor = true;
-                                    break;
+                                    this.hasAccountingAuth = true;
                                 }
-                            }
-                            for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH20'){
+                                // 檢算員
+                                else if(response.restData.authList[i] == 'AUTH20'){
                                     this.checker = true;
-                                    break;
+                                    this.hasAccountingAuth = true;
+                                }
+                                // 核算課長 or 核算部門主辦 可看到該課所有資料，但不能進行核算
+                                else if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07'){
+                                    this.checker = true;
+                                    this.hasAccountingAuth = true;
                                 }
                             }
                         }         
@@ -331,15 +330,10 @@ export default {
                     // server error                    
                     MessageService.showSystemError(response.restData.code);
                 }
-            );
+            );      
 
-            let accoutingList = [
-               
-            ];
-            
-
-            // 整理案件資料
-            this.setAccountInfo(accoutingList);
+            // // 整理案件資料
+            // this.setAccountInfo(accoutingList);
             // 取出後端參數
             this.numOfAccounting = numOfAccounting;
         },
@@ -405,7 +399,7 @@ export default {
                 contractType: this.searchForm.contractType,
                 caseType: this.searchForm.caseType,
             };
-            let numOfAccounting = '';
+            let numOfAccounting = 0;
             AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,
             (response) => {
                 if (response != null &&

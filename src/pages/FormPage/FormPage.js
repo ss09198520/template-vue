@@ -349,7 +349,7 @@ export default {
                 this.formSignPage.signFileNo = this.cancelSign.fileNo;
             }
             // 若為檢視表單則不需簽名
-            else if(this.formPageMode == "accounting" || this.formPageMode == "view"){
+            else if(this.formPageMode == "accounting" || this.formPageMode == "view" || this.formPageMode == "viewDownload"){
                 this.formSignPage.mode = "view";
             }
             else{
@@ -365,21 +365,25 @@ export default {
             this.formSignPage.region = this.region;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
 
-            try {
-                // 將畫面顯示改為同步
-                PMCService.callDualScreenAdapterClone();
-            } catch (error) {
-                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            if(this.formPageMode != "accounting" && this.formPageMode != "view" && this.formPageMode != "viewDownload"){
+                try {
+                    // 將畫面顯示改為同步
+                    PMCService.callDualScreenAdapterClone();
+                } catch (error) {
+                    MessageService.showError("PMC 未開啟或異常", "PMC ");
+                }
             }
             
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
-            try {
-                // 將畫面顯示改為延伸
-                PMCService.callDualScreenAdapterExtend();
-            } catch (error) {
-                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            if(this.formPageMode != "accounting" && this.formPageMode != "view" && this.formPageMode != "viewDownload"){
+                try {
+                    // 將畫面顯示改為延伸
+                    PMCService.callDualScreenAdapterExtend();
+                } catch (error) {
+                    MessageService.showError("PMC 未開啟或異常", "PMC ");
+                }
             }
 
             this.isFormSignPageOpened = false;

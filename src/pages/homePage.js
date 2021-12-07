@@ -81,7 +81,7 @@ export default {
                     this.showCounts.myForm = true;
                 }
                 // 判斷我的退件區-案件
-                if(roleList[index].roleCode === 'AUTH07' || roleList[index].roleCode === 'AUTH15'){
+                if(roleList[index].roleCode === 'AUTH01' || roleList[index].roleCode === 'AUTH07' || roleList[index].roleCode === 'AUTH15'){
                     this.showCounts.myReturnForm = true;
                 }
                 // 判斷我的退件區-多媒體
@@ -95,10 +95,10 @@ export default {
                     this.showCounts.myRead = true;
                 } 
                 // 判斷我的核算區
-                if(roleList[index].roleCode === 'AUTH07' || roleList[index].roleCode === 'AUTH15' || roleList[index].roleCode === 'AUTH20'){            
+                if(roleList[index].roleCode === 'AUTH01' || roleList[index].roleCode === 'AUTH07' || roleList[index].roleCode === 'AUTH15' || roleList[index].roleCode === 'AUTH20'){            
                     this.showCounts.myAccounting = true;
                     // 判斷是否為核算員或核算課長權限
-                    if(roleList[index].roleCode === 'AUTH07' || roleList[index].roleCode === 'AUTH15'){
+                    if(roleList[index].roleCode === 'AUTH01' || roleList[index].roleCode === 'AUTH07' || roleList[index].roleCode === 'AUTH15'){
                         this.showCounts.hasAccounting = true;
                     }
                     // 判斷是否為檢算員權限

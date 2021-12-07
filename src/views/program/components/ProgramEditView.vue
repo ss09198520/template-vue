@@ -621,6 +621,22 @@
           this.signAttachmentFile.base64 = this.dataURL.split(",")[1]
         }
       },
+      //素材送出前檢查
+      checkSelectedFiles(selectedFiles) {
+        if(isEmpty(selectedFiles)) {
+          let formatArray = ['素材數量為空']
+          let requiredArray = ['素材數量']
+          MessageService.showCheckInfo(requiredArray,formatArray);
+          return false
+        } else if (this.selectedFiles.length > 20) {
+          let formatArray = ['素材數量超過' + '20']
+          let requiredArray = ['素材數量']
+          MessageService.showCheckInfo(requiredArray,formatArray);
+          return false
+        }
+
+        return true
+      },
       checkDate() {
         let hasCheck = true;
         // 1-1 輪播起迄日都有選擇
@@ -705,14 +721,8 @@
       // Button Function 送出節目單製作儲存
       submit(isSign) {
       if (this.$refs.programForm.validate()) {
-          
-          if(isEmpty(this.selectedFiles)) {
-            let formatArray = []
-            let requiredArray = ['素材資料']
-
-            MessageService.showCheckInfo(requiredArray,formatArray);
-            this.valid = false
-            return;
+          if(!this.checkSelectedFiles(this.selectedFiles)) {
+            return
           } else {
             //塞入素材資訊
             this.postForm.programMaterials = this.selectedFiles.reduce((items, mediaFile) => {

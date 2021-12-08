@@ -388,7 +388,7 @@ export default {
                 archieveNum: this.searchForm.archieveNum,
                 dispatchStartDate: this.searchForm.dispatchStartDate,
                 dispatchEndDate: this.searchForm.dispatchEndDate,
-                contractType: this.searchForm.contractType,
+                contractType:  (ValidateUtil.isEmpty(this.searchForm.contractType)? null:this.searchForm.contractType.text),
                 caseType: this.searchForm.caseType,
             };
             AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,

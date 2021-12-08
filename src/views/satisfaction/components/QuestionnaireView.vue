@@ -257,6 +257,8 @@
         }
 
         MessageService.showSuccess('作答成功' + "✓")
+
+        window.close();
       },
       
     }

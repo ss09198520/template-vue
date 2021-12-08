@@ -51,6 +51,7 @@
       <v-row class="marginLeft">
         <v-btn class="mr-3" @click="openNewWindow()">OPEN CHROME</v-btn>
         <v-btn class="mr-3" @click="dualScreenExtend()">EXTEND</v-btn>
+        <v-btn class="mr-3" @click="openNewSatisfactionWindow()">openSatisfactionWindow</v-btn>
         <v-btn @click="dualScreenClone()">CLONE</v-btn>
       </v-row>
       <hr style="margin-top: 30px;margin-bottom: 30px;">
@@ -542,6 +543,10 @@ export default {
             });
             
             this.importExcelModalShow = false;
+        },
+        openNewSatisfactionWindow() {
+          let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
+          window.open("/tpes/#/satisfaction/answer?acceptNum=" + '12345678', '滿意度調查', config);
         },
         openNewWindow() {
           PMCService.callBrowserAdapter('https://www.google.com');

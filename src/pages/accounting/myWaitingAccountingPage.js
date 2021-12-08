@@ -384,7 +384,7 @@ export default {
                 electricNum: this.searchForm.electricNum,
                 custName: this.searchForm.custName,
                 cumulativeDay: this.searchForm.cumulativeDay,
-                computeDate: this.searchForm.computeDate,
+                computeDate: (ValidateUtil.isEmpty(this.searchForm.computeDate)? null:this.searchForm.computeDate.value),
                 archieveNum: this.searchForm.archieveNum,
                 dispatchStartDate: this.searchForm.dispatchStartDate,
                 dispatchEndDate: this.searchForm.dispatchEndDate,

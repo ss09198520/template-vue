@@ -205,7 +205,7 @@ export default {
           if(!this.checkRejectVal()){
               MessageService.showCheckInfo(this.requireArray,this.formatArray);
           }  else {
-              this.updateAccouting('reject'); 
+              this.updateAccouting(); 
           }
         },
         // 開啟備註視窗
@@ -491,18 +491,18 @@ export default {
                 memo: this.memo,
                 accnting: this.selectItem.accnting,
                 acceptNum: this.selectItem.acceptNum,
-                rejectReason: this.rejectReason,
+                rejectReason: this.rejectReason.rejectReasonName,
                 rejectDesc: this.rejectDesc,
             };
             
-            AjaxService.post('/waitAccounting/auditAccounting',AuditAccountingReq,
+            AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
             (response) => {
                 if (response != null &&
                     response != undefined &&                    
                     response.restData.message != null &&
                     response.restData.message != undefined &&
                     response.restData.success
-                    ) {                                                             
+                    ) {
                         MessageService.showInfo('核算成功');                                                                   
                 } else {
                   //接後端候要放errorMsg

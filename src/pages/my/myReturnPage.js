@@ -14,12 +14,6 @@ export default {
     
     },
     beforeMount() { // 在這裡做初始化, 勿刪
-      const token = this.$store.getters.token;
-      this.hasReturnAuth = token.authTokens.some(authCode => this.returnAuthCode.includes(authCode))
-      this.haseMediaReturnAuth = token.authTokens.some(authCode => this.mediaTeamAuthCode.includes(authCode))
-      //u can show token info on console
-      // console.log('token' ,token)
-      
       //初始化頁面資料
       this.init();
     },
@@ -82,6 +76,7 @@ export default {
               'AUTH13',	//多媒體設定-區處
             ],
             returnAuthCode: [
+              'AUTH01', //核算部門主辦
               'AUTH07', //核算課長
               'AUTH15', //核算員
             ],
@@ -92,6 +87,12 @@ export default {
     },
     methods: {
       init(){
+        const token = this.$store.getters.token;
+        this.hasReturnAuth = token.authTokens.some(authCode => this.returnAuthCode.includes(authCode))
+        this.haseMediaReturnAuth = token.authTokens.some(authCode => this.mediaTeamAuthCode.includes(authCode))
+        //u can show token info on console
+        // console.log('token' ,token)
+
         if(this.hasReturnAuth){
           this.queryReturnForm();
         }
@@ -191,14 +192,15 @@ export default {
             this.formList = response.restData.formList;
             this.numberOfReject = response.restData.numberOfReject;
 
-            if(!ValidateUtil.isEmpty(response.restData.authList)){
-              for(let i in response.restData.authList){
-                if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07' || response.restData.authList[i] == 'AUTH15'){
-                  this.hasReturnAuth = true;
-                  break;
-                }
-              }
-            }
+            // 移至init()中判斷 By JohnZeng
+            // if(!ValidateUtil.isEmpty(response.restData.authList)){ 
+            //   for(let i in response.restData.authList){
+            //     if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07' || response.restData.authList[i] == 'AUTH15'){
+            //       this.hasReturnAuth = true;
+            //       break;
+            //     }
+            //   }
+            // }
 
         },
         // eslint-disable-next-line no-unused-vars

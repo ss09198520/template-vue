@@ -260,7 +260,7 @@
         if (this.$refs.form.validate()) {
           // console.log(this.postForm)
           
-          // this.submitForm(this.postForm)
+          this.submitForm(this.postForm)
         }
       },
       validate() {

@@ -348,6 +348,10 @@
         <span class="mr-2">confirmArchive (取得 NBS 變動失敗清單)</span>
         <v-btn @click="confirmArchive()">start</v-btn>
       </v-row>
+      <v-row class="marginLeft mt-7" style="display: flex; align-items: center;">
+        <span class="mr-2">generateRejectReport (產出退件報表)</span>
+        <v-btn @click="generateRejectReport()">start</v-btn>
+      </v-row>
 
     </v-container>
     <v-dialog id="importWordModal" v-model="importWordModalShow" width="370">
@@ -683,7 +687,16 @@ export default {
             (error) => {
                 MessageService.showError("失敗");
             });
-        }
+        },
+        generateRejectReport(){
+          AjaxService.post("/batch/generateRejectReport", {}, 
+            (response) => {
+                MessageService.showSuccess("成功");
+            },
+            (error) => {
+                MessageService.showError("失敗");
+            });
+        },
     }
 }
 </script>

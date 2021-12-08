@@ -634,7 +634,7 @@
               <v-col cols="2">備註</v-col>
               <v-col cols="9">
                 <v-textarea
-                  v-model="otherReason"
+                  v-model="memo"
                   outlined
                   value=""
                   rows="4"

@@ -43,7 +43,6 @@ export default {
             returnReasonModel: false,
             selectIndex: null,
             hasShowList:false,
-            department:null,
             deptList:[],
             oriDeptList:[],
             rejectReason: null,
@@ -535,14 +534,6 @@ export default {
         // 驗證退件資料
         checkRejectVal(){
             let hasCheck = true;
-
-            if(ValidateUtil.isEmpty(this.department)){
-                this.errMsg.dept = "請選擇退件到的部門";
-                this.requireArray.push('退件部門');
-                hasCheck = false;
-            } else {
-                this.errMsg.dept = null
-            }
 
             if(ValidateUtil.isEmpty(this.rejectReason)){
                 this.errMsg.rejectReason = "請選擇退件原因";

@@ -37,7 +37,7 @@ export default {
                 { text: '退件原因', value: 'rejectReason', align: 'center',sortable: false,},
                 { text: '退件說明', value: 'rejectDesc', align: 'center',sortable: false, },  
                 { text: '受理項目', value: 'acceptItem', align: 'center' },
-                { text: '原受理人', value: 'acceptUser', align: 'center' },
+                { text: '受理人', value: 'acceptUser', align: 'center' },
                 { text: '退件人', value: 'rejectUser', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center',sortable: false, }
             ],

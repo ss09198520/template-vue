@@ -371,6 +371,7 @@ export default {
     
                 // 將取得的資料放進前端參數中    
                 MessageService.showSuccess('申請請假代理');
+                this.queryLeaveInit();
                 this.resetVal();
             },
             // eslint-disable-next-line no-unused-vars

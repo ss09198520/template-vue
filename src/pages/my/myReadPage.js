@@ -43,8 +43,8 @@ export default{
                 end: null,
             },
             sysDate: new Date(),
-            numOfRead:2,
-            numOfReadApply: 1,
+            numOfRead:0,
+            numOfReadApply: 0,
             // 依條件查詢我的調閱區資料
             acceptNum: null,
             electricNum: null,

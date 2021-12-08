@@ -343,7 +343,7 @@ export const asyncRoutes = [
         name: 'Satisfaction-Report-Dynamic-PersonalWeekly',
         privilegeCode: ['P028'],
         component: () => import('@/views/satisfaction/reportDynamicPersonal'),
-        meta: { title: '不滿意度個人動態查詢(自訂區間與%數)', icon: 'mdi-clipboard-search' }
+        meta: { title: '滿意度個人動態查詢(自訂區間與%數)', icon: 'mdi-clipboard-search' }
       }
     ]
   },

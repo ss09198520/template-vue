@@ -88,6 +88,7 @@
         </v-form>
       </v-col>
     </v-row>
+    <span class="annotation font-weight-bold">※提醒&nbsp;此報表為每週一凌晨01:10產出前一月份資料</span>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">
     <v-row v-show="isShow">

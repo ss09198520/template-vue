@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="font-bold">不滿意度個人動態查詢(自訂區間與%數)</h2>
+    <h2 class="font-bold">滿意度個人動態查詢(自訂區間與%數)</h2>
     <v-row>
       <v-col
         class="ml-10 mt-10 font-18px"
@@ -68,7 +68,8 @@
               </v-menu>
             </v-col>
             <v-col cols="3" class="ml-2">
-              * 查詢區間於6個月內
+              <span class="annotation">※提醒&nbsp;查詢區間於6個月內</span>
+              <!-- * 查詢區間於6個月內 -->
             </v-col>
           </v-row>
           <v-row>
@@ -94,8 +95,8 @@
                 hide-details
               />
             </v-col>
-            <v-col cols="1" class="ml-2">
-              %數
+            <v-col cols="1">
+              %
             </v-col>
 
             <!-- <v-col cols="1">

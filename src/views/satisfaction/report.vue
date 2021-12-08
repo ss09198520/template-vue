@@ -217,6 +217,8 @@
         <span>清空查詢</span>
       </v-tooltip>
     </v-row>
+    <span class="annotation-red">※提醒&nbsp;</span>
+    <span class="annotation-red">僅填入查詢時間，最多可查詢半年內之資料，若包含日期以外的條件最多可查詢兩年內之資料</span>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">
   </v-container>

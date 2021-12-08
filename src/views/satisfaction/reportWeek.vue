@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="font-bold ">不滿意度個人摘要(週)</h2>
+    <h2 class="font-bold ">滿意度個人摘要(週)</h2>
     <v-row>
       <v-col
         class="ml-10 font-18px"
@@ -96,6 +96,7 @@
         </v-form>
       </v-col>
     </v-row>
+    <span class="annotation font-weight-bold">※提醒&nbsp;此報表為每週一凌晨01:00產出，資料為前一週不意度達10%以上之人員</span>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">
     <v-row v-show="isShow">

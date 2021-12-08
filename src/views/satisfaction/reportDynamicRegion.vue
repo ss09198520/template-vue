@@ -69,7 +69,8 @@
               </v-menu>
             </v-col>
             <v-col cols="3" class="ml-2">
-              * 查詢區間於6個月內
+              <span class="annotation">※提醒&nbsp;查詢區間於6個月內</span>
+              <!-- * 查詢區間於6個月內 -->
             </v-col>
           </v-row>
           <v-row>

@@ -38,3 +38,12 @@ export function submitProgramAnswer(data) {
     data
   })
 }
+
+
+export function fetchActiveProgramCalendar(data) {
+  return request({
+    url: '/program/v1/media/calendar',
+    method: 'post',
+    data
+  })
+}

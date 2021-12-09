@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-container>
+    <v-container style="max-width: 100%">
       <v-row v-show="!isSign" justify="center">
         <tui-image-editor ref="tuiImageEditor" :include-ui="true" :options="options" />
       </v-row>

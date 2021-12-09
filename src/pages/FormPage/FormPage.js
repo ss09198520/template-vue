@@ -118,6 +118,7 @@ export default {
             maxSignVersion: 0,
             isLoading: false,
             encryptedParam: null,
+            empName: null,
         }
     },
     methods: {
@@ -131,7 +132,7 @@ export default {
             }
            
             await this.getInitParam();
-            this.formInit();
+            this.formInit(false);
 
             EventBus.subscriber("scan-data-list", this.getScanDataList);
             EventBus.subscriber("scan-error", this.showScanErrorMsg);
@@ -193,7 +194,7 @@ export default {
                 this.$emit("showOnlyContent");
             }
         },
-        formInit(){
+        formInit(canSkipValidateTime){
             // 驗證是否有受理編號，若無直接擋件
             if(ValidateUtil.isEmpty(this.acceptNum) && ValidateUtil.isEmpty(this.encryptedParam)){
                 this.isBlocking = true;
@@ -227,6 +228,7 @@ export default {
                 empNo: this.empNo,
                 region: this.region,
                 encryptedParam: this.encryptedParam,
+                canSkipValidateTime: canSkipValidateTime
             }
 
             AjaxService.post("/tpesForm/init", param, 
@@ -246,6 +248,7 @@ export default {
                 this.needScanFileCodeList = response.restData.needScanFileCodeList;
                 this.isAgentNeedScanAttach = response.restData.agentNeedScanAttach;
                 this.maxSignVersion = response.restData.maxSignVersion;
+                this.empName = response.restData.empName;
 
                 // 若為加密參數進件，放入解密後才有的參數
                 this.setDescryptedParam(response.restData);
@@ -337,8 +340,8 @@ export default {
             }
         },
         openFormSignPage(){
-            let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-            this.formSignPage = window.open("/tpes/#/imageEditor", '表單及簽名', config);
+            let config = "width=" + screen.availWidth + ",height=" + screen.availHeight + 'top=0,left=0,statusbar=no,scrollbars=yes,status=no,location=no';
+            this.formSignPage = window.open("/tpes/#/imageEditor", "_blank", config);
 
             // 若為取消需將模式傳給簽名頁做取消簽名
             if(this.formPageMode == "cancel"){
@@ -346,7 +349,7 @@ export default {
                 this.formSignPage.signFileNo = this.cancelSign.fileNo;
             }
             // 若為檢視表單則不需簽名
-            else if(this.formPageMode == "accounting" || this.formPageMode == "view"){
+            else if(this.formPageMode == "accounting" || this.formPageMode == "view" || this.formPageMode == "viewDownload"){
                 this.formSignPage.mode = "view";
             }
             else{
@@ -362,25 +365,29 @@ export default {
             this.formSignPage.region = this.region;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
 
-            try {
-                // 將畫面顯示改為同步
-                PMCService.callDualScreenAdapterClone();
-            } catch (error) {
-                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            if(this.formPageMode != "accounting" && this.formPageMode != "view" && this.formPageMode != "viewDownload"){
+                try {
+                    // 將畫面顯示改為同步
+                    PMCService.callDualScreenAdapterClone();
+                } catch (error) {
+                    MessageService.showError("PMC 未開啟或異常", "PMC ");
+                }
             }
             
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
-            try {
-                // 將畫面顯示改為延伸
-                PMCService.callDualScreenAdapterExtend();
-            } catch (error) {
-                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            if(this.formPageMode != "accounting" && this.formPageMode != "view" && this.formPageMode != "viewDownload"){
+                try {
+                    // 將畫面顯示改為延伸
+                    PMCService.callDualScreenAdapterExtend();
+                } catch (error) {
+                    MessageService.showError("PMC 未開啟或異常", "PMC ");
+                }
             }
 
             this.isFormSignPageOpened = false;
-            this.formInit();
+            this.formInit(true);
         },
         closeFormSignPage(){
             if(!this.formSignPage) {
@@ -473,6 +480,11 @@ export default {
                         return;
                     }
                 }
+            }
+
+            if(ValidateUtil.isEmpty(fileName)){
+                MessageService.showInfo("需輸入附件名稱");
+                return;
             }
 
             this.attachmentList.push({
@@ -586,16 +598,16 @@ export default {
                 MessageService.showSuccess("儲存成功");
 
                 if(this.restrictMode){
-                    // 開啟滿意度調查頁
-                    let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-                    window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '滿意度調查', config);
-                    
                     // 當點擊儲存按鈕，則通知父層可關閉
                     this.$emit("saveFile");
                 }
                 else{
+                    // 開啟滿意度調查頁
+                    let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
+                    window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '滿意度調查', config);
+                    
                     // 重新查詢一次
-                    this.formInit();
+                    this.formInit(true);
                 }
             },
             (error) => {
@@ -724,6 +736,9 @@ export default {
                 modifyFileList: modifyFileList,
                 deleteFileList: deleteFileList,
                 isAddAttachment: this.isAddAttachment,
+                empNo: this.empNo,
+                region: this.region,
+                empName: this.empName,
             };
 
             return vin;

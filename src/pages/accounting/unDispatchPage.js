@@ -18,7 +18,7 @@ export default {
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
                 { text: '整理號碼', value: 'archieveNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
-                { text: '契約種類', value: 'contractType', align: 'center' },
+                { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '計算日', value: 'computeDate', align: 'center' },
                 { text: '受理日期', value: 'acceptDate', align: 'center' },
@@ -39,7 +39,7 @@ export default {
             accountingList:[],
             selectIndex: null,
             //操作者角色
-            User: 'manager',
+            User: 'employee',
             formSeq: null,
             seq: null,
             requiredArray:[],
@@ -110,11 +110,12 @@ export default {
                     if (ValidateUtil.isEmpty(response.restData.initUndispatchListVo)) {                        
                         MessageService.showInfo('查無資料');
                     } else {           
-                        console.log(response);                                                             
                         this.unDispatchList = Object.assign(response.restData.initUndispatchListVo);                        
                         response.restData.initUndispatchListVo.forEach((element) => {
                             element.action = true;
-                        });                                                                                       
+                        });
+                        this.User = response.restData.userType;
+                        this.numOfUndispatch = response.restData.initUndispatchListVo.length;                                                                            
                     }
                 } else {
                   //接後端候要放errorMsg

@@ -188,7 +188,7 @@ export const asyncRoutes = [
       {
         path: 'myReturn',
         name: 'MyReturn',
-        privilegeCode: ['P002','P003'],
+        privilegeCode: ['P002','P003','AUTH12','AUTH13'],
         component: () => import('@/pages/my/myReturnPage.vue'),
         meta: { title: '我的退件區', icon: 'mdi-alert' }
       },
@@ -343,7 +343,7 @@ export const asyncRoutes = [
         name: 'Satisfaction-Report-Dynamic-PersonalWeekly',
         privilegeCode: ['P028'],
         component: () => import('@/views/satisfaction/reportDynamicPersonal'),
-        meta: { title: '不滿意度個人動態查詢(自訂區間與%數)', icon: 'mdi-clipboard-search' }
+        meta: { title: '滿意度個人動態查詢(自訂區間與%數)', icon: 'mdi-clipboard-search' }
       }
     ]
   },

@@ -75,7 +75,7 @@ export default {
                     } else {
                         console.log(response);
                         this.archieveList = Object.assign(response.restData.initWaitArchiveListVo);                        
-                                      
+                        this.numOfArchieve = this.archieveList.length;        
                         response.restData.initWaitArchiveListVo.forEach((element) => {                             
                             let createHours = parseInt(new Date().getTime() - Date.parse(element.createDate)) / 1000 / 60 / 60; 
                             console.log(createHours);                                                      
@@ -94,26 +94,10 @@ export default {
                     MessageService.showSystemError(response.restData.code);
                 }
             );
-
-            let archieveList = [
-               
-            ];
-
-
-            // 取得待歸檔件數
-            let numOfArchieve = 5;
-
-            this.numOfArchieve = numOfArchieve;
-
-            this.archieveList = archieveList;
         },
 
         // Action:依條件查詢待歸檔清單
         queryArchieveList(){
-            // Vin
-            // acceptNum: this.acceptNum,
-            // electricNum: this.electricNum,
-            // archieveNum: this.archieveNum,
             const QueryWaitArchiveReq = {
                 acceptNum: this.acceptNum,
                 electricNum: this.electricNum,
@@ -147,16 +131,6 @@ export default {
                 }
             );
 
-
-            // 依條件取得待歸檔資料
-            let archieveList = [
-                
-            ];
-            // 取得待歸檔件數
-            let numOfArchieve = 5;
-
-            this.numOfArchieve = numOfArchieve;
-            this.archieveList = archieveList;
         },
 
         // Action:將案件返回核算

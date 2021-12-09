@@ -373,8 +373,8 @@
         rules: {
           requiredRule: [v => !!v || '此欄位為必填欄位'],
           lengthRules: [v => (v && v.length <= this.maxCharacter) || `不能超過 ${this.maxCharacter} 個字`],
-          videoSizeRules: [v => !!v || v.size < 50000000 || 'Avatar size should be less than 50 MB!',],
-          iamgeSizeRules: [v => !!v || v.size < 10000000 || 'Avatar size should be less than 10 MB!',],
+          videoSizeRules: [v => !!v || v.size < 50000000 || '檔案大小超過 50 MB!',],
+          iamgeSizeRules: [v => !!v || v.size < 10000000 || '檔案大小超過 10 MB!',],
         },
       }
     },

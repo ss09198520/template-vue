@@ -2,8 +2,6 @@
   <v-app>
     <v-container>
       <div v-if="hasAccountingAuth == true">
-        <v-btn class="ma-2" :class="{'primary': User == 'auditer'}" @click="User = 'auditer'">角色：核算員</v-btn>
-        <v-btn class="ma-2" :class="{'primary': User == 'checker'}" @click="User = 'checker'">角色：檢算員</v-btn>
         <div class="d-flex w-100" style="margin-top: 20px;">
           <div class="block mr-5 w-100">
             <div>
@@ -181,7 +179,7 @@
             </v-col>
             <v-col cols="1" />
             <v-col cols="1">
-              契約種類
+              卡別
             </v-col>                                             
             <v-col
               cols="3"
@@ -198,7 +196,7 @@
                 :clearable="true"
                 class="my-auto"
                 color="#ADADAD"
-                placeholder="請選擇契約種類"
+                placeholder="請選擇卡別"
               />
             </v-col>
             <v-col cols="3" />

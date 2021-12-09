@@ -329,20 +329,37 @@
               </template>
               <span>編輯</span>
             </v-tooltip>
-            <v-tooltip top>
+            <v-tooltip v-if="allowDelete(item.signStatus)" top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="ma-2"
                   fab
                   x-small
                   color="error"
-                  @click="action('deleteMultiMedia',item)"
+                  :disabled="!allowDelete(item.signStatus)"
+                  @click="!allowDelete(item.signStatus)"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-delete'" />
                 </v-btn>
               </template>
               <span>刪除</span>
+            </v-tooltip>
+            <v-tooltip v-if="allowSunset(item.signStatus,item.status)" top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="error"
+                  :disabled="!allowSunset(item.signStatus,item.status)"
+                  @click="!allowSunset(item.signStatus,item.status)"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-arrow-down-bold-outline'" />
+                </v-btn>
+              </template>
+              <span>下架</span>
             </v-tooltip>
           </template>
           <!-- 退件資訊 -->
@@ -487,6 +504,12 @@
     methods: {
       allowEdit(signStatus) {
         return (/(DRAFT|REJECT)$/i).test(signStatus)
+      },
+      allowDelete(signStatus) {
+        return (/(DRAFT|REJECT)$/i).test(signStatus)
+      },
+      allowSunset(signStatus,status) {
+        return (/(PASS)$/i).test(signStatus) && (/(ACTIVE)$/i).test(status)
       },
       previewItem(item) {
         this.$router.push({path:`/media/preview/questionnaire/${item.questionnaireId}`})

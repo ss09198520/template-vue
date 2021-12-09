@@ -7,7 +7,7 @@ MessageService
 */
 const MessageService = {
     async showError(message,title){
-        var defaultTitle = "發生錯誤";
+        var defaultTitle = "失敗";
 
         // // this.notify 噴錯
         // // this.$notify 噴錯
@@ -48,7 +48,7 @@ const MessageService = {
     },
 
     async showCheckInfo(required,format){
-        var defaultTitle = "請確認欄位正確性";
+        var defaultTitle = "請確認填寫資料正確性";
         // 必填欄位的名稱
         let requiredMsg = '';
         let formatMsg = '';

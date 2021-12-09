@@ -334,10 +334,10 @@ export default {
           attachedFiles =>
             !attachedFiles ||
             !attachedFiles.some(attachedFiles => attachedFiles.size > 25e6) ||
-            "Avatar size should be less than 25 MB!"
+            "檔案大小超過 25 MB!"
         ] 多檔案使用*/
         filesSizeRules: [
-          v => !v || v.size < 25e6 || "Avatar size should be less than 25 MB!"
+          v => !v || v.size < 25e6 || "檔案大小超過 25 MB!"
         ]
       }
     };

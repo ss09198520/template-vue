@@ -25,7 +25,6 @@ export function deleteFile(id) {
 
 
 // 簽核相關
-
 export function queryMediaSignOff(data) {
   return request({
     url: '/mediaSign/v1/querySignOff',
@@ -48,6 +47,14 @@ export function downloadMediaSignOffFile(data) {
     method: 'post',
     responseType: 'blob',
     data
+  })
+}
+
+// 退件相關
+export function queryMediaReturnList() {
+  return request({
+    url: '/mediaSign/v1/queryMediaReturnList',
+    method: 'post',
   })
 }
 

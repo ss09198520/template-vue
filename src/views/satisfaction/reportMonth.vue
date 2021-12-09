@@ -43,7 +43,7 @@
                 />
               </v-menu>
             </v-col>
-            <v-col v-if="isRegion==1" cols="1">
+            <v-col v-if="isRegion" cols="1">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -60,27 +60,23 @@
                 <span>查詢</span>
               </v-tooltip>
             </v-col>
-            <v-col v-if="isRegion==0" cols="4">
-              <v-row
-                align="center"
-                justify="space-around"
+            <v-col cols="8" class="ml-2 ">        
+              <v-btn 
+                v-if="!isRegion"
+                class="ml-3 ma-2"
+                color="primary"
+                @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY_ALL')"
               >
-                <v-btn
-                  depressed
-                  color="primary"
-                  @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY_ALL')"
-                >
-                  查詢多區處 <v-icon v-text="'mdi-magnify'" />
-                </v-btn>
-                <v-btn
-                  class="mt-1"
-                  depressed
-                  color="primary"
-                  @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY')"
-                >
-                  查詢業務處彙總 <v-icon v-text="'mdi-magnify'" />
-                </v-btn>
-              </v-row>
+                查詢全區處 <v-icon v-text="'mdi-file-download-outline'" />
+              </v-btn>
+              <v-btn
+                v-if="!isRegion"
+                class="ml-3 ma-2"
+                color="primary"
+                @click="submitSearch('QUESTIONNAIRE_REPORT_MONTHLY')"
+              >
+                查詢業務處彙總 <v-icon v-text="'mdi-file-download-outline'" />
+              </v-btn>
             </v-col>
           </v-row>
           <v-row>
@@ -89,11 +85,10 @@
               <!-- <v-btn color="primary" class="ml-3" @click="search()">{{ searchText }}</v-btn> -->
             </v-col>
           </v-row>
-          
-          
         </v-form>
       </v-col>
     </v-row>
+    <span class="annotation font-weight-bold">※提醒&nbsp;此報表為每週一凌晨01:10產出前一月份資料</span>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">
     <v-row v-show="isShow">
@@ -149,6 +144,7 @@
   import MessageService from "@/assets/services/message.service";
   import { fetchQuestionnaireReportList , downloadSatisfactionReportFile} from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
+  import enums from '@/utils/enums'
 
   const defaultForm = {
     startDate: null, 
@@ -157,9 +153,9 @@
   export default {
     data() {
       return {
+        isRegion: false, // true區處、false業務處
         //api post data
         postForm: Object.assign({}, defaultForm),
-        isRegion: 0, // 1區處、else業務處
         isShow: false,
         //分頁
         itemsPerPage: 10,
@@ -184,12 +180,17 @@
         alertDialog: false,
       }
     },
+    mounted() { //initial data
+      const token = this.$store.getters.token;
+      this.isRegion = !token.authTokens.some(authCode => enums.salesTeamAuthCode.includes(authCode)) //不再業務處AuthCode內即為區處人員
+    },
     methods: {
       downloadReport(item) {
         this.downloadSatisfactionReportFile(item)
       },
       // 送出問卷查詢
       submitSearch(reportType) {
+        
         if(reportType){
           this.postForm.category = reportType
         }

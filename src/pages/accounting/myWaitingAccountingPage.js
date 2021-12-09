@@ -17,7 +17,7 @@ export default {
     data() {
         return {            
             User: '',
-            numOfAccounting: null,
+            numOfAccounting: 0,
             accoutingHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center',width:'10%' },
                 { text: '受理日期', value: 'acceptDate', align: 'center',width:'10%'  },
@@ -28,7 +28,7 @@ export default {
                 { text: '電號', value: 'electricNum', align: 'center',width:'5%'  },
                 { text: '待核算累積日數', value: 'cumulativeDay', align: 'center',width:'5%'  },
                 { text: '派工日期', value: 'dispatchDate', align: 'center',width:'10%'  },
-                { text: '契約種類', value: 'contractType', align: 'center',width:'10%' },
+                { text: '卡別', value: 'contractType', align: 'center',width:'10%' },
                 { text: '整理號碼', value: 'archiveNum', align: 'center',width:'10%' },
                 { text: '檢視註記', value: 'hasView', align: 'center',width:'5%'},
                 { text: '代理件', value: 'isAgent', align: 'center',width:'5%' },
@@ -43,7 +43,6 @@ export default {
             returnReasonModel: false,
             selectIndex: null,
             hasShowList:false,
-            department:null,
             deptList:[],
             oriDeptList:[],
             rejectReason: null,
@@ -106,7 +105,7 @@ export default {
                 archiveNum: null,        //整理號碼
                 dispatchStartDate: null,  //派工日期開始
                 dispatchEndDate: null,    //派工日期結束
-                contractType: null,       //契約種類
+                contractType: null,       //卡別
                 caseType: null            //代理件顯示
             },
             memo: null,
@@ -206,7 +205,7 @@ export default {
           if(!this.checkRejectVal()){
               MessageService.showCheckInfo(this.requireArray,this.formatArray);
           }  else {
-              this.updateAccouting('reject'); 
+              this.updateAccouting(); 
           }
         },
         // 開啟備註視窗
@@ -248,10 +247,7 @@ export default {
          **/
 
         // Action:頁面初始化
-        queryAccoutingInit(){
-
-            let numOfAccounting = '';
-                     
+        queryAccoutingInit(){                     
             AjaxService.post('/waitAccounting/init',
             {
                        
@@ -266,23 +262,22 @@ export default {
                     if (ValidateUtil.isEmpty(response.restData.initWaitAccountingListVo)) {                        
                         MessageService.showInfo('查無資料');
                         if(!ValidateUtil.isEmpty(response.restData.authList)){
+                            // 根據使用者角色決定頁面顯示
                             for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH15' || response.restData.authList[i] == 'AUTH20'){
-                                    this.hasAccountingAuth = true;
-                                    console.log(this.hasAccountingAuth);
-                                    break;
-                                }
-                            }
-                            for(let i in response.restData.authList){
+                                // 核算員
                                 if(response.restData.authList[i] == 'AUTH15'){
                                     this.auditor = true;
-                                    break;
+                                    this.hasAccountingAuth = true;
                                 }
-                            }
-                            for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH20'){
+                                // 檢算員
+                                else if(response.restData.authList[i] == 'AUTH20'){
                                     this.checker = true;
-                                    break;
+                                    this.hasAccountingAuth = true;
+                                }
+                                // 核算課長 or 核算部門主辦 可看到該課所有資料，但不能進行核算
+                                else if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07'){
+                                    this.checker = true;
+                                    this.hasAccountingAuth = true;
                                 }
                             }
                         }         
@@ -320,7 +315,7 @@ export default {
                                 }
                             }
                         }                      
-                        numOfAccounting = response.restData.initWaitAccountingListVo.length;                                               
+                        this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                                               
                     }
                 } else {
                   //接後端候要放errorMsg
@@ -332,16 +327,6 @@ export default {
                     MessageService.showSystemError(response.restData.code);
                 }
             );
-
-            let accoutingList = [
-               
-            ];
-            
-
-            // 整理案件資料
-            this.setAccountInfo(accoutingList);
-            // 取出後端參數
-            this.numOfAccounting = numOfAccounting;
         },
 
         // 取得退件視窗的下拉選單清單
@@ -398,14 +383,13 @@ export default {
                 electricNum: this.searchForm.electricNum,
                 custName: this.searchForm.custName,
                 cumulativeDay: this.searchForm.cumulativeDay,
-                computeDate: this.searchForm.computeDate,
+                computeDate: (ValidateUtil.isEmpty(this.searchForm.computeDate)? null:this.searchForm.computeDate.value),
                 archieveNum: this.searchForm.archieveNum,
                 dispatchStartDate: this.searchForm.dispatchStartDate,
                 dispatchEndDate: this.searchForm.dispatchEndDate,
-                contractType: this.searchForm.contractType,
+                contractType:  (ValidateUtil.isEmpty(this.searchForm.contractType)? null:this.searchForm.contractType.text),
                 caseType: this.searchForm.caseType,
             };
-            let numOfAccounting = '';
             AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,
             (response) => {
                 if (response != null &&
@@ -429,7 +413,7 @@ export default {
                                 element.isAgent = true;
                             }                  
                         });                        
-                        numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
+                        this.numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
                         MessageService.showSuccess('依條件查詢待核算資料成功');                                       
                     }
                 } else {
@@ -442,16 +426,6 @@ export default {
                     MessageService.showSystemError(response.restData.code);
                 }
             );
-             // 模擬從後端取到的假資料
-            let accoutingList = [
-                
-            ];
-            
-
-            // 整理案件資料
-            this.setAccountInfo(accoutingList);
-            // 取出後端參數
-            this.numOfAccounting = numOfAccounting;
         },
 
         // Action:查詢待審核案件資料
@@ -517,18 +491,18 @@ export default {
                 memo: this.memo,
                 accnting: this.selectItem.accnting,
                 acceptNum: this.selectItem.acceptNum,
-                rejectReason: this.rejectReason,
+                rejectReason: this.rejectReason.rejectReasonName,
                 rejectDesc: this.rejectDesc,
             };
             
-            AjaxService.post('/waitAccounting/auditAccounting',AuditAccountingReq,
+            AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
             (response) => {
                 if (response != null &&
                     response != undefined &&                    
                     response.restData.message != null &&
                     response.restData.message != undefined &&
                     response.restData.success
-                    ) {                                                             
+                    ) {
                         MessageService.showInfo('核算成功');                                                                   
                 } else {
                   //接後端候要放errorMsg
@@ -560,14 +534,6 @@ export default {
         // 驗證退件資料
         checkRejectVal(){
             let hasCheck = true;
-
-            if(ValidateUtil.isEmpty(this.department)){
-                this.errMsg.dept = "請選擇退件到的部門";
-                this.requireArray.push('退件部門');
-                hasCheck = false;
-            } else {
-                this.errMsg.dept = null
-            }
 
             if(ValidateUtil.isEmpty(this.rejectReason)){
                 this.errMsg.rejectReason = "請選擇退件原因";

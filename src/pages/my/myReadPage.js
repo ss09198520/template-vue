@@ -21,12 +21,13 @@ export default{
             formListPageCount: 0,
             formListHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
+                { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '受理日期', value: 'acceptDateStr', align: 'center' },
                 { text: '歸檔日期', value: 'archiveDateStr', align: 'center' },
                 { text: '調閱狀態', value: 'status', align: 'center' },            
                 { text: '退件原因', value: 'rejectReason', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
-                { text: '契約種類', value: 'contractType', align: 'center' },
+                { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '整理號碼', value: 'archiveNum', align: 'center' },
                 { text: '受理項目', value: 'acceptItem', align: 'center' },                
                 { text: '狀態操作', value: 'action', align: 'center' }
@@ -42,8 +43,8 @@ export default{
                 end: null,
             },
             sysDate: new Date(),
-            numOfRead:2,
-            numOfReadApply: 1,
+            numOfRead:0,
+            numOfReadApply: 0,
             // 依條件查詢我的調閱區資料
             acceptNum: null,
             electricNum: null,

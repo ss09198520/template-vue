@@ -106,7 +106,7 @@ export default {
         requiredRule: [(v) => !!v || "此欄位為必填欄位"],
         filesSizeRules: [
           (v) =>
-            !v || v.size < 25e6 || "Avatar size should be less than 25 MB!",
+            !v || v.size < 25e6 || "檔案大小超過 25 MB!",
         ],
       },
       pmcTypeList: [],

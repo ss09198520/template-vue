@@ -30,6 +30,12 @@ const mediaSignStatusOption = [
   { text: '審核完成', value: 'PASS'},
 ]
 
+const salesTeamAuthCode = [
+  'AUTH11', //行銷組組長
+  'AUTH10', //行銷主管銷售作業主管
+  'AUTH16', //業務處行銷組-銷售作業課人員
+  'AUTH12', //多媒體設定-業務處
+]
 
 export default {
   mediaTypeOption : mediaTypeOption,
@@ -37,4 +43,5 @@ export default {
   mediaSignStatusOption : mediaSignStatusOption,
   materialFileTypeOption : materialFileTypeOption,
   mediaSignTypeOption : mediaSignTypeOption,
+  salesTeamAuthCode : salesTeamAuthCode,
 }

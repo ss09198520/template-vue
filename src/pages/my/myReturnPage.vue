@@ -122,13 +122,14 @@
               </template>
 
               <template v-slot:[`item.action`]="{ item }">
-                <v-tooltip v-if="item.edit" top>
+                <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       class="ma-2"
                       fab
                       small
                       color="success"
+                      @click="editItem(item)"
                       v-on="on"
                     >
                       <v-icon v-text="'mdi-pencil'" />
@@ -136,7 +137,7 @@
                   </template>
                   <span>重新編輯</span>
                 </v-tooltip>
-                <v-tooltip v-if="item.cancel" top>
+                <!-- <v-tooltip top>
                   <template v-slot:activator="{ on }">
                     <v-btn
                       class="ma-2"
@@ -150,7 +151,7 @@
                     </v-btn>
                   </template>
                   <span>取消案件</span>
-                </v-tooltip>
+                </v-tooltip> -->
               </template>
             </v-data-table>
             <!-- 選頁 -->

@@ -1,298 +1,340 @@
 <template>
-  <v-container
-    id="calendar"
-    fluid
-    tag="section"
-  >
-    <v-row>
-      <v-col
-        cols="12"
-        md="10"
-        class="mx-auto"
+  <v-layout wrap>
+    <v-flex
+      sm12
+      lg3
+      class="pa-3 mb-3 feature-pane"
+    >
+      <v-btn
+        fab
+        small
+        absolute
+        left
+        color="primary"
+        @click="$refs.calendar.prev()"
       >
-        <v-card>
-          <v-toolbar flat :color="'elevation-0'">
-            <v-btn
-              outlined
-              class="mr-4 justify-start"
-              color="grey darken-2"
-              @click="setToday"
-            >
-              Today
-            </v-btn>
-
-            <calendar-btn
-              text
-              small
-              color="grey darken-2"
-              @click="prev"
-            >
-              <v-icon>
-                mdi-chevron-left
-              </v-icon>
-            </calendar-btn>
-            <calendar-btn
-              text
-              small
-              color="grey darken-1"
-              @click="next"
-            >
-              <v-icon>
-                mdi-chevron-right
-              </v-icon>
-            </calendar-btn>
-            <v-spacer />
-            <v-toolbar-title 
-              v-if="$refs.calendar"
-              class="d-flex text-xl-h5 font-weight-bold justify-start"
-            >
-              {{ $refs.calendar.title }}
-            </v-toolbar-title>
-            
-            <!-- <calendar-btn
-              v-for="(t, i) in types"
-              :key="i"
-              @click="type = t"
-            >
-              {{ t }}
-            </calendar-btn> -->
-            <v-spacer />
-            <v-menu bottom right>
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn outlined v-bind="attrs" v-on="on">
-                  <span>{{ typeToLabel[type] }}</span>
-                  <v-icon right v-text="'mdi-menu-down'" />
-                </v-btn>
-              </template>
-              <v-list>
-                <template v-for="(item , idx) in types">
-                  <v-list-item :key="idx" @click="type = item">
-                    <v-list-item-title>{{ typeToLabel[item] }}</v-list-item-title>
-                  </v-list-item>
-                </template>
-              </v-list>
-            </v-menu>
-
-          </v-toolbar>
-
-          <v-sheet
-            height="600"
-            flat
-            class="mt-5"
+        <v-icon dark>
+          mdi-chevron-left
+        </v-icon>
+      </v-btn>
+      <v-btn
+        fab        
+        small
+        absolute
+        right
+        color="primary"
+        @click="$refs.calendar.next()"
+      >
+        <v-icon
+          dark
+        >
+          mdi-chevron-right
+        </v-icon>
+      </v-btn>
+      <br><br><br>
+      <v-select
+        v-model="status"
+        :items="statusOptions"
+        class="font-weight-bold"
+        label="狀態"
+        @change="getEvents(status,start)"
+      />
+      <v-menu
+        ref="startMenu"
+        v-model="startMenu"
+        :close-on-content-click="false"
+        :nudge-right="40"
+        :return-value.sync="start"
+        transition="scale-transition"
+        min-width="290px"
+        lazy
+        offset-y
+        full-width
+      >
+        <template v-slot:activator="{ on }">
+          <v-text-field
+            v-model="start"
+            label="Start Date"
+            prepend-icon="mdi-calendar-month"
+            readonly
+            v-on="on"
+          />
+        </template>
+        <v-date-picker
+          v-model="start"
+          no-title
+          scrollable
+        >
+          <v-spacer />
+          <v-btn            
+            color="primary"
+            @click="startMenu = false"
           >
-            <v-calendar
-              ref="calendar"
-              v-model="focus"
-              color="error"
-              :events="events"
-              :event-color="getEventColor"
-              :type="type"
-              @click:event="showEvent"
-              @click:more="viewDay"
-              @click:date="viewDay"
-              @change="updateRange"
-            />
-            <v-menu
-              v-model="selectedOpen"
-              :close-on-content-click="false"
-              :activator="selectedElement"
-              offset-x
-            >
-              <v-card
-                color="grey lighten-4"
-                min-width="350px"
-                flat
-              >
-                <v-toolbar
-                  :color="selectedEvent.color"
-                  dark
-                >
-                  <v-btn icon>
-                    <v-icon>mdi-pencil</v-icon>
-                  </v-btn>
-                  <v-toolbar-title v-html="selectedEvent.name" />
-                  <v-spacer />
-                  <v-btn icon>
-                    <v-icon>mdi-heart</v-icon>
-                  </v-btn>
-                  <v-btn icon>
-                    <v-icon>mdi-dots-vertical</v-icon>
-                  </v-btn>
-                </v-toolbar>
-                <v-card-text>
-                  <span v-html="selectedEvent.details" />
-                </v-card-text>
-                <v-card-actions>
-                  <v-btn
-                    text
-                    color="secondary"
-                    @click="selectedOpen = false"
-                  >
-                    Cancel
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-menu>
-          </v-sheet>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+            Cancel
+          </v-btn>
+          <v-btn            
+            color="primary"
+            @click="$refs.startMenu.save(start)"
+          >
+            OK
+          </v-btn>
+        </v-date-picker>
+      </v-menu>
+
+      <v-btn
+        class="mr-4"
+        color="amber"
+        @click="setToday"
+      >
+        Today
+      </v-btn>
+      <hr class="mt-3">
+      <v-row>
+        <v-col
+          v-for="selfColors in selfColor"
+          :key="selfColors.text"
+          cols="12" 
+          md="12"
+          class="pt-2 pb-0"
+        >
+          <v-list-item-avatar           
+            tile
+            size="20"
+            :color="selfColors.value"
+            class="ml-0 mt-1"
+          />
+          <span class="font-weight-bold mr-3"> {{ selfColors.text }}</span>          
+        </v-col>
+      </v-row>
+    </v-flex>
+    <v-flex
+      sm12
+      lg9
+      class="pl-3"
+    >
+      <v-toolbar-title v-if="$refs.calendar" class="d-flex justify-center font-weight-bold">
+        {{ $refs.calendar.title }}
+      </v-toolbar-title>
+      <v-sheet height="1050">
+        <v-calendar
+          ref="calendar"
+          v-model="start"
+          :type="type"
+          :start="start"  
+          :color="color"
+          :event-overlap-mode="mode"
+          :events="events"
+          @change="getEvents(status,start)"
+        />
+      </v-sheet>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
-  // Components
-  import { VBtn } from 'vuetify/lib'
+import { fetchActiveProgramCalendar } from "@/api/program"; 
+import MessageService from "@/assets/services/message.service";
+
+  const weekdaysDefault = [0, 1, 2, 3, 4, 5, 6]
 
   export default {
-    name: 'DashboardCalendar',
-
-    components: {
-      CalendarBtn: {
-        extends: VBtn,
-        props: {
-          color: {
-            type: String,
-            default: 'secondary',
-          },
-          minWidth: {
-            type: Number,
-            default: 0,
-          },
-          rounded: {
-            type: Boolean,
-            default: true,
-          },
-        },
-        computed: {
-          classes () {
-            return {
-              ...VBtn.options.computed.classes.call(this),
-              'mx-1': true,
-              'text-lowercase': true,
-            }
-          },
-        },
-      },
-    },
-
+    
     data: () => ({
-      focus: '',
+      dark: false,
+      startMenu: false,
+      start: '2021-11-01',
+      events: [],
+      more: false,
+      mode: 'column',
+      modes: ['stack', 'column'],
       type: 'month',
-      types: [
-        'month',
-        'week',
-        'day',
-        '4day'
+      weekdays: weekdaysDefault,
+      status:'請選擇',
+      statusOptions: ['請選擇','上架','下架','未上架:審核中','未上架:審核完成','未上架:退件','未上架:草稿'],
+      selfColor: [
+        { text: '上架', value: 'green darken-2' },
+        { text: '下架', value: 'grey lighten-1' },
+        { text: '未上架:退件', value: 'red' },
+        { text: '未上架:審核中', value: 'light-blue accent-1' },
+        { text: '未上架:審核完成', value: 'cyan darken-4' },
+        { text: '未上架:草稿', value:'yellow darken-1'}
       ],
-      typeToLabel: {
-        month: 'MONTH',
-        week: 'WEEK',
-        day: 'DAY',
-        '4day': '4 DAYS',
-      },
-      colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-      names: ['News!! 颱風登陸緊急警報', 'New! 秋季用電宣導', '台電公司對受疫情影響農業及服務業之電費減免措施', '台電連4年獲亞洲企業社會責任獎 以電幻1號所、循環經濟奪雙獎'],
-      events: [
-        {
-          name: 'New! 9月11日颱風緊急通報',
-          start: '2021-09-11',
-          end: '2021-09-13',
-          color: 'red',
-        },
-        {
-          name: 'New! 秋季用電宣導',
-          start: '2021-09-14',
-          end: '2021-09-20',
-          color: 'orange',
-        },
-        {
-          name: '電廠維護公告',
-          start: '2021-09-30',
-          end: '2021-10-01',
-          color: 'red',
-        },
-      ],
-      selectedEvent: {},
-      selectedOpen: false,
-      selectedElement: null,
+   /*   OtherColor: [
+       { text: '上架', value: 'indigo darken-3' },
+        { text: '下架', value: 'grey darken-3' },
+        { text: '未上架:退件', value: 'red darken-3' },
+        { text: '未上架:審核中', value: 'lime darken-3' },
+        { text: '未上架:審核完成', value: 'light-green darken-3' }, 
+      ],*/
+      color: 'amber',
     }),
-    mounted () {
-      this.$refs.calendar.checkChange()
+
+    computed: {
+      hasIntervals () {
+        return this.type in {
+          'week': 1, 'day': 1, '4day': 1, 'custom-daily': 1
+        }
+      },
+      hasEnd () {
+        return this.type in {
+          'custom-weekly': 1, 'custom-daily': 1
+        }
+      }
     },
     methods: {
-      viewDay ({ date }) {
-        this.focus = date
-        this.type = 'day'
+       setToday () {
+         function pad2(n) {  return (n < 10 ? '0' : '') + n;}
+          let date = new Date();
+          let month = pad2(date.getMonth()+1);//months (0-11)
+          let day = pad2(date.getDate());//day (1-31)
+          let year= date.getFullYear();
+          //let formattedDate =  year+"-"+month+"-"+day;
+          this.focus = year+"-"+month+"-"+day;
+          this.start = this.focus;
+          this.$refs.startMenu.save(this.start);        
       },
-      getEventColor (event) {
-        return event.color
-      },
-      setToday () {
-        this.focus = ''
-      },
-      prev () {
-        console.log(this.$refs.calendar)
-        this.$refs.calendar.prev()
-      },
-      next () {
-        this.$refs.calendar.next()
-      },
-      showEvent({ nativeEvent, event }) {
-        const open = () => {
-          this.selectedEvent = event
-          this.selectedElement = nativeEvent.target
-          setTimeout(() => (this.selectedOpen = true), 10)
+      getEvents (status,start) {        
+        let objs = {}
+        let event = [];
+        let str = start.substring(0, 7);
+        console.log(str);
+
+        fetchActiveProgramCalendar({
+          region: null,
+          releaseMonth: str
+        }).then((res) => {
+            let reslut =  JSON.parse(JSON.stringify( res.restData.programs));
+            MessageService.showInfo(res.restData.message, "成功✓");
+            const keyMap = { programName: 'name', releaseStartDate:'start', releaseEndDate:'end'}
+              reslut.map((item) => {
+              objs = Object.keys(item).reduce((newData, key) => {
+                const newKey = keyMap[key] || key
+                newData[newKey] = item[key]
+                return newData
+              }, {})
+              event.push(objs)
+              })
+              
+              let statusArray = status.split(':');
+              let eventTemp =  event.filter(function (el) {
+                if(status == "請選擇")
+                  return el.status;
+                else if (status == "上架")
+                  return el.status == "ACTIVE"
+                else if (status == "下架")
+                  return el.status =="CLOSE"
+                else if (statusArray[0] == "未上架" && statusArray[1] == "退件")
+                  return (el.status == "WAIT" &&  el.signStatus == "REJECT");
+                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核中")
+                  return (el.status == "WAIT" &&  el.signStatus == "WAIT");
+                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核完成" )
+                  return (el.status == "WAIT" &&  el.signStatus == "PROGRESS" );
+                else if (statusArray[0] == "未上架" &&  statusArray[1] == "草稿")
+                  return (el.status == "WAIT" &&  el.signStatus == "DRAFT");              
+              });
+
+             for(let i=0; i< eventTemp.length; i++){
+              //  if(eventTemp[i].region == "區處"){
+                if(eventTemp[i].status == "ACTIVE"){
+                  Object.assign(eventTemp[i], {color: 'green darken-2'});                
+                }else if (eventTemp[i].status == "CLOSE"){
+                   Object.assign(eventTemp[i], {color: 'grey darken-1'});                   
+                }else if(eventTemp[i].status == "WAIT" && eventTemp[i].signStatus=="REJECT"){
+                  Object.assign(eventTemp[i], {color: 'red darken-4'});                    
+                }else if(eventTemp[i].status == "WAIT" && (eventTemp[i].signStatus=="WAIT" || eventTemp[i].signStatus=="PROGRESS")){
+                   Object.assign(eventTemp[i], {color: 'light-blue accent-1'});
+                }else if(eventTemp[i].status == "WAIT" && (eventTemp[i].signStatus=="DRAFT")){
+                   Object.assign(eventTemp[i], {color: 'yellow darken-1'});
+                }else if(eventTemp[i].status == "WAIT" && eventTemp[i].signStatus=="PASS"){                    
+                    Object.assign(eventTemp[i], {color: 'cyan darken-4'});
+                }
         }
-
-        if (this.selectedOpen) {
-          this.selectedOpen = false
-          setTimeout(open, 10)
-        } else {
-          open()
-        }
-
-        nativeEvent.stopPropagation()
+             this.events =  eventTemp;
+        }).catch((error) => {
+          console.log(error)
+        });
       },
-      updateRange ({ start, end }) {
-        const newevents = []
 
-        const min = new Date(`${start.date}T00:00:00`)
-        const max = new Date(`${end.date}T23:59:59`)
-        const days = (max.getTime() - min.getTime()) / 86400000
-        const eventCount = this.rnd(days-30, days)
-        
-        for (let i = 0; i < eventCount; i++) {
-          const allDay = !!1 //this.rnd(0, 3) === 0
-          const firstTimestamp = this.rnd(min.getTime(), max.getTime())
-          const first = new Date(firstTimestamp - (firstTimestamp % 900000))
-          const secondTimestamp = this.rnd(2, allDay ? 288 : 8) * 900000
-          const second = new Date(first.getTime() + secondTimestamp)
-
-          newevents.push({
-            name: this.names[this.rnd(0, this.names.length - 1)],
-            start: first,
-            end: second,
-            color: this.colors[this.rnd(0, this.colors.length - 1)],
-            timed: !allDay,
-          })
-        }
-        this.events = this.events.concat(newevents)
-        // this.events = Object.assign({},this.events)
-      },
       rnd (a, b) {
         return Math.floor((b - a + 1) * Math.random()) + a
       },
-    },
+      
+    } 
   }
 </script>
 
-<style lang="sass">
-  #calendar
-    .v-calendar-weekly__day:last-child,
-    .v-calendar-weekly__head-weekday:last-child
-      border-right: none
+<style scoped>
 
-    .v-calendar-weekly__week:last-child .v-calendar-weekly__day
-      border-bottom: none
+  .feature-pane {
+    position: relative;
+    padding-top: 30px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+
+ .my-event {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-radius: 2px;
+    background-color: #1867c0;
+    color: #ffffff;
+    border: 1px solid #1867c0;
+    width: 100%;
+    font-size: 12px;
+    padding: 3px;
+    cursor: pointer;
+    margin-bottom: 1px;
+  }
+
+   .day-header {
+    margin: 0px 2px 2px 2px;
+    padding: 2px 6px;
+    background-color: #1867c0;
+    color: #ffffff;
+    border: 1px solid #1867c0;
+    border-radius: 2px;
+    user-select: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .day-body {
+    position: absolute;
+    top: 400px;
+    height: 36px;
+    margin: 2px;
+    padding: 2px 6px;
+    background-color: #1867c0;
+    color: #ffffff;
+    border: 1px solid #1867c0;
+    border-radius: 2px;
+    left: 0;
+    right: 0;
+    user-select: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .day {
+    position: relative;
+    height: 24px;
+    margin: 0px;
+    padding: 0px 6px;
+    background-color: #1867c0;
+    color: #ffffff;
+    border: 1px solid #1867c0;
+    border-radius: 2px;
+    left: 0;
+    right: 0;
+    user-select: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  .v-application--is-ltr .v-list-item__avatar:first-child {
+    margin-right: 0px;
+}
 </style>

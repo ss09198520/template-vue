@@ -1,340 +1,610 @@
 <template>
-  <v-layout wrap>
-    <v-flex
-      sm12
-      lg3
-      class="pa-3 mb-3 feature-pane"
+  <v-container>
+    <h2 class="font-bold">節目單查詢</h2>
+    <v-row>
+      <v-col
+        class="ml-10 font-18px"
+        cols="12"
+      >
+        <v-form class="font-weight-bold">
+          <v-row
+            class="d-flex justify-start"
+            align="center"
+          >
+            <v-col cols="1" class="ml-2">
+              節 目 單 標 題
+            </v-col>
+            <v-col cols="3" class="mt-5">
+              <v-text-field
+                v-model="postForm.programName"
+                color="accent"
+                dense
+                placeholder="節目單標題內容"
+                outlined
+                clearable
+                persistent-hint
+              />
+            </v-col>
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2">
+              節 目 單 類 型
+            </v-col>
+            <v-col cols="3" class="ml-2">
+              <v-select
+                v-model="postForm.programType"
+                :items="programTypeOption"
+                class="font-bold"
+                color="accent"
+                item-color="accent"
+                placeholder="節目單類型"
+                dense
+                outlined
+                clearable
+                hide-details
+              />
+            </v-col>
+          </v-row>
+          <v-row
+            class="d-flex justify-start"
+            align="center"
+          >
+            <v-col cols="1" class="ml-2">
+              簽 核 狀 態
+            </v-col>
+            <v-col cols="3">
+              <v-autocomplete
+                v-model="postForm.signStatus"
+                :items="signStatusOption"
+                clearable
+                item-color="accent"
+                class="font-bold"
+                color="accent"
+                placeholder="簽核狀態"
+                dense
+                outlined
+                hide-details
+              />
+            </v-col>
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2">
+              上架狀態
+            </v-col>
+            <v-col cols="3" class="ml-2">
+              <v-autocomplete
+                v-model="postForm.status"
+                :items="statusOption"
+                class="font-bold"
+                color="accent"
+                item-color="accent"
+                placeholder="上架狀態"
+                dense
+                outlined
+                clearable
+                hide-details
+              />
+            </v-col>
+          </v-row>
+          <v-row
+            class="d-flex justify-start"
+            align="center"
+          >
+            <v-col cols="1" class="ml-2">
+              上 架 時 間
+            </v-col>
+            <v-col 
+              cols="3"   
+              class="d-flex"
+            >
+              <v-menu
+                v-model="releaseStartDateFromMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="postForm.releaseStartDateFrom"
+                    append-icon="mdi-calendar"
+                    placeholder="上架時間(起)"
+                    color="accent"
+                    outlined
+                    dense
+                    readonly
+                    hide-details   
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="postForm.releaseStartDateFrom"
+                  scrollable
+                />
+              </v-menu>
+              <div class="mt-2"> ~ </div>
+              <v-menu
+                v-model="releaseStartDateToMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="postForm.releaseStartDateTo"
+                    append-icon="mdi-calendar"
+                    placeholder="上架時間(迄)"
+                    color="accent"
+                    outlined
+                    dense
+                    readonly
+                    hide-details   
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="postForm.releaseStartDateTo"
+                  scrollable
+                />
+              </v-menu>
+            </v-col>
+            <v-col cols="1" />
+            <v-col cols="1" class="ml-2">
+              下 架 時 間
+            </v-col>
+            <v-col 
+              cols="3"   
+              class="d-flex ml-2"
+            >
+              <v-menu
+                v-model="releaseEndDateFromMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="postForm.releaseEndDateFrom"
+                    append-icon="mdi-calendar"
+                    label="下架時間(起)"
+                    color="accent"
+                    outlined
+                    dense
+                    readonly
+                    hide-details   
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="postForm.releaseEndDateFrom"
+                  scrollable
+                />
+              </v-menu>
+              <div class="mt-2"> ~ </div>
+              <v-menu
+                v-model="releaseEndDateToMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="postForm.releaseEndDateTo"
+                    append-icon="mdi-calendar"
+                    label="下架時間(迄)"
+                    color="accent"
+                    outlined
+                    dense
+                    readonly
+                    hide-details   
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="postForm.releaseEndDateTo"
+                  scrollable
+                />
+              </v-menu>
+            </v-col>
+          </v-row>
+        </v-form>
+      </v-col>
+    </v-row>
+    <v-row
+      class="d-flex justify-end"
+      dense
     >
-      <v-btn
-        fab
-        small
-        absolute
-        left
-        color="primary"
-        @click="$refs.calendar.prev()"
-      >
-        <v-icon dark>
-          mdi-chevron-left
-        </v-icon>
-      </v-btn>
-      <v-btn
-        fab        
-        small
-        absolute
-        right
-        color="primary"
-        @click="$refs.calendar.next()"
-      >
-        <v-icon
-          dark
-        >
-          mdi-chevron-right
-        </v-icon>
-      </v-btn>
-      <br><br><br>
-      <v-select
-        v-model="status"
-        :items="statusOptions"
-        class="font-weight-bold"
-        label="狀態"
-        @change="getEvents(status,start)"
-      />
-      <v-menu
-        ref="startMenu"
-        v-model="startMenu"
-        :close-on-content-click="false"
-        :nudge-right="40"
-        :return-value.sync="start"
-        transition="scale-transition"
-        min-width="290px"
-        lazy
-        offset-y
-        full-width
-      >
+      <v-tooltip top>
         <template v-slot:activator="{ on }">
-          <v-text-field
-            v-model="start"
-            label="Start Date"
-            prepend-icon="mdi-calendar-month"
-            readonly
+          <v-btn
+            class="ma-2 "
+            fab
+            small
+            color="success"
+            @click="viewSchedule"
             v-on="on"
-          />
+          >
+            <v-icon v-text="'mdi-calendar'" />
+          </v-btn>
         </template>
-        <v-date-picker
-          v-model="start"
-          no-title
-          scrollable
-        >
-          <v-spacer />
-          <v-btn            
+        <span>行事曆劉覽</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2"
+            fab
+            small
             color="primary"
-            @click="startMenu = false"
+            @click="submitSearch"
+            v-on="on"
           >
-            Cancel
+            <v-icon v-text="'mdi-magnify'" />
           </v-btn>
-          <v-btn            
-            color="primary"
-            @click="$refs.startMenu.save(start)"
+        </template>
+        <span>查詢</span>
+      </v-tooltip>
+      <v-tooltip top>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            class="ma-2 "
+            fab
+            small
+            color="accent"
+            @click="postForm={};programs=[]"
+            v-on="on"
           >
-            OK
+            <v-icon>mdi-refresh</v-icon>
           </v-btn>
-        </v-date-picker>
-      </v-menu>
-
-      <v-btn
-        class="mr-4"
-        color="amber"
-        @click="setToday"
-      >
-        Today
-      </v-btn>
-      <hr class="mt-3">
-      <v-row>
-        <v-col
-          v-for="selfColors in selfColor"
-          :key="selfColors.text"
-          cols="12" 
-          md="12"
-          class="pt-2 pb-0"
+        </template>
+        <span>清空查詢</span>
+      </v-tooltip>
+    </v-row>
+    <!-- <v-divider class="mt-6 mb-5" /> -->
+    <hr class="mt-6 mb-5">
+    <v-row v-show="isShow">
+      <v-col md="12">
+        <v-data-table
+          item-key="id"
+          :headers="headerProgram"
+          :items="programs"
+          :items-per-page="itemsPerPage"
+          :page.sync="itemsListPage"
+          :footer-props="{
+            showFirstLastPage: true,
+          }"
+          disable-sort
+          class="font-weight-bold elevation-1"
+          hide-default-footer
+          no-data-text="查無資料"
+          @page-count="itemsListPageCount = $event"
         >
-          <v-list-item-avatar           
-            tile
-            size="20"
-            :color="selfColors.value"
-            class="ml-0 mt-1"
+          <template v-slot:top>
+            <v-dialog v-model="dialog" max-width="500" />
+            <v-dialog v-model="alertDialog" :max-width="250">
+              <v-card>
+                <v-card-title class="justify-center">Are you sure?</v-card-title>
+                <v-card-text />
+                <v-card-actions class="justify-center">
+                  <v-btn color="error" depressed @click="remove" v-text="'Yes'" />
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </template>
+          <!-- 動作 -->
+          <template v-slot:[`item.action`]="{ item }">
+            <!-- <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="primary"
+                  @click="editItem(item)"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-eye'" />
+                </v-btn>
+              </template>
+              <span>預覽</span>
+            </v-tooltip> -->
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="success"
+                  :disabled="!allowEdit(item.signStatus)"
+                  @click="editItem(item)"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-pencil'" />
+                </v-btn>
+              </template>
+              <span>編輯</span>
+            </v-tooltip>
+            <v-tooltip v-if="allowDelete(item.signStatus)" top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="error"
+                  :disabled="!allowDelete(item.signStatus)"
+                  @click="!allowDelete(item.signStatus)"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-delete'" />
+                </v-btn>
+              </template>
+              <span>刪除</span>
+            </v-tooltip>
+            <v-tooltip v-if="allowSunset(item.signStatus,item.status)" top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="error"
+                  :disabled="!allowSunset(item.signStatus,item.status)"
+                  @click="!allowSunset(item.signStatus,item.status)"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-arrow-down-bold-outline'" />
+                </v-btn>
+              </template>
+              <span>下架</span>
+            </v-tooltip>
+          </template>
+          <!-- 退件資訊 -->
+          <template v-slot:[`item.rejectInfo`]="{ item }">
+            <v-tooltip v-if="item.rejectInfo" top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="mr-2 d-flex justify-center"
+                  color="error"
+                  v-on="on"
+                >
+                  mdi-information-outline
+                </v-icon>
+              </template>
+              <v-data-table
+                :headers="headerReject"
+                :items="[item.rejectInfo]"
+                disable-sort
+                hide-default-footer
+              />
+            </v-tooltip>
+          </template>
+          
+          <!-- 上架狀態 -->
+          <template v-slot:[`item.status`]="{ item }">
+            <v-tooltip top>
+              <template v-slot:activator="{ on }">
+                <v-icon
+                  class="d-flex justify-center"
+                  :color="item.status==='ACTIVE' ? 'green darken-2':''"
+                  v-on="on"
+                >
+                  {{ statusOption.find(state => { return item.status===state.value }).icon }}
+                </v-icon>
+              </template>
+              {{ statusOption.find(state => { return item.status===state.value }).text }}
+            </v-tooltip>
+          </template>
+          <!-- 簽核狀態 -->
+          <template v-slot:[`item.signStatus`]="{ item }">
+            {{ signStatusOption.find(state => { return item.signStatus===state.value }).text }}
+          </template>
+          <!-- 節目單類型 -->
+          <template v-slot:[`item.programType`]="{ item }">
+            {{ programTypeOption.find(type => { return item.programType===type.value }).text }}
+          </template>
+        </v-data-table>
+        <!-- 選頁 -->
+        <div class="mt-2">
+          <v-pagination
+            v-model="itemsListPage"
+            color="#2F59C4"
+            :length="itemsListPageCount"
           />
-          <span class="font-weight-bold mr-3"> {{ selfColors.text }}</span>          
-        </v-col>
-      </v-row>
-    </v-flex>
-    <v-flex
-      sm12
-      lg9
-      class="pl-3"
-    >
-      <v-toolbar-title v-if="$refs.calendar" class="d-flex justify-center font-weight-bold">
-        {{ $refs.calendar.title }}
-      </v-toolbar-title>
-      <v-sheet height="1050">
-        <v-calendar
-          ref="calendar"
-          v-model="start"
-          :type="type"
-          :start="start"  
-          :color="color"
-          :event-overlap-mode="mode"
-          :events="events"
-          @change="getEvents(status,start)"
-        />
-      </v-sheet>
-    </v-flex>
-  </v-layout>
+        </div>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-import { fetchActiveProgramCalendar } from "@/api/program"; 
-import MessageService from "@/assets/services/message.service";
+  import MessageService from "@/assets/services/message.service";
+  import { fetchProgramList} from '@/api/program'
+  import enums from '@/utils/enums'
+  import isEmpty from 'lodash/isEmpty'
 
-  const weekdaysDefault = [0, 1, 2, 3, 4, 5, 6]
+  const defaultForm = {
+    programName: null, 
+    releaseStartDateFrom: null, 
+    releaseStartDateTo: null, 
+    releaseEndDateFrom: null, 
+    releaseEndDateTo: null, 
+    status: null,
+    signStatus:null
+  }
 
   export default {
-    
-    data: () => ({
-      dark: false,
-      startMenu: false,
-      start: '2021-11-01',
-      events: [],
-      more: false,
-      mode: 'column',
-      modes: ['stack', 'column'],
-      type: 'month',
-      weekdays: weekdaysDefault,
-      status:'請選擇',
-      statusOptions: ['請選擇','上架','下架','未上架:審核中','未上架:審核完成','未上架:退件','未上架:草稿'],
-      selfColor: [
-        { text: '上架', value: 'green darken-2' },
-        { text: '下架', value: 'grey lighten-1' },
-        { text: '未上架:退件', value: 'red' },
-        { text: '未上架:審核中', value: 'light-blue accent-1' },
-        { text: '未上架:審核完成', value: 'cyan darken-4' },
-        { text: '未上架:草稿', value:'yellow darken-1'}
-      ],
-   /*   OtherColor: [
-       { text: '上架', value: 'indigo darken-3' },
-        { text: '下架', value: 'grey darken-3' },
-        { text: '未上架:退件', value: 'red darken-3' },
-        { text: '未上架:審核中', value: 'lime darken-3' },
-        { text: '未上架:審核完成', value: 'light-green darken-3' }, 
-      ],*/
-      color: 'amber',
-    }),
+    data() {
+      return {
+        isShow: false,
+        menu: false,
+        
+        //api post data
+        postForm: Object.assign({}, defaultForm),
 
-    computed: {
-      hasIntervals () {
-        return this.type in {
-          'week': 1, 'day': 1, '4day': 1, 'custom-daily': 1
-        }
-      },
-      hasEnd () {
-        return this.type in {
-          'custom-weekly': 1, 'custom-daily': 1
-        }
+        date: new Date().toISOString().substr(0, 10),
+        //分頁
+        itemsPerPage: 10,
+        itemsListPage: 1,
+        itemsListPageCount: 1,
+        //分頁 end
+
+        //日曆開關
+        releaseStartDateFromMenu: false,
+        releaseStartDateToMenu: false,
+        releaseEndDateFromMenu: false,
+        releaseEndDateToMenu: false,
+        //日曆 end
+
+        //節目單類型下拉選單
+        programTypeOption: enums.mediaTypeOption,
+        //節目單上架下拉選單
+        statusOption: enums.mediaStatusOption,
+        //節目單簽核狀態下拉選單
+        signStatusOption: enums.mediaSignStatusOption,
+
+        //節目單DataTable表頭
+        headerProgram: [
+          { text: '節目標題', value: 'programName',},
+          { text: '節目類別', value: 'programType', align: 'center', },
+          { text: '簽核狀態', value: 'signStatus', sortable: false, align: 'center', },
+          { text: '上架人員名稱', value: 'createAuthor', align: 'center', },
+          { text: '上架日期', value: 'releaseStartDate', align: 'center', },
+          { text: '下架日期', value: 'releaseEndDate', align: 'center', },
+          { text: '建立時間', value: 'createDate', align: 'center' },
+          { text: '上架', value: 'status', sortable: false, width: '10%', align: 'center', },
+          { text: '退件資訊', value: 'rejectInfo', align: 'center' },
+          { text: '操作', value: 'action', sortable: false, align: 'center', },
+        ],
+        //退件資訊表頭
+        headerReject:[
+          {text: '退件主管名稱',value: 'rejectManagerName',align: 'center',},
+          {text: '退件日期',value: 'rejectDate',align: 'center',},
+          {text: '退件原因',value: 'rejectReason',align: 'center',},
+        ],
+        
+        programs: [],
+        //彈跳視窗
+        dialog: false,
+        alertDialog: false,
+        editedIndex: -1,
+        // editedItem: {
+        //   name: '',
+        //   scp_id: '',
+        //   marquee_content: '',
+        //   division:'',
+        //   ondate: 0,
+        //   pages: 0,
+        // },
       }
     },
     methods: {
-       setToday () {
-         function pad2(n) {  return (n < 10 ? '0' : '') + n;}
-          let date = new Date();
-          let month = pad2(date.getMonth()+1);//months (0-11)
-          let day = pad2(date.getDate());//day (1-31)
-          let year= date.getFullYear();
-          //let formattedDate =  year+"-"+month+"-"+day;
-          this.focus = year+"-"+month+"-"+day;
-          this.start = this.focus;
-          this.$refs.startMenu.save(this.start);        
+      allowEdit(signStatus) {
+        return (/(DRAFT|REJECT)$/i).test(signStatus)
       },
-      getEvents (status,start) {        
-        let objs = {}
-        let event = [];
-        let str = start.substring(0, 7);
-        console.log(str);
-
-        fetchActiveProgramCalendar({
-          region: null,
-          releaseMonth: str
-        }).then((res) => {
-            let reslut =  JSON.parse(JSON.stringify( res.restData.programs));
-            MessageService.showInfo(res.restData.message, "成功✓");
-            const keyMap = { programName: 'name', releaseStartDate:'start', releaseEndDate:'end'}
-              reslut.map((item) => {
-              objs = Object.keys(item).reduce((newData, key) => {
-                const newKey = keyMap[key] || key
-                newData[newKey] = item[key]
-                return newData
-              }, {})
-              event.push(objs)
-              })
-              
-              let statusArray = status.split(':');
-              let eventTemp =  event.filter(function (el) {
-                if(status == "請選擇")
-                  return el.status;
-                else if (status == "上架")
-                  return el.status == "ACTIVE"
-                else if (status == "下架")
-                  return el.status =="CLOSE"
-                else if (statusArray[0] == "未上架" && statusArray[1] == "退件")
-                  return (el.status == "WAIT" &&  el.signStatus == "REJECT");
-                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核中")
-                  return (el.status == "WAIT" &&  el.signStatus == "WAIT");
-                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核完成" )
-                  return (el.status == "WAIT" &&  el.signStatus == "PROGRESS" );
-                else if (statusArray[0] == "未上架" &&  statusArray[1] == "草稿")
-                  return (el.status == "WAIT" &&  el.signStatus == "DRAFT");              
-              });
-
-             for(let i=0; i< eventTemp.length; i++){
-              //  if(eventTemp[i].region == "區處"){
-                if(eventTemp[i].status == "ACTIVE"){
-                  Object.assign(eventTemp[i], {color: 'green darken-2'});                
-                }else if (eventTemp[i].status == "CLOSE"){
-                   Object.assign(eventTemp[i], {color: 'grey darken-1'});                   
-                }else if(eventTemp[i].status == "WAIT" && eventTemp[i].signStatus=="REJECT"){
-                  Object.assign(eventTemp[i], {color: 'red darken-4'});                    
-                }else if(eventTemp[i].status == "WAIT" && (eventTemp[i].signStatus=="WAIT" || eventTemp[i].signStatus=="PROGRESS")){
-                   Object.assign(eventTemp[i], {color: 'light-blue accent-1'});
-                }else if(eventTemp[i].status == "WAIT" && (eventTemp[i].signStatus=="DRAFT")){
-                   Object.assign(eventTemp[i], {color: 'yellow darken-1'});
-                }else if(eventTemp[i].status == "WAIT" && eventTemp[i].signStatus=="PASS"){                    
-                    Object.assign(eventTemp[i], {color: 'cyan darken-4'});
-                }
+      allowDelete(signStatus) {
+        return (/(DRAFT|REJECT)$/i).test(signStatus)
+      },
+      allowSunset(signStatus,status) {
+        return (/(PASS)$/i).test(signStatus) && (/(ACTIVE)$/i).test(status)
+      },
+      previewItem(item) {
+        this.$router.push({path:`/media/preview/questionnaire/${item.questionnaireId}`})
+      },
+      close() {
+        this.dialog = false
+        // this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+        this.alertDialog = false
+      },
+      editItem(item) {
+        // this.editedItem = Object.assign({}, item)
+        if(this.allowEdit(item.signStatus)){
+          this.$router.push({path: `${this.$route.matched[0].path}/edit/${item.programId}`})
+        } else {
+          MessageService.showNoticeInfo('無法編輯節目狀態為:' + this.signStatusOption.find(state => { return item.signStatus===state.value }).text);
+          return
         }
-             this.events =  eventTemp;
-        }).catch((error) => {
-          console.log(error)
-        });
+
+      },
+      viewSchedule() {
+        this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
+      },
+      deleteItem(item) {
+        this.alertDialog = true
+        this.editedIndex = this.itemsCRUD.indexOf(item)
+      },
+      remove() {
+        this.itemsCRUD.splice(this.editedIndex, 1)
+        this.close()
+      },
+      // 送出問卷查詢
+      submitSearch() {
+        console.log(this.postForm)
+        //API post data
+        this.fetchProgramList(this.postForm)
       },
 
-      rnd (a, b) {
-        return Math.floor((b - a + 1) * Math.random()) + a
+      /**
+       * @param {Object} questionnaire
+       * @returns {Object}
+       */
+      hasResult (dataList) {
+        // 驗證questionnaire是否有資料
+        if(isEmpty(dataList) || dataList.length < 1 ){
+            MessageService.showInfo('查無相關資料')
+            return
+        }
+        return true
       },
+
+      /**
+       * 
+       * Ajax start 
+       * 
+       **/
       
-    } 
+      //Action:節目單清單查詢
+      async fetchProgramList(postData) {
+        //查詢前清空資料
+        this.programs = Object.assign([])
+        this.isShow = false
+        
+        const data = await fetchProgramList(postData)
+
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢節目單清單資料');
+            return;
+        }
+        this.isShow = true
+        
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.programs)){
+          
+          let tmpData = data.restData.programs
+          
+          //處理退件資訊轉換
+          tmpData.forEach(item => {
+            if(item.signStatus==='REJECT'){
+              Object.assign(item, {rejectInfo: {
+                rejectManagerName: item.rejectUser,
+                rejectDate: item.rejectDate,
+                rejectReason: item.rejectReason,
+              }});
+            }
+          });
+
+          this.programs = tmpData
+        }
+        
+        
+      },
+    }
   }
 </script>
 
-<style scoped>
-
-  .feature-pane {
-    position: relative;
-    padding-top: 30px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  }
-
- .my-event {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    border-radius: 2px;
-    background-color: #1867c0;
-    color: #ffffff;
-    border: 1px solid #1867c0;
-    width: 100%;
-    font-size: 12px;
-    padding: 3px;
-    cursor: pointer;
-    margin-bottom: 1px;
-  }
-
-   .day-header {
-    margin: 0px 2px 2px 2px;
-    padding: 2px 6px;
-    background-color: #1867c0;
-    color: #ffffff;
-    border: 1px solid #1867c0;
-    border-radius: 2px;
-    user-select: none;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  .day-body {
-    position: absolute;
-    top: 400px;
-    height: 36px;
-    margin: 2px;
-    padding: 2px 6px;
-    background-color: #1867c0;
-    color: #ffffff;
-    border: 1px solid #1867c0;
-    border-radius: 2px;
-    left: 0;
-    right: 0;
-    user-select: none;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  .day {
-    position: relative;
-    height: 24px;
-    margin: 0px;
-    padding: 0px 6px;
-    background-color: #1867c0;
-    color: #ffffff;
-    border: 1px solid #1867c0;
-    border-radius: 2px;
-    left: 0;
-    right: 0;
-    user-select: none;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-
-  .v-application--is-ltr .v-list-item__avatar:first-child {
-    margin-right: 0px;
-}
-</style>
+<style lang="scss" scoped></style>

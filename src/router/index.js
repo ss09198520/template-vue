@@ -127,6 +127,7 @@ export const constantRoutes = [
     path: '/imageEditor',
     name: 'ImageEditor',
     component: () => import('@/pages/imageEditorPage.vue'),
+    hidden: true,
     meta: { title: 'imageEditor', icon: 'mdi-image' }
   },
 ]

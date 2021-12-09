@@ -491,7 +491,7 @@ export default {
                 memo: this.memo,
                 accnting: this.selectItem.accnting,
                 acceptNum: this.selectItem.acceptNum,
-                rejectReason: this.rejectReason.rejectReasonName,
+                rejectReason: (this.rejectReason) ? this.rejectReason.rejectReasonName : null,
                 rejectDesc: this.rejectDesc,
             };
             

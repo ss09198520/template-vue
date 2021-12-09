@@ -636,7 +636,9 @@ export default {
         (this.releaseEndDateFrom = null),
         (this.releaseEndDateTo = null),
         (this.status = null),
-        (this.signStatus = null);
+         (this.marqueeType = null),
+        (this.signStatus = null),
+        (this.itemsCRUD = []);
     },
     deleteMarquee(item) {
       fetchDeleteMarquee({

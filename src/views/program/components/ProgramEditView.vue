@@ -1,304 +1,271 @@
 <template>
   <v-container>
     <h2 class="font-bold">節 目 單 製 作</h2>
-    
-    <v-row class="d-flex justify-center">
-      <v-col
-        class="ml-10"
-        cols="12"
-      >
-        <fet-card
-          full-width
-          outlined
-          title="節 目 單 製 作"
-        >
-          <not-found v-if="isNotFound" />
-
-          <v-form v-else ref="programForm" v-model="valid" lazy-validation>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
+    <v-row class="ml-10">
+      <v-col class="ml-10 font-18px" cols="12">
+        <not-found v-if="isNotFound" />
+        <v-form v-else ref="programForm" v-model="valid" lazy-validation class="ml-10 font-weight-bold">
+          <v-row
+            :dense="dense"
+            :no-gutters="noGutters"
+            class="d-flex justify-start mt-3"
+          >
+            <v-col cols="2" md="2">
+              節 目 標 題
+              <span class="red--text">*</span>
+            </v-col>
+            <v-col
+              cols="7"
+              md="6"
             >
-              <v-col
-                cols="4"
-                md="3"
-              >
-                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                  節 目 標 題
-                  <span class="red--text">*</span>
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="7"
-                md="6"
-              >
-                <v-text-field
-                  v-model="postForm.programName"
-                  :rules="rules.requiredRule.concat(rules.lengthRules)"
-                  :hide-details="hideDatails"
-                  color="accent"
-                  placeholder="請輸入節目標題"
-                  :counter="maxCharacter"
-                  outlined
-                  required
-                  dense
-                />
-              </v-col>
-            </v-row>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
+              <v-text-field
+                v-model="postForm.programName"
+                :rules="rules.requiredRule.concat(rules.lengthRules)"
+                :hide-details="hideDatails"
+                color="accent"
+                placeholder="請輸入節目標題"
+                :counter="maxCharacter"
+                outlined
+                required
+                dense
+              />
+            </v-col>
+          </v-row>
+          <v-row
+            :dense="dense"
+            :no-gutters="noGutters"
+          >
+            <v-col cols="2" md="2">
+              節 目 說 明
+              <span class="red--text ml-2">*</span>
+            </v-col>
+            <v-col
+              cols="7"
+              md="6"
             >
-              <v-col
-                cols="3"
-                md="3"
+              <v-text-field
+                v-model="postForm.memo"
+                :rules="rules.requiredRule.concat(rules.lengthRules)"
+                :hide-details="hideDatails"
+                color="accent"
+                placeholder="請輸入節目描述"
+                :counter="maxCharacter"
+                outlined
+                dense
+                persistent-hint
+              />
+            </v-col>
+          </v-row>
+          <v-row
+            :dense="dense"
+            :no-gutters="noGutters"
+          >
+            <v-col cols="2" md="2">
+              上架/下架日期
+              <span class="red--text ml-2">*</span>
+            </v-col>
+            <v-col cols="1" md="3">
+              <v-menu
+                v-model="releaseStartDateMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
               >
-                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                  節 目 說 明
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="7"
-                md="6"
-              >
-                <v-text-field
-                  v-model="postForm.memo"
-                  :rules="rules.requiredRule.concat(rules.lengthRules)"
-                  :hide-details="hideDatails"
-                  color="accent"
-                  placeholder="請輸入節目描述"
-                  :counter="maxCharacter"
-                  outlined
-                  dense
-                  persistent-hint
-                />
-              </v-col>
-            </v-row>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
-            >
-              <v-col cols="3" md="3">
-                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                  輪 播 時 間
-                </v-subheader>
-              </v-col>
-              <v-col cols="1" md="3">
-                <v-menu
-                  v-model="releaseStartDateMenu"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="auto"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-model="postForm.releaseStartDate"
-                      :rules="rules.requiredRule.concat(rules.lengthRules)"
-                      :error-messages="errormages.dateCheck"
-                      append-icon="mdi-calendar"
-                      placeholder="上架時間(起)"
-                      color="accent"
-                      outlined
-                      dense
-                      readonly
-                      :hide-details="hideDatails"
-                      :clearable="true"
-                      v-on="on"
-                    />
-                  </template>
-                  <v-date-picker
+                <template v-slot:activator="{ on }">
+                  <v-text-field
                     v-model="postForm.releaseStartDate"
-                    scrollable
-                    :min="getMinimumStartDate"
-                    :max="getMaximumStartDate"
-                    @input="releaseStartDateMenu = false"
-                    @change="checkDate"
+                    :rules="rules.requiredRule.concat(rules.lengthRules)"
+                    :error-messages="errormages.dateCheck"
+                    append-icon="mdi-calendar"
+                    placeholder="上架時間(起)"
+                    color="accent"
+                    outlined
+                    dense
+                    readonly
+                    :hide-details="hideDatails"
+                    :clearable="true"
+                    v-on="on"
                   />
-                </v-menu>
-              </v-col>
-              <v-col cols="1" md="3">
-                <v-menu
-                  v-model="releaseEndDateMenu"
-                  :close-on-content-click="false"
-                  transition="scale-transition"
-                  offset-y
-                  min-width="auto"
-                >
-                  <template v-slot:activator="{ on }">
-                    <v-text-field
-                      v-model="postForm.releaseEndDate"
-                      :rules="rules.requiredRule"
-                      :error-messages="errormages.dateCheck"
-                      append-icon="mdi-calendar"
-                      placeholder="上架時間(迄)"
-                      color="accent"
-                      outlined
-                      dense
-                      readonly
-                      :hide-details="hideDatails"
-                      :clearable="true"
-                      v-on="on"
-                    />
-                  </template>
-                  <v-date-picker
-                    v-model="postForm.releaseEndDate"
-                    scrollable
-                    :min="getMinimumEndDate"
-                    @input="releaseEndDateMenu = false"
-                    @change="checkDate"
-                  />
-                </v-menu>
-              </v-col>
-            </v-row>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
-            >
-              <v-col
-                cols="3"
-                md="3"
-              >
-                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                  選 擇 素 材
-                  <span class="red--text">*</span>
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="7"
-                md="6"
-              >
-                <v-btn class="primary" style="margin:10px;" @click="showSelectPannel"><v-icon small style="margin-right: 3px;">mdi-plus</v-icon>新增</v-btn>
-              </v-col>
-            </v-row>
-            <v-row 
-              v-if="selectedFiles.length > 0"
-            >
-              <v-col
-                cols="3"
-                md="3"
-              >
-                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                  已 選 擇 素 材
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="7"
-                md="6"
-              >
-                <v-data-table
-                  v-sortable-data-table
-                  disable-sort
-                  hide-default-footer
-                  :headers="headerSelectedFiles"
-                  :items="selectedFiles"
-                  item-key="id"
-                  class="font-weight-bold elevation-1"
-                  @sorted="saveOrder"
-                >
-                  <!-- 縮圖 -->
-                  <template v-slot:[`item.dataUrl`]="{ item }">
-                    <v-img
-                      :src="item.dataUrl"
-                      max-width="50"
-                      max-height="50"
-                    />
-                  </template>
-                  <template v-slot:[`item.sort`]="{ item }">
-                    <v-icon
-                      class="mr-2"
-                      :style="`cursor: pointer`"
-                    >
-                      mdi-sort-variant
-                    </v-icon>
-                    {{ item.sort || '' }}
-                  </template>
-                  <template v-slot:[`item.delete`]="{ item }">
-                    <v-btn
-                      class="ma-2"
-                      fab
-                      x-small
-                      color="error"
-                      @click="deleteItem(item)"
-                    >
-                      <v-icon v-text="'mdi-delete'" /> 
-                    </v-btn>
-                  </template>
-                </v-data-table>
-              </v-col>
-            </v-row>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
-            >
-              <v-col
-                cols="5"
-                md="3"
-              >
-                <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                  審 核 附 件 上 傳
-                  <span class="red--text">*</span>
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="7"
-                md="6"
-              >
-                <v-file-input
-                  v-model="attachmentFile"
-                  :rules="rules.requiredRule.concat(rules.filesSizeRules)"
-                  placeholder="請選擇上傳附件"
-                  color="accent"
-                  outlined
-                  dense
-                  persistent-hint
-                  prepend-inner-icon="mdi-cloud-upload"
-                  prepend-icon
-                  accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf ,application/vnd.ms-excel"
-                  show-size
-                  @change="onUpload"
+                </template>
+                <v-date-picker
+                  v-model="postForm.releaseStartDate"
+                  scrollable
+                  :min="getMinimumStartDate"
+                  :max="getMaximumStartDate"
+                  @input="releaseStartDateMenu = false"
+                  @change="checkDate"
                 />
-                <div v-if="!!dataURL" class="t-center">
-                  <v-icon x-large class="mb-2">
-                    mdi-file-document-outline
-                  </v-icon><br>
-                </div>
-              </v-col>
-            </v-row>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
+              </v-menu>
+            </v-col>
+            <v-col cols="1" md="3">
+              <v-menu
+                v-model="releaseEndDateMenu"
+                :close-on-content-click="false"
+                transition="scale-transition"
+                offset-y
+                min-width="auto"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="postForm.releaseEndDate"
+                    :rules="rules.requiredRule"
+                    :error-messages="errormages.dateCheck"
+                    append-icon="mdi-calendar"
+                    placeholder="下架時間(迄)"
+                    color="accent"
+                    outlined
+                    dense
+                    readonly
+                    :hide-details="hideDatails"
+                    :clearable="true"
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker
+                  v-model="postForm.releaseEndDate"
+                  scrollable
+                  :min="getMinimumEndDate"
+                  @input="releaseEndDateMenu = false"
+                  @change="checkDate"
+                />
+              </v-menu>
+            </v-col>
+          </v-row>
+          <v-row
+            :dense="dense"
+            :no-gutters="noGutters"
+          >
+            <v-col cols="2" md="2">
+              選 擇 素 材
+              <span class="red--text">*</span>
+            </v-col>
+            <v-col
+              cols="7"
+              md="6"
             >
-              <v-col class="d-flex justify-end">
-                <v-btn
-                  class="ma-1"
-                  outlined
-                  color="accent"
-                >
-                  取消
-                </v-btn>
-                <v-btn
-                  class="ma-1"
-                  depressed
-                  color="primary"
-                  :disabled="!valid"
-                  @click="submit(false)"
-                >
-                  暫存
-                </v-btn>
-                <v-btn
-                  class="ma-1"
-                  depressed
-                  color="success"
-                  :disabled="!valid"
-                  @click="submit(true)"
-                >
-                  送出審核
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-form>
-        </fet-card>
+              <v-btn class="primary" style="margin:10px;" @click="showSelectPannel"><v-icon small style="margin-right: 3px;">mdi-plus</v-icon>新增</v-btn>
+            </v-col>
+          </v-row>
+          <v-row 
+            v-if="selectedFiles.length > 0"
+          >
+            <v-col cols="2" md="2">
+              <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                已 選 擇 素 材
+              </v-subheader>
+            </v-col>
+            <v-col
+              cols="7"
+              md="6"
+            >
+              <v-data-table
+                v-sortable-data-table
+                disable-sort
+                hide-default-footer
+                :headers="headerSelectedFiles"
+                :items="selectedFiles"
+                item-key="id"
+                class="font-weight-bold elevation-1"
+                @sorted="saveOrder"
+              >
+                <!-- 縮圖 -->
+                <template v-slot:[`item.dataUrl`]="{ item }">
+                  <v-img
+                    :src="item.dataUrl"
+                    max-width="50"
+                    max-height="50"
+                  />
+                </template>
+                <template v-slot:[`item.sort`]="{ item }">
+                  <v-icon
+                    class="mr-2"
+                    :style="`cursor: pointer`"
+                  >
+                    mdi-sort-variant
+                  </v-icon>
+                  {{ item.sort || '' }}
+                </template>
+                <template v-slot:[`item.delete`]="{ item }">
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    x-small
+                    color="error"
+                    @click="deleteItem(item)"
+                  >
+                    <v-icon v-text="'mdi-delete'" /> 
+                  </v-btn>
+                </template>
+              </v-data-table>
+            </v-col>
+          </v-row>
+          <v-row
+            :dense="dense"
+            :no-gutters="noGutters"
+          >
+            <v-col cols="2" md="2">
+              審 核 附 件 上 傳
+              <span class="red--text">*</span>
+            </v-col>
+            <v-col
+              cols="7"
+              md="6"
+            >
+              <v-file-input
+                v-model="attachmentFile"
+                :rules="rules.requiredRule.concat(rules.filesSizeRules)"
+                placeholder="請選擇上傳附件"
+                color="accent"
+                outlined
+                dense
+                persistent-hint
+                prepend-inner-icon="mdi-cloud-upload"
+                prepend-icon
+                accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf ,application/vnd.ms-excel"
+                show-size
+                @change="onUpload"
+              />
+              <div v-if="!!dataURL" class="t-center">
+                <v-icon x-large class="mb-2">
+                  mdi-file-document-outline
+                </v-icon><br>
+              </div>
+            </v-col>
+          </v-row>
+          <v-row
+            :dense="dense"
+            :no-gutters="noGutters"
+          >
+            <v-col class="d-flex justify-end" cols="8" md="8">
+              <v-btn
+                class="ma-1"
+                outlined
+                color="accent"
+              >
+                取消
+              </v-btn>
+              <v-btn
+                class="ma-1"
+                depressed
+                color="primary"
+                :disabled="!valid"
+                @click="submit(false)"
+              >
+                暫存
+              </v-btn>
+              <v-btn
+                class="ma-1"
+                depressed
+                color="success"
+                :disabled="!valid"
+                @click="submit(true)"
+              >
+                送出審核
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
       </v-col>
     </v-row>
     <!-- 選 擇 素 材 視 窗 -->

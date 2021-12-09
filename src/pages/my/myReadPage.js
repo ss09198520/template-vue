@@ -87,11 +87,11 @@ export default{
         queryReadList(){
 
             let param = {
-                acceptNum: this.acceptNum,
-                electricNum: this.electricNum,
-                archiveNum: this.archiveNum,
-                applyStartDate: this.applyStartDate,
-                applyEndDate: this.applyEndDate
+                acceptNum: (ValidateUtil.isEmpty(this.acceptNum)? null : this.acceptNum),
+                electricNum: (ValidateUtil.isEmpty(this.electricNum)? null : this.electricNum),
+                archiveNum: (ValidateUtil.isEmpty(this.archiveNum)? null : this.archiveNum),
+                applyStartDate: (ValidateUtil.isEmpty(this.applyStartDate)? null : this.applyStartDate),
+                applyEndDate: (ValidateUtil.isEmpty(this.applyEndDate)? null : this.applyEndDate),
             };
 
             AjaxService.post("/read/queryReadApply", param, (response) => {

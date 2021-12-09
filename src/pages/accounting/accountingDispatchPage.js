@@ -496,10 +496,15 @@ export default {
         isValid = false;
       }
 
+
       // 將電號整理並放到dispatchList中      
       // 無卡別-純電號
       if(this.dispatchInfo.dispatchType === 0 && this.dispatchInfo.electricNumList.length > 0) {
           for(let i in this.dispatchInfo.electricNumList){
+            // 判斷選到的電號是否滿11碼，若無，則起號補0，迄號補9
+            this.dispatchInfo.electricNumList[i].start = this.paddingZero(this.dispatchInfo.electricNumList[i].start,11);
+            this.dispatchInfo.electricNumList[i].end = this.paddingNine(this.dispatchInfo.electricNumList[i].end,11);
+
             // 判斷電號起訖號是否都有值
             if(!ValidateUtil.isEmpty(this.dispatchInfo.electricNumList[i].start) 
               && !ValidateUtil.isEmpty(this.dispatchInfo.electricNumList[i].end)){
@@ -521,6 +526,10 @@ export default {
          // 包制
         if(this.dispatchInfo.usePackage && this.dispatchInfo.packageNumList.length > 0) {
           for(let i in this.dispatchInfo.packageNumList){
+            // 判斷選到的電號是否滿11碼，若無，則起號補0，迄號補9
+            this.dispatchInfo.packageNumList[i].start = this.paddingZero(this.dispatchInfo.packageNumList[i].start,11);
+            this.dispatchInfo.packageNumList[i].end = this.paddingNine(this.dispatchInfo.packageNumList[i].end,11);
+
             // 判斷電號起訖號是否都有值
             if(!ValidateUtil.isEmpty(this.dispatchInfo.packageNumList[i].start) 
               && !ValidateUtil.isEmpty(this.dispatchInfo.packageNumList[i].end)){
@@ -542,6 +551,10 @@ export default {
         // 高壓
         if(this.dispatchInfo.useHighVoltage && this.dispatchInfo.highVoltageNumList.length > 0) {
           for(let i in this.dispatchInfo.highVoltageNumList){
+            // 判斷選到的電號是否滿11碼，若無，則起號補0，迄號補9
+            this.dispatchInfo.highVoltageNumList[i].start = this.paddingZero(this.dispatchInfo.highVoltageNumList[i].start,11);
+            this.dispatchInfo.highVoltageNumList[i].end = this.paddingNine(this.dispatchInfo.highVoltageNumList[i].end,11);
+
             // 判斷電號起訖號是否都有值
             if(!ValidateUtil.isEmpty(this.dispatchInfo.highVoltageNumList[i].start) 
               && !ValidateUtil.isEmpty(this.dispatchInfo.highVoltageNumList[i].end)){
@@ -564,6 +577,10 @@ export default {
         if(this.dispatchInfo.useMeter){
           if(this.dispatchInfo.meterType === 0 && this.dispatchInfo.meterElectricNumList.length > 0) {
               for(let i in this.dispatchInfo.meterElectricNumList){
+                // 判斷選到的電號是否滿11碼，若無，則起號補0，迄號補9
+                this.dispatchInfo.meterElectricNumList[i].start = this.paddingZero(this.dispatchInfo.meterElectricNumList[i].start,11);
+                this.dispatchInfo.meterElectricNumList[i].end = this.paddingNine(this.dispatchInfo.meterElectricNumList[i].end,11);
+
                 // 判斷電號起訖號是否都有值
                 if(!ValidateUtil.isEmpty(this.dispatchInfo.meterElectricNumList[i].start) 
                   && !ValidateUtil.isEmpty(this.dispatchInfo.meterElectricNumList[i].end)){
@@ -607,7 +624,6 @@ export default {
         if(!this.checkOptionValid(dispatchList)){
           isValid = false;
         }
-
 
         // 最後判斷驗證是否都通過，再決定要打修改還是新增的Action
         if(isValid){

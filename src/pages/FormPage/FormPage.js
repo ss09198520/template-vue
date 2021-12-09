@@ -120,6 +120,7 @@ export default {
             encryptedParam: null,
             empName: null,
             windowRef: null,//開啟問卷存放回傳物件
+            isCreateForm: false,
         }
     },
     methods: {
@@ -182,6 +183,7 @@ export default {
             if(page == "createForm"){
                 this.formPageMode = "edit";
                 this.showModeSelect = false;
+                this.isCreateForm = true;
                 this.$emit("showOnlyContent");
             }
             else if(page == "cancelForm_cust"){
@@ -366,7 +368,7 @@ export default {
             this.formSignPage.region = this.region;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
 
-            if(this.formPageMode != "accounting" && this.formPageMode != "view" && this.formPageMode != "viewDownload"){
+            if(this.isCreateForm){
                 try {
                     // 將畫面顯示改為同步
                     PMCService.callDualScreenAdapterClone();
@@ -378,7 +380,7 @@ export default {
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
-            if(this.formPageMode != "accounting" && this.formPageMode != "view" && this.formPageMode != "viewDownload"){
+            if(this.isCreateForm){
                 try {
                     // 將畫面顯示改為延伸
                     PMCService.callDualScreenAdapterExtend();
@@ -957,7 +959,7 @@ export default {
         openPortal() {
             // 開啟滿意度調查頁
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-            window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '滿意度調查', config);
+            this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '滿意度調查', config);
             this.windowRef.document.body.appendChild(this.$el);
             this.windowRef.addEventListener("beforeunload", this.closePortal);
         },

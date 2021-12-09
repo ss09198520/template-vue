@@ -1,3 +1,5 @@
+import MessageService from './message.service';
+
 class WS {
     constructor(){
         this._uri = "wss://127.0.0.1:2330"; // server url
@@ -19,8 +21,10 @@ class WS {
     OnDisconnect () {
         console.log("PmcControllerTestPageWs: OnDisconnect");
 
-        console.log('Socket is closed. Reconnect will be attempted in 1 second.');
-        setTimeout(this.CheckAndReconnect(), 1000);
+        console.log('Socket is closed. Reconnect will be attempted in 10 second.');
+
+        MessageService.showError("PMC 連線失敗", "PMC ");
+        setTimeout(this.CheckAndReconnect(), 10000);
     }
 
     // default empty callback

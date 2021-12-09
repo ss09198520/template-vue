@@ -53,7 +53,7 @@
             cols="3"
           >
             <v-text-field
-              v-model="archieveNum"
+              v-model="archiveNum"
               outlined
               hide-details                                         
               dense

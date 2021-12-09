@@ -130,6 +130,15 @@ export default {
             MessageService.showSuccess("取消案件成功✓");
             this.deleteOrderModel = false;
         },
+        editItem(item) {
+          if(item.mediaType =='MEDIA_PROGRAM') {
+            this.$router.push({path: `/program/edit/${item.id}`})
+          } else if(item.mediaType == 'MEDIA_QUESTIONNAIRE') {
+            this.$router.push({path: `/satisfaction/edit/${item.id}`})
+          } else if(item.mediaType =='MEDIA_MARQUEE') {
+            this.$router.push({path: `/marquee/marqueeEdit?id=${item.id}`})
+          }
+        },
         browerOrder(item){
           this.selectItem = item;
 

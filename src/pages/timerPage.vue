@@ -703,7 +703,6 @@ export default {
         openPortal() {
           let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
           this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + '12345678', '滿意度調查', config);
-          this.windowRef.document.body.appendChild(this.$el);
           this.windowRef.addEventListener("beforeunload", this.closePortal);
         },
         closePortal() {

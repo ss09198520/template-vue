@@ -229,7 +229,7 @@
           <v-row v-if="marqueeType !== 'DEFAULT'" :dense="dense" :no-gutters="noGutters">
             <v-col class="d-flex justify-end" cols="8" md="8">
               <v-btn class="ma-1" outlined color="accent" @click="resetForm">
-                取消
+                清空
               </v-btn>
               <v-btn
                 class="ma-1"
@@ -245,7 +245,7 @@
                 class="ma-1"
                 depressed
                 color="success"
-                :disabled="!valid"
+                :disabled="isAddButtonDisabled"
                 @click="submit(true)"
               >
                 送出審核
@@ -276,12 +276,24 @@ import { fetchInitMarquee, fetchQueryMarquee } from "@/api/marquee";
 import { downloadMediaSignOffFile} from '@/api/media';
 import ValidateUtil from "@/assets/services/validateUtil";
 import MessageService from "@/assets/services/message.service";
-export default {
+export default { 
   components: { 
     Quill , 
     },
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        console.log("here");
+         vm.prevRoute = from
+         console.log("here",from.path);
+        if(from.path =="/marquee/marqueeEdit"){
+          next(`/marquee/redirect`)
+           
+        }
+      })
+  },
   data() {
-    return {      
+    return {  
+      prevRoute: null,
       errMsg: {
         acceptDate: null,
         editorData: null
@@ -355,13 +367,20 @@ export default {
     if (this.location !== "" && this.location !== null) {
       this.queryMarqueeById();
     }
-    else this.$router.push({ path: '/marquee/marqueeCreate'})
-  },
-  mounted() {
-    console.log("this is current quill instance object", this.editor);
-    this.onEditorChange(this.marqueeHTML);
+   },
+  mounted() {       
+      console.log("this is current quill instance object", this.editor);
+      this.onEditorChange(this.marqueeHTML);
   },
   methods: {
+    refresh() { 
+        const { fullPath } = this.$route;
+        this.$router.replace({
+          path: "/marquee/redirect",
+          query: { path: fullPath }
+      }); 
+    
+    },
     getQueryString(name) {
       // eslint-disable-next-line no-sparse-arrays
       this.location = decodeURIComponent((new RegExp("[?|&]" + name + "=" + "([^&;]+?)(&|#|;|$)").exec(location.href) || [, ""])[1].replace(/\+/g, "%20")) || null;
@@ -522,7 +541,8 @@ export default {
 
     },
     resetForm() {
-      this.isSubmited = true;
+      this.isSubmited = false;
+      this.marqueeHTML="";
       this.marqueeName = "";
       this.duration = 30;
       this.marqueeDesc = null;
@@ -556,11 +576,10 @@ export default {
       //判斷編輯器內容長度至少大於等於2 初始""\n"
       if (this.marqueeText.length <= 2) {
         this.errMsg.editorData = "跑馬燈內容必填";
-        //hasCheck = false;
-        //this.valid = false;
-        //this.isSubmited = false;
+        this.isSubmited = true;
       } else {
-        //this.errMsg.editorData = null;
+        this.errMsg.editorData = null;
+        this.isSubmited = false;
       }
       console.log(this.marqueeText);
       return hasCheck;

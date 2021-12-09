@@ -473,7 +473,7 @@
         </v-card-title>
         <v-card-text class="font-24px">
           <v-row class="mt-6 ml-1 font-bold">
-            節目單名稱: {{ selectProgram.programName }} ,下架後將不會再撥放此節目單
+            節目單名稱: {{ selectProgram.programName }} ,下架後將不會再播放此節目單
           </v-row>
         </v-card-text>
         <v-card-actions class="d-end mt-6">

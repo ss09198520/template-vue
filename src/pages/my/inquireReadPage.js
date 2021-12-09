@@ -3,7 +3,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
 import AjaxService from "@/assets/services/ajax.service";
 
 export default{
-    beforeMount(){
+    mounted(){
         this.init();
     },
     data(){
@@ -192,9 +192,10 @@ export default{
                     if(reasonList){
                         for(let i in reasonList){
                             let reason = reasonList[i];
-                            this.readReasonList.push({reasonCode: reason.code, readReason: reason.codeValue});
+                            this.readReasonList.push({reasonCode: reason.code, readReason: reason.codeName});
                         }
                     }
+
                     let readerList = response.restData.readerList;
                     if(readerList){
                         for(let i in readerList){

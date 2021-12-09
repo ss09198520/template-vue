@@ -1,10 +1,19 @@
 /** When your routing table is too long, you can split it into small modules**/
 
 import Layout from '@/layout'
+import Vue from 'vue'
+import Router from 'vue-router'
+
+
+Vue.use(Router)
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+  return originalPush.call(this, location).catch((err) => err)
+}
 
 const marqueeRouter = {
   path: '/marquee',
-  redirect: '/marquee/create',
+  redirect: '/marquee/marqueeCreate',
   component: Layout,
   name: 'MarqueePages',
   privilegeCode: ['P017','P18'],
@@ -67,7 +76,13 @@ const marqueeRouter = {
       // hidden: true,
       hidden: true,
       meta: { title: '跑馬燈行事曆', icon: 'mdi-pencil-box-multiple-outline' },
-    }
+    },
+    {
+      path: 'redirect',
+      name: 'Marquee-Redirect',
+      hidden: true,
+      component: () => import('@/views/marquee/redirect')
+    },
   ]
 }
 

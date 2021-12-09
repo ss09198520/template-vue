@@ -340,8 +340,8 @@ export default {
             }
         },
         openFormSignPage(){
-            let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-            this.formSignPage = window.open("/tpes/#/imageEditor", '表單及簽名', config);
+            let config = "width=" + screen.availWidth + ",height=" + screen.availHeight + 'top=0,left=0,statusbar=no,scrollbars=yes,status=no,location=no';
+            this.formSignPage = window.open("/tpes/#/imageEditor", "_blank", config);
 
             // 若為取消需將模式傳給簽名頁做取消簽名
             if(this.formPageMode == "cancel"){

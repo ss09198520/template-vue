@@ -960,6 +960,7 @@ export default {
             // 開啟滿意度調查頁
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
             this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '滿意度調查', config);
+            this.windowRef.document.title = 'TPES-問卷';
             this.windowRef.document.body.appendChild(this.$el);
             this.windowRef.addEventListener("beforeunload", this.closePortal);
         },

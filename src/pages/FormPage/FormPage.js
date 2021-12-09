@@ -119,6 +119,7 @@ export default {
             isLoading: false,
             encryptedParam: null,
             empName: null,
+            windowRef: null,//開啟問卷存放回傳物件
         }
     },
     methods: {
@@ -603,8 +604,7 @@ export default {
                 }
                 else{
                     // 開啟滿意度調查頁
-                    let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-                    window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '滿意度調查', config);
+                    this.openPortal();
                     
                     // 重新查詢一次
                     this.formInit(true);
@@ -953,6 +953,20 @@ export default {
                 MessageService.showSystemError();
                 console.log(error);
             });
+        },
+        openPortal() {
+            // 開啟滿意度調查頁
+            let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
+            window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '滿意度調查', config);
+            this.windowRef.document.body.appendChild(this.$el);
+            this.windowRef.addEventListener("beforeunload", this.closePortal);
+        },
+        closePortal() {
+          if (this.windowRef) {
+            this.windowRef.close();
+            this.windowRef = null;
+            MessageService.showSuccess('客戶已完成問卷填寫' + "✓")
+          }
         },
     }
 }

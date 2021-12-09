@@ -242,8 +242,9 @@
                 class="ma-1"
                 outlined
                 color="accent"
+                @click="reset"
               >
-                取消
+                清空
               </v-btn>
               <v-btn
                 class="ma-1"

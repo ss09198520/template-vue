@@ -177,6 +177,7 @@
       },
       // 送出問卷作答
       submit() {
+        
         //API post data 
         this.postForm.acceptNum = this.$route.query.acceptNum
         const postData = { questionnaireAnswer : this.postForm}

@@ -45,7 +45,7 @@
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
             <v-col cols="2" md="2">
-              上架日期
+              上架/下架日期
               <span class="red--text ml-2">*</span>
             </v-col>
             <v-col cols="6" class="d-flex">
@@ -89,7 +89,7 @@
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
                     v-model="endDate"
-                    placeholder="上架時間(起)"
+                    placeholder="下架時間(訖)"
                     :rules="rules.requiredRule"
                     append-icon="mdi-calendar"
                     readonly

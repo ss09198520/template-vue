@@ -89,7 +89,7 @@
       align="center"
     >     
       <v-col cols="2" class="ml-2 ">
-        查詢下載結果
+        下載查詢結果
       </v-col>
       <v-col cols="8" class="ml-2 ">        
         <v-btn 
@@ -99,7 +99,7 @@
           @click="submitSearch(false)"
           v-on="on"
         > 
-          查詢下載結果<v-icon v-text="'mdi-file-download-outline'" />
+          下載查詢結果<v-icon v-text="'mdi-file-download-outline'" />
         </v-btn>
         <v-btn 
           v-if="!isRegion"

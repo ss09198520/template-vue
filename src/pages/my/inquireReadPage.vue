@@ -300,7 +300,7 @@
       <!-- 彈出視窗 -->
       <v-dialog
         v-model="popOut"
-        max-width="600"
+        max-width="1200"
       >
         
 

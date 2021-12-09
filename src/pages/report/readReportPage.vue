@@ -19,7 +19,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="before7"
+                    v-model="startDate"
                     append-icon="mdi-calendar"
                     readonly
                     outlined
@@ -44,7 +44,7 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
-                    v-model="date"
+                    v-model="endDate"
                     append-icon="mdi-calendar"
                     readonly
                     outlined

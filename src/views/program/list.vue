@@ -337,7 +337,7 @@
                   x-small
                   color="error"
                   :disabled="!allowDelete(item.signStatus)"
-                  @click="!allowDelete(item.signStatus)"
+                  @click="remove(item,'DELETE')"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-delete'" />
@@ -353,7 +353,7 @@
                   x-small
                   color="error"
                   :disabled="!allowSunset(item.signStatus,item.status)"
-                  @click="!allowSunset(item.signStatus,item.status)"
+                  @click="remove(item,'CLOSE')"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-arrow-down-bold-outline'" />
@@ -417,12 +417,84 @@
         </div>
       </v-col>
     </v-row>
+    <v-dialog v-model="deleteModel" max-width="500">
+      <v-card>
+        <v-card-title
+          class="text-h5 lighten-2"
+          style="background-color: #c62828; color: white"
+        >
+          確認是否要刪除節目單
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="deleteModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            節目單名稱: {{ selectProgram.programName }}
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn color="normal" @click="deleteModel = false">
+            &emsp;取消&emsp;
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="updateStatus()"
+          >
+            &emsp;確定&emsp;
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="sunsetModel" max-width="500">
+      <v-card>
+        <v-card-title
+          class="text-h5 lighten-2"
+          style="background-color: #c62828; color: white"
+        >
+          確認是否要下架節目單
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="sunsetModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            節目單名稱: {{ selectProgram.programName }} ,下架後將不會再撥放此節目單
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn color="normal" @click="sunsetModel = false">
+            &emsp;取消&emsp;
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="updateStatus()"
+          >
+            &emsp;確定&emsp;
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
   import MessageService from "@/assets/services/message.service";
-  import { fetchProgramList} from '@/api/program'
+  import { fetchProgramList ,updateProgramStatus} from '@/api/program'
   import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
 
@@ -491,14 +563,11 @@
         dialog: false,
         alertDialog: false,
         editedIndex: -1,
-        // editedItem: {
-        //   name: '',
-        //   scp_id: '',
-        //   marquee_content: '',
-        //   division:'',
-        //   ondate: 0,
-        //   pages: 0,
-        // },
+        deleteModel: false,
+        sunsetModel: false,
+        selectIndex: null,
+        selectProgram: {},
+        selectAction: null,
       }
     },
     methods: {
@@ -516,9 +585,13 @@
       },
       close() {
         this.dialog = false
-        // this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
         this.alertDialog = false
+        
+        this.selectProgram = {};
+        this.selectAction = null;
+        this.deleteModel = false;
+        this.sunsetModel = false;
       },
       editItem(item) {
         // this.editedItem = Object.assign({}, item)
@@ -533,19 +606,30 @@
       viewSchedule() {
         this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
       },
-      deleteItem(item) {
-        this.alertDialog = true
-        this.editedIndex = this.itemsCRUD.indexOf(item)
-      },
-      remove() {
-        this.itemsCRUD.splice(this.editedIndex, 1)
-        this.close()
+      remove(item , action) {
+        this.selectProgram = item;
+        this.selectAction = action;
+        if(action =='DELETE'){
+          this.deleteModel = true;
+        } else if (action =='CLOSE'){
+          this.sunsetModel = true;
+        }
       },
       // 送出問卷查詢
       submitSearch() {
         console.log(this.postForm)
         //API post data
         this.fetchProgramList(this.postForm)
+      },
+      // 送出狀態更新
+      updateStatus() {
+        let postData = {
+          id: this.selectProgram.programId ,
+          action: this.selectAction ,
+        }
+        console.log('postData',postData)
+        //API post 
+        this.updateProgramStatus(postData)
       },
 
       /**
@@ -603,6 +687,24 @@
         
         
       },
+      //Action:更新節目單清單查詢
+      async updateProgramStatus(postData) {
+        
+        const data = await updateProgramStatus(postData)
+
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢節目單清單資料');
+            return;
+        }
+        MessageService.showSuccess('更新成功' + "✓")
+
+        //關閉視窗
+        this.close()
+        //重新查詢
+        this.submitSearch()
+      },
+      
     }
   }
 </script>

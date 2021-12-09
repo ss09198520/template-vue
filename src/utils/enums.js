@@ -19,7 +19,7 @@ const mediaTypeOption = [
 const mediaStatusOption = [
   { text: '上架中', value: 'ACTIVE' , icon: 'mdi-checkbox-marked-circle'},
   { text: '未上架', value: 'WAIT' , icon : 'mdi-minus-circle'},
-  { text: '已下架', value: 'CLOSE', icon: 'mdi-minus-circle'},
+  { text: '已下架', value: 'CLOSE', icon: 'mdi-arrow-down-bold-outline'},
 ]
 //多媒體簽核狀態下拉選單
 const mediaSignStatusOption = [

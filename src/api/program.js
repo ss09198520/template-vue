@@ -47,3 +47,11 @@ export function fetchActiveProgramCalendar(data) {
     data
   })
 }
+
+export function updateProgramStatus(data) {
+  return request({
+    url: '/program/v1/updateStatus',
+    method: 'post',
+    data
+  })
+}

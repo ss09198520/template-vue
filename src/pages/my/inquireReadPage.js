@@ -217,14 +217,14 @@ export default{
          // Action: 依條件查詢可調閱的案件清單
         queryInquireReadList(){
             let param = {
-                acceptNum:this.acceptNum,
-                electricNum: this.electricNum,
-                custName: this.custName,
-                archiveNum: this.archiveNum,
-                acceptStartDate: this.acceptStartDate,
-                acceptEndDate: this.acceptEndDate,
-                archiveStartDate: this.archiveStartDate,
-                archiveEndDate: this.archiveEndDate
+                acceptNum:(ValidateUtil.isEmpty(this.acceptNum)? null :this.acceptNum),
+                electricNum: (ValidateUtil.isEmpty(this.electricNum)? null :this.electricNum),
+                custName: (ValidateUtil.isEmpty(this.custName)? null :this.custName),
+                archiveNum: (ValidateUtil.isEmpty(this.archiveNum)? null :this.archiveNum),
+                acceptStartDate: (ValidateUtil.isEmpty(this.acceptStartDate)? null :this.acceptStartDate),
+                acceptEndDate: (ValidateUtil.isEmpty(this.acceptEndDate)? null :this.acceptEndDate),
+                archiveStartDate: (ValidateUtil.isEmpty(this.archiveStartDate)? null :this.archiveStartDate),
+                archiveEndDate: (ValidateUtil.isEmpty(this.archiveEndDate)? null :this.archiveEndDate),
             };
 
             AjaxService.post("/tpesForm/queryForm", param, (response) => {

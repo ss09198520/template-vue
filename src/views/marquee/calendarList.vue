@@ -142,7 +142,7 @@ import MessageService from "@/assets/services/message.service";
     data: () => ({
       dark: false,
       startMenu: false,
-      start: '2021-11-01',
+      start: new Date().toISOString().substr(0, 10),
       events: [],
       more: false,
       mode: 'column',

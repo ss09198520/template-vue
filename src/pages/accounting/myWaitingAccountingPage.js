@@ -130,8 +130,10 @@ export default {
         // 點擊打開核算視窗
         accounting(item) {   
             let seq = item.seq;
-            let accounting = item.accounting;
-            AjaxService.post('/waitAccounting/updateAccntStatus',
+            let accounting = item.accnting;
+            console.log(item.status);
+            if(item.status == "UNREAD"){
+                AjaxService.post('/waitAccounting/updateAccntStatus',
             {
                 seq: seq,
                 accounting: accounting
@@ -146,15 +148,15 @@ export default {
                         this.queryAccoutingList();                                             
                 } else {
                   //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                  MessageService.showError(response.restData.message);                  
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
-
+            }
             //視窗帶入備註
             this.memo = item.memo;
           // 帶入受理編號
@@ -162,12 +164,13 @@ export default {
             FM_NO: item.acceptNum
         };
         this.formKey++;
+            
+            
           // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄(Action)
         //   if(ValidateUtil.isEmpty(item.status)){
         //       this.updateAccoutingStatus(item.seq,this.selectIndex);
         //   }
-          // 查詢待核算案件資料(Action)
-          this.queryAccoutingData();
+          // 查詢待核算案件資料(Action)          
           this.selectItem.seq = item.seq;  
           this.selectItem.formSeq = item.formSeq;     
           this.selectItem.accnting = item.accnting;  
@@ -205,7 +208,7 @@ export default {
           if(!this.checkRejectVal()){
               MessageService.showCheckInfo(this.requireArray,this.formatArray);
           }  else {
-              this.updateAccouting(); 
+              this.returnAccounting(); 
           }
         },
         // 開啟備註視窗
@@ -221,6 +224,7 @@ export default {
 
         // 查詢資料
         search(){
+            console.log(this.formatArray);
             if(this.formatArray.length > 0) {
                 MessageService.showCheckInfo(this.requireArray,this.formatArray);
             } else {
@@ -247,7 +251,7 @@ export default {
          **/
 
         // Action:頁面初始化
-        queryAccoutingInit(){                     
+        queryAccoutingInit(){                                 
             AjaxService.post('/waitAccounting/init',
             {
                        
@@ -319,12 +323,12 @@ export default {
                     }
                 } else {
                   //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                  MessageService.showError(response.restData.message);                  
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
         },
@@ -354,12 +358,13 @@ export default {
                     }
                 } else {
                   //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
-                }
+                  MessageService.showError(response.restData.message);                  
+                }   
+                
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
         },
@@ -378,6 +383,10 @@ export default {
             // dispatchEndDate: this.searchForm.dispatchEndDate,
             // contractType: this.searchForm.contractType,
             // caseType: this.searchForm.caseType,
+            let caseType = null;
+            if(!this.searchForm.caseType == null){
+                caseType = this.searchForm.caseType.value;
+            }
             let QueryWaitAccountingReq ={
                 acceptNum: this.searchForm.acceptNum,
                 electricNum: this.searchForm.electricNum,
@@ -388,7 +397,7 @@ export default {
                 dispatchStartDate: this.searchForm.dispatchStartDate,
                 dispatchEndDate: this.searchForm.dispatchEndDate,
                 contractType:  (ValidateUtil.isEmpty(this.searchForm.contractType)? null:this.searchForm.contractType.text),
-                caseType: this.searchForm.caseType,
+                caseType: caseType,
             };
             AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,
             (response) => {
@@ -418,22 +427,17 @@ export default {
                     }
                 } else {
                   //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                  MessageService.showError(response.restData.message);                  
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
         },
 
-        // Action:查詢待審核案件資料
-        queryAccoutingData(){
-            // vin參數
-            // formSeq: this.selectItem.formSeq,
-            
-        },
+        
 
         // Action:更新待審核案件檢視狀態
         updateAccoutingStatus(seq,index){
@@ -451,7 +455,8 @@ export default {
             // memo: this.memo,            
             const SaveMemoReq = {
                 seq: this.selectItem.seq,
-                memo: this.memo,
+                memo: this.memo, 
+                accounting: this.selectItem.accnting           
             };
             
             AjaxService.post('/waitAccounting/saveMemo',SaveMemoReq,
@@ -462,20 +467,21 @@ export default {
                     response.restData.message != undefined &&
                     response.restData.success
                     ) {                                                           
-                        MessageService.showInfo('儲存備註成功');                                                                   
+                        MessageService.showInfo('儲存備註成功'); 
+                        this.queryAccoutingList();                                                                          
                 } else {
                   //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                  MessageService.showError(response.restData.message);                  
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
         },
 
-        // Action:更新案件審核狀態(成功/退件)
+        // Action:更新案件審核狀態(成功)
         updateAccouting(){
             // vin參數
             // seq: this.selectItem.seq,
@@ -483,8 +489,40 @@ export default {
             // memo: this.memo,
             // accounting: this.accounting,           
             // rejectReason:this.rejectReason,
-            // rejectDesc:this.rejectDesc,accounting            
+            // rejectDesc:this.rejectDesc,accounting    
+            
+            const AuditAccountingReq = {
+                seq: this.selectItem.seq,
+                formSeq: this.selectItem.formSeq,
+                memo: this.memo,
+                accnting: this.selectItem.accnting,
+                acceptNum: this.selectItem.acceptNum,                
+            };
+            
+            AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
+            (response) => {
+                if (response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                    ) {                                                             
+                        MessageService.showInfo('核算成功');
+                        this.queryAccoutingInit();                                                                   
+                } else {
+                  //接後端候要放errorMsg
+                  MessageService.showError(response.restData.message);                  
+                }
+            },
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
+                }
+            );
+        },
 
+        //Action: 更新案件審核狀態(退件)
+        returnAccounting(){
             const AuditAccountingReq = {
                 seq: this.selectItem.seq,
                 formSeq: this.selectItem.formSeq,
@@ -502,23 +540,20 @@ export default {
                     response.restData.message != null &&
                     response.restData.message != undefined &&
                     response.restData.success
-                    ) {
-                        MessageService.showInfo('核算成功');                                                                   
+                    ) {                                                             
+                        MessageService.showInfo('核算成功');
+                        this.queryAccoutingList();                                                                   
                 } else {
                   //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                  MessageService.showError(response.restData.message);                  
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
-
-
-           
         },
-
 
         /**
          *  Ajax end 

@@ -25,6 +25,7 @@
                     outlined
                     dense
                     hide-details
+                    clearable
                     v-bind="attrs"
                     v-on="on"
                   />
@@ -32,6 +33,7 @@
                 <v-date-picker
                   v-model="startDate"
                   @input="openStartDate = false"
+                  @change="checkDate()"
                 />
               </v-menu>
               <div class="mt-1">~</div>
@@ -49,6 +51,7 @@
                     readonly
                     outlined
                     dense
+                    clearable
                     hide-details
                     v-bind="attrs"
                     style="padding-top: 0;"
@@ -58,6 +61,7 @@
                 <v-date-picker
                   v-model="endDate"
                   @input="openEndDate = false"
+                  @change="checkDate()"
                 />
               </v-menu>
             </v-col>
@@ -78,7 +82,12 @@
                 <span>&nbsp;查詢&nbsp;</span>
               </v-tooltip>
             </v-col>
-          </v-row>
+            <v-col cols="7" />
+            <v-col cols="1" />
+            <v-col v-if="returnDateErrMsg != null" cols="3" style="margin-top:-25px">
+              <span class="red--text font-14px">{{ returnDateErrMsg }}</span>
+            </v-col> 
+          </v-row>         
         </div>
       </div>
       <hr class="mt-6 mb-5">

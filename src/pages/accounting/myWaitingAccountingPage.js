@@ -134,48 +134,43 @@ export default {
             console.log(item.status);
             if(item.status == "UNREAD"){
                 AjaxService.post('/waitAccounting/updateAccntStatus',
-            {
-                seq: seq,
-                accounting: accounting
-            },
-            (response) => {
-                if (response != null &&
-                    response != undefined &&
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {                                                                                                                                                                                       
+                {
+                    seq: seq,
+                    accounting: accounting
+                },
+                (response) => {
+                    if (response && response.restData && response.restData.success) {                                                                                                                                                                                       
                         this.queryAccoutingList();                                             
-                } else {
-                  //接後端候要放errorMsg
-                  MessageService.showError(response.restData.message);                  
-                }
-            },
-                (error) => {
-                    MessageService.showSystemError();
-                    console.log(error);
-                }
-            );
+                    } else {
+                    //接後端候要放errorMsg
+                    MessageService.showError(response.restData.message);                  
+                    }
+                },
+                    (error) => {
+                        MessageService.showSystemError();
+                        console.log(error);
+                    }
+                );
             }
             //視窗帶入備註
             this.memo = item.memo;
-          // 帶入受理編號
-          this.formParam = {
-            FM_NO: item.acceptNum
-        };
-        this.formKey++;
+            // 帶入受理編號
+            this.formParam = {
+                FM_NO: item.acceptNum
+            };
+            this.formKey++;
             
             
           // 判斷該筆案件是否已檢視過，若沒有則修改該筆案件註記紀錄(Action)
         //   if(ValidateUtil.isEmpty(item.status)){
         //       this.updateAccoutingStatus(item.seq,this.selectIndex);
         //   }
-          // 查詢待核算案件資料(Action)          
-          this.selectItem.seq = item.seq;  
-          this.selectItem.formSeq = item.formSeq;     
-          this.selectItem.accnting = item.accnting;  
-          this.selectItem.acceptNum = item.acceptNum; 
-          this.accountingDialog = true;
+            // 查詢待核算案件資料(Action)          
+            this.selectItem.seq = item.seq;
+            this.selectItem.formSeq = item.formSeq;
+            this.selectItem.accnting = item.accnting;
+            this.selectItem.acceptNum = item.acceptNum;
+            this.accountingDialog = true;
 
         },
         // 打開核算視窗
@@ -257,12 +252,7 @@ export default {
                        
             },
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {
+                if (response && response.restData && response.restData.success) {
                     if (ValidateUtil.isEmpty(response.restData.initWaitAccountingListVo)) {                        
                         MessageService.showInfo('查無資料');
                         if(!ValidateUtil.isEmpty(response.restData.authList)){
@@ -344,12 +334,7 @@ export default {
                        
             },
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {
+                if (response && response.restData && response.restData.success) {
                     if (ValidateUtil.isEmpty(response.restData.returnReasonVoList)) {                        
                         MessageService.showInfo('查無資料');
                     } else {                                                                                                                                            
@@ -401,12 +386,7 @@ export default {
             };
             AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {
+                if (response && response.restData && response.restData.success) {
                     if (ValidateUtil.isEmpty(response.restData.queryWaitAccountingListVo)) {                        
                         MessageService.showInfo('查無資料');
                     } else {                                                                                                             
@@ -456,19 +436,14 @@ export default {
             const SaveMemoReq = {
                 seq: this.selectItem.seq,
                 memo: this.memo, 
-                accounting: this.selectItem.accnting           
+                accounting: this.selectItem.accnting
             };
             
             AjaxService.post('/waitAccounting/saveMemo',SaveMemoReq,
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {                                                           
-                        MessageService.showInfo('儲存備註成功'); 
-                        this.queryAccoutingList();                                                                          
+                if (response && response.restData && response.restData.success) {                                                           
+                    MessageService.showInfo('儲存備註成功'); 
+                    this.queryAccoutingList();                                                                          
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
@@ -501,14 +476,9 @@ export default {
             
             AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {                                                             
-                        MessageService.showInfo('核算成功');
-                        this.queryAccoutingInit();                                                                   
+                if (response && response.restData && response.restData.success) {                                                             
+                    MessageService.showInfo('核算成功');
+                    this.queryAccoutingInit();                                                                   
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
@@ -535,14 +505,9 @@ export default {
             
             AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {                                                             
-                        MessageService.showInfo('核算成功');
-                        this.queryAccoutingList();                                                                   
+                if (response && response.restData && response.restData.success) {                                                             
+                    MessageService.showInfo('核算成功');
+                    this.queryAccoutingList();                                                                   
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  

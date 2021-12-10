@@ -118,7 +118,7 @@ export default {
             },
             requireArray:[],
             formatArray:[],
-            selectItem:{},
+            selectItem:{},            
         }
     },
     methods: {
@@ -131,7 +131,7 @@ export default {
         accounting(item) {   
             let seq = item.seq;
             let accounting = item.accnting;
-            console.log(item.status);
+            console.log(item);
             if(item.status == "UNREAD"){
                 AjaxService.post('/waitAccounting/updateAccntStatus',
                 {
@@ -165,12 +165,13 @@ export default {
         //   if(ValidateUtil.isEmpty(item.status)){
         //       this.updateAccoutingStatus(item.seq,this.selectIndex);
         //   }
-            // 查詢待核算案件資料(Action)          
-            this.selectItem.seq = item.seq;
-            this.selectItem.formSeq = item.formSeq;
-            this.selectItem.accnting = item.accnting;
-            this.selectItem.acceptNum = item.acceptNum;
-            this.accountingDialog = true;
+          // 查詢待核算案件資料(Action)          
+          this.selectItem.seq = item.seq;  
+          this.selectItem.formSeq = item.formSeq;     
+          this.selectItem.accnting = item.accnting;  
+          this.selectItem.acceptNum = item.acceptNum; 
+          this.selectItem.acceptDept = item.acceptDept;
+          this.accountingDialog = true;
 
         },
         // 打開核算視窗
@@ -204,6 +205,9 @@ export default {
               MessageService.showCheckInfo(this.requireArray,this.formatArray);
           }  else {
               this.returnAccounting(); 
+              this.returnReasonModel = false;
+              this.accountingDialog = false;
+              this.queryAccoutingList(); 
           }
         },
         // 開啟備註視窗
@@ -493,16 +497,18 @@ export default {
 
         //Action: 更新案件審核狀態(退件)
         returnAccounting(){
+
+            console.log(this.selectItem);
             const AuditAccountingReq = {
                 seq: this.selectItem.seq,
                 formSeq: this.selectItem.formSeq,
                 memo: this.memo,
+                rejectToDept: this.selectItem.acceptDept,                
                 accnting: this.selectItem.accnting,
                 acceptNum: this.selectItem.acceptNum,
-                rejectReason: (this.rejectReason) ? this.rejectReason.rejectReasonName : null,
+                rejectReason: (this.rejectReason) ? this.rejectReason.returnReasonName : null,
                 rejectDesc: this.rejectDesc,
-            };
-            
+            };           
             AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
             (response) => {
                 if (response && response.restData && response.restData.success) {                                                             
@@ -518,6 +524,7 @@ export default {
                     console.log(error);
                 }
             );
+            
         },
 
         /**

@@ -26,12 +26,14 @@
                     dense
                     hide-details
                     v-bind="attrs"
-                    v-on="on"
+                    clearable
+                    v-on="on"           
                   />
                 </template>
                 <v-date-picker
                   v-model="startDate"
                   @input="openStartDate = false"
+                  @change="checkDate()"
                 />
               </v-menu>
               <div class="mt-1">~</div>
@@ -48,6 +50,7 @@
                     append-icon="mdi-calendar"
                     readonly
                     outlined
+                    clearable
                     dense
                     hide-details
                     v-bind="attrs"
@@ -58,6 +61,7 @@
                 <v-date-picker
                   v-model="endDate"
                   @input="openEndDate = false"
+                  @change="checkDate()"
                 />
               </v-menu>
             </v-col>
@@ -70,6 +74,7 @@
                     small
                     color="primary"
                     v-on="on"
+                    @click="search()"
                   >
                     <v-icon v-text="'mdi-magnify'" />
                   </v-btn>
@@ -77,6 +82,11 @@
                 <span>&nbsp;查詢&nbsp;</span>
               </v-tooltip>
             </v-col>
+            <v-col cols="7" />
+            <v-col cols="1" />
+            <v-col v-if="readApplyDateErrMsg != null" cols="3" style="margin-top:-25px">
+              <span class="red--text font-14px">{{ readApplyDateErrMsg }}</span>
+            </v-col> 
           </v-row>
         </div>
       </div>

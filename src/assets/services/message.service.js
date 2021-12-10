@@ -7,14 +7,14 @@ MessageService
 */
 const MessageService = {
     async showError(message,title){
-        var defaultTitle = "失敗";
+        var defaultTitle = " 失敗";
 
         // this.notify 噴錯
         // this.$notify 噴錯
         // window.vm.$notify 沒噴錯但沒訊息
         Vue.notify({
             group : 'topRight',
-            title : title + defaultTitle,
+            title : (title) ? title + defaultTitle : defaultTitle,
             text : message,
             type: 'noti-error'
         });

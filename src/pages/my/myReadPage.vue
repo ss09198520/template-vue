@@ -185,6 +185,12 @@
                 </div>
                 <div v-else />
               </template>
+              <!-- 退件原因 -->
+              <template v-slot:item.rejectReason="{ item }">                                                        
+                <div>
+                  {{ item.rejectReason }} {{ item.rejectDesc == null? null : '-'+item.rejectDesc }} 
+                </div>
+              </template>
               <template v-slot:item.action="{ item }">   
                 <div v-if="(item.status === 'PASS' || item.status === 'CLOSE') && new Date(item.validDateStr) > sysDate">
                   <v-tooltip top>

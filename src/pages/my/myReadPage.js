@@ -55,7 +55,8 @@ export default{
             errMsg: null,
             formatArray:[], // 格式驗證
             formParam: {},
-            formKey: 0
+            formKey: 0,
+            archiveNum: null,
         }
     },
     methods: {

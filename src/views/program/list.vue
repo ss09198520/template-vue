@@ -320,7 +320,7 @@
                   fab
                   x-small
                   color="success"
-                  :disabled="!allowEdit(item.signStatus)"
+                  :disabled="!allowEdit(item.signStatus ,item.programType)"
                   @click="editItem(item)"
                   v-on="on"
                 >
@@ -345,14 +345,14 @@
               </template>
               <span>刪除</span>
             </v-tooltip>
-            <v-tooltip v-if="allowSunset(item.signStatus,item.status)" top>
+            <v-tooltip v-if="allowSunset(item.signStatus,item.status , item.programType)" top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="ma-2"
                   fab
                   x-small
                   color="error"
-                  :disabled="!allowSunset(item.signStatus,item.status)"
+                  :disabled="!allowSunset(item.signStatus,item.status, item.programType)"
                   @click="remove(item,'CLOSE')"
                   v-on="on"
                 >
@@ -571,14 +571,14 @@
       }
     },
     methods: {
-      allowEdit(signStatus) {
-        return (/(DRAFT|REJECT)$/i).test(signStatus)
+      allowEdit(signStatus ,programType) {
+        return (/(DRAFT|REJECT)$/i).test(signStatus) || (/(DEFAULT)$/i).test(programType)
       },
       allowDelete(signStatus) {
         return (/(DRAFT|REJECT)$/i).test(signStatus)
       },
-      allowSunset(signStatus,status) {
-        return (/(PASS)$/i).test(signStatus) && (/(ACTIVE)$/i).test(status)
+      allowSunset(signStatus,status,programType) {
+        return (/(PASS)$/i).test(signStatus) && (/(ACTIVE)$/i).test(status) && !(/(DEFAULT)$/i).test(programType)
       },
       previewItem(item) {
         this.$router.push({path:`/media/preview/questionnaire/${item.questionnaireId}`})
@@ -595,7 +595,7 @@
       },
       editItem(item) {
         // this.editedItem = Object.assign({}, item)
-        if(this.allowEdit(item.signStatus)){
+        if(this.allowEdit(item.signStatus , item.programType)){
           this.$router.push({path: `${this.$route.matched[0].path}/edit/${item.programId}`})
         } else {
           MessageService.showNoticeInfo('無法編輯節目狀態為:' + this.signStatusOption.find(state => { return item.signStatus===state.value }).text);

@@ -22,6 +22,7 @@
                 v-model="postForm.programName"
                 :rules="rules.requiredRule.concat(rules.lengthRules)"
                 :hide-details="hideDatails"
+                :disabled="postForm.programType=='DEFAULT'"
                 color="accent"
                 placeholder="請輸入節目標題"
                 :counter="maxCharacter"
@@ -47,6 +48,7 @@
                 v-model="postForm.memo"
                 :rules="rules.requiredRule.concat(rules.lengthRules)"
                 :hide-details="hideDatails"
+                :disabled="postForm.programType=='DEFAULT'"
                 color="accent"
                 placeholder="請輸入節目描述"
                 :counter="maxCharacter"
@@ -85,6 +87,7 @@
                     readonly
                     :hide-details="hideDatails"
                     :clearable="true"
+                    :disabled="postForm.programType=='DEFAULT'"
                     v-on="on"
                   />
                 </template>
@@ -119,6 +122,7 @@
                     readonly
                     :hide-details="hideDatails"
                     :clearable="true"
+                    :disabled="postForm.programType=='DEFAULT'"
                     v-on="on"
                   />
                 </template>
@@ -201,6 +205,7 @@
             </v-col>
           </v-row>
           <v-row
+            v-if="postForm.programType=='GENERAL'"
             :dense="dense"
             :no-gutters="noGutters"
           >
@@ -237,7 +242,18 @@
             :dense="dense"
             :no-gutters="noGutters"
           >
-            <v-col class="d-flex justify-end" cols="8" md="8">
+            <v-col v-if="postForm.programType=='DEFAULT'" class="d-flex justify-end" cols="8" md="8">
+              <v-btn
+                class="ma-1"
+                depressed
+                color="primary"
+                :disabled="!valid"
+                @click="submit(false)"
+              >
+                儲存
+              </v-btn>
+            </v-col>
+            <v-col v-else class="d-flex justify-end" cols="8" md="8">
               <v-btn
                 class="ma-1"
                 outlined

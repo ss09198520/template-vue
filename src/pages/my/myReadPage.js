@@ -109,6 +109,8 @@ export default{
         checkDate(){
             this.formatArray = [];
             let hasCheck = true;
+            this.applyStartDate = null;
+            this.applyEndDate = null;
 
             // 1-1判斷日期起迄日是否都有
             if(!ValidateUtil.isEmpty(this.readDate.start) && !ValidateUtil.isEmpty(this.readDate.end)){

@@ -358,8 +358,10 @@ export default {
     isAddButtonDisabled() {
       return !this.valid || this.isSubmited;
     },
-    animationDuration() {
-      return 600 / this.duration;
+    animationDuration() {      
+      console.log(" this.duration")
+      console.log( this.duration)
+      return Math.round(600 / this.duration);
     }
   },
   created() {
@@ -398,7 +400,7 @@ export default {
             this.marqueeType = result.marqueeType;
             this.marqueeText = result.marqueeContent;
             this.marqueeHTML = result.marqueeContentHTML;
-            this.animationDuration = result.animationDuration;
+            this.duration = Math.round(600 / result.animationDuration) ;
             this.marqueeDesc = result.memo;
             this.startDate = result.releaseStartDate;
             this.endDate = result.releaseEndDate;
@@ -562,6 +564,8 @@ export default {
     decrementDuration() {
       //減慢播放
       this.duration = this.duration - 1 || 0;
+       if( this.duration <=1)
+      this.duration = 3;
     },
     incrementDuration() {
       //加快播放

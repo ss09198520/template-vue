@@ -256,9 +256,6 @@ export default {
                 // 若為加密參數進件，放入解密後才有的參數
                 this.setDescryptedParam(response.restData);
 
-                // 檢查證件是否已依規範掃描
-                this.checkNeedScanFile();
-
                 // 簽名
                 if(!ValidateUtil.isEmpty(response.restData.customerSign)){
                     this.customerSign = response.restData.customerSign;
@@ -269,7 +266,7 @@ export default {
                     this.cancelSign = response.restData.cancelSign;
                 }
 
-                // 整理證件及附件
+                // 整理證件及附件 (同時檢查證件規範)
                 this.setCertificateList(response.restData.certificateList);
                 this.setAttachmentList(response.restData.attachmentList);
             },
@@ -317,6 +314,9 @@ export default {
 
                 this.oriCertificateList = Array.from(this.certificateList);
             }
+
+            // 檢查證件是否已依規範掃描
+            this.checkNeedScanFile();
         },
         setAttachmentList(attachmentList){
             this.attachmentList = [];
@@ -583,7 +583,7 @@ export default {
 
             return true;
         },
-        save(){
+        async save(){
             if(!this.validateCertifate()){
                 return;
             }
@@ -591,7 +591,7 @@ export default {
             let vin = this.setSaveFormVin();
 
             AjaxService.post("/tpesForm/save", vin, 
-            (response) => {
+            async (response) => {
                 // 驗證是否成功
                 if (!response.restData.success) {              
                     MessageService.showError(response.restData.message,'儲存表單');
@@ -606,10 +606,14 @@ export default {
                 }
                 else{
                     // 開啟滿意度調查頁
-                    this.openPortal();
+                    await this.openPortal();
                     
                     // 重新查詢一次
                     this.formInit(true);
+
+                    // 關閉目前頁面
+                    // window.location.href = "about:blank";
+                    // window.close();
                 }
             },
             (error) => {
@@ -630,7 +634,7 @@ export default {
                     if(ValidateUtil.isEmpty(certificate.fileNo) && !ValidateUtil.isEmpty(certificate.imgSrc)){
                         addFileList.push({
                             category: "CERTIFICATE",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: certificate.fileCode,
                             fileName: certificate.fileName,
                             originalFileName: certificate.originalFileName,
                             fileExt: this.getFileExt(certificate.originalFileName),
@@ -643,7 +647,7 @@ export default {
                         modifyFileList.push({
                             fileNo: certificate.fileNo,
                             category: "CERTIFICATE",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: certificate.fileCode,
                             fileName: certificate.fileName,
                             originalFileName: certificate.originalFileName,
                             fileExt: this.getFileExt(certificate.originalFileName),
@@ -683,7 +687,7 @@ export default {
                     if(ValidateUtil.isEmpty(attachment.fileNo) && !ValidateUtil.isEmpty(attachment.base64)){
                         addFileList.push({
                             category: "ATTACHMENT",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: attachment.fileCode,
                             fileName: attachment.fileName,
                             originalFileName: attachment.originalFileName,
                             fileExt: this.getFileExt(attachment.originalFileName),
@@ -697,7 +701,7 @@ export default {
                         modifyFileList.push({
                             fileNo: attachment.fileNo,
                             category: "ATTACHMENT",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: attachment.fileCode,
                             fileName: attachment.fileName,
                             originalFileName: attachment.originalFileName,
                             fileExt: this.getFileExt(attachment.originalFileName),
@@ -893,7 +897,7 @@ export default {
                             // 若已有掃描的證件，將 fileCode 從 List 移除，最後剩下來的就是還沒掃描的
                             if(!ValidateUtil.isEmpty(needScanFileCode) 
                                 && certificate.fileCode == needScanFileCode 
-                                && ValidateUtil.isEmpty(certificate.fileNo)){
+                                && !ValidateUtil.isEmpty(certificate.fileNo)){
 
                                 this.needScanFileCodeList.splice(index, 1);
                                 index--;
@@ -956,7 +960,7 @@ export default {
                 console.log(error);
             });
         },
-        openPortal() {
+        async openPortal() {
             // 開啟滿意度調查頁
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
             this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '_blank', config);

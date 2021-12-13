@@ -56,42 +56,29 @@ export default {
 
         // Action:查詢初始化
         queryArchieveInit(){
-            // 取得所有待歸檔資料
-            
-            console.log(parseInt(new Date() - new Date('2021/11/17 15:11:22')) / 1000 / 60 / 60);
+            // 取得所有待歸檔資料                        
             AjaxService.post('/waitArchive/init',
             {
                        
             },
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {
-                    if (ValidateUtil.isEmpty(response.restData.initWaitArchiveListVo)) {                        
-                        MessageService.showInfo('查無資料');
-                    } else {
-                        console.log(response);
-                        this.archieveList = Object.assign(response.restData.initWaitArchiveListVo);                        
-                        this.numOfArchieve = this.archieveList.length;        
-                        response.restData.initWaitArchiveListVo.forEach((element) => {                             
-                            let createHours = parseInt(new Date().getTime() - Date.parse(element.createDate)) / 1000 / 60 / 60; 
-                            console.log(createHours);                                                      
-                            if(createHours <= 4){
-                                element.action = true;
-                            }                            
-                        });    
-                    }
-                } else {
-                  //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                if (response != null && response.restData && response.restData.success) {                                           
+                    this.archieveList = Object.assign(response.restData.initWaitArchiveListVo);                        
+                    this.numOfArchieve = this.archieveList.length;        
+                    response.restData.initWaitArchiveListVo.forEach((element) => {                             
+                        let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
+                        //console.log(createHours);                                                                                                      
+                        if(createHours <= 4 && new Date().getHours() < 17){
+                            element.action = true;
+                        }                   
+                    });                        
+                } else {                   
+                   MessageService.showError(response.restData.message);                      
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
         },
@@ -105,29 +92,22 @@ export default {
             };
             AjaxService.post('/waitArchive/queryWaitArchive',QueryWaitArchiveReq,
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {
-                    if (ValidateUtil.isEmpty(response.restData.queryWaitArchiveListVo)) {                        
-                        MessageService.showInfo('查無資料');
-                    } else {           
-                        console.log(response);                                                             
-                        this.archieveList = Object.assign(response.restData.queryWaitArchiveListVo);                        
-                        response.restData.queryWaitArchiveListVo.forEach((element) => {
+                if (response && response.restData && response.restData.success) {                                                                                                               
+                    this.archieveList = Object.assign(response.restData.queryWaitArchiveListVo);                        
+                    response.restData.queryWaitArchiveListVo.forEach((element) => {
+                        let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
+                        //console.log(createHours);                                                                                                      
+                        if(createHours <= 4 && new Date().getHours() < 17){
                             element.action = true;
-                        });                                                                                       
-                    }
+                        }  
+                    });                                                                                                           
                 } else {
-                  //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                    MessageService.showError(response.restData.message);                    
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {                  
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
 
@@ -145,29 +125,19 @@ export default {
             };
             AjaxService.post('/waitArchive/returnToWaitAccounting',ReturnToWaitAccountingReq,
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {
-                    
+                if (response && response.restData && response.restData.success) {                    
                         MessageService.showSuccess('返回核算成功');
                         this.queryArchieveList();
                 } else {
-                  //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                    MessageService.showError(response.restData.message);                  
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error
-                    MessageService.showSystemError(response.restData.code);
+                (error) => { 
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
-            );
-
-            
+            );            
             this.returnModel = false;
-
         },       
 
 

@@ -177,6 +177,15 @@ export default {
         // 打開核算視窗
         checking(item){
             this.selectIndex = this.accoutingList.indexOf(item);
+            
+            //視窗帶入備註
+            this.memo = item.memo;
+            // 帶入受理編號
+            this.formParam = {
+                FM_NO: item.acceptNum
+            };
+            this.formKey++;
+
             this.checkingDialog = true;            
         },
         // 打開核算退件視窗
@@ -187,8 +196,7 @@ export default {
         // 核算成功
         accountingSubmit(memo){
             this.memo = memo;
-            this.updateAccouting(); 
-            this.accountingDialog = false;
+            this.updateAccouting();             
         },
         saveComments(memo){
             this.memo = memo;            
@@ -256,65 +264,40 @@ export default {
                        
             },
             (response) => {
-                if (response && response.restData && response.restData.success) {
-                    if (ValidateUtil.isEmpty(response.restData.initWaitAccountingListVo)) {                        
-                        MessageService.showInfo('查無資料');
-                        if(!ValidateUtil.isEmpty(response.restData.authList)){
-                            // 根據使用者角色決定頁面顯示
-                            for(let i in response.restData.authList){
-                                // 核算員
-                                if(response.restData.authList[i] == 'AUTH15'){
-                                    this.auditor = true;
-                                    this.hasAccountingAuth = true;
-                                }
-                                // 檢算員
-                                else if(response.restData.authList[i] == 'AUTH20'){
-                                    this.checker = true;
-                                    this.hasAccountingAuth = true;
-                                }
-                                // 核算課長 or 核算部門主辦 可看到該課所有資料，但不能進行核算
-                                else if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07'){
-                                    this.checker = true;
-                                    this.hasAccountingAuth = true;
-                                }
+                if (response && response.restData && response.restData.success) {                                                                                                                                 
+                    this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
+                    response.restData.initWaitAccountingListVo.forEach((element) => {
+                        element.action = true;
+                    });       
+                    response.restData.initWaitAccountingListVo.forEach((element) => {
+                        if(element.status == 'READ'){
+                            element.hasView = true;
+                        }          
+                        if(element.isAgentForm){
+                            element.isAgent = true;
+                        }                  
+                    });                  
+                    this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                                                                   
+                    if(!ValidateUtil.isEmpty(response.restData.authList)){
+                        // 根據使用者角色決定頁面顯示
+                        for(let i in response.restData.authList){
+                            // 核算員
+                            if(response.restData.authList[i] == 'AUTH15'){
+                                this.auditor = true;
+                                this.hasAccountingAuth = true;
                             }
-                        }         
-                    } else {                                                                                                             
-                        this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
-                        response.restData.initWaitAccountingListVo.forEach((element) => {
-                            element.action = true;
-                        });       
-                        response.restData.initWaitAccountingListVo.forEach((element) => {
-                            if(element.status == 'READ'){
-                                element.hasView = true;
-                            }          
-                            if(element.isAgentForm){
-                                element.isAgent = true;
-                            }                  
-                        });  
-                        if(!ValidateUtil.isEmpty(response.restData.authList)){
-                            for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH15' || response.restData.authList[i] == 'AUTH20'){
-                                    this.hasAccountingAuth = true;
-                                    console.log(this.hasAccountingAuth);
-                                    break;
-                                }
+                            // 檢算員
+                            else if(response.restData.authList[i] == 'AUTH20'){
+                                this.checker = true;
+                                this.hasAccountingAuth = true;
                             }
-                            for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH15'){
-                                    this.auditor = true;
-                                    break;
-                                }
+                            // 核算課長 or 核算部門主辦 可看到該課所有資料，但不能進行核算
+                            else if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07'){
+                                this.checker = true;
+                                this.hasAccountingAuth = true;
                             }
-                            for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH20'){
-                                    this.checker = true;
-                                    break;
-                                }
-                            }
-                        }                      
-                        this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                                               
-                    }
+                        }
+                    } 
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
@@ -338,13 +321,9 @@ export default {
                        
             },
             (response) => {
-                if (response && response.restData && response.restData.success) {
-                    if (ValidateUtil.isEmpty(response.restData.returnReasonVoList)) {                        
-                        MessageService.showInfo('查無資料');
-                    } else {                                                                                                                                            
-                        reasonList = response.restData.returnReasonVoList;
-                        this.reasonList = reasonList;
-                    }
+                if (response && response.restData && response.restData.success) {                                                                                                                                                                
+                    reasonList = response.restData.returnReasonVoList;
+                    this.reasonList = reasonList;                    
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
@@ -390,25 +369,21 @@ export default {
             };
             AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,
             (response) => {
-                if (response && response.restData && response.restData.success) {
-                    if (ValidateUtil.isEmpty(response.restData.queryWaitAccountingListVo)) {                        
-                        MessageService.showInfo('查無資料');
-                    } else {                                                                                                             
-                        this.accoutingList = Object.assign(response.restData.queryWaitAccountingListVo);                        
-                        response.restData.queryWaitAccountingListVo.forEach((element) => {
-                            element.action = true;
-                        });       
-                        response.restData.queryWaitAccountingListVo.forEach((element) => {
-                            if(element.status == 'READ'){
-                                element.hasView = true;
-                            }          
-                            if(element.isAgentForm){
-                                element.isAgent = true;
-                            }                  
-                        });                        
-                        this.numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
-                        MessageService.showSuccess('依條件查詢待核算資料成功');                                       
-                    }
+                if (response && response.restData && response.restData.success) {                                                                                                                                 
+                    this.accoutingList = Object.assign(response.restData.queryWaitAccountingListVo);                        
+                    response.restData.queryWaitAccountingListVo.forEach((element) => {
+                        element.action = true;
+                    });       
+                    response.restData.queryWaitAccountingListVo.forEach((element) => {
+                        if(element.status == 'READ'){
+                            element.hasView = true;
+                        }          
+                        if(element.isAgentForm){
+                            element.isAgent = true;
+                        }                  
+                    });                        
+                    this.numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
+                    MessageService.showSuccess('依條件查詢待核算資料成功');                                                           
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
@@ -482,7 +457,9 @@ export default {
             (response) => {
                 if (response && response.restData && response.restData.success) {                                                             
                     MessageService.showInfo('核算成功');
-                    this.queryAccoutingInit();                                                                   
+                    this.accoutingList = [];
+                    this.queryAccoutingList();  
+                    this.accountingDialog = false;                                                                 
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
@@ -512,16 +489,15 @@ export default {
             await AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
             (response) => {
                 if (response && response.restData && response.restData.success) {                                                             
-                    MessageService.showInfo('核算成功');
-                    this.queryAccoutingList();                                                                   
+                    MessageService.showInfo('退件成功');
+                    this.accoutingList = [];                                                                                                          
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
                 }
             },
                 (error) => {
-                    MessageService.showSystemError();
-                    console.log(error);
+                    MessageService.showSystemError();                    
                 }
             );
             

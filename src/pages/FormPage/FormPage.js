@@ -197,7 +197,7 @@ export default {
                 this.$emit("showOnlyContent");
             }
         },
-        async formInit(canSkipValidateTime){
+        formInit(canSkipValidateTime){
             // 驗證是否有受理編號，若無直接擋件
             if(ValidateUtil.isEmpty(this.acceptNum) && ValidateUtil.isEmpty(this.encryptedParam)){
                 this.isBlocking = true;
@@ -235,7 +235,7 @@ export default {
             }
 
             AjaxService.post("/tpesForm/init", param, 
-            async (response) => {
+            (response) => {
                 // 驗證是否成功
                 if (!response.restData.success) {
                     this.isBlocking = true;
@@ -266,12 +266,9 @@ export default {
                     this.cancelSign = response.restData.cancelSign;
                 }
 
-                // 整理證件及附件
-                await this.setCertificateList(response.restData.certificateList);
+                // 整理證件及附件 (同時檢查證件規範)
+                this.setCertificateList(response.restData.certificateList);
                 this.setAttachmentList(response.restData.attachmentList);
-
-                // 檢查證件是否已依規範掃描
-                this.checkNeedScanFile();
             },
             (error) => {
                 MessageService.showSystemError();
@@ -295,7 +292,7 @@ export default {
                 this.isAddAttachment = data.isAddAttachment;
             }
         },
-        async setCertificateList(certificateList){
+        setCertificateList(certificateList){
             this.certificateList = [];
             this.oriCertificateList = [];
 
@@ -317,6 +314,9 @@ export default {
 
                 this.oriCertificateList = Array.from(this.certificateList);
             }
+
+            // 檢查證件是否已依規範掃描
+            this.checkNeedScanFile();
         },
         setAttachmentList(attachmentList){
             this.attachmentList = [];

@@ -106,18 +106,7 @@ export default {
         changeEmp(){
             this.agentList = [];
             for(let i in this.empList){
-                if(this.selectEmp.isMgmt === this.empList[i].isMgmt 
-                    && this.empList[i].empNo !== this.selectEmp.empNo){
-
-                    this.agentList.push({                            
-                        empNo:this.empList[i].empNo,                        
-                        empName:this.empList[i].empName,
-                        isMgmt:this.empList[i].isMgmt,
-                        dept:this.empList[i].dept,
-                        deptName: this.empList[i].deptName,
-                    })            
-                } 
-
+                // 如果選到的請假員工為主管
                 if(this.selectEmp.isMgmt){
                     if(this.selectEmp.isMgmt === this.empList[i].isMgmt 
                         && this.empList[i].empNo !== this.selectEmp.empNo){
@@ -130,7 +119,7 @@ export default {
                             deptName: this.empList[i].deptName,
                         })            
                     } 
-
+                // 若選到的請假員工為一般員工，需先排除同一筆資料，再去比對部門是否相同，因員工請假代理人也可選擇部門主管，故此處僅比對部門是否相同
                 } else {
                     if(this.empList[i].empNo !== this.selectEmp.empNo
                         && this.empList[i].dept === this.selectEmp.dept){    

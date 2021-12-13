@@ -16,13 +16,13 @@ export default {
             numOfUndispatch: 0,
             unDispatchHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
-                { text: '整理號碼', value: 'archieveNum', align: 'center' },
+                { text: '整理號碼', value: 'archiveNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
                 { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '計算日', value: 'computeDate', align: 'center' },
                 { text: '受理日期', value: 'acceptDate', align: 'center' },
-                { text: '結案日期', value: 'colseDate', align: 'center' },
+                { text: '結案日期', value: 'closeDate', align: 'center' },
                 { text: '受理項目', value: 'acceptItem', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],

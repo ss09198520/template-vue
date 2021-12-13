@@ -258,27 +258,7 @@ export default {
             (response) => {
                 if (response && response.restData && response.restData.success) {
                     if (ValidateUtil.isEmpty(response.restData.initWaitAccountingListVo)) {                        
-                        MessageService.showInfo('查無資料');
-                        if(!ValidateUtil.isEmpty(response.restData.authList)){
-                            // 根據使用者角色決定頁面顯示
-                            for(let i in response.restData.authList){
-                                // 核算員
-                                if(response.restData.authList[i] == 'AUTH15'){
-                                    this.auditor = true;
-                                    this.hasAccountingAuth = true;
-                                }
-                                // 檢算員
-                                else if(response.restData.authList[i] == 'AUTH20'){
-                                    this.checker = true;
-                                    this.hasAccountingAuth = true;
-                                }
-                                // 核算課長 or 核算部門主辦 可看到該課所有資料，但不能進行核算
-                                else if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07'){
-                                    this.checker = true;
-                                    this.hasAccountingAuth = true;
-                                }
-                            }
-                        }         
+                        MessageService.showInfo('查無資料');        
                     } else {                                                                                                             
                         this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
                         response.restData.initWaitAccountingListVo.forEach((element) => {
@@ -291,30 +271,29 @@ export default {
                             if(element.isAgentForm){
                                 element.isAgent = true;
                             }                  
-                        });  
-                        if(!ValidateUtil.isEmpty(response.restData.authList)){
-                            for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH15' || response.restData.authList[i] == 'AUTH20'){
-                                    this.hasAccountingAuth = true;
-                                    console.log(this.hasAccountingAuth);
-                                    break;
-                                }
-                            }
-                            for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH15'){
-                                    this.auditor = true;
-                                    break;
-                                }
-                            }
-                            for(let i in response.restData.authList){
-                                if(response.restData.authList[i] == 'AUTH20'){
-                                    this.checker = true;
-                                    break;
-                                }
-                            }
-                        }                      
+                        });                  
                         this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                                               
                     }
+                    if(!ValidateUtil.isEmpty(response.restData.authList)){
+                        // 根據使用者角色決定頁面顯示
+                        for(let i in response.restData.authList){
+                            // 核算員
+                            if(response.restData.authList[i] == 'AUTH15'){
+                                this.auditor = true;
+                                this.hasAccountingAuth = true;
+                            }
+                            // 檢算員
+                            else if(response.restData.authList[i] == 'AUTH20'){
+                                this.checker = true;
+                                this.hasAccountingAuth = true;
+                            }
+                            // 核算課長 or 核算部門主辦 可看到該課所有資料，但不能進行核算
+                            else if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07'){
+                                this.checker = true;
+                                this.hasAccountingAuth = true;
+                            }
+                        }
+                    } 
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  

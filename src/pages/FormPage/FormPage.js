@@ -608,8 +608,11 @@ export default {
                     // 開啟滿意度調查頁
                     await this.openPortal();
                     
+                    // 重新查詢一次
+                    this.formInit(true);
+
                     // 關閉目前頁面
-                    window.close();
+                    window.open("","_self").close();
                 }
             },
             (error) => {

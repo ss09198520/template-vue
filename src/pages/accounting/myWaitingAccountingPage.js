@@ -490,8 +490,7 @@ export default {
             (response) => {
                 if (response && response.restData && response.restData.success) {                                                             
                     MessageService.showInfo('退件成功');
-                    this.accoutingList = [];
-                    this.queryAccoutingList();                                                                                       
+                    this.accoutingList = [];                                                                                                          
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  

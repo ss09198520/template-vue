@@ -893,7 +893,7 @@ export default {
                             // 若已有掃描的證件，將 fileCode 從 List 移除，最後剩下來的就是還沒掃描的
                             if(!ValidateUtil.isEmpty(needScanFileCode) 
                                 && certificate.fileCode == needScanFileCode 
-                                && ValidateUtil.isEmpty(certificate.fileNo)){
+                                && !ValidateUtil.isEmpty(certificate.fileNo)){
 
                                 this.needScanFileCodeList.splice(index, 1);
                                 index--;

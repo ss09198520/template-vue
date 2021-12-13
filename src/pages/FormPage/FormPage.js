@@ -612,7 +612,8 @@ export default {
                     this.formInit(true);
 
                     // 關閉目前頁面
-                    window.open("","_self").close();
+                    window.location.href = "about:blank";
+                    window.close();
                 }
             },
             (error) => {

@@ -364,7 +364,7 @@
           <template v-slot:[`item.signStatus`]="{ item }">
             {{ signStatusOption.find(state => { return item.signStatus===state.value }).text }}
           </template>
-          <!-- 節目單類型 -->
+          <!-- 跑馬燈類型 -->
           <template v-slot:[`item.marqueeType`]="{ item }">
             {{ marqueeTypeOption.find(type => { return item.marqueeType===type.value }).text }}
           </template>
@@ -437,8 +437,7 @@
         </v-card-title>
         <v-card-text class="font-24px">
           <v-row class="mt-6 ml-1 font-bold">
-            跑馬燈名稱: {{ selectMarquee.marqueeName
-            }}{{ selectMarquee.animationDuration }}
+            跑馬燈名稱: {{ selectMarquee.marqueeName }}
             <marquee-text
               :duration="selectMarquee.animationDuration"
               :repeat="1"

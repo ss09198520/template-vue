@@ -177,6 +177,14 @@ export default {
         // 打開核算視窗
         checking(item){
             this.selectIndex = this.accoutingList.indexOf(item);
+            
+            //視窗帶入備註
+            this.memo = item.memo;
+            // 帶入受理編號
+            this.formParam = {
+                FM_NO: item.acceptNum
+            };
+            
             this.checkingDialog = true;            
         },
         // 打開核算退件視窗

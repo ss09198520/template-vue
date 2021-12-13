@@ -194,16 +194,27 @@
             <div class="imgList">
               <ul class="resourceList">
                 <li
-                  v-for="(resource,id) in mediaFiles"
-                  :id="resource.id"
+                  v-for="(item,id) in mediaFiles"
+                  :id="item.id"
                   :key="id"
-                  @dblclick="(previewUrl = resource.dataUrl),(overlay = true)"
+                  @click="(previewUrl = item.dataUrl),(previewFileName = item.originalFileName),(overlay = true)"
                 >
                   <div class="imgBox">
-                    <img :src="resource.dataUrl">
+                    <img v-if="!!item.dataUrl && isImage(item.originalFileName)" :src="item.dataUrl">
+                    <video 
+                      v-if="!!item.dataUrl && isVideo(item.originalFileName)"
+                      width="120" 
+                      height="120"
+                    >
+                      <source
+                        :src="item.dataUrl"
+                        type="video/mp4"
+                      >
+                      Sorry, your browser doesn't support embedded videos.
+                    </video>
                   </div>
 
-                  <p>{{ resource.materialName }}</p>
+                  <p>{{ item.materialName }}</p>
                 </li>
               </ul>
             </div>
@@ -321,13 +332,25 @@
             <!-- 縮圖 -->
             <template v-slot:[`item.dataUrl`]="{ item }">
               <v-img
+                v-if="!!item.dataUrl && isImage(item.originalFileName)"
                 :src="item.dataUrl"
                 :style="`cursor: pointer`"
                 max-width="50"
                 max-height="50"
-                @dblclick="(previewUrl = item.dataUrl),(overlay = true)"
+                @dblclick="(previewUrl = item.dataUrl),(previewFileName = item.originalFileName),(overlay = true)"
               />
-              {{ item.fileName }}
+              <video 
+                v-if="!!item.dataUrl && isVideo(item.originalFileName)" 
+                width="50" 
+                height="50"
+                @dblclick="(previewUrl = item.dataUrl),(previewFileName = item.originalFileName),(overlay = true)" 
+              >
+                <source
+                  :src="item.dataUrl"
+                  type="video/mp4"
+                >
+                Sorry, your browser doesn't support embedded videos.
+              </video>
             </template>
           </v-data-table>
           <!-- 選頁 -->
@@ -347,16 +370,35 @@
       class="text-right"
     >
       <v-img
+        v-if="isImage(previewFileName)"
         :src="previewUrl"
         max-width="700"
         max-height="1024"
         @load="imageLoaded = true"
-        @click="(overlay = false), (imageLoaded = false)"
+        @click="closeOverlay"
       />
+      <video 
+        v-if="isVideo(previewFileName)" 
+        controls 
+        controlsList="nodownload"
+        @click="closeOverlay"
+      >
+        <source
+          :src="previewUrl"
+          type="video/mp4"
+        >
+        Sorry, your browser doesn't support embedded videos.
+      </video>
       <v-progress-circular
-        v-show="!imageLoaded"
+        v-if="!imageLoaded && isImage(previewFileName)"
         indeterminate
       />
+      <v-btn
+        icon
+        @click="closeOverlay"
+      >
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
     </v-overlay>
   </v-container>
 </template>
@@ -386,6 +428,7 @@
         isGrid: false,
         overlay: false,
         previewUrl: '',
+        previewFileName: null,
         imageLoaded: false,
         //分頁
         itemsPerPage: 10,
@@ -428,6 +471,16 @@
       }
     },
     methods: {
+      isImage(filename) {
+        return (/\.(jpg|jpeg|tiff|png)$/i).test(filename)
+      },
+      isVideo(filename) {
+        return (/\.(mp4)$/i).test(filename)
+      },
+      closeOverlay() {
+        this.overlay = false
+        this.imageLoaded = false
+      },
       close() {
         this.dialog = false
         this.editedIndex = -1

@@ -162,7 +162,7 @@
                           </v-icon>
                         </v-btn>
                       </v-col>
-                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'edit'" :cols="(formPageMode == 'edit' ? 6 : 12)" class="t-center">
+                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode == 'edit'" :cols="(formPageMode == 'edit' ? 6 : 12)" class="t-center">
                         <v-btn depressed color="normal" :disabled="!certificate.imgSrc" @click="viewImage(certificate)">
                           檢視
                           <v-icon

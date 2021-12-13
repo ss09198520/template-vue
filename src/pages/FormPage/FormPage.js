@@ -256,9 +256,6 @@ export default {
                 // 若為加密參數進件，放入解密後才有的參數
                 this.setDescryptedParam(response.restData);
 
-                // 檢查證件是否已依規範掃描
-                this.checkNeedScanFile();
-
                 // 簽名
                 if(!ValidateUtil.isEmpty(response.restData.customerSign)){
                     this.customerSign = response.restData.customerSign;
@@ -272,6 +269,9 @@ export default {
                 // 整理證件及附件
                 this.setCertificateList(response.restData.certificateList);
                 this.setAttachmentList(response.restData.attachmentList);
+
+                // 檢查證件是否已依規範掃描
+                this.checkNeedScanFile();
             },
             (error) => {
                 MessageService.showSystemError();

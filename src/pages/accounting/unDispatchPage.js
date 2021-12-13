@@ -253,9 +253,14 @@ export default {
                    response.restData.message != undefined &&
                    response.restData.success
                    ) {                    
-                    MessageService.showSuccess('案件認領成功');
-                    // 重新查詢一次未分派案件
-                    this.queryUndispatchInit();                  
+                    if(response.restData.canClaimForm){
+                        MessageService.showSuccess('案件認領成功');
+                        // 重新查詢一次未分派案件
+                        this.queryUndispatchInit();                  
+                    }
+                    else{
+                        MessageService.showInfo('無核算班別排班資料，不可認領案件');
+                    }                 
                } else {
                  //接後端候要放errorMsg
                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  

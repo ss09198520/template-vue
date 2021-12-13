@@ -402,7 +402,7 @@
         <v-card-text>
           <FormPage 
             :key="formKey"
-            :restrict-mode="'accounting'" 
+            :restrict-mode="'viewDownload'" 
             :form-param="formParam"
           />
         </v-card-text>

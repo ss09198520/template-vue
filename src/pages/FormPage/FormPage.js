@@ -583,7 +583,7 @@ export default {
 
             return true;
         },
-        save(){
+        async save(){
             if(!this.validateCertifate()){
                 return;
             }
@@ -591,7 +591,7 @@ export default {
             let vin = this.setSaveFormVin();
 
             AjaxService.post("/tpesForm/save", vin, 
-            (response) => {
+            async (response) => {
                 // 驗證是否成功
                 if (!response.restData.success) {              
                     MessageService.showError(response.restData.message,'儲存表單');
@@ -606,10 +606,10 @@ export default {
                 }
                 else{
                     // 開啟滿意度調查頁
-                    this.openPortal();
+                    await this.openPortal();
                     
-                    // 重新查詢一次
-                    this.formInit(true);
+                    // 關閉目前頁面
+                    window.close();
                 }
             },
             (error) => {
@@ -956,7 +956,7 @@ export default {
                 console.log(error);
             });
         },
-        openPortal() {
+        async openPortal() {
             // 開啟滿意度調查頁
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
             this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '_blank', config);

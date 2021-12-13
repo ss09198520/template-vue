@@ -146,7 +146,15 @@
                   :rules="rules.filesSizeRules.concat([checkFileExt])"
                   @change="getImagePreviews()"
                 />
-                <v-img v-if="!!imageURL" :src="imageURL" />
+                <v-img v-if="!!imageURL && isImage(postForm.file.originalFileName)" :src="imageURL" />
+                <video v-if="!!imageURL && isVideo(postForm.file.originalFileName)" controls controlsList="nodownload">
+                  <source
+                    :src="imageURL"
+                    type="video/mp4"
+                  >
+                  Sorry, your browser doesn't support embedded videos.
+                </video>
+
               </v-col>
             </v-row>
             <v-row

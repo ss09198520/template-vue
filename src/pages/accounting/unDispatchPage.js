@@ -16,13 +16,13 @@ export default {
             numOfUndispatch: 0,
             unDispatchHeaders: [
                 { text: '受理號碼', value: 'acceptNum', align: 'center' },
-                { text: '整理號碼', value: 'archieveNum', align: 'center' },
+                { text: '整理號碼', value: 'archiveNum', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
                 { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '電號', value: 'electricNum', align: 'center' },
                 { text: '計算日', value: 'computeDate', align: 'center' },
                 { text: '受理日期', value: 'acceptDate', align: 'center' },
-                { text: '結案日期', value: 'colseDate', align: 'center' },
+                { text: '結案日期', value: 'closeDate', align: 'center' },
                 { text: '受理項目', value: 'acceptItem', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
@@ -109,6 +109,7 @@ export default {
                     ) {
                     if (ValidateUtil.isEmpty(response.restData.initUndispatchListVo)) {                        
                         MessageService.showInfo('查無資料');
+                        this.unDispatchList = [];
                     } else {           
                         this.unDispatchList = Object.assign(response.restData.initUndispatchListVo);                        
                         response.restData.initUndispatchListVo.forEach((element) => {
@@ -201,7 +202,9 @@ export default {
                    response.restData.message != undefined &&
                    response.restData.success
                    ) {                    
-                    MessageService.showSuccess('案件分派成功');                  
+                    MessageService.showSuccess('案件分派成功'); 
+                    // 重新查詢一次未分派案件
+                    this.queryUndispatchInit();                 
                } else {
                  //接後端候要放errorMsg
                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
@@ -250,7 +253,14 @@ export default {
                    response.restData.message != undefined &&
                    response.restData.success
                    ) {                    
-                    MessageService.showSuccess('案件認領成功');                  
+                    if(response.restData.canClaimForm){
+                        MessageService.showSuccess('案件認領成功');
+                        // 重新查詢一次未分派案件
+                        this.queryUndispatchInit();                  
+                    }
+                    else{
+                        MessageService.showInfo('無核算班別排班資料，不可認領案件');
+                    }                 
                } else {
                  //接後端候要放errorMsg
                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  

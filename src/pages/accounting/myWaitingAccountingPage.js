@@ -184,7 +184,8 @@ export default {
             this.formParam = {
                 FM_NO: item.acceptNum
             };
-            
+            this.formKey++;
+
             this.checkingDialog = true;            
         },
         // 打開核算退件視窗

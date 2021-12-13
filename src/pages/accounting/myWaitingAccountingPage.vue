@@ -400,7 +400,11 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <FormPage :restrict-mode="'accounting'" />
+          <FormPage 
+            :key="formKey"
+            :restrict-mode="'accounting'" 
+            :form-param="formParam"
+          />
         </v-card-text>
       </v-card>
     </v-dialog>

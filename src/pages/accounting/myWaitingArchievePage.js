@@ -57,8 +57,7 @@ export default {
         // Action:查詢初始化
         queryArchieveInit(){
             // 取得所有待歸檔資料
-            
-            console.log(parseInt(new Date() - new Date('2021/11/17 15:11:22')) / 1000 / 60 / 60);
+                        
             AjaxService.post('/waitArchive/init',
             {
                        
@@ -89,9 +88,9 @@ export default {
                   //MessageService.showError('查詢審核帳號申請清單 失敗');                  
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
         },

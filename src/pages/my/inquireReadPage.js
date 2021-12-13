@@ -137,7 +137,8 @@ export default{
                         reader: '',
                         readerName: '',
                         user: this.User,
-                        readNum: this.readNum
+                        readNum: this.readNum,
+                        readDate: this.readDate,
                     };
                 }
                 else{
@@ -147,7 +148,7 @@ export default{
                         acceptNum: this.selectAcceptNum,
                         reader: this.readAudience.empNo,
                         readerName: this.readAudience.empName,
-                        user: this.User
+                        user: this.User,
                     };
                 }
 

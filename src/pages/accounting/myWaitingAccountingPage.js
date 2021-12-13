@@ -180,7 +180,8 @@ export default {
             this.checkingDialog = true;            
         },
         // 打開核算退件視窗
-        returnOrder(){
+        returnOrder(memo){
+            this.memo = memo;
             this.returnReasonModel = true;
         },
         // 核算成功
@@ -196,15 +197,14 @@ export default {
             this.accountingDialog = false;
         },
         // 案件退件
-        returnSubmit(memo){
+        async returnSubmit(){
           this.requireArray = [];
           this.formatArray = [];
-          this.memo = memo;
 
           if(!this.checkRejectVal()){
               MessageService.showCheckInfo(this.requireArray,this.formatArray);
           }  else {
-              this.returnAccounting(); 
+              await this.returnAccounting(); 
               this.returnReasonModel = false;
               this.accountingDialog = false;
               this.queryAccoutingList(); 
@@ -496,7 +496,7 @@ export default {
         },
 
         //Action: 更新案件審核狀態(退件)
-        returnAccounting(){
+        async returnAccounting(){
 
             console.log(this.selectItem);
             const AuditAccountingReq = {
@@ -509,7 +509,7 @@ export default {
                 rejectReason: (this.rejectReason) ? this.rejectReason.returnReasonName : null,
                 rejectDesc: this.rejectDesc,
             };           
-            AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
+            await AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
             (response) => {
                 if (response && response.restData && response.restData.success) {                                                             
                     MessageService.showInfo('核算成功');

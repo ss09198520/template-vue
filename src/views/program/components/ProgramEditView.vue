@@ -176,10 +176,22 @@
                 <!-- 縮圖 -->
                 <template v-slot:[`item.dataUrl`]="{ item }">
                   <v-img
+                    v-if="!!item.dataUrl && isImage(item.originalFileName)"
                     :src="item.dataUrl"
-                    max-width="50"
-                    max-height="50"
+                    max-width="80"
+                    max-height="80"
                   />
+                  <video 
+                    v-if="!!item.dataUrl && isVideo(item.originalFileName)"
+                    width="80" 
+                    height="80"
+                  >
+                    <source
+                      :src="item.dataUrl"
+                      type="video/mp4"
+                    >
+                    Sorry, your browser doesn't support embedded videos.
+                  </video>
                 </template>
                 <template v-slot:[`item.sort`]="{ item }">
                   <v-icon
@@ -395,12 +407,24 @@
                   >
                     <template v-slot:label>
                       <v-img
+                        v-if="!!itemFile.dataUrl && isImage(itemFile.originalFileName)"
                         :src="itemFile.dataUrl"
                         :lazy-src="itemFile.dataUrl"
                         class="grey lighten-2"
                         max-height="150"
                         max-width="150"
                       />
+                      <video 
+                        v-if="!!itemFile.dataUrl && isVideo(itemFile.originalFileName)"
+                        width="120" 
+                        height="120"
+                      >
+                        <source
+                          :src="itemFile.dataUrl"
+                          type="video/mp4"
+                        >
+                        Sorry, your browser doesn't support embedded videos.
+                      </video>
                       
                     </template>
                   </v-checkbox>
@@ -588,6 +612,12 @@
       }
     },
     methods: {
+      isImage(filename) {
+        return (/\.(jpg|jpeg|tiff|png)$/i).test(filename)
+      },
+      isVideo(filename) {
+        return (/\.(mp4)$/i).test(filename)
+      },
       //Init 
       init() {
         this.reader = new FileReader();

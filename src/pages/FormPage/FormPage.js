@@ -612,8 +612,8 @@ export default {
                     this.formInit(true);
 
                     // 關閉目前頁面
-                    window.location.href = "about:blank";
-                    window.close();
+                    // window.location.href = "about:blank";
+                    // window.close();
                 }
             },
             (error) => {
@@ -634,7 +634,7 @@ export default {
                     if(ValidateUtil.isEmpty(certificate.fileNo) && !ValidateUtil.isEmpty(certificate.imgSrc)){
                         addFileList.push({
                             category: "CERTIFICATE",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: certificate.fileCode,
                             fileName: certificate.fileName,
                             originalFileName: certificate.originalFileName,
                             fileExt: this.getFileExt(certificate.originalFileName),
@@ -647,7 +647,7 @@ export default {
                         modifyFileList.push({
                             fileNo: certificate.fileNo,
                             category: "CERTIFICATE",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: certificate.fileCode,
                             fileName: certificate.fileName,
                             originalFileName: certificate.originalFileName,
                             fileExt: this.getFileExt(certificate.originalFileName),
@@ -687,7 +687,7 @@ export default {
                     if(ValidateUtil.isEmpty(attachment.fileNo) && !ValidateUtil.isEmpty(attachment.base64)){
                         addFileList.push({
                             category: "ATTACHMENT",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: attachment.fileCode,
                             fileName: attachment.fileName,
                             originalFileName: attachment.originalFileName,
                             fileExt: this.getFileExt(attachment.originalFileName),
@@ -701,7 +701,7 @@ export default {
                         modifyFileList.push({
                             fileNo: attachment.fileNo,
                             category: "ATTACHMENT",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: attachment.fileCode,
                             fileName: attachment.fileName,
                             originalFileName: attachment.originalFileName,
                             fileExt: this.getFileExt(attachment.originalFileName),

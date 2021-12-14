@@ -476,9 +476,9 @@ export default {
     },
     downloadAttachedFiles(){
       downloadMediaSignOffFile({
-           mediaSignType: "MEDIA_MARQUEE",
-           relatedSeq: this.location
-        });
+          mediaSignType: "MEDIA_MARQUEE",
+          relatedSeq: this.location
+      });
     },
     submit(isSign) {
       //if (this.$refs.form.validate()) {

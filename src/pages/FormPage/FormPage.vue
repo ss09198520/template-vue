@@ -100,7 +100,7 @@
               <v-container>
                 <v-row v-if="needScanFileHint && (formPageMode == 'edit' || formPageMode == 'accounting')" class="mb-2">
                   <v-col cols="12">
-                    <span class="hint-text">提示：尚須掃描並上傳 {{ needScanFileHint }}</span>
+                    <span class="hint-text">提示：尚需掃描並上傳 {{ needScanFileHint }}</span>
                   </v-col>
                 </v-row>
                 <v-row>
@@ -162,7 +162,7 @@
                           </v-icon>
                         </v-btn>
                       </v-col>
-                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode == 'edit'" :cols="(formPageMode == 'edit' ? 6 : 12)" class="t-center">
+                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode=='cancel' || formPageMode == 'edit'" :cols="(formPageMode == 'edit' ? 6 : 12)" class="t-center">
                         <v-btn depressed color="normal" :disabled="!certificate.imgSrc" @click="viewImage(certificate)">
                           檢視
                           <v-icon
@@ -257,9 +257,9 @@
                     <v-row>
                       <v-col cols="12" class="d-center">
                         <v-checkbox 
-                          v-if="checkIsWord(attachment)"
+                          v-if="checkIsWord(attachment) || (onlySealFileCode && onlySealFileCode == attachment.fileCode)"
                           v-model="attachment.needSeal" 
-                          :disabled="formPageMode != 'edit' || attachment.canOnlyView"
+                          :disabled="formPageMode != 'edit' || attachment.canOnlyView || onlySealFileCode"
                           class="mt-0" 
                           label="套印專用章" 
                           color="success" 
@@ -298,7 +298,7 @@
                         </v-btn>
                       </v-col>
                     </v-row>
-                    <v-row v-else-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || attachment.canOnlyView">
+                    <v-row v-else-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode=='cancel' || attachment.canOnlyView">
                       <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="viewImage(attachment)">
                           檢視

@@ -199,8 +199,9 @@
                     class="ma-1"
                     outlined
                     color="accent"
+                    @click="isEdit ? $router.go(-1): reset()"
                   >
-                    取消
+                    {{ isEdit ? '返回':'清空' }}
                   </v-btn>
                   <v-btn
                     class="ma-1"
@@ -379,6 +380,10 @@
       //     input[input.length - 1].focus()
       //   })
       // },
+      reset() {
+        this.$refs.questionnaireForm.reset()
+        this.init()
+      },
 
       //初始化 
       init () {

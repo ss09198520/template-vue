@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h2 class="font-bold">節 目 單 製 作</h2>
+    <h2 class="font-bold">節 目 單 {{ getTitleAction }}</h2>
     <v-row class="ml-10">
       <v-col class="ml-10 font-18px" cols="12">
         <not-found v-if="isNotFound" />
@@ -601,6 +601,9 @@
           returnStr = tmpDate.toISOString().slice(0,10)
         }
         return returnStr
+      },
+      getTitleAction() {
+        return this.isEdit ? '編 輯':'製 作'
       },
     },
     mounted() {

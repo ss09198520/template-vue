@@ -458,7 +458,7 @@
     programId: null,
     programName: null,
     memo: null,
-    programType: null,
+    programType: 'GENERAL',
     releaseStartDate: null,
     releaseEndDate: null,
   }

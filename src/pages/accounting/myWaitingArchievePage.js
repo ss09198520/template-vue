@@ -45,6 +45,7 @@ export default {
             this.formSeq = item.formSeq;
             this.seq = item.seq;
             this.accnting = item.accnting;
+            this.acceptNum = item.acceptNum;
             this.returnModel = true;
         },
 
@@ -63,7 +64,8 @@ export default {
             },
             (response) => {
                 if (response != null && response.restData && response.restData.success) {                                           
-                    this.archieveList = Object.assign(response.restData.initWaitArchiveListVo);                        
+                    this.archieveList = Object.assign(response.restData.initWaitArchiveListVo);  
+                    console.log(this.archieveList);                      
                     this.numOfArchieve = this.archieveList.length;        
                     response.restData.initWaitArchiveListVo.forEach((element) => {                             
                         let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
@@ -116,12 +118,12 @@ export default {
         // Action:將案件返回核算
         returnForm(){
             // Vin參數
-            // formSeq: this.formSeq,
-            
+            // formSeq: this.formSeq,                        
             const ReturnToWaitAccountingReq ={
                 seq: this.seq,
                 formSeq: this.formSeq,
                 accounting: this.accnting,
+                acceptNum: this.acceptNum                
             };
             AjaxService.post('/waitArchive/returnToWaitAccounting',ReturnToWaitAccountingReq,
             (response) => {

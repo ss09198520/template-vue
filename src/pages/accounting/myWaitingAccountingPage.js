@@ -74,16 +74,17 @@ export default {
 
             ],
             agentCaseOption:[
-                {text:'顯示全部',value:'1'},
-                {text:'顯示代理件',value:'2'},
-                {text:'不顯示代理件',value:'3'},
+                {text:'顯示全部',value:'All'},
+                {text:'顯示代理件',value:'QUERYAGENT'},
+                {text:'不顯示代理件',value:'QUERYNOTAGENT'},
             ],
 
             commentsModel:false,
             contractTypeOption:[
-                {text:'表制', value:'1'},
-                {text:'高壓', value:'2'},
-                {text:'包制', value:'3'},
+                {text:'純電號', value:'V'},
+                {text:'表制', value:'C'},
+                {text:'高壓', value:'E'},
+                {text:'包制', value:'F'},
             ],
             contractType:null,
             
@@ -352,9 +353,10 @@ export default {
             // contractType: this.searchForm.contractType,
             // caseType: this.searchForm.caseType,
             let caseType = null;
-            if(!this.searchForm.caseType == null){
+            if(this.searchForm.caseType != null){
                 caseType = this.searchForm.caseType.value;
             }
+            console.log(caseType);
             let QueryWaitAccountingReq ={
                 acceptNum: this.searchForm.acceptNum,
                 electricNum: this.searchForm.electricNum,
@@ -364,9 +366,10 @@ export default {
                 archieveNum: this.searchForm.archieveNum,
                 dispatchStartDate: this.searchForm.dispatchStartDate,
                 dispatchEndDate: this.searchForm.dispatchEndDate,
-                contractType:  (ValidateUtil.isEmpty(this.searchForm.contractType)? null:this.searchForm.contractType.text),
+                contractType:  (ValidateUtil.isEmpty(this.searchForm.contractType)? null:this.searchForm.contractType.value),
                 caseType: caseType,
             };
+            
             AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,
             (response) => {
                 if (response && response.restData && response.restData.success) {                                                                                                                                 

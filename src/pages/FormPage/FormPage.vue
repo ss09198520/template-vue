@@ -568,7 +568,7 @@
         </v-card-title>
         <v-card-text>
           <v-row class="ma-3">
-            <div v-for="(option, index) in attachmentOptions" :key="option">
+            <div v-for="(option, index) in attachmentOptions" :key="option.fileName">
               <v-chip
                 v-if="newAttachmentType === index"
                 label 
@@ -577,10 +577,10 @@
                 color="success"
                 text-color="white"
               >
-                <span>{{ option }}</span>
+                <span>{{ option.fileName }}</span>
               </v-chip>
               <v-chip v-else label x-large class="ma-2" @click="selectAttachment(index)">
-                <span>{{ option }}</span>
+                <span>{{ option.fileName }}</span>
               </v-chip>
             </div>
           </v-row>
@@ -610,7 +610,7 @@
           </v-btn>
           <v-btn
             color="success"
-            :disabled="newAttachmentType == -1"
+            :disabled="newAttachmentType == -1 || (newAttachmentType === attachmentOptions.length && !otherAttachment)"
             @click="addAttachment()"
           >
             &emsp;新增&emsp;

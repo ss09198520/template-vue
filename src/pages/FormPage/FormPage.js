@@ -103,7 +103,36 @@ export default {
                 },
             ],
             newAttachmentType: -1,
-            attachmentOptions: ['農業動力用電主管機關證明文件', '電氣技術人員執照', '門牌整編證明', '扣繳代繳帳號資料或中獎證明', '抄表事故聯絡單', '切結書'],
+            attachmentOptions: [
+                {
+                    fileName: '農業動力用電主管機關證明文件', 
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '電氣技術人員執照', 
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '門牌整編證明',
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '扣繳代繳帳號資料或中獎證明',
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '抄表事故聯絡單',
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '切結書', 
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '證明函', 
+                    fileCode: 'CERTIFICATE_LETTER'
+                },
+            ],
             setCertificateModal: false,
             newAttachmentModal: false,
             otherCertificate: '',
@@ -474,8 +503,9 @@ export default {
             this.newAttachmentType = index;
         },
         addAttachment(){
-            let fileName = this.newAttachmentType === this.attachmentOptions.length ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType];
-            
+            let fileName = this.newAttachmentType == this.attachmentOptions.length ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType].fileName;
+            let fileCode = this.newAttachmentType == this.attachmentOptions.length ? "OTHER_ATTACHMENT" : this.attachmentOptions[this.newAttachmentType].fileCode;
+
             if(!ValidateUtil.isEmpty(this.attachmentList)){
                 for(let attachment of this.attachmentList){
                     if(fileName == attachment.fileName){
@@ -494,6 +524,7 @@ export default {
                 id: this.attachmentNo,
                 // 其他佐證文件，須由使用者輸入附件類別
                 fileName: fileName,
+                fileCode: fileCode,
                 fileNo: null,
                 imgSrc: null,
                 file: null,

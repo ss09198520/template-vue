@@ -3,7 +3,7 @@
     <h2 class="font-bold">{{ pageTitle }}</h2>
     <v-row class="ml-10">
       <v-col class="ml-10 font-18px" cols="12">
-        <v-form v-model="valid" class="ml-10 font-weight-bold">
+        <v-form ref="marqueeForm" v-model="valid" class="ml-10 font-weight-bold">
           <v-row
             :dense="dense"
             :no-gutters="noGutters"
@@ -228,8 +228,13 @@
 
           <v-row v-if="marqueeType !== 'DEFAULT'" :dense="dense" :no-gutters="noGutters">
             <v-col class="d-flex justify-end" cols="8" md="8">
-              <v-btn class="ma-1" outlined color="accent" @click="resetForm">
-                清空
+              <v-btn 
+                class="ma-1" 
+                outlined 
+                color="accent" 
+                @click="!!location ? $router.go(-1): resetForm()"
+              >
+                {{ !!location ? '返回':'清空' }}
               </v-btn>
               <v-btn
                 class="ma-1"
@@ -276,20 +281,19 @@ import { fetchInitMarquee, fetchQueryMarquee } from "@/api/marquee";
 import { downloadMediaSignOffFile} from '@/api/media';
 import ValidateUtil from "@/assets/services/validateUtil";
 import MessageService from "@/assets/services/message.service";
+
 export default { 
-  components: { 
-    Quill , 
-    },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        console.log("here");
-         vm.prevRoute = from
-         console.log("here",from.path);
-        if(from.path =="/marquee/marqueeEdit"){
-          next(`/marquee/redirect`)
-           
-        }
-      })
+
+  components: { Quill , },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      console.log("here");
+      vm.prevRoute = from
+      console.log("here",from.path);
+      if(from.path =="/marquee/marqueeEdit"){
+        next(`/marquee/redirect`)
+      }
+    })
   },
   data() {
     return {  
@@ -551,15 +555,16 @@ export default {
       this.startDate = null;
       this.endDate = null;
       this.attachedFiles = null;
+      // this.$refs.marqueeForm.reset();
     },
     validate() {
-      this.$refs.form.validate();
+      this.$refs.marqueeForm.validate();
     },
     reset() {
-      this.$refs.form.reset();
+      this.$refs.marqueeForm.reset();
     },
     resetValidation() {
-      this.$refs.form.resetValidation();
+      this.$refs.marqueeForm.resetValidation();
     },
     decrementDuration() {
       //減慢播放
@@ -585,7 +590,7 @@ export default {
         this.errMsg.editorData = null;
         this.isSubmited = false;
       }
-      console.log(this.marqueeText);
+      // console.log(this.marqueeText);
       return hasCheck;
     }
   }

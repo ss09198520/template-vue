@@ -270,9 +270,9 @@
                 class="ma-1"
                 outlined
                 color="accent"
-                @click="reset"
+                @click="isEdit ? $router.go(-1): reset()"
               >
-                清空
+                {{ isEdit ? '返回':'清空' }}
               </v-btn>
               <v-btn
                 class="ma-1"

@@ -161,6 +161,7 @@
                   class="ma-1"
                   outlined
                   color="accent"
+                  @click="reset"
                 >
                   取消
                 </v-btn>

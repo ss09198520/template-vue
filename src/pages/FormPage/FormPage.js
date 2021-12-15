@@ -1068,7 +1068,7 @@ export default {
 
                     if(!ValidateUtil.isEmpty(this.attachmentList) && needScanFile != null){
                         for (let attachment of this.attachmentList) {
-                            if(!ValidateUtil.isEmpty(acctUploadFileCode) && acctUploadFileCode == attachment.fileCode && !attachment.fileNo){
+                            if(!ValidateUtil.isEmpty(acctUploadFileCode) && acctUploadFileCode == attachment.fileCode && !ValidateUtil.isEmpty(attachment.fileNo)){
                                 isUploadedSpecificFile = true;
                             }
 

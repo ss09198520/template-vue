@@ -307,7 +307,7 @@ export default {
                 await this.setAttachmentList(response.restData.attachmentList);
 
                 // 檢查證件及附件是否已依規範掃描及上傳，同時檢查有無特殊附件
-                this.checkNeedScanFile();
+                this.checkNeedScanFile(false);
                 
             },
             (error) => {
@@ -567,12 +567,16 @@ export default {
                 // 若為強制須掃專用章的附件，需檢查是否為 word，不是的話要擋
                 if(this.selectedAttachment.fileCode == this.onlySealFileCode && !this.checkIsWord(this.selectedAttachment)){
                     // 清空附件
-                    this.selectedAttachment.originalFileName = null;
-                    this.selectedAttachment.fileNo = null;
-                    this.selectedAttachment.imgSrc = null;
-                    this.selectedAttachment.file = null;
-                    this.selectedAttachment.needSeal = false;
-                    this.selectedAttachment.isSelecting = false;
+                    for(let attachment of this.attachmentList){
+                        if(attachment.id == this.selectedAttachment.id){
+                            attachment.originalFileName = null;
+                            attachment.fileNo = null;
+                            attachment.imgSrc = null;
+                            attachment.file = null;
+                            attachment.needSeal = false;
+                            break;
+                        }
+                    }
                     
                     MessageService.showInfo("欲套用專用章檔案只可上傳 Word 檔");
                 }
@@ -881,11 +885,25 @@ export default {
             this.$emit("returnOrder", this.accountingMemo);
         },
         accountingSubmit(){
-            if(this.checkNeedScanFile()){
+            if(this.checkNeedScanFile(true)){
                 this.$emit("accountingSubmit", this.accountingMemo);
             }
             else{
-                MessageService.showInfo("尚需掃描並上傳 " + this.needScanFileHint + (this.needScanFileHint && this.needScanAttachHint) ? "、" + this.needScanAttachHint : this.needScanAttachHint);
+                let msg = "尚需掃描並上傳 ";
+
+                if(this.needScanFileHint){
+                    msg += this.needScanFileHint
+                }
+
+                if(this.needScanAttachHint){
+                    if(this.needScanFileHint){
+                        msg += "、"
+                    }
+
+                    msg += this.needScanAttachHint
+                }
+
+                MessageService.showInfo(msg);
             }
         },
         saveComments(){
@@ -991,7 +1009,7 @@ export default {
             this.isLoading = false;
             MessageService.showError("PMC 回傳: " + msg);
         },
-        checkNeedScanFile(){
+        checkNeedScanFile(onlyForCheck){
             this.needScanFileHint = "";
 
             // 證件
@@ -1033,14 +1051,15 @@ export default {
             // 附件
             this.onlySealFileCode = null;
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
+
+                let acctUploadFileCode = null;
+                let isUploadedSpecificFile = false;
+                let acctUploadFileOption = {};
+                let acctUploadFileSealFlag = null;
+
                 for (let index = 0 ; index < this.needScanFileList.length ; index++) {
 
                     let needScanFile = this.needScanFileList[index];
-
-                    let acctUploadFileCode = null;
-                    let isUploadedSpecificFile = false;
-                    let acctUploadFileOption = {};
-                    let acctUploadFileSealFlag = null;
 
                     if(needScanFile != null && needScanFile.category == "ATTACHMENT"){
                         // 若為指定套印專用章的附件則取出限制的 fileCode
@@ -1080,27 +1099,28 @@ export default {
                             }
                         }
                     }
-
-                    // 若於核算時，規則有核算時可補件之附件則檢查是否已上傳，若無則新增欄位並開啟上傳按鈕
-                    if(this.formPageMode == "accounting" && !ValidateUtil.isEmpty(acctUploadFileCode) && !isUploadedSpecificFile){
-                        this.attachmentList.push({
-                            id: this.attachmentNo,
-                            fileName: acctUploadFileOption.fileName,
-                            fileCode: acctUploadFileOption.fileCode,
-                            originalFileName: null,
-                            fileNo: null,
-                            filePath: null,
-                            imgSrc: null,
-                            base64: null,
-                            hasEdit: false,
-                            needSeal: acctUploadFileSealFlag == "Y",
-                            canOnlyView: false,
-                            isSelecting: false,
-                            canAcctUpload: true,
-                        });
-                        this.attachmentNo++;
-                    }
                 }
+                
+                // 若於核算時，規則有核算時可補件之附件則檢查是否已上傳，若無則新增欄位並開啟上傳按鈕
+                if(!onlyForCheck && this.formPageMode == "accounting" && !ValidateUtil.isEmpty(acctUploadFileCode) && !isUploadedSpecificFile){
+                    this.attachmentList.push({
+                        id: this.attachmentNo,
+                        fileName: acctUploadFileOption.fileName,
+                        fileCode: acctUploadFileOption.fileCode,
+                        originalFileName: null,
+                        fileNo: null,
+                        filePath: null,
+                        imgSrc: null,
+                        base64: null,
+                        hasEdit: false,
+                        needSeal: acctUploadFileSealFlag == "Y",
+                        canOnlyView: false,
+                        isSelecting: false,
+                        canAcctUpload: true,
+                    });
+                    this.attachmentNo++;
+                }
+
             }
 
             // 附件整理

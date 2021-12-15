@@ -542,7 +542,7 @@ export default {
         },
         uploadFile(attachment, index) {
             this.selectedAttachment = attachment;
-            this.selectedAttachment.isSelecting = true
+            this.selectedAttachment.isSelecting = true;
             this.selectedAttachment.hasEdit = true;
             window.addEventListener('focus', () => {
                 this.selectedAttachment.isSelecting = false
@@ -558,13 +558,21 @@ export default {
 
             let reader = new FileReader();
             reader.onload = (e) =>{
-                this.selectedAttachment.base64 = e.target.result;
-                this.selectedAttachment.imgSrc = null;
-
-                // 圖片
-                if(this.selectedAttachment.file.type.indexOf("image") > -1){
-                    // 不套浮水印
-                    this.selectedAttachment.imgSrc = e.target.result;
+                // 若為強制須掃專用章的附件，需檢查是否為 word，不是的話要擋
+                if(this.selectedAttachment.fileCode == this.onlySealFileCode && !this.checkIsWord(this.selectedAttachment)){
+                    this.selectedAttachment.file = null;
+                    this.selectedAttachment.originalFileName = null;
+                    MessageService.showInfo("欲套用專用章檔案只可上傳 Word 檔");
+                }
+                else{
+                    this.selectedAttachment.base64 = e.target.result;
+                    this.selectedAttachment.imgSrc = null;
+    
+                    // 圖片
+                    if(this.selectedAttachment.file.type.indexOf("image") > -1){
+                        // 不套浮水印
+                        this.selectedAttachment.imgSrc = e.target.result;
+                    }
                 }
             };
             reader.readAsDataURL(this.selectedAttachment.file);

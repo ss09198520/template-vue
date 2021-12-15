@@ -567,17 +567,12 @@ export default {
                 // 若為強制須掃專用章的附件，需檢查是否為 word，不是的話要擋
                 if(this.selectedAttachment.fileCode == this.onlySealFileCode && !this.checkIsWord(this.selectedAttachment)){
                     // 清空附件
-                    this.selectedAttachment = {
-                        id: this.selectedAttachment.id,
-                        fileName: this.selectedAttachment.fileName,
-                        fileCode: this.selectedAttachment.fileCode,
-                        originalFileName: null,
-                        fileNo: null,
-                        imgSrc: null,
-                        file: null,
-                        needSeal: true,
-                        isSelecting: false
-                    };
+                    this.selectedAttachment.originalFileName = null;
+                    this.selectedAttachment.fileNo = null;
+                    this.selectedAttachment.imgSrc = null;
+                    this.selectedAttachment.file = null;
+                    this.selectedAttachment.needSeal = false;
+                    this.selectedAttachment.isSelecting = false;
                     
                     MessageService.showInfo("欲套用專用章檔案只可上傳 Word 檔");
                 }

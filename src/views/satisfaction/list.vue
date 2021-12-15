@@ -195,7 +195,7 @@
               </template>
               <span>預覽</span>
             </v-tooltip>
-            <v-tooltip top>
+            <v-tooltip v-if="canView" top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="ma-2"
@@ -316,6 +316,16 @@
         dialog: false,
         alertDialog: false,
       }
+    },
+    computed: {
+      canView () {
+        const token = this.$store.getters.token;
+        let staffAuthCode = [
+          'AUTH12' , //多媒體設定-區處
+          'AUTH13' , //多媒體設定-業務處
+        ]
+        return token.authTokens.some(authCode => staffAuthCode.includes(authCode))
+      },
     },
     methods: {
       allowEdit(signStatus) {

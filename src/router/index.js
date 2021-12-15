@@ -169,7 +169,7 @@ export const asyncRoutes = [
     redirect: "/myWorkSpace/myForm",
     component: Layout,
     name: "My WorkSpace",
-    privilegeCode: ['P000','P001','P002','P003','P004','P005','P006','P007'],
+    privilegeCode: ['P000','P001','P002','P003','P004','P005','P006','P007','P033'],
     meta: { title: '我的工作區', icon: 'mdi-account' },
     children: [
       {
@@ -192,6 +192,13 @@ export const asyncRoutes = [
         privilegeCode: ['P002','P003','AUTH12','AUTH13'],
         component: () => import('@/pages/my/myReturnPage.vue'),
         meta: { title: '我的退件區', icon: 'mdi-alert' }
+      },
+      {
+        path: 'myCancelPage',
+        name: 'MyCancelPage',
+        privilegeCode: ['P033'],
+        component: () => import('@/pages/my/myCancelPage.vue'),
+        meta: { title: '我的取消區', icon: 'mdi-file-document-outline' }
       },
       {
         path: 'inquireReadPage',

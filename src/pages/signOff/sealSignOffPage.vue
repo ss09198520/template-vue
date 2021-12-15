@@ -139,9 +139,7 @@
             </v-btn>
           </v-card-title>
           <v-card-text>
-            <div v-show="sealOffFinish">
-              <form-page :key="formKey" restrict-mode="viewDownload" :form-param="formParam" />
-            </div>         
+            <form-page :key="formKey" restrict-mode="viewDownload" :form-param="formParam" />
           </v-card-text>
           <!-- <v-card-text>
             <form-page v-if="sealOffFinishNot" restrict-mode="viewSealSignOffBefore" />            

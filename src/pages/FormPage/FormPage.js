@@ -306,8 +306,8 @@ export default {
                 await this.setCertificateList(response.restData.certificateList);
                 await this.setAttachmentList(response.restData.attachmentList);
 
-                // 檢查證件及附件是否已依規範掃描 (加 timeout 確保 render 完才會跑到)
-                setTimeout(() => this.checkNeedScanFile(), 0);
+                // 檢查證件及附件是否已依規範掃描 (加 timeout 確保資料塞完才會跑到)
+                setTimeout(() => this.checkNeedScanFile(), 100);
                 
             },
             (error) => {

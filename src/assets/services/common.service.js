@@ -37,6 +37,8 @@ const CommonService = {
             privilegeCode = ['P001'];
         } else if(url.includes('myWorkSpace/myReturn')){
             privilegeCode =  ['P002','P003'];
+        } else if(url.includes('myWorkSpace/myCancelPage')){
+            privilegeCode =  ['P033'];
         } else if(url.includes('myWorkSpace/inquireReadPage')){
             privilegeCode =  ['P004'];
         } else if(url.includes('myWorkSpace/myRead')){

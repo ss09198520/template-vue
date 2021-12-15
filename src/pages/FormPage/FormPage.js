@@ -307,7 +307,7 @@ export default {
                 await this.setAttachmentList(response.restData.attachmentList);
 
                 // 檢查證件及附件是否已依規範掃描 (加 timeout 確保資料塞完才會跑到)
-                setTimeout(() => this.checkNeedScanFile(), 100);
+                setTimeout(() => this.checkNeedScanFile(), 1000);
                 
             },
             (error) => {

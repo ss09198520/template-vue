@@ -571,6 +571,7 @@ export default {
                         id: this.selectedAttachment.id,
                         fileName: this.selectedAttachment.fileName,
                         fileCode: this.selectedAttachment.fileCode,
+                        originalFileName: null,
                         fileNo: null,
                         imgSrc: null,
                         file: null,

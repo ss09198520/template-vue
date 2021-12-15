@@ -147,6 +147,7 @@ export default {
             scanDataList: [],
             needScanFileList: [],
             needScanFileHint: null,
+            needScanAttachHint: null,
             isNeedScanAttach: false,
             maxSignVersion: 0,
             isLoading: false,
@@ -232,7 +233,7 @@ export default {
                 this.$emit("showOnlyContent");
             }
         },
-        formInit(canSkipValidateTime){
+        async formInit(canSkipValidateTime){
             // 驗證是否有受理編號，若無直接擋件
             if(ValidateUtil.isEmpty(this.acceptNum) && ValidateUtil.isEmpty(this.encryptedParam)){
                 this.isBlocking = true;
@@ -269,8 +270,8 @@ export default {
                 canSkipValidateTime: canSkipValidateTime
             }
 
-            AjaxService.post("/tpesForm/init", param, 
-            (response) => {
+            await AjaxService.post("/tpesForm/init", param, 
+            async (response) => {
                 // 驗證是否成功
                 if (!response.restData.success) {
                     this.isBlocking = true;
@@ -301,9 +302,13 @@ export default {
                     this.cancelSign = response.restData.cancelSign;
                 }
 
-                // 整理證件及附件 (同時檢查證件規範)
-                this.setCertificateList(response.restData.certificateList);
-                this.setAttachmentList(response.restData.attachmentList);
+                // 整理證件及附件
+                await this.setCertificateList(response.restData.certificateList);
+                await this.setAttachmentList(response.restData.attachmentList);
+
+                // 檢查證件及附件是否已依規範掃描 (加 timeout 確保 render 完才會跑到)
+                setTimeout(() => this.checkNeedScanFile(), 0);
+                
             },
             (error) => {
                 MessageService.showSystemError();
@@ -327,7 +332,7 @@ export default {
                 this.isAddAttachment = data.isAddAttachment;
             }
         },
-        setCertificateList(certificateList){
+        async setCertificateList(certificateList){
             this.certificateList = [];
             this.oriCertificateList = [];
 
@@ -349,11 +354,8 @@ export default {
 
                 this.oriCertificateList = Array.from(this.certificateList);
             }
-
-            // 檢查證件是否已依規範掃描
-            this.checkNeedScanFile();
         },
-        setAttachmentList(attachmentList){
+        async setAttachmentList(attachmentList){
             this.attachmentList = [];
             this.oriAttachmentList = [];
 
@@ -840,7 +842,7 @@ export default {
                 this.$emit("accountingSubmit", this.accountingMemo);
             }
             else{
-                MessageService.showInfo("尚需掃描並上傳 " + this.needScanFileHint);
+                MessageService.showInfo("尚需掃描並上傳 " + this.needScanFileHint + (this.needScanFileHint && this.needScanAttachHint) ? "、" + this.needScanAttachHint : this.needScanAttachHint);
             }
         },
         saveComments(){
@@ -1012,13 +1014,14 @@ export default {
             }
 
             // 附件整理
+            this.needScanAttachHint = "";
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
                 for (let needScanFile of this.needScanFileList) {
                     for(let attachmentOption of this.attachmentOptions){
                         // 放入缺少的附件
                         if(attachmentOption.fileCode == needScanFile.fileCode 
                             && needScanFile.category == "ATTACHMENT"){
-                            this.needScanFileHint = this.needScanFileHint ? this.needScanFileHint + "、" + attachmentOption.fileName : attachmentOption.fileName;
+                            this.needScanAttachHint = this.needScanAttachHint ? this.needScanAttachHint + "、" + attachmentOption.fileName : attachmentOption.fileName;
                         }
                     }
                 }

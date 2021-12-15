@@ -227,6 +227,11 @@
                     <span class="hint-text">提示：需至少上傳一項附件</span>
                   </v-col>
                 </v-row>
+                <v-row v-if="needScanAttachHint && (formPageMode == 'edit' || formPageMode == 'accounting')" class="mb-2">
+                  <v-col cols="12">
+                    <span class="hint-text">提示：尚需上傳 {{ needScanAttachHint }}</span>
+                  </v-col>
+                </v-row>
                 <v-row>
                   <v-col v-for="(attachment, index) in attachmentList" :key="attachment.id" cols="3" class="mb-2">                    
                     <v-row>

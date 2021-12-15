@@ -257,18 +257,15 @@
                     <v-row>
                       <v-col cols="12" class="d-center">
                         <v-checkbox 
-                          v-if="checkIsWord(attachment) || (onlySealFileCode && onlySealFileCode == attachment.fileCode)"
+                          v-if="onlySealFileCode && onlySealFileCode == attachment.fileCode"
                           v-model="attachment.needSeal" 
-                          :disabled="formPageMode != 'edit' || attachment.canOnlyView || onlySealFileCode"
+                          :disabled="true"
                           class="mt-0" 
                           label="套印專用章" 
                           color="success" 
                           hide-details
                           @change="checkNeedSeal(index, attachment.needSeal)"
                         />
-                        <span v-else class="gray-text">
-                          (需為 Word 檔才可套用專用章)
-                        </span>
                       </v-col>
                     </v-row>
                     <input
@@ -742,9 +739,5 @@
     .hint-text{
       color: red;
       font-size: 24px;
-    }
-
-    .gray-text{
-      color: rgb(161, 161, 161);
     }
 </style>

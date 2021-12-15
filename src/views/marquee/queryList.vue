@@ -23,7 +23,7 @@
             <v-col cols="4" class="ml-2">
               <v-select
                 v-model="marqueeType"
-                :items="['一般', '預設']"
+                :items="marqueeTypeOption"
                 class="font-bold"
                 color="accent"
                 item-color="accent"

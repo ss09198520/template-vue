@@ -94,6 +94,13 @@ export const constantRoutes = [
     hidden: true,
     meta: { title: 'TPES-問卷', icon: 'mdi-pencil-box-multiple-outline' },
   },
+  {
+    path: '/satisfaction/answerTemp',
+    name: 'Satisfaction-Answer',
+    component: () => import('@/views/satisfaction/answerTemp'),
+    hidden: true,
+    meta: { title: 'TEMP-問卷', icon: 'mdi-pencil-box-multiple-outline' },
+  },
   //TPES Form
   {
     path: '/tpesForm',

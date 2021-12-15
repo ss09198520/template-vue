@@ -279,9 +279,9 @@
                       type="file"
                       @change="onFileChanged"
                     >
-                    <v-row v-if="formPageMode == 'edit' && !attachment.canOnlyView">
+                    <v-row v-if="(formPageMode == 'edit' && !attachment.canOnlyView) || attachment.canAcctUpload">
                       <v-col cols="6" class="t-center">
-                        <v-btn depressed color="error" @click="deleteAttachment(index)">
+                        <v-btn depressed color="error" :disabled="attachment.canAcctUpload" @click="deleteAttachment(index)">
                           刪除
                           <v-icon
                             right

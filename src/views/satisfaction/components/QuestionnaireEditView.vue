@@ -1,228 +1,218 @@
 <template>
   <v-container>
     <h2 class="font-bold">滿意度問卷製作</h2>
-    <v-row class="justify-center">
-      <v-col
-        class="ml-10"
-        cols="12"
-      >
+    <v-row class="justify-end">
+      <v-col class="ml-10 font-24px" cols="12">
         <v-form ref="questionnaireForm" v-model="valid" lazy-validation>
-          <fet-card
-            full-width
-            outlined
-            title="問 卷 製 作"
-          >
-            <v-row align="center">
-              <div class="form-create-wrap font-weight-bold">
-                <div v-if="!loading" class="wrap">
-                  <div class="content-wrap">
-                    <div class="item title" :class="{'title-focus': focusIndex === 'title'}" @click="focusTitle($event)">
-                      <v-row>
-                        <v-col md="3">
-                          <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                            問 卷 標 題
-                            <span class="red--text">*</span>
-                          </v-subheader>
-                        </v-col>
-                        <v-col>
-                          <v-textarea
-                            v-model="questionnaire.questionnaireName"
-                            :rules="rules.requiredRule"
-                            class="form-title"
-                            color="accent"
-                            outlined
-                            placeholder="問卷標題"
-                            counter="40"
-                          />
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col md="3">
-                          <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                            問 卷 描 述
-                            <span class="red--text">*</span>
-                          </v-subheader>
-                        </v-col>
-                        <v-col>
-                          <v-textarea 
-                            v-model="questionnaire.memo"
-                            :rules="rules.requiredRule"
-                            color="accent"
-                            outlined
-                            placeholder="問卷描述"
-                            counter="40"
-                          />
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col md="3">
-                          <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                            上 架 時 間
-                            <span class="red--text">*</span>
-                          </v-subheader>
-                        </v-col>
-                        <v-col md="3">
-                          <v-menu
-                            v-model="releaseDateStartMenu"
-                            :close-on-content-click="false"
-                            transition="scale-transition"
-                            offset-y
-                            min-width="auto"
-                          >
-                            <template v-slot:activator="{ on }">
-                              <v-text-field
-                                v-model="questionnaire.releaseStartDate"
-                                :rules="rules.requiredRule"
-                                append-icon="mdi-calendar"
-                                label="上架時間"
-                                placeholder="上架時間"
-                                color="accent"
-                                outlined
-                                dense
-                                class="font-weight-bold"
-                                readonly
-                                hide-details
-                                :clearable="true"
-                                v-on="on"
-                              />
-                            </template>
-                            <v-date-picker
+          <v-row align="center">
+            <div class="form-create-wrap font-weight-bold">
+              <div v-if="!loading" class="wrap">
+                <div class="content-wrap">
+                  <div class="item title" :class="{'title-focus': focusIndex === 'title'}" @click="focusTitle($event)">
+                    <v-row>
+                      <v-col md="3">
+                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                          問 卷 標 題
+                          <span class="red--text">*</span>
+                        </v-subheader>
+                      </v-col>
+                      <v-col>
+                        <v-text-field
+                          v-model="questionnaire.questionnaireName"
+                          :rules="rules.requiredRule"
+                          color="accent"
+                          outlined
+                          placeholder="問卷標題"
+                          counter="40"
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col md="3">
+                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                          問 卷 描 述
+                          <span class="red--text">*</span>
+                        </v-subheader>
+                      </v-col>
+                      <v-col>
+                        <v-text-field 
+                          v-model="questionnaire.memo"
+                          :rules="rules.requiredRule"
+                          color="accent"
+                          outlined
+                          placeholder="問卷描述"
+                          counter="40"
+                        />
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col md="3">
+                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                          上 架 時 間
+                          <span class="red--text">*</span>
+                        </v-subheader>
+                      </v-col>
+                      <v-col md="4">
+                        <v-menu
+                          v-model="releaseDateStartMenu"
+                          :close-on-content-click="false"
+                          transition="scale-transition"
+                          offset-y
+                          min-width="auto"
+                        >
+                          <template v-slot:activator="{ on }">
+                            <v-text-field
                               v-model="questionnaire.releaseStartDate"
-                              no-title
-                              scrollable
-                              :min="questionnaire.releaseStartDate||nowDate"
+                              :rules="rules.requiredRule"
+                              append-icon="mdi-calendar"
+                              label="上架時間"
+                              placeholder="上架時間"
+                              color="accent"
+                              outlined
+                              dense
+                              class="font-weight-bold"
+                              readonly
+                              hide-details
+                              :clearable="true"
+                              v-on="on"
                             />
-                          </v-menu>
-                        </v-col>
-                      </v-row>
-                      <v-row>
-                        <v-col md="3">
-                          <v-subheader class="justify-center text-md-body-1 font-weight-bold">
-                            審 核 附 件 上 傳
-                            <span class="red--text">*</span>
-                          </v-subheader>
-                        </v-col>
-                        <v-col>
-                          <v-file-input
-                            v-model="attachmentFile"
-                            :rules="rules.requiredRule.concat(rules.filesSizeRules)"
-                            :hide-details="hideDatails"
-                            placeholder="請選擇上傳附件"
-                            color="accent"
-                            outlined
-                            dense
-                            persistent-hint
-                            prepend-inner-icon="mdi-cloud-upload"
-                            prepend-icon
-                            accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf ,application/vnd.ms-excel"
-                            show-size
-                            @change="onUpload"
+                          </template>
+                          <v-date-picker
+                            v-model="questionnaire.releaseStartDate"
+                            scrollable
+                            :min="questionnaire.releaseStartDate||nowDate"
+                            @input="releaseDateStartMenu = false"
                           />
-                          <div v-if="!!dataURL" class="t-center">
-                            <v-icon x-large class="mb-2">
-                              mdi-file-document-outline
-                            </v-icon><br>
+                        </v-menu>
+                      </v-col>
+                    </v-row>
+                    <v-row>
+                      <v-col md="3">
+                        <v-subheader class="justify-center text-md-body-1 font-weight-bold">
+                          審 核 附 件 上 傳
+                          <span class="red--text">*</span>
+                        </v-subheader>
+                      </v-col>
+                      <v-col>
+                        <v-file-input
+                          v-model="attachmentFile"
+                          :rules="rules.requiredRule.concat(rules.filesSizeRules)"
+                          :hide-details="hideDatails"
+                          placeholder="請選擇上傳附件"
+                          color="accent"
+                          outlined
+                          dense
+                          persistent-hint
+                          prepend-inner-icon="mdi-cloud-upload"
+                          prepend-icon
+                          accept=".xlsx,.xls,image/*,.doc, .docx,.ppt, .pptx,.txt,.pdf ,application/vnd.ms-excel"
+                          show-size
+                          @change="onUpload"
+                        />
+                        <div v-if="!!dataURL" class="t-center">
+                          <v-icon x-large class="mb-2">
+                            mdi-file-document-outline
+                          </v-icon><br>
+                        </div>
+                      </v-col>
+                    </v-row>
+                    <div v-if="!questionnaire.questions.length" class="add-list" color="primary">
+                      <v-btn
+                        class="ma-2"
+                        fab
+                        color="#68cbd8"
+                        @click="addListFn"
+                      >
+                        <v-icon v-text="'mdi-plus'" />
+                      </v-btn>
+                    </div>
+                  </div>
+                  <v-col class="q-wrap">
+                    <draggable 
+                      :list="questionnaire.questions"
+                      :options="{group:'question'}"
+                      @start="drag=true" 
+                      @end="onEnd"
+                    >
+                      <template v-for="question, idxQ in questionnaire.questions">
+                        <v-col id="items" :key="idxQ" class="q-li" :class="{'q-li-focus': focusIndex === idxQ}" @click="focusItem($event, idxQ)">
+                          <div class="drap-area">
+                            <v-icon v-text="'mdi-drag-horizontal'" />
+                          </div>
+                          <div class="q-item-wrap">
+                            <div class="q-item q-title-wrap">
+                              <div class="q-title">
+                                <v-text-field 
+                                  v-model="question.title" 
+                                  :rules="rules.requiredRule"
+                                  placeholder="問題名稱" 
+                                  color="#68cbd8" 
+                                  outlined
+                                />
+                              </div>
+                            </div>
+                            <div class="q-item">
+                              <v-radio-group
+                                disabled
+                                row
+                              >
+                                <v-radio
+                                  v-for="answer, idxAns in question.answers" 
+                                  :key="idxAns"
+                                  :label="answer.label"
+                                  :value="answer.value"
+                                />
+                              </v-radio-group>
+                            </div>
+                            <div v-if="focusIndex === idxQ" class="q-item option-wrap">
+                              <v-divider class="mt-6 mb-5" />
+                              <ul class="option-list">
+                                <li>
+                                  <v-icon @click="copyListFn(idxQ)" v-text="'mdi-plus'" />
+                                </li>
+                                <li>
+                                  <v-icon @click="deleteListFn(idxQue)" v-text="'mdi-delete'" />
+                                </li>
+                              </ul>
+                            </div>
                           </div>
                         </v-col>
-                      </v-row>
-                      <div v-if="!questionnaire.questions.length" class="add-list" color="primary">
-                        <v-btn
-                          class="ma-2"
-                          fab
-                          color="#68cbd8"
-                          @click="addListFn"
-                        >
-                          <v-icon v-text="'mdi-plus'" />
-                        </v-btn>
-                      </div>
-                    </div>
-                    <v-col class="q-wrap">
-                      <draggable 
-                        :list="questionnaire.questions"
-                        :options="{group:'question'}"
-                        @start="drag=true" 
-                        @end="onEnd"
-                      >
-                        <template v-for="question, idxQ in questionnaire.questions">
-                          <v-col id="items" :key="idxQ" class="q-li" :class="{'q-li-focus': focusIndex === idxQ}" @click="focusItem($event, idxQ)">
-                            <div class="drap-area">
-                              <v-icon v-text="'mdi-drag-horizontal'" />
-                            </div>
-                            <div class="q-item-wrap">
-                              <div class="q-item q-title-wrap">
-                                <div class="q-title">
-                                  <v-text-field 
-                                    v-model="question.title" 
-                                    :rules="rules.requiredRule"
-                                    placeholder="問題名稱" 
-                                    color="#68cbd8" 
-                                    outlined
-                                  />
-                                </div>
-                              </div>
-                              <div class="q-item">
-                                <v-radio-group
-                                  disabled
-                                  row
-                                >
-                                  <v-radio
-                                    v-for="answer, idxAns in question.answers" 
-                                    :key="idxAns"
-                                    :label="answer.label"
-                                    :value="answer.value"
-                                  />
-                                </v-radio-group>
-                              </div>
-                              <div v-if="focusIndex === idxQ" class="q-item option-wrap">
-                                <v-divider class="mt-6 mb-5" />
-                                <ul class="option-list">
-                                  <li>
-                                    <v-icon @click="copyListFn(idxQ)" v-text="'mdi-content-copy'" />
-                                  </li>
-                                  <li>
-                                    <v-icon @click="deleteListFn(idxQue)" v-text="'mdi-delete'" />
-                                  </li>
-                                </ul>
-                              </div>
-                            </div>
-                          </v-col>
-                        </template>
-                      </draggable>
-                    </v-col>
-                  </div>
-                  <!-- <v-btn v-if="questionnaire.questions.length" class="primary form-sidebar" @click="addListFn">
-                    <v-icon v-text="'mdi-plus'" />
-                  </v-btn> -->
+                      </template>
+                    </draggable>
+                  </v-col>
                 </div>
-                <v-col class="d-flex justify-end">
-                  <v-btn
-                    class="ma-1"
-                    outlined
-                    color="accent"
-                    @click="isEdit ? $router.go(-1): reset()"
-                  >
-                    {{ isEdit ? '返回':'清空' }}
-                  </v-btn>
-                  <v-btn
-                    class="ma-1"
-                    depressed
-                    color="primary"
-                    @click="submit(false)"
-                  >
-                    暫存
-                  </v-btn>
-                  <v-btn
-                    class="ma-1"
-                    depressed
-                    color="success"
-                    @click="submit(true)"
-                  >
-                    送出審核
-                  </v-btn>
-                </v-col>
+                <!-- <v-btn v-if="questionnaire.questions.length" class="primary form-sidebar" @click="addListFn">
+                  <v-icon v-text="'mdi-plus'" />
+                </v-btn> -->
               </div>
-            </v-row>
-          </fet-card>
+              <v-col class="d-flex justify-end">
+                <v-btn
+                  class="ma-1"
+                  outlined
+                  color="accent"
+                  @click="isEdit ? $router.go(-1): reset()"
+                >
+                  {{ isEdit ? '返回':'清空' }}
+                </v-btn>
+                <v-btn
+                  class="ma-1"
+                  depressed
+                  color="primary"
+                  @click="submit(false)"
+                >
+                  暫存
+                </v-btn>
+                <v-btn
+                  class="ma-1"
+                  depressed
+                  color="success"
+                  @click="submit(true)"
+                >
+                  送出審核
+                </v-btn>
+              </v-col>
+            </div>
+          </v-row>
         </v-form>
       </v-col>
     </v-row>
@@ -417,10 +407,14 @@
         }
       },
       copyListFn (index) {
-        let data = JSON.parse(JSON.stringify(this.questionnaire.questions[index]))
-        this.questionnaire.questions.splice(index, 0, data)
+        // let data = JSON.parse(JSON.stringify(this.questionnaire.questions[index]))
+        let newQuestion = Object.assign({}, defaultQuestion) //塞入預設題目
+        newQuestion.question_id = this.questionnaire.questions.length + 1 
+        newQuestion.answers = Object.assign([], defaultAnswers) //塞入預設答案
+
+        this.questionnaire.questions.splice(index+1, 0, newQuestion)
         this.focusIndex = this.questionnaire.questions.length - 1
-        console.log(this.questionnaire ,this.focusIndex ,this.questionnaire.questions)
+        // console.log(this.questionnaire ,this.focusIndex ,this.questionnaire.questions)
       },
       addListFn () {
         let newQuestion = Object.assign({}, defaultQuestion) //塞入預設題目
@@ -430,7 +424,7 @@
         
         this.questionnaire.questions.push(newQuestion)
         this.focusIndex = this.questionnaire.questions.length - 1
-        console.log(this.data)
+        // console.log(this.data)
       },
       deleteListFn (i) {
         this.questionnaire.questions.splice(i, 1)
@@ -460,7 +454,6 @@
         }
         
         if (this.$refs.questionnaireForm.validate()) {
-          console.log(postData)
           this.submitForm(postData)
         }else{
           this.$nextTick(() => {
@@ -500,6 +493,7 @@
         }
 
         MessageService.showSuccess('儲存成功' + "✓")
+        this.reset()
       },
 
       //Action:問卷預覽頁面初始化

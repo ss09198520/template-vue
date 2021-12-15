@@ -137,6 +137,14 @@ export const constantRoutes = [
     hidden: true,
     meta: { title: 'imageEditor', icon: 'mdi-image' }
   },
+  // external file
+  {
+    path: '/externalFileView',
+    name: 'externalFileView',
+    component: () => import('@/pages/externalFile/viewExternalFile.vue'),
+    hidden: true,
+    meta: { title: 'viewFile', icon: 'mdi-file-document' }
+  },
 ]
 
 /**

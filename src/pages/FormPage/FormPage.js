@@ -106,27 +106,27 @@ export default {
             attachmentOptions: [
                 {
                     fileName: '農業動力用電主管機關證明文件', 
-                    fileCode: 'ATTACHMENT'
+                    fileCode: 'AGRI_COMP_AUTH_DOC'
                 },
                 {
                     fileName: '電氣技術人員執照', 
-                    fileCode: 'ATTACHMENT'
+                    fileCode: 'ELECTRIC_TECH_LIC'
                 },
                 {
                     fileName: '門牌整編證明',
-                    fileCode: 'ATTACHMENT'
+                    fileCode: 'HOUSE_NUM_CERTIFICATE'
                 },
                 {
                     fileName: '扣繳代繳帳號資料或中獎證明',
-                    fileCode: 'ATTACHMENT'
+                    fileCode: 'PAYMENT_OR_WINNING'
                 },
                 {
                     fileName: '抄表事故聯絡單',
-                    fileCode: 'ATTACHMENT'
+                    fileCode: 'ACCIDENT_CONTACT'
                 },
                 {
                     fileName: '切結書', 
-                    fileCode: 'ATTACHMENT'
+                    fileCode: 'AFFIDAVIT_LETTER'
                 },
                 {
                     fileName: '用電資料表', 
@@ -147,7 +147,7 @@ export default {
             scanDataList: [],
             needScanFileList: [],
             needScanFileHint: null,
-            isAgentNeedScanAttach: false,
+            isNeedScanAttach: false,
             maxSignVersion: 0,
             isLoading: false,
             encryptedParam: null,
@@ -284,7 +284,7 @@ export default {
                 this.editedFormFileNo = response.restData.editedFormFileNo;
                 this.accountingMemo = response.restData.accountingMemo;
                 this.needScanFileList = response.restData.needScanFileList;
-                this.isAgentNeedScanAttach = response.restData.agentNeedScanAttach;
+                this.isNeedScanAttach = response.restData.needScanAttach;
                 this.maxSignVersion = response.restData.maxSignVersion;
                 this.empName = response.restData.empName;
 

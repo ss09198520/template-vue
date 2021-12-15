@@ -222,9 +222,9 @@
             </v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-container>
-                <v-row v-if="isAgentNeedScanAttach && (formPageMode == 'edit' || formPageMode == 'accounting')" class="mb-2">
+                <v-row v-if="isNeedScanAttach && (formPageMode == 'edit' || formPageMode == 'accounting')" class="mb-2">
                   <v-col cols="12">
-                    <span class="hint-text">提示：代理人需至少上傳一項附件</span>
+                    <span class="hint-text">提示：需至少上傳一項附件</span>
                   </v-col>
                 </v-row>
                 <v-row>

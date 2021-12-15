@@ -266,6 +266,9 @@
                           hide-details
                           @change="checkNeedSeal(index, attachment.needSeal)"
                         />
+                        <span v-else class="gray-text">
+                          (需為 Word 檔才可套用專用章)
+                        </span>
                       </v-col>
                     </v-row>
                     <input
@@ -739,5 +742,9 @@
     .hint-text{
       color: red;
       font-size: 24px;
+    }
+
+    .gray-text{
+      color: rgb(161, 161, 161);
     }
 </style>

@@ -211,7 +211,8 @@
               </template>
               <span>編輯</span>
             </v-tooltip>
-          </template><template v-slot:[`item.rejectInfo`]="{ item }">
+          </template>
+          <template v-slot:[`item.rejectInfo`]="{ item }">
             <v-tooltip v-if="item.rejectInfo" top>
               <template v-slot:activator="{ on }">
                 <v-icon
@@ -297,9 +298,9 @@
         signStatusOption: enums.mediaSignStatusOption,
         
         headerQuestionnaire: [
-          { text: '滿意度問卷標題', value: 'questionnaireName', width: '24%', },
+          { text: '滿意度問卷標題', value: 'questionnaireName', },
           { text: '上架人員', value: 'createAuthor', width: '10%', },
-          { text: '狀態', value: 'signStatus', sortable: false, width: '10%', align: 'center', },
+          { text: '狀態', value: 'signStatus', sortable: false, align: 'center', },
           { text: '上架日期', value: 'releaseStartDate', width: '10%', },
           { text: '問卷建立日期', value: 'createDate', width: '15%', align: 'center', },
           { text: '上架', value: 'status', sortable: false, align: 'center', },

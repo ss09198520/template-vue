@@ -314,7 +314,7 @@ export default {
       max: 60,
       fileNo:null,
       marqueeName: null,
-      marqueeHTML: `<p><span style="background-color: rgb(204, 224, 245);">請輸入跑馬燈 </span></p><p><span style="background-color: rgb(255, 235, 204);">內容</span></p>`,
+      marqueeHTML: `<p><span style="background-color: rgb(204, 224, 245);">請輸入跑馬燈內容</span></p>`,
       marqueeText: "",
       marqueeDesc: "",
       marqueeType: "",

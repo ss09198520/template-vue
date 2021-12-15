@@ -963,7 +963,7 @@ export default {
 
             // 證件
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
-                for (let index in this.needScanFileList) {
+                for (let index = 0 ; index < this.needScanFileList.length ; index++) {
                     let needScanFile = this.needScanFileList[index];
                     if(!ValidateUtil.isEmpty(this.certificateList) && needScanFile != null){
                         for (let certificate of this.certificateList) {
@@ -983,8 +983,6 @@ export default {
             }
 
             // 證件整理
-            console.log("證件整理");
-            console.log(this.needScanFileList);
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
                 for (let needScanFile of this.needScanFileList) {
                     for(let certificateOption of this.certificateOptions){
@@ -1000,7 +998,7 @@ export default {
             // 附件
             this.onlySealFileCode = null;
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
-                for (let index in this.needScanFileList) {
+                for (let index = 0 ; index < this.needScanFileList.length ; index++) {
                     let needScanFile = this.needScanFileList[index];
                     // 若為指定套印專用章的附件則取出限制的 fileCode
                     if(needScanFile != null && needScanFile.category == "ATTACHMENT" 

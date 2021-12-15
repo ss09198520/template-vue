@@ -507,7 +507,7 @@ export default {
                 marqueeContentHTML: this.marqueeHTML,
                 animationDuration: this.animationDuration,
                 memo: this.marqueeDesc,
-                region: "區處",
+                region: null,
                 releaseStartDate: this.startDate,
                 releaseEndDate: this.endDate,
                 sign: isSign
@@ -530,6 +530,8 @@ export default {
               this.isSubmited = false;
             } else if (res.restData.code == "20001") {
               MessageService.showError("儲存失敗", res.restData.message);
+            }else{
+              MessageService.showError("失敗", res.restData.message);
             }
           })
           .catch(error => {

@@ -625,6 +625,12 @@ export default {
                 return;
             }
 
+            // 驗證若為 NCPS 且為本人進件，需簽名才可儲存
+            if(this.isAgent != "Y" && (!this.customerSign || !this.customerSign.imgSrc)){
+                MessageService.showInfo("需簽名後才可儲存");
+                return;
+            }
+
             let vin = this.setSaveFormVin();
 
             AjaxService.post("/tpesForm/save", vin, 

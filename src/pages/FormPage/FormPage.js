@@ -306,8 +306,8 @@ export default {
                 await this.setCertificateList(response.restData.certificateList);
                 await this.setAttachmentList(response.restData.attachmentList);
 
-                // 檢查證件及附件是否已依規範掃描 (加 timeout 確保資料塞完才會跑到)
-                setTimeout(() => this.checkNeedScanFile(), 1000);
+                // 檢查證件及附件是否已依規範掃描
+                this.checkNeedScanFile();
                 
             },
             (error) => {
@@ -983,6 +983,8 @@ export default {
             }
 
             // 證件整理
+            console.log("證件整理");
+            console.log(this.needScanFileList);
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
                 for (let needScanFile of this.needScanFileList) {
                     for(let certificateOption of this.certificateOptions){

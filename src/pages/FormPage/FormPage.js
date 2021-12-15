@@ -306,8 +306,8 @@ export default {
                 await this.setCertificateList(response.restData.certificateList);
                 await this.setAttachmentList(response.restData.attachmentList);
 
-                // 檢查證件及附件是否已依規範掃描 (加 timeout 確保 render 完才會跑到)
-                setTimeout(() => this.checkNeedScanFile(), 0);
+                // 檢查證件及附件是否已依規範掃描
+                this.checkNeedScanFile();
                 
             },
             (error) => {
@@ -562,8 +562,18 @@ export default {
             reader.onload = (e) =>{
                 // 若為強制須掃專用章的附件，需檢查是否為 word，不是的話要擋
                 if(this.selectedAttachment.fileCode == this.onlySealFileCode && !this.checkIsWord(this.selectedAttachment)){
-                    this.selectedAttachment.file = null;
-                    this.selectedAttachment.originalFileName = null;
+                    // 清空附件
+                    this.selectedAttachment = {
+                        id: this.selectedAttachment.id,
+                        fileName: this.selectedAttachment.fileName,
+                        fileCode: this.selectedAttachment.fileCode,
+                        fileNo: null,
+                        imgSrc: null,
+                        file: null,
+                        needSeal: true,
+                        isSelecting: false
+                    };
+                    
                     MessageService.showInfo("欲套用專用章檔案只可上傳 Word 檔");
                 }
                 else{
@@ -636,7 +646,7 @@ export default {
             }
 
             // 驗證若為 NCPS 且為本人進件，需簽名才可儲存
-            if(this.isAgent != "Y" && (!this.customerSign || !this.customerSign.imgSrc)){
+            if(this.isAgent != "Y" && this.applyType == "NCPS" && (!this.customerSign || !this.customerSign.imgSrc)){
                 MessageService.showInfo("需簽名後才可儲存");
                 return;
             }
@@ -973,6 +983,8 @@ export default {
             }
 
             // 證件整理
+            console.log("證件整理");
+            console.log(this.needScanFileList);
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
                 for (let needScanFile of this.needScanFileList) {
                     for(let certificateOption of this.certificateOptions){

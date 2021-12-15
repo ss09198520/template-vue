@@ -39,7 +39,6 @@ export default{
             selectIndex: null,
             selectItem:{},
             browserModel: false, // 瀏覽案件視窗開關
-            supplementModel: false, // 補件操作視窗開關
             formHistoryModel: false, // 表單歷程視窗開關
             formHistoryList:[],
             formParam: {},
@@ -63,20 +62,13 @@ export default{
 
             if(type == 'browse'){
                 this.browserModel = true;
-            } else if(type == 'supplement'){
-                this.supplementModel = true;
             }
             
         },
         checkSubmit(){
             this.browserModel = false;
         },
-        orderRecord(item){
-            console.log(item);
-        },
-        saveFile(){
-            this.supplementModel = false;
-        },
+
         // 開啟
         openFormHistory(item){
             this.formHistoryList = item.formHistoryList;

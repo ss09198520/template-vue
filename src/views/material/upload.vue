@@ -12,10 +12,7 @@
           title="素 材 上 傳"
         >
           <v-form ref="form" v-model="valid" lazy-validation>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
-            >
+            <v-row>
               <v-col
                 cols="4"
                 md="3"
@@ -44,10 +41,7 @@
                 />
               </v-col>
             </v-row>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
-            >
+            <v-row>
               <v-col
                 cols="3"
                 md="3"
@@ -73,10 +67,7 @@
                 />
               </v-col>
             </v-row>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
-            >
+            <v-row>
               <v-col
                 cols="3"
                 md="3"
@@ -115,10 +106,7 @@
                 </v-radio-group>
               </v-col>
             </v-row>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
-            >
+            <v-row>
               <v-col
                 cols="3"
                 md="3"
@@ -146,26 +134,34 @@
                   :rules="rules.filesSizeRules.concat([checkFileExt])"
                   @change="getImagePreviews()"
                 />
-                <v-img v-if="!!imageURL && isImage(postForm.file.originalFileName)" :src="imageURL" />
-                <video v-if="!!imageURL && isVideo(postForm.file.originalFileName)" controls controlsList="nodownload">
-                  <source
-                    :src="imageURL"
-                    type="video/mp4"
-                  >
-                  Sorry, your browser doesn't support embedded videos.
-                </video>
-
+                <v-img 
+                  v-if="!!imageURL && isImage(postForm.file.originalFileName)"
+                  :src="imageURL"
+                />
               </v-col>
             </v-row>
-            <v-row
-              :dense="dense"
-              :no-gutters="noGutters"
-            >
+            <v-row>
+              <v-col>
+                <video 
+                  v-if="!!imageURL && isVideo(postForm.file.originalFileName)"
+                  width="1000" 
+                  height="650"
+                  :src="imageURL"
+                  controls 
+                  controlsList="nodownload"
+                >
+                  <source type="video/mp4">
+                  Sorry, your browser doesn't support embedded videos.
+                </video>
+              </v-col>
+            </v-row>
+            <v-row>
               <v-col class="d-flex justify-end">
                 <v-btn
                   class="ma-1"
                   outlined
                   color="accent"
+                  @click="reset"
                 >
                   取消
                 </v-btn>

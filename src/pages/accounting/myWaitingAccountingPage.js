@@ -74,16 +74,17 @@ export default {
 
             ],
             agentCaseOption:[
-                {text:'顯示全部',value:'1'},
-                {text:'顯示代理件',value:'2'},
-                {text:'不顯示代理件',value:'3'},
+                {text:'顯示全部',value:'All'},
+                {text:'顯示代理件',value:'QUERYAGENT'},
+                {text:'不顯示代理件',value:'QUERYNOTAGENT'},
             ],
 
             commentsModel:false,
             contractTypeOption:[
-                {text:'表制', value:'1'},
-                {text:'高壓', value:'2'},
-                {text:'包制', value:'3'},
+                {text:'純電號', value:'V'},
+                {text:'表制', value:'C'},
+                {text:'高壓', value:'E'},
+                {text:'包制', value:'F'},
             ],
             contractType:null,
             
@@ -184,7 +185,8 @@ export default {
             this.formParam = {
                 FM_NO: item.acceptNum
             };
-            
+            this.formKey++;
+
             this.checkingDialog = true;            
         },
         // 打開核算退件視窗
@@ -195,8 +197,7 @@ export default {
         // 核算成功
         accountingSubmit(memo){
             this.memo = memo;
-            this.updateAccouting(); 
-            this.accountingDialog = false;
+            this.updateAccouting();             
         },
         saveComments(memo){
             this.memo = memo;            
@@ -264,24 +265,20 @@ export default {
                        
             },
             (response) => {
-                if (response && response.restData && response.restData.success) {
-                    if (ValidateUtil.isEmpty(response.restData.initWaitAccountingListVo)) {                        
-                        MessageService.showInfo('查無資料');        
-                    } else {                                                                                                             
-                        this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
-                        response.restData.initWaitAccountingListVo.forEach((element) => {
-                            element.action = true;
-                        });       
-                        response.restData.initWaitAccountingListVo.forEach((element) => {
-                            if(element.status == 'READ'){
-                                element.hasView = true;
-                            }          
-                            if(element.isAgentForm){
-                                element.isAgent = true;
-                            }                  
-                        });                  
-                        this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                                               
-                    }
+                if (response && response.restData && response.restData.success) {                                                                                                                                 
+                    this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
+                    response.restData.initWaitAccountingListVo.forEach((element) => {
+                        element.action = true;
+                    });       
+                    response.restData.initWaitAccountingListVo.forEach((element) => {
+                        if(element.status == 'READ'){
+                            element.hasView = true;
+                        }          
+                        if(element.isAgentForm){
+                            element.isAgent = true;
+                        }                  
+                    });                  
+                    this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                                                                   
                     if(!ValidateUtil.isEmpty(response.restData.authList)){
                         // 根據使用者角色決定頁面顯示
                         for(let i in response.restData.authList){
@@ -325,13 +322,9 @@ export default {
                        
             },
             (response) => {
-                if (response && response.restData && response.restData.success) {
-                    if (ValidateUtil.isEmpty(response.restData.returnReasonVoList)) {                        
-                        MessageService.showInfo('查無資料');
-                    } else {                                                                                                                                            
-                        reasonList = response.restData.returnReasonVoList;
-                        this.reasonList = reasonList;
-                    }
+                if (response && response.restData && response.restData.success) {                                                                                                                                                                
+                    reasonList = response.restData.returnReasonVoList;
+                    this.reasonList = reasonList;                    
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
@@ -360,9 +353,10 @@ export default {
             // contractType: this.searchForm.contractType,
             // caseType: this.searchForm.caseType,
             let caseType = null;
-            if(!this.searchForm.caseType == null){
+            if(this.searchForm.caseType != null){
                 caseType = this.searchForm.caseType.value;
             }
+            console.log(caseType);
             let QueryWaitAccountingReq ={
                 acceptNum: this.searchForm.acceptNum,
                 electricNum: this.searchForm.electricNum,
@@ -372,30 +366,27 @@ export default {
                 archieveNum: this.searchForm.archieveNum,
                 dispatchStartDate: this.searchForm.dispatchStartDate,
                 dispatchEndDate: this.searchForm.dispatchEndDate,
-                contractType:  (ValidateUtil.isEmpty(this.searchForm.contractType)? null:this.searchForm.contractType.text),
+                contractType:  (ValidateUtil.isEmpty(this.searchForm.contractType)? null:this.searchForm.contractType.value),
                 caseType: caseType,
             };
+            
             AjaxService.post('/waitAccounting/queryWaitAccounting',QueryWaitAccountingReq,
             (response) => {
-                if (response && response.restData && response.restData.success) {
-                    if (ValidateUtil.isEmpty(response.restData.queryWaitAccountingListVo)) {                        
-                        MessageService.showInfo('查無資料');
-                    } else {                                                                                                             
-                        this.accoutingList = Object.assign(response.restData.queryWaitAccountingListVo);                        
-                        response.restData.queryWaitAccountingListVo.forEach((element) => {
-                            element.action = true;
-                        });       
-                        response.restData.queryWaitAccountingListVo.forEach((element) => {
-                            if(element.status == 'READ'){
-                                element.hasView = true;
-                            }          
-                            if(element.isAgentForm){
-                                element.isAgent = true;
-                            }                  
-                        });                        
-                        this.numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
-                        MessageService.showSuccess('依條件查詢待核算資料成功');                                       
-                    }
+                if (response && response.restData && response.restData.success) {                                                                                                                                 
+                    this.accoutingList = Object.assign(response.restData.queryWaitAccountingListVo);                        
+                    response.restData.queryWaitAccountingListVo.forEach((element) => {
+                        element.action = true;
+                    });       
+                    response.restData.queryWaitAccountingListVo.forEach((element) => {
+                        if(element.status == 'READ'){
+                            element.hasView = true;
+                        }          
+                        if(element.isAgentForm){
+                            element.isAgent = true;
+                        }                  
+                    });                        
+                    this.numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
+                    MessageService.showSuccess('依條件查詢待核算資料成功');                                                           
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
@@ -469,7 +460,9 @@ export default {
             (response) => {
                 if (response && response.restData && response.restData.success) {                                                             
                     MessageService.showInfo('核算成功');
-                    this.queryAccoutingInit();                                                                   
+                    this.accoutingList = [];
+                    this.queryAccoutingList();  
+                    this.accountingDialog = false;                                                                 
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
@@ -499,16 +492,15 @@ export default {
             await AjaxService.post('/waitAccounting/auditAccounting', AuditAccountingReq,
             (response) => {
                 if (response && response.restData && response.restData.success) {                                                             
-                    MessageService.showInfo('核算成功');
-                    this.queryAccoutingList();                                                                   
+                    MessageService.showInfo('退件成功');
+                    this.accoutingList = [];                                                                                                          
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  
                 }
             },
                 (error) => {
-                    MessageService.showSystemError();
-                    console.log(error);
+                    MessageService.showSystemError();                    
                 }
             );
             

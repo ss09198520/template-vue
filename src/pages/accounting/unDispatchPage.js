@@ -95,37 +95,25 @@ export default {
         // Action:頁面初始化
         queryUndispatchInit(){
             // 取得未分派清單資料
-
             AjaxService.post('/undispatch/init',
             {
                        
             },
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
-                    ) {
-                    if (ValidateUtil.isEmpty(response.restData.initUndispatchListVo)) {                        
-                        MessageService.showInfo('查無資料');
-                        this.unDispatchList = [];
-                    } else {           
-                        this.unDispatchList = Object.assign(response.restData.initUndispatchListVo);                        
-                        response.restData.initUndispatchListVo.forEach((element) => {
-                            element.action = true;
-                        });
-                        this.User = response.restData.userType;
-                        this.numOfUndispatch = response.restData.initUndispatchListVo.length;                                                                            
-                    }
+                if (response && response.restData && response.restData.success) {                             
+                    this.unDispatchList = Object.assign(response.restData.initUndispatchListVo);                        
+                    response.restData.initUndispatchListVo.forEach((element) => {
+                        element.action = true;
+                    });
+                    this.User = response.restData.userType;
+                    this.numOfUndispatch = response.restData.initUndispatchListVo.length;                                                                                                
                 } else {
-                  //接後端候要放errorMsg
-                  //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                    MessageService.showError(response.restData.message);             
                 }
             },
-                (response) => { // server 出錯才會進入
-                    // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                (error) => {                 
+                    MessageService.showSystemError();
+                    console.log(error);
                 }
             );
 
@@ -149,30 +137,20 @@ export default {
                       
            },
            (response) => {
-               if (response != null &&
-                   response != undefined &&                    
-                   response.restData.message != null &&
-                   response.restData.message != undefined &&
-                   response.restData.success
-                   ) {
-                   if (ValidateUtil.isEmpty(response.restData.accountingDispatchVoList) && ValidateUtil.isEmpty(response.restData.classNameList)) {                        
-                       MessageService.showInfo('查無資料');
-                   } else {           
+               if (response && response.restData && response.restData.success) {                             
                     // 取得班別資料
                     classList = response.restData.classNameList;  
                     this.classList = classList;                         
                     // 取得有設定班別的核算員清單
                     accountingList = response.restData.accountingDispatchVoList;                                       
-                    this.accountingList = accountingList;  
-                   }
+                    this.accountingList = accountingList;                     
                } else {
-                 //接後端候要放errorMsg
-                 //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                MessageService.showError(response.restData.message);           
                }
            },
-               (response) => { // server 出錯才會進入
-                   // server error                   
-                   MessageService.showSystemError(response.restData.code);
+               (error) => {                 
+                   MessageService.showSystemError();
+                   console.log(error);
                }
            );
     
@@ -196,23 +174,17 @@ export default {
             };            
             AjaxService.post('/undispatch/submitDispatchForm',DispatchFormsReq,
            (response) => {
-               if (response != null &&
-                   response != undefined &&                    
-                   response.restData.message != null &&
-                   response.restData.message != undefined &&
-                   response.restData.success
-                   ) {                    
+               if (response && response.restData && response.restData.success) {                    
                     MessageService.showSuccess('案件分派成功'); 
                     // 重新查詢一次未分派案件
                     this.queryUndispatchInit();                 
                } else {
-                 //接後端候要放errorMsg
-                 //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                MessageService.showError(response.restData.message);        
                }
            },
-               (response) => { // server 出錯才會進入
-                   // server error                   
-                   MessageService.showSystemError(response.restData.code);
+               (error) => {                  
+                   MessageService.showSystemError();
+                   console.log(error);
                }
            );
 
@@ -247,12 +219,8 @@ export default {
             };            
             AjaxService.post('/undispatch/claimUnDispatch',ClaimUnDispatchReq,
            (response) => {
-               if (response != null &&
-                   response != undefined &&                    
-                   response.restData.message != null &&
-                   response.restData.message != undefined &&
-                   response.restData.success
-                   ) {                    
+               if (response && response.restData && response.restData.success)
+                    {                    
                     if(response.restData.canClaimForm){
                         MessageService.showSuccess('案件認領成功');
                         // 重新查詢一次未分派案件
@@ -262,13 +230,13 @@ export default {
                         MessageService.showInfo('無核算班別排班資料，不可認領案件');
                     }                 
                } else {
-                 //接後端候要放errorMsg
-                 //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                MessageService.showError(response.restData.message);       
                }
            },
-               (response) => { // server 出錯才會進入
+               (error) => { // server 出錯才會進入
                    // server error                   
-                   MessageService.showSystemError(response.restData.code);
+                   MessageService.showSystemError();
+                   console.log(error);
                }
            );
         },

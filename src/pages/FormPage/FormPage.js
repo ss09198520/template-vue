@@ -103,7 +103,40 @@ export default {
                 },
             ],
             newAttachmentType: -1,
-            attachmentOptions: ['農業動力用電主管機關證明文件', '電氣技術人員執照', '門牌整編證明', '扣繳代繳帳號資料或中獎證明', '抄表事故聯絡單', '切結書'],
+            attachmentOptions: [
+                {
+                    fileName: '農業動力用電主管機關證明文件', 
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '電氣技術人員執照', 
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '門牌整編證明',
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '扣繳代繳帳號資料或中獎證明',
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '抄表事故聯絡單',
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '切結書', 
+                    fileCode: 'ATTACHMENT'
+                },
+                {
+                    fileName: '用電資料表', 
+                    fileCode: 'ELECTRIC_INFO'
+                },
+                {
+                    fileName: '證明函', 
+                    fileCode: 'CERTIFICATE_LETTER'
+                },
+            ],
             setCertificateModal: false,
             newAttachmentModal: false,
             otherCertificate: '',
@@ -112,7 +145,7 @@ export default {
             blockingMsg: null,
             cancelReason: null,
             scanDataList: [],
-            needScanFileCodeList: [],
+            needScanFileList: [],
             needScanFileHint: null,
             isAgentNeedScanAttach: false,
             maxSignVersion: 0,
@@ -120,7 +153,8 @@ export default {
             encryptedParam: null,
             empName: null,
             windowRef: null,//開啟問卷存放回傳物件
-            isCreateForm: false,
+            usePmc: false,
+            onlySealFileCode: null,
         }
     },
     methods: {
@@ -183,12 +217,13 @@ export default {
             if(page == "createForm"){
                 this.formPageMode = "edit";
                 this.showModeSelect = false;
-                this.isCreateForm = true;
+                this.usePmc = true;
                 this.$emit("showOnlyContent");
             }
             else if(page == "cancelForm_cust"){
                 this.formPageMode = "cancel";
                 this.showModeSelect = false;
+                this.usePmc = true;
                 this.$emit("showOnlyContent");
             }
             else if(page == "viewForm"){
@@ -248,16 +283,13 @@ export default {
                 this.formImgFileNo = response.restData.formImgFileNo;
                 this.editedFormFileNo = response.restData.editedFormFileNo;
                 this.accountingMemo = response.restData.accountingMemo;
-                this.needScanFileCodeList = response.restData.needScanFileCodeList;
+                this.needScanFileList = response.restData.needScanFileList;
                 this.isAgentNeedScanAttach = response.restData.agentNeedScanAttach;
                 this.maxSignVersion = response.restData.maxSignVersion;
                 this.empName = response.restData.empName;
 
                 // 若為加密參數進件，放入解密後才有的參數
                 this.setDescryptedParam(response.restData);
-
-                // 檢查證件是否已依規範掃描
-                this.checkNeedScanFile();
 
                 // 簽名
                 if(!ValidateUtil.isEmpty(response.restData.customerSign)){
@@ -269,7 +301,7 @@ export default {
                     this.cancelSign = response.restData.cancelSign;
                 }
 
-                // 整理證件及附件
+                // 整理證件及附件 (同時檢查證件規範)
                 this.setCertificateList(response.restData.certificateList);
                 this.setAttachmentList(response.restData.attachmentList);
             },
@@ -317,6 +349,9 @@ export default {
 
                 this.oriCertificateList = Array.from(this.certificateList);
             }
+
+            // 檢查證件是否已依規範掃描
+            this.checkNeedScanFile();
         },
         setAttachmentList(attachmentList){
             this.attachmentList = [];
@@ -368,7 +403,7 @@ export default {
             this.formSignPage.region = this.region;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
 
-            if(this.isCreateForm){
+            if(this.usePmc){
                 try {
                     // 將畫面顯示改為同步
                     PMCService.callDualScreenAdapterClone();
@@ -380,7 +415,7 @@ export default {
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
-            if(this.isCreateForm){
+            if(this.usePmc){
                 try {
                     // 將畫面顯示改為延伸
                     PMCService.callDualScreenAdapterExtend();
@@ -474,8 +509,9 @@ export default {
             this.newAttachmentType = index;
         },
         addAttachment(){
-            let fileName = this.newAttachmentType === this.attachmentOptions.length ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType];
-            
+            let fileName = this.newAttachmentType == this.attachmentOptions.length ? this.otherAttachment : this.attachmentOptions[this.newAttachmentType].fileName;
+            let fileCode = this.newAttachmentType == this.attachmentOptions.length ? "OTHER_ATTACHMENT" : this.attachmentOptions[this.newAttachmentType].fileCode;
+
             if(!ValidateUtil.isEmpty(this.attachmentList)){
                 for(let attachment of this.attachmentList){
                     if(fileName == attachment.fileName){
@@ -494,10 +530,11 @@ export default {
                 id: this.attachmentNo,
                 // 其他佐證文件，須由使用者輸入附件類別
                 fileName: fileName,
+                fileCode: fileCode,
                 fileNo: null,
                 imgSrc: null,
                 file: null,
-                needSeal: false,
+                needSeal: (this.onlySealFileCode && this.onlySealFileCode == fileCode),
                 isSelecting: false
             });
             this.attachmentNo++;
@@ -608,8 +645,12 @@ export default {
                     // 開啟滿意度調查頁
                     await this.openPortal();
                     
-                    // 關閉目前頁面
-                    window.close();
+                    // 重新查詢一次
+                    this.formInit(true);
+
+                    // 擋頁
+                    this.isBlocking = true;
+                    this.blockingMsg = "已儲存成功";
                 }
             },
             (error) => {
@@ -630,7 +671,7 @@ export default {
                     if(ValidateUtil.isEmpty(certificate.fileNo) && !ValidateUtil.isEmpty(certificate.imgSrc)){
                         addFileList.push({
                             category: "CERTIFICATE",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: certificate.fileCode,
                             fileName: certificate.fileName,
                             originalFileName: certificate.originalFileName,
                             fileExt: this.getFileExt(certificate.originalFileName),
@@ -643,7 +684,7 @@ export default {
                         modifyFileList.push({
                             fileNo: certificate.fileNo,
                             category: "CERTIFICATE",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: certificate.fileCode,
                             fileName: certificate.fileName,
                             originalFileName: certificate.originalFileName,
                             fileExt: this.getFileExt(certificate.originalFileName),
@@ -683,7 +724,7 @@ export default {
                     if(ValidateUtil.isEmpty(attachment.fileNo) && !ValidateUtil.isEmpty(attachment.base64)){
                         addFileList.push({
                             category: "ATTACHMENT",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: attachment.fileCode,
                             fileName: attachment.fileName,
                             originalFileName: attachment.originalFileName,
                             fileExt: this.getFileExt(attachment.originalFileName),
@@ -697,7 +738,7 @@ export default {
                         modifyFileList.push({
                             fileNo: attachment.fileNo,
                             category: "ATTACHMENT",
-                            fileCode: "fileCode", // 等定義好各檔案 fileCode 再調整
+                            fileCode: attachment.fileCode,
                             fileName: attachment.fileName,
                             originalFileName: attachment.originalFileName,
                             fileExt: this.getFileExt(attachment.originalFileName),
@@ -781,7 +822,12 @@ export default {
             this.$emit("returnOrder", this.accountingMemo);
         },
         accountingSubmit(){
-            this.$emit("accountingSubmit", this.accountingMemo);
+            if(this.checkNeedScanFile()){
+                this.$emit("accountingSubmit", this.accountingMemo);
+            }
+            else{
+                MessageService.showInfo("尚需掃描並上傳 " + this.needScanFileHint);
+            }
         },
         saveComments(){
             // 將待審核備註一併傳回給父層
@@ -812,6 +858,10 @@ export default {
                 }
 
                 MessageService.showSuccess("取消成功");
+
+                // 擋頁
+                this.isBlocking = true;
+                this.blockingMsg = "已取消成功";
             },
             (error) => {
                 MessageService.showSystemError();
@@ -885,34 +935,82 @@ export default {
         checkNeedScanFile(){
             this.needScanFileHint = "";
 
-            if(!ValidateUtil.isEmpty(this.needScanFileCodeList)){
-                for (let index in this.needScanFileCodeList) {
-                    let needScanFileCode = this.needScanFileCodeList[index];
-                    if(!ValidateUtil.isEmpty(this.certificateList)){
+            // 證件
+            if(!ValidateUtil.isEmpty(this.needScanFileList)){
+                for (let index in this.needScanFileList) {
+                    let needScanFile = this.needScanFileList[index];
+                    if(!ValidateUtil.isEmpty(this.certificateList) && needScanFile != null){
                         for (let certificate of this.certificateList) {
-                            // 若已有掃描的證件，將 fileCode 從 List 移除，最後剩下來的就是還沒掃描的
-                            if(!ValidateUtil.isEmpty(needScanFileCode) 
-                                && certificate.fileCode == needScanFileCode 
+                            // 若已有掃描的證件，將 file 從 List 移除，最後剩下來的就是還沒掃描的
+                            if(!ValidateUtil.isEmpty(needScanFile.fileCode) 
+                                && certificate.fileCode == needScanFile .fileCode
+                                && needScanFile.category == "CERTIFICATE"
                                 && !ValidateUtil.isEmpty(certificate.fileNo)){
 
-                                this.needScanFileCodeList.splice(index, 1);
+                                this.needScanFileList.splice(index, 1);
                                 index--;
                                 break;
                             }
                         }
                     }
                 }
+            }
 
-                if(!ValidateUtil.isEmpty(this.needScanFileCodeList)){
-                    for (let needScanFileCode of this.needScanFileCodeList) {
-                        for(let certificateOption of this.certificateOptions){
-                            if(certificateOption.fileCode == needScanFileCode){
-                                this.needScanFileHint = this.needScanFileHint ? this.needScanFileHint + "、" + certificateOption.fileName : certificateOption.fileName;
+            // 證件整理
+            if(!ValidateUtil.isEmpty(this.needScanFileList)){
+                for (let needScanFile of this.needScanFileList) {
+                    for(let certificateOption of this.certificateOptions){
+                        // 放入缺少的證件
+                        if(certificateOption.fileCode == needScanFile.fileCode 
+                            && needScanFile.category == "CERTIFICATE"){
+                            this.needScanFileHint = this.needScanFileHint ? this.needScanFileHint + "、" + certificateOption.fileName : certificateOption.fileName;
+                        }
+                    }
+                }
+            }
+
+            // 附件
+            this.onlySealFileCode = null;
+            if(!ValidateUtil.isEmpty(this.needScanFileList)){
+                for (let index in this.needScanFileList) {
+                    let needScanFile = this.needScanFileList[index];
+                    // 若為指定套印專用章的附件則取出限制的 fileCode
+                    if(needScanFile != null && needScanFile.category == "ATTACHMENT" 
+                        && needScanFile.sealFlag == "Y"){
+                        this.onlySealFileCode = needScanFile.fileCode;
+                    }
+
+                    if(!ValidateUtil.isEmpty(this.attachmentList) && needScanFile != null){
+                        for (let attachment of this.attachmentList) {
+                            // 若已有掃描的附件，將 file 從 List 移除，最後剩下來的就是還沒掃描的
+                            if(!ValidateUtil.isEmpty(needScanFile.fileCode) 
+                                && attachment.fileCode == needScanFile .fileCode
+                                && needScanFile.category == "ATTACHMENT"
+                                && !ValidateUtil.isEmpty(attachment.fileNo)){
+        
+                                this.needScanFileList.splice(index, 1);
+                                index--;
+                                break;
                             }
                         }
                     }
                 }
             }
+
+            // 附件整理
+            if(!ValidateUtil.isEmpty(this.needScanFileList)){
+                for (let needScanFile of this.needScanFileList) {
+                    for(let attachmentOption of this.attachmentOptions){
+                        // 放入缺少的附件
+                        if(attachmentOption.fileCode == needScanFile.fileCode 
+                            && needScanFile.category == "ATTACHMENT"){
+                            this.needScanFileHint = this.needScanFileHint ? this.needScanFileHint + "、" + attachmentOption.fileName : attachmentOption.fileName;
+                        }
+                    }
+                }
+            }
+
+            return ValidateUtil.isEmpty(this.needScanFileList);
         },
         chooseCertificateType(certificate){
             if(!ValidateUtil.isEmpty(certificate.fileName)){

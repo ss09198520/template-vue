@@ -19,7 +19,7 @@
           </template>
           <span>顯示全部</span>
         </v-tooltip>
-        <v-tooltip top>
+        <!-- <v-tooltip top>
           <template v-slot:activator="{ on }">
             <v-btn
               class="ma-2"
@@ -33,7 +33,7 @@
             </v-btn>
           </template>
           <span>只顯示待簽核</span>
-        </v-tooltip>        
+        </v-tooltip>         -->
       </v-row>
       <hr class="mt-6 mb-5 ml-4 mr-5">
       <v-row class="ma-2">
@@ -172,7 +172,7 @@
             </v-btn>
             <v-btn
               color="primary"              
-              @click="popOut = false"
+              @click="previewItem"
             >
               預 覽
             </v-btn>
@@ -258,6 +258,64 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+
+      <v-dialog v-model="preViewProgramModel" max-width="100%">
+        <v-card>
+          <v-carousel hide-delimiters>
+            <v-carousel-item v-for="(item,i) in carouselItems" :key="i" reverse-transition="fade-transition" transition="fade-transition">
+              <v-img
+                v-if="!!item.dataUrl && isImage(item.originalFileName)"
+                :src="item.dataUrl"
+                max-width="100%"
+                max-height="100%"
+              />
+              <video 
+                v-if="!!item.dataUrl && isVideo(item.originalFileName)"
+                width="100%" 
+                height="100%"
+              >
+                <source
+                  :src="item.dataUrl"
+                  type="video/mp4"
+                >
+                Sorry, your browser doesn't support embedded videos.
+              </video>
+            </v-carousel-item>
+          </v-carousel>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog v-model="preViewMarqueeModel" max-width="1280">
+        <v-card>
+          <v-card-title
+            style="background-color: #003D79; color: white"
+          >
+            跑馬燈預覽
+            <v-spacer />
+            <v-btn
+              color="white"
+              icon
+              small
+              text
+              @click="preViewMarqueeModel = false"
+            >
+              <v-icon> mdi-close </v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="font-24px">
+            <v-row class="mt-6 ml-1 font-bold">
+              跑馬燈名稱: {{ selectedMarquee.marqueeName }}
+              <marquee-text
+                :duration="selectedMarquee.animationDuration"
+                :repeat="1"
+                class="marquee"
+              >
+                {{ selectedMarquee.marqueeContentHTML }}
+              </marquee-text>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
       <!-- <v-snackbar
         v-model="snackbar"
         top
@@ -287,6 +345,8 @@ import MessageService from "@/assets/services/message.service";
 import enums from '@/utils/enums'
 import isEmpty from 'lodash/isEmpty'
 import { queryMediaSignOff , mediaSignOff , downloadMediaSignOffFile} from '@/api/media'
+import { fetchProgram } from '@/api/program'
+import {  fetchListMarquee } from "@/api/marquee";
 
 const defaultQueryForm = {}
 
@@ -299,6 +359,10 @@ const defaultMediaSignOffForm = {
   rejectDesc: null,
 }
 
+const defaultQueryProgramForm = {
+  programId: null, 
+}
+
 export default {
     
     data() {
@@ -306,6 +370,7 @@ export default {
             //api post data
             postQueryForm: {},
             postMediaSignOffForm: {},
+            postQueryProgramForm : Object.assign({} , defaultQueryProgramForm),
 
             //預設當前頁數
             inquireListPage: 1,
@@ -320,9 +385,16 @@ export default {
             rejectReason: '',
             rejectDesc: '',
 
+            //節目單預覽彈出視窗
+            preViewProgramModel: false,
+            preViewMarqueeModel: false,
+
             //類型對照
             mediaSignTypeOption: enums.mediaSignTypeOption,
 
+            //預覽用
+            carouselItems: [],
+            selectedMarquee: {},
             snackbar: false,
             alert: false,
             //
@@ -362,6 +434,26 @@ export default {
         this.selectedSign = item;
         // this.querySignDetail();
         this.popOut = true;
+      },
+      previewItem() {
+        if(this.selectedSign.mediaSignType=='MEDIA_MARQUEE'){
+          this.postQueryProgramForm.programId = this.selectedSign.id
+          this.fetchMarquee({ marqueeId: this.selectedSign.id })
+        }
+        if(this.selectedSign.mediaSignType=='MEDIA_PROGRAM'){
+          this.postQueryProgramForm.programId = this.selectedSign.id
+          this.fetchProgram(this.postQueryProgramForm)
+        }
+        if(this.selectedSign.mediaSignType=='MEDIA_QUESTIONNAIRE'){
+          let config = 'top=0,left=0,statusbar=no,scrollbars=yes,status=no,location=no';
+          this.formSignPage = window.open(`/tpes/#/media/preview/questionnaire/${this.selectedSign.id}`, "_blank", config);
+        }
+      },
+      isImage(filename) {
+        return (/\.(jpg|jpeg|tiff|png)$/i).test(filename)
+      },
+      isVideo(filename) {
+        return (/\.(mp4)$/i).test(filename)
       },
       downloadAttachment() {
         this.downloadMediaSignOffFile(this.selectedSign)
@@ -463,7 +555,46 @@ export default {
           MessageService.showError('下載附件')
         }
       },
+
+      //Action:預覽節目單查詢
+      async fetchProgram(postData) {
+
+        this.isNotFound = true
         
+        const data = await fetchProgram(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢編輯素材資料');
+            return;
+        }
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.programs)){
+          
+          let tmpData = data.restData.programs[0] //僅會有一筆
+          this.carouselItems = tmpData.programMaterials
+          //開啟預覽視窗
+          this.preViewProgramModel = true
+        }
+      },
+      //Action:預覽跑馬燈查詢
+      async fetchMarquee(postData) {
+
+        const data = await fetchListMarquee(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢編輯素材資料');
+            return;
+        }
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.marquee[0])){
+          
+          let tmpData = data.restData.marquee[0] //僅會有一筆
+          this.selectedMarquee = tmpData
+          //開啟預覽視窗
+          this.preViewMarqueeModel = true
+        }
+      },
+
     },
 }
 </script>

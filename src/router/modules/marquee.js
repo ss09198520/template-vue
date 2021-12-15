@@ -7,7 +7,7 @@ const marqueeRouter = {
   redirect: '/marquee/marqueeCreate',
   component: Layout,
   name: 'MarqueePages',
-  privilegeCode: ['P017','P18'],
+  privilegeCode: ['P017','P018'],
   meta: { title: '跑馬燈管理', icon: 'mdi-clipboard-play-multiple' },
   children: [
     // {

@@ -298,21 +298,21 @@
           </template>
           <!-- 動作 -->
           <template v-slot:[`item.action`]="{ item }">
-            <!-- <v-tooltip top>
+            <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="ma-2"
                   fab
                   x-small
                   color="primary"
-                  @click="editItem(item)"
+                  @click="previewItem(item)"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-eye'" />
                 </v-btn>
               </template>
               <span>預覽</span>
-            </v-tooltip> -->
+            </v-tooltip>
             <v-tooltip top>
               <template v-slot:activator="{ on }">
                 <v-btn
@@ -489,12 +489,62 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="carouselModel">
+      <v-card>
+        <!-- <v-card-title
+          class="text-h5 lighten-2"
+          style="background-color: #c62828; color: white"
+        >
+          節目單預覽
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="carouselModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title> -->
+        <template>
+          <v-carousel hide-delimiters max-width="100%">
+            <!-- <v-carousel-item v-for="(item,i) in carouselItems" :key="i" :src="item.dataUrl" /> -->
+            <v-carousel-item v-for="(item,i) in carouselItems" :key="i" reverse-transition="fade-transition" transition="fade-transition">
+              <v-img
+                v-if="!!item.dataUrl && isImage(item.originalFileName)"
+                :src="item.dataUrl"
+                max-width="100%"
+                max-height="100%"
+              />
+              <video 
+                v-if="!!item.dataUrl && isVideo(item.originalFileName)"
+                width="100%" 
+                height="100%"
+              >
+                <source
+                  :src="item.dataUrl"
+                  type="video/mp4"
+                >
+                Sorry, your browser doesn't support embedded videos.
+              </video>
+            </v-carousel-item>
+          </v-carousel>
+        </template>
+        <!-- <v-card-actions class="d-end mt-6">
+          <v-btn color="normal" @click="carouselModel = false">
+            &emsp;關閉&emsp;
+          </v-btn>
+        </v-card-actions> -->
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
   import MessageService from "@/assets/services/message.service";
-  import { fetchProgramList ,updateProgramStatus} from '@/api/program'
+  import { fetchProgramList ,updateProgramStatus , fetchProgram} from '@/api/program'
   import enums from '@/utils/enums'
   import isEmpty from 'lodash/isEmpty'
 
@@ -508,6 +558,10 @@
     signStatus:null
   }
 
+  const defaultQueryProgramForm = {
+    programId: null, 
+  }
+
   export default {
     data() {
       return {
@@ -516,6 +570,7 @@
         
         //api post data
         postForm: Object.assign({}, defaultForm),
+        postQueryProgramForm : Object.assign({} , defaultQueryProgramForm),
 
         date: new Date().toISOString().substr(0, 10),
         //分頁
@@ -559,6 +614,10 @@
         ],
         
         programs: [],
+
+        previewProgram: {},
+
+        carouselItems: [],
         //彈跳視窗
         dialog: false,
         alertDialog: false,
@@ -568,6 +627,7 @@
         selectIndex: null,
         selectProgram: {},
         selectAction: null,
+        carouselModel: false,
       }
     },
     methods: {
@@ -580,8 +640,15 @@
       allowSunset(signStatus,status,programType) {
         return (/(PASS)$/i).test(signStatus) && (/(ACTIVE)$/i).test(status) && !(/(DEFAULT)$/i).test(programType)
       },
+      isImage(filename) {
+        return (/\.(jpg|jpeg|tiff|png)$/i).test(filename)
+      },
+      isVideo(filename) {
+        return (/\.(mp4)$/i).test(filename)
+      },
       previewItem(item) {
-        this.$router.push({path:`/media/preview/questionnaire/${item.questionnaireId}`})
+        this.postQueryProgramForm.programId = item.programId
+        this.fetchProgram(this.postQueryProgramForm)
       },
       close() {
         this.dialog = false
@@ -601,7 +668,6 @@
           MessageService.showNoticeInfo('無法編輯節目狀態為:' + this.signStatusOption.find(state => { return item.signStatus===state.value }).text);
           return
         }
-
       },
       viewSchedule() {
         this.$router.push({path:`${this.$route.matched[0].path}/calendarList`})
@@ -615,7 +681,7 @@
           this.sunsetModel = true;
         }
       },
-      // 送出問卷查詢
+      // 送出節目單查詢
       submitSearch() {
         console.log(this.postForm)
         //API post data
@@ -633,11 +699,11 @@
       },
 
       /**
-       * @param {Object} questionnaire
+       * @param {Object} dataList
        * @returns {Object}
        */
       hasResult (dataList) {
-        // 驗證questionnaire是否有資料
+        // 驗證是否有資料
         if(isEmpty(dataList) || dataList.length < 1 ){
             MessageService.showInfo('查無相關資料')
             return
@@ -684,9 +750,29 @@
 
           this.programs = tmpData
         }
-        
-        
       },
+
+      //Action:預覽素材查詢
+      async fetchProgram(postData) {
+
+        this.isNotFound = true
+        
+        const data = await fetchProgram(postData)
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'查詢編輯素材資料');
+            return;
+        }
+        // 驗證是否有資料
+        if(this.hasResult(data.restData.programs)){
+          
+          let tmpData = data.restData.programs[0] //僅會有一筆
+          this.carouselItems = tmpData.programMaterials
+          //開啟預覽視窗
+          this.carouselModel = true
+        }
+      },
+
       //Action:更新節目單清單查詢
       async updateProgramStatus(postData) {
         

@@ -562,8 +562,18 @@ export default {
             reader.onload = (e) =>{
                 // 若為強制須掃專用章的附件，需檢查是否為 word，不是的話要擋
                 if(this.selectedAttachment.fileCode == this.onlySealFileCode && !this.checkIsWord(this.selectedAttachment)){
-                    this.selectedAttachment.file = null;
-                    this.selectedAttachment.originalFileName = null;
+                    this.selectedAttachment = {
+                        id: this.selectedAttachment.id,
+                        // 其他佐證文件，須由使用者輸入附件類別
+                        fileName: this.selectedAttachment.fileName,
+                        fileCode: this.selectedAttachment.fileCode,
+                        fileNo: null,
+                        imgSrc: null,
+                        file: null,
+                        needSeal: true,
+                        isSelecting: false
+                    };
+                    
                     MessageService.showInfo("欲套用專用章檔案只可上傳 Word 檔");
                 }
                 else{

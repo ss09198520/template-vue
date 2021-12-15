@@ -562,9 +562,9 @@ export default {
             reader.onload = (e) =>{
                 // 若為強制須掃專用章的附件，需檢查是否為 word，不是的話要擋
                 if(this.selectedAttachment.fileCode == this.onlySealFileCode && !this.checkIsWord(this.selectedAttachment)){
+                    // 清空附件
                     this.selectedAttachment = {
                         id: this.selectedAttachment.id,
-                        // 其他佐證文件，須由使用者輸入附件類別
                         fileName: this.selectedAttachment.fileName,
                         fileCode: this.selectedAttachment.fileCode,
                         fileNo: null,

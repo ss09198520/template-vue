@@ -17,7 +17,7 @@
                         </v-subheader>
                       </v-col>
                       <v-col>
-                        <v-textarea
+                        <v-text-field
                           v-model="questionnaire.questionnaireName"
                           :rules="rules.requiredRule"
                           color="accent"
@@ -35,7 +35,7 @@
                         </v-subheader>
                       </v-col>
                       <v-col>
-                        <v-textarea 
+                        <v-text-field 
                           v-model="questionnaire.memo"
                           :rules="rules.requiredRule"
                           color="accent"
@@ -454,7 +454,6 @@
         }
         
         if (this.$refs.questionnaireForm.validate()) {
-          console.log(postData)
           this.submitForm(postData)
         }else{
           this.$nextTick(() => {
@@ -494,6 +493,7 @@
         }
 
         MessageService.showSuccess('儲存成功' + "✓")
+        this.reset()
       },
 
       //Action:問卷預覽頁面初始化

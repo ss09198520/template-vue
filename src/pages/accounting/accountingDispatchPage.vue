@@ -38,15 +38,15 @@
           >
             <!-- 核算員號碼+姓名 -->
             <template v-slot:item.accounting="{ item }">
-              {{ item.accountingName }}
+              {{ item.accountingName }}({{ item.accounting }})
             </template>
             <!-- 檢算員號碼+姓名 -->
             <template v-slot:item.calculate="{ item }">
-              {{ item.calculateName }}
+              {{ item.calculateName }}({{ item.calculate }})
             </template>
             <!-- 設定人員號碼+姓名 -->
             <template v-slot:item.settingUser="{ item }">
-              {{ item.settingUserName }}
+              {{ item.settingUserName }}({{ item.settingUser }})
             </template>
             <!-- 修改派工按鈕 -->
             <template v-slot:item.edit="{ item }">              
@@ -126,7 +126,7 @@
                       v-model="dispatchInfo.className"
                       outlined
                       hide-details                                         
-                      dense
+                      dense                      
                       placeholder="請輸入班別"
                       @blur="checkRequired()"
                     />
@@ -152,14 +152,21 @@
                       dense
                       placeholder="請選擇核算員"
                       :items="accountingList"
-                      item-text="empName"
+                      item-value="empNo"
                       :return-object="true"
                       @change="change('accounting')"
                       @blur="checkRequired()"
-                    />
+                    > 
+                      <template slot="item" slot-scope="data">
+                        {{ data.item.empName }} ({{ data.item.empNo }})
+                      </template>
+                      <template slot="selection" slot-scope="data">
+                        {{ data.item.empName }} ({{ data.item.empNo }})
+                      </template>
+                    </v-select>
                   </div>
                   <div v-if="dialogType!=='add'">
-                    {{ dispatchInfo.accountingName }}
+                    {{ dispatchInfo.accountingName }}({{ dispatchInfo.accounting }})
                   </div>
                   <span class="red--text font-12px">{{ errorMsg.accounting }}</span>    
                 </v-col>
@@ -178,14 +185,21 @@
                       dense
                       placeholder="請選擇檢算員"
                       :items="calculateList"
-                      item-text="empName"
+                      item-value="empNo"
                       :return-object="true"
                       @change="change('calculate')"
                       @blur="checkRequired()"
-                    />
+                    >
+                      <template slot="item" slot-scope="data">
+                        {{ data.item.empName }}({{ data.item.empNo }})
+                      </template>
+                      <template slot="selection" slot-scope="data">
+                        {{ data.item.empName }} ({{ data.item.empNo }})
+                      </template>
+                    </v-select>
                   </div>
                   <div v-if="dialogType!=='add'">
-                    {{ dispatchInfo.calculateName }}
+                    {{ dispatchInfo.calculateName }}({{ dispatchInfo.calculate }})
                   </div>
                   <span class="red--text font-12px">{{ errorMsg.calculate }}</span>    
                 </v-col>

@@ -69,10 +69,12 @@ export default {
                     this.numOfArchieve = this.archieveList.length;        
                     response.restData.initWaitArchiveListVo.forEach((element) => {                             
                         let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
-                        //console.log(createHours);                                                                                                      
-                        if(createHours <= 4 && new Date().getHours() < 17){
-                            element.action = true;
-                        }                   
+                        //console.log(createHours);    
+                        //TODO:方便測試記得改回來                                                                                                  
+                        // if(createHours <= 4 && new Date().getHours() < 17){
+                        //     element.action = true;
+                        // }  
+                        element.action = true;                 
                     });                        
                 } else {                   
                    MessageService.showError(response.restData.message);                      

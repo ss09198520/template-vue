@@ -191,19 +191,13 @@ export default {
                 if (!response.restData.success) {              
                     MessageService.showError(response.restData.returnMessage,'查詢全部啟用中的核算派工資料');
                     return;
-                }
-                // 驗證formList是否有資料
-                if(ValidateUtil.isEmpty(response.restData.dispatchList) || response.restData.dispatchList.length < 1 ){
-                    MessageService.showInfo('查無相關資料');
-                    return;
-                }
-
+                }                                
                 // 將取得的資料放進前端參數中
                 this.dispatchList = response.restData.dispatchList;
 
             },
             // eslint-disable-next-line no-unused-vars
-            (response) => {                
+            (error) => {                
                 MessageService.showSystemError();
             });
           
@@ -218,7 +212,6 @@ export default {
               MessageService.showError(response.restData.returnMessage,'查詢核算員檢算員下拉選單');
               return;
           }
-
           // 將取得的資料放進前端參數中
           this.accountingList = response.restData.accountingList;
           this.calculateList = response.restData.calculateList;
@@ -244,13 +237,7 @@ export default {
           if (!response.restData.success) {              
               MessageService.showError(response.restData.returnMessage,'依核算員編號查詢啟用的核算派工設定資料');
               return;
-          }
-
-          // 驗證formList是否有資料
-          if(ValidateUtil.isEmpty(response.restData.dispatchList) || response.restData.dispatchList.length < 1 ){
-            MessageService.showInfo('查無相關資料');
-            return;
-        }
+          }          
             // 整理資料
             this.sortDispatchData(response.restData.dispatchList);
             // 切換 dialog 模式
@@ -260,7 +247,7 @@ export default {
 
       },
       // eslint-disable-next-line no-unused-vars
-      (response) => {                
+      (error) => {                
           MessageService.showSystemError();
       });
      },
@@ -289,7 +276,7 @@ export default {
             MessageService.showSuccess('修改派工設定');
        },
        // eslint-disable-next-line no-unused-vars
-       (response) => {                
+       (error) => {                
            MessageService.showSystemError();
        });
 
@@ -321,10 +308,10 @@ export default {
           MessageService.showSuccess('新增派工設定');
        },
        // eslint-disable-next-line no-unused-vars
-       (response) => {                
+       (error) => {                
            MessageService.showSystemError();
        });
-
+      this.dialog = false;
     },
 
     // Action:刪除派工設定
@@ -348,7 +335,7 @@ export default {
 
       },
       // eslint-disable-next-line no-unused-vars
-      (response) => {                
+      (error) => {                
           MessageService.showSystemError();
       });
 
@@ -1005,8 +992,7 @@ export default {
       } else {
         this.errorMsg.electricNum = null
       }
-    },
-
+    },    
     checkOptionValid(dispatchList){
       let accounting = dispatchList[0].accounting;
       let calculate  = dispatchList[0].calculate;
@@ -1027,6 +1013,8 @@ export default {
       }      
       return isOptionValid;      
     },
+
+    
 
     /**
      * 驗證 end

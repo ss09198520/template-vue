@@ -204,33 +204,25 @@ import MessageService from "@/assets/services/message.service";
           releaseMonth: str
         }).then((res) => {
             let reslut =  JSON.parse(JSON.stringify( res.restData.programs));
-            MessageService.showInfo(res.restData.message, "成功✓");
             const keyMap = { programName: 'name', releaseStartDate:'start', releaseEndDate:'end'}
               reslut.map((item) => {
-              objs = Object.keys(item).reduce((newData, key) => {
-                const newKey = keyMap[key] || key
-                newData[newKey] = item[key]
-                return newData
-              }, {})
-              event.push(objs)
+                objs = Object.keys(item).reduce((newData, key) => {
+                  const newKey = keyMap[key] || key
+                  newData[newKey] = item[key]
+                  return newData
+                }, {})
+                event.push(objs)
               })
               
               let statusArray = status.split(':');
               let eventTemp =  event.filter(function (el) {
-                if(status == "請選擇")
-                  return el.status;
-                else if (status == "上架")
-                  return el.status == "ACTIVE"
-                else if (status == "下架")
-                  return el.status =="CLOSE"
-                else if (statusArray[0] == "未上架" && statusArray[1] == "退件")
-                  return (el.status == "WAIT" &&  el.signStatus == "REJECT");
-                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核中")
-                  return (el.status == "WAIT" &&  el.signStatus == "WAIT");
-                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核完成" )
-                  return (el.status == "WAIT" &&  el.signStatus == "PROGRESS" );
-                else if (statusArray[0] == "未上架" &&  statusArray[1] == "草稿")
-                  return (el.status == "WAIT" &&  el.signStatus == "DRAFT");              
+                if(status == "請選擇") return el.status;
+                else if (status == "上架") return el.status == "ACTIVE"
+                else if (status == "下架") return el.status =="CLOSE"
+                else if (statusArray[0] == "未上架" && statusArray[1] == "退件") return (el.status == "WAIT" && el.signStatus == "REJECT")
+                else if (statusArray[0] == "未上架" && statusArray[1] == "審核中") return (el.status == "WAIT" && (el.signStatus == "WAIT" || el.signStatus == "PROGRESS"))
+                else if (statusArray[0] == "未上架" && statusArray[1] == "審核完成") return (el.status == "WAIT" && el.signStatus == "PASS")
+                else if (statusArray[0] == "未上架" && statusArray[1] == "草稿") return (el.status == "WAIT" && el.signStatus == "DRAFT")
               });
 
              for(let i=0; i< eventTemp.length; i++){
@@ -238,7 +230,7 @@ import MessageService from "@/assets/services/message.service";
                 if(eventTemp[i].status == "ACTIVE"){
                   Object.assign(eventTemp[i], {color: 'green darken-2'});                
                 }else if (eventTemp[i].status == "CLOSE"){
-                   Object.assign(eventTemp[i], {color: 'grey darken-1'});                   
+                  Object.assign(eventTemp[i], {color: 'grey darken-1'});                   
                 }else if(eventTemp[i].status == "WAIT" && eventTemp[i].signStatus=="REJECT"){
                   Object.assign(eventTemp[i], {color: 'red darken-4'});                    
                 }else if(eventTemp[i].status == "WAIT" && (eventTemp[i].signStatus=="WAIT" || eventTemp[i].signStatus=="PROGRESS")){
@@ -246,12 +238,13 @@ import MessageService from "@/assets/services/message.service";
                 }else if(eventTemp[i].status == "WAIT" && (eventTemp[i].signStatus=="DRAFT")){
                    Object.assign(eventTemp[i], {color: 'yellow darken-1'});
                 }else if(eventTemp[i].status == "WAIT" && eventTemp[i].signStatus=="PASS"){                    
-                    Object.assign(eventTemp[i], {color: 'cyan darken-4'});
+                  Object.assign(eventTemp[i], {color: 'cyan darken-4'});
                 }
         }
              this.events =  eventTemp;
         }).catch((error) => {
           console.log(error)
+          MessageService.showError('查詢發生錯誤','查詢節目單行事曆');
         });
       },
 

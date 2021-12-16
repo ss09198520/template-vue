@@ -208,7 +208,7 @@
             fab
             small
             color="accent"
-            @click="isShow = false"
+            @click="reset()"
             v-on="on"
           >
             <v-icon>mdi-refresh</v-icon>
@@ -270,6 +270,9 @@
       },
       goMonth() {
         this.$router.push({path:`${this.$route.matched[0].path}/satisfyReport/week`})
+      },
+      reset() {
+        this.$refs.form.reset()
       },
       // 送出問卷查詢下載
       submitDownload() {

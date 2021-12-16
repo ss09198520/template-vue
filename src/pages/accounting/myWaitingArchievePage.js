@@ -32,7 +32,6 @@ export default {
             archieveNum: null,
             seq: null,
             formSeq: null,
-            accnting: null,
             numOfArchieve: 0,
         }
     },

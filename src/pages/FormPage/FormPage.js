@@ -1097,7 +1097,8 @@ export default {
                             if(!ValidateUtil.isEmpty(needScanFile.fileCode) 
                                 && attachment.fileCode == needScanFile.fileCode
                                 && needScanFile.category == "ATTACHMENT"
-                                && !ValidateUtil.isEmpty(attachment.fileNo)){
+                                && !ValidateUtil.isEmpty(attachment.fileNo)
+                                && !ValidateUtil.isEmpty(attachment.originalFileName)){
         
                                 this.needScanFileList.splice(index, 1);
                                 index--;

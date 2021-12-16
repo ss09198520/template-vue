@@ -304,10 +304,10 @@
                       </v-col>
                     </v-row>
                     <!-- 核算補件專用 -->
-                    <v-row v-else-if="formPageMode == 'accounting' && attachment.canAcctUpload">
-                      <div v-if="attachment.base64 != null || (attachment.filNo != null && attachment.originalFileName != null)">
+                    <v-row v-else-if="formPageMode == 'accounting' && attachment.canAcctUpload" class="d-center">
+                      <div v-if="attachment.base64 != null || (attachment.fileNo != null && attachment.originalFileName != null)" class="d-center">
                         <v-col cols="6" class="t-center">
-                          <v-btn depressed color="normal" @click="clearAttachment(attachment)">
+                          <v-btn depressed color="error" @click="clearAttachment(attachment)">
                             清空
                             <v-icon
                               right

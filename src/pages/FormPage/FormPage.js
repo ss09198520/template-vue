@@ -312,7 +312,6 @@ export default {
 
                 // 檢查證件及附件是否已依規範掃描及上傳，同時檢查有無特殊附件
                 this.checkNeedScanFile(false);
-                
             },
             (error) => {
                 MessageService.showSystemError();
@@ -595,7 +594,7 @@ export default {
                         let vin = {
                             acceptNum: this.acceptNum,
                             formSeq: this.formSeq,
-                            fileNo: null,
+                            fileNo: this.selectedAttachment.fileNo,
                             fileCode: this.selectedAttachment.fileCode,
                             fileName: this.selectedAttachment.fileName,
                             originalFileName: this.selectedAttachment.originalFileName,
@@ -614,7 +613,8 @@ export default {
                                 MessageService.showError(response.restData.message,'上傳檔案');
                                 return;
                             }
-            
+                            
+                            // 重新查詢
                             this.formInit(true);
                         },
                         (error) => {
@@ -1138,6 +1138,8 @@ export default {
                     }
                 }
             }
+
+            console.log(this.attachmentList);
 
             return ValidateUtil.isEmpty(this.needScanFileList);
         },

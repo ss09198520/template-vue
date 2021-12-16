@@ -1189,9 +1189,14 @@ export default {
         },
         closePortal() {
           if (this.windowRef) {
+            let answered = this.windowRef.document.getElementById('answered')
             this.windowRef.close();
             this.windowRef = null;
-            MessageService.showSuccess('客戶已完成問卷填寫' + "✓")
+            if (answered.value == 'true'){
+              MessageService.showSuccess('客戶問卷填寫')
+            } else {
+              MessageService.showInfo('客戶放棄問卷填寫','問卷調查')
+            }
           }
         },
         clearAttachment(attachment){

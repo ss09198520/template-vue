@@ -87,6 +87,7 @@
                       </v-stepper>
                     </v-col>
                     <v-col v-if="!isView" class="d-flex justify-center">
+                      <input id="answered" type="hidden" :value="answered">
                       <v-btn
                         class="mr-1 text-h6"                        
                         color="success"
@@ -138,6 +139,7 @@
         postForm: Object.assign({}, defaultForm),
         stepEl: 0,
         valid: false,
+        answered: false,
         rules: {
           checkSelected(isRequired) {
             return  v => (!!v || !isRequired)  || '此題必須作答'
@@ -271,8 +273,12 @@
         }
 
         MessageService.showSuccess('作答成功' + "✓")
-
-        window.close();
+        
+        //作答成功後將隱藏欄位改為true ,可於parent window查詢判斷訊息
+        this.answered = true
+        this.$nextTick(() => {
+            window.close()
+          });
       },
       
     }

@@ -148,6 +148,7 @@ export default {
             needScanFileList: [],
             needScanFileHint: null,
             needScanAttachHint: null,
+            oriNeedScanFileList: [],
             isNeedScanAttach: false,
             maxSignVersion: 0,
             isLoading: false,
@@ -286,9 +287,13 @@ export default {
                 this.editedFormFileNo = response.restData.editedFormFileNo;
                 this.accountingMemo = response.restData.accountingMemo;
                 this.needScanFileList = response.restData.needScanFileList;
+                this.oriNeedScanFileList = response.restData.needScanFileList;
                 this.isNeedScanAttach = response.restData.needScanAttach;
                 this.maxSignVersion = response.restData.maxSignVersion;
                 this.empName = response.restData.empName;
+
+                // 初始化一次後就將修正件 flag 壓為 N 避免每次都是修正件
+                this.isUpdate = "N";
 
                 // 若為加密參數進件，放入解密後才有的參數
                 this.setDescryptedParam(response.restData);
@@ -309,7 +314,6 @@ export default {
 
                 // 檢查證件及附件是否已依規範掃描及上傳，同時檢查有無特殊附件
                 this.checkNeedScanFile(false);
-                
             },
             (error) => {
                 MessageService.showSystemError();
@@ -592,7 +596,7 @@ export default {
                         let vin = {
                             acceptNum: this.acceptNum,
                             formSeq: this.formSeq,
-                            fileNo: null,
+                            fileNo: this.selectedAttachment.fileNo,
                             fileCode: this.selectedAttachment.fileCode,
                             fileName: this.selectedAttachment.fileName,
                             originalFileName: this.selectedAttachment.originalFileName,
@@ -611,7 +615,8 @@ export default {
                                 MessageService.showError(response.restData.message,'上傳檔案');
                                 return;
                             }
-            
+                            
+                            // 重新查詢
                             this.formInit(true);
                         },
                         (error) => {
@@ -1009,6 +1014,8 @@ export default {
         checkNeedScanFile(onlyForCheck){
             this.needScanFileHint = "";
 
+            this.needScanFileList = Array.from(this.oriNeedScanFileList);
+
             // 證件
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
                 for (let index = 0 ; index < this.needScanFileList.length ; index++) {
@@ -1080,7 +1087,7 @@ export default {
 
                     if(!ValidateUtil.isEmpty(this.attachmentList) && needScanFile != null){
                         for (let attachment of this.attachmentList) {
-                            if(!ValidateUtil.isEmpty(this.acctUploadFileCode) && this.acctUploadFileCode == attachment.fileCode && !ValidateUtil.isEmpty(attachment.fileNo)){
+                            if(!onlyForCheck && !ValidateUtil.isEmpty(this.acctUploadFileCode) && this.acctUploadFileCode == attachment.fileCode && !ValidateUtil.isEmpty(attachment.fileNo)){
                                 isUploadedSpecificFile = true;
                                 attachment.canAcctUpload = true;
                                 attachment.needSeal = (acctUploadFileSealFlag == "Y");

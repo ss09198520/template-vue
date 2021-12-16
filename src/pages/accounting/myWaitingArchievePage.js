@@ -69,12 +69,10 @@ export default {
                     this.numOfArchieve = this.archieveList.length;        
                     response.restData.initWaitArchiveListVo.forEach((element) => {                             
                         let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
-                        //console.log(createHours);    
-                        //TODO:方便測試記得改回來                                                                                                  
-                        // if(createHours <= 4 && new Date().getHours() < 17){
-                        //     element.action = true;
-                        // }  
-                        element.action = true;                 
+                        console.log(createHours);                                                                                                                              
+                        if(createHours <= 4 && new Date().getHours() < 17 && !element.hasAllViewAuth){
+                            element.action = true;
+                        }                                         
                     });                        
                 } else {                   
                    MessageService.showError(response.restData.message);                      
@@ -94,6 +92,7 @@ export default {
                 electricNum: this.electricNum,
                 archiveNum: this.archieveNum
             };
+            console.log(this.acceptNum);
             AjaxService.post('/waitArchive/queryWaitArchive',QueryWaitArchiveReq,
             (response) => {
                 if (response && response.restData && response.restData.success) {                                                                                                               
@@ -101,7 +100,7 @@ export default {
                     response.restData.queryWaitArchiveListVo.forEach((element) => {
                         let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
                         //console.log(createHours);                                                                                                      
-                        if(createHours <= 4 && new Date().getHours() < 17){
+                        if(createHours <= 4 && new Date().getHours() < 17 && !element.hasAllViewAuth){
                             element.action = true;
                         }  
                     });                                                                                                           

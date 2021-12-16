@@ -32,7 +32,6 @@ export default {
             archieveNum: null,
             seq: null,
             formSeq: null,
-            accnting: null,
             numOfArchieve: 0,
         }
     },
@@ -44,9 +43,9 @@ export default {
             console.log("每日跑批次給NCPS前退回核算");
             this.formSeq = item.formSeq;
             this.seq = item.seq;
-            this.accnting = item.accnting;
+            this.accounting = item.accounting;
             this.acceptNum = item.acceptNum;
-            this.returnModel = true;
+            this.returnModel = true;            
         },
 
         /** 
@@ -123,9 +122,9 @@ export default {
             const ReturnToWaitAccountingReq ={
                 seq: this.seq,
                 formSeq: this.formSeq,
-                accounting: this.accnting,
+                accounting: this.accounting,
                 acceptNum: this.acceptNum                
-            };
+            };            
             AjaxService.post('/waitArchive/returnToWaitAccounting',ReturnToWaitAccountingReq,
             (response) => {
                 if (response && response.restData && response.restData.success) {                    

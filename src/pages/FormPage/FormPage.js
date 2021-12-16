@@ -891,7 +891,7 @@ export default {
                 this.$emit("accountingSubmit", this.accountingMemo);
             }
             else{
-                let msg = "尚需掃描並上傳 ";
+                let msg = "尚需掃描/上傳 ";
 
                 if(this.needScanFileHint){
                     msg += this.needScanFileHint

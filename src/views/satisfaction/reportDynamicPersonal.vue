@@ -98,7 +98,6 @@
             <v-col cols="1">
               %
             </v-col>
-
             <!-- <v-col cols="1">
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
@@ -117,7 +116,12 @@
               </v-tooltip>
             </v-col> -->
           </v-row>
-          
+          <v-row>
+            <v-col cols="1" />
+            <v-col cols="3" class="d-flex">
+              <span class="red--text font-12px">{{ errorMsg.unSatisfyPercentInfo }}</span>
+            </v-col>
+          </v-row>
         </v-form>
       </v-col>
     </v-row>
@@ -138,7 +142,6 @@
           small
           color="primary"
           @click="submitSearch"
-          v-on="on"
         > 
           <v-icon v-text="'mdi-file-download-outline'" />
         </v-btn>
@@ -149,6 +152,7 @@
 
 <script>
   import MessageService from "@/assets/services/message.service"
+  import ValidateUtil from "@/assets/services/validateUtil";
   import moment from 'moment'
   import { geneDynaSatisfactionReport} from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
@@ -157,7 +161,7 @@
   const defaultForm = {
     startDate: null, 
     endDate: null,
-    unSatisfyPercent: null
+    unSatisfyPercent: null,
   }
 
   export default {
@@ -184,6 +188,7 @@
 
         errorMsg:{
           dateInfo:null,
+          unSatisfyPercentInfo:null,
         },
       }
     },
@@ -195,6 +200,7 @@
 
       // 驗證是否欄位是否合法
       checkRequired(){
+        console.log()
         //無任何條件且日期間隔大於183
         if(isEmpty(this.postForm.startDate) && isEmpty(this.postForm.endDate)){
           this.errorMsg.dateInfo = '需填入查詢時間，最多可查詢半年內之資料'
@@ -212,6 +218,18 @@
           this.valid = false
           return
         }
+        if(!ValidateUtil.validateDateRange(this.postForm.startDate,this.postForm.endDate)){
+          this.errorMsg.dateInfo ='查詢時間錯誤，需填入正確日期範圍錯誤'
+          this.valid = false
+          return
+        }
+        if ( !Number.isInteger(Number(this.postForm.unSatisfyPercent)) 
+            || (Number(this.postForm.unSatisfyPercent) > 100 || Number(this.postForm.unSatisfyPercent < 0)) ) {
+          
+          this.errorMsg.unSatisfyPercentInfo ='格式錯誤，需1~100之數字'
+          this.valid = false
+          return
+        }
 
         this.valid = true
         this.errorMsg.dateInfo = null
@@ -219,7 +237,6 @@
 
       // 送出問卷查詢
       submitSearch() {
-        
         this.checkRequired()
         if (this.valid) {
           //API post data
@@ -252,19 +269,6 @@
         
         const data = await geneDynaSatisfactionReport(postData)
 
-        // 驗證是否成功
-        if (!data.restData.success) {              
-          MessageService.showError(data.restData.message,'查詢動態個人報表資料');
-            return;
-        }
-        
-        // 驗證是否有資料
-        if(this.hasResult(data.restData.reports)){
-          
-          let tmpData = data.restData.reports
-          
-          this.reports = tmpData
-        }
       },
 
     }

@@ -217,8 +217,8 @@
         <span>清空查詢</span>
       </v-tooltip>
     </v-row>
-    <span class="annotation-red">※提醒&nbsp;</span>
-    <span class="annotation-red">僅填入查詢時間，最多可查詢半年內之資料，若包含日期以外的條件最多可查詢兩年內之資料</span>
+    <span class="annotation font-weight-bold">※提醒&nbsp;</span>
+    <span class="annotation font-weight-bold">僅填入查詢時間，最多可查詢半年內之資料，若包含日期以外的條件最多可查詢兩年內之資料</span>
     <!-- <v-divider class="mt-6 mb-5" /> -->
     <hr class="mt-6 mb-5">
   </v-container>
@@ -226,6 +226,7 @@
 
 <script>
   import MessageService from "@/assets/services/message.service"
+  import ValidateUtil from "@/assets/services/validateUtil";
   import moment from 'moment'
   import { listSatisfactionRawData } from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
@@ -319,6 +320,11 @@
         }
         else if(isEmpty(this.postForm.startDate) || isEmpty(this.postForm.endDate)){
           this.errorMsg.dateInfo ='查詢時間錯誤需填入正確起訖'
+          this.valid = false
+          return
+        }
+        if(!ValidateUtil.validateDateRange(this.postForm.startDate,this.postForm.endDate)){
+          this.errorMsg.dateInfo ='查詢時間錯誤，需填入正確日期範圍錯誤'
           this.valid = false
           return
         }

@@ -127,6 +127,7 @@
 <script>
 
   import MessageService from "@/assets/services/message.service"
+  import ValidateUtil from "@/assets/services/validateUtil";
   import moment from 'moment'
   import { geneDynaRegionSatisfactionReport} from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
@@ -186,6 +187,11 @@
         }
         else if(isEmpty(this.postForm.startDate) || isEmpty(this.postForm.endDate)){
           this.errorMsg.dateInfo ='查詢時間錯誤需填入正確起訖'
+          this.valid = false
+          return
+        }
+        if(!ValidateUtil.validateDateRange(this.postForm.startDate,this.postForm.endDate)){
+          this.errorMsg.dateInfo ='查詢時間錯誤，需填入正確日期範圍錯誤'
           this.valid = false
           return
         }

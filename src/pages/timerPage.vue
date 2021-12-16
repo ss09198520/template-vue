@@ -703,16 +703,20 @@ export default {
             });
         },
         openPortal() {
-          let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
+          let config = 'scrollbars=yes';
           this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + '12345678', '滿意度調查', config);
           this.windowRef.addEventListener("beforeunload", this.closePortal);
-          console.log('this.windowRef' , this.windowRef)
         },
         closePortal() {
           if (this.windowRef) {
+            let answered = this.windowRef.document.getElementById('answered')
             this.windowRef.close();
             this.windowRef = null;
-            MessageService.showSuccess('客戶已完成問卷填寫' + "✓")
+            if (answered.value == 'true'){
+              MessageService.showSuccess('客戶問卷填寫')
+            } else {
+              MessageService.showInfo('客戶放棄問卷填寫','問卷調查')
+            }
           }
         },
         openOldPortal() {

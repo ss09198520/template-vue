@@ -305,35 +305,30 @@
                     </v-row>
                     <!-- 核算補件專用 -->
                     <v-row v-else-if="formPageMode == 'accounting' && attachment.canAcctUpload">
-                      <v-col v-if="attachment.base64 || (attachment.filNo && attachment.originalFileName)" cols="12" class="t-center">
-                        <v-btn depressed color="normal" @click="clearAttachment(attachment)">
-                          清空
-                          <v-icon
-                            right
-                            dark
-                          >
-                            mdi-delete
-                          </v-icon>
-                        </v-btn>
-                        <v-btn v-if="attachment.imgSrc" depressed color="normal" @click="viewImage(attachment)">
-                          檢視
-                          <v-icon
-                            right
-                            dark
-                          >
-                            mdi-eye
-                          </v-icon>
-                        </v-btn>
-                        <v-btn v-else depressed color="primary" :disabled="!attachment.filePath" @click="downloadFile(attachment)">
-                          下載
-                          <v-icon
-                            right
-                            dark
-                          >
-                            mdi-cloud-download
-                          </v-icon>
-                        </v-btn>
-                      </v-col>
+                      <div v-if="attachment.base64 != null || (attachment.filNo != null && attachment.originalFileName != null)">
+                        <v-col cols="6" class="t-center">
+                          <v-btn depressed color="normal" @click="clearAttachment(attachment)">
+                            清空
+                            <v-icon
+                              right
+                              dark
+                            >
+                              mdi-delete
+                            </v-icon>
+                          </v-btn>
+                        </v-col>
+                        <v-col cols="6" class="t-center">
+                          <v-btn depressed color="primary" :disabled="!attachment.filePath" @click="downloadFile(attachment)">
+                            下載
+                            <v-icon
+                              right
+                              dark
+                            >
+                              mdi-cloud-download
+                            </v-icon>
+                          </v-btn>
+                        </v-col>
+                      </div>
                       <v-col v-else cols="12" class="t-center">
                         <v-btn depressed color="primary" :loading="attachment.isSelecting" @click="uploadFile(attachment, index)">
                           上傳

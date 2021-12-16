@@ -1201,7 +1201,7 @@ export default {
             attachment.base64 = null;
             attachment.needSeal = this.selectedAttachment.needSeal;
             attachment.hasEdit = true;
-            attachment.canAcctUpload = this.acctUploadFileCode == attachment.fileCode;
+            attachment.canAcctUpload = (this.acctUploadFileCode == attachment.fileCode);
         }
     }
 }

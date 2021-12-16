@@ -156,6 +156,7 @@ export default {
             windowRef: null,//開啟問卷存放回傳物件
             usePmc: false,
             onlySealFileCode: null,
+            acctUploadFileCode: null,
         }
     },
     methods: {
@@ -569,11 +570,7 @@ export default {
                     // 清空附件
                     for(let attachment of this.attachmentList){
                         if(attachment.id == this.selectedAttachment.id){
-                            attachment.originalFileName = null;
-                            attachment.fileNo = null;
-                            attachment.imgSrc = null;
-                            attachment.file = null;
-                            attachment.needSeal = false;
+                            this.clearAttachment(attachment);
                             break;
                         }
                     }
@@ -1050,9 +1047,9 @@ export default {
 
             // 附件
             this.onlySealFileCode = null;
+            this.acctUploadFileCode = null;
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
 
-                let acctUploadFileCode = null;
                 let isUploadedSpecificFile = false;
                 let acctUploadFileOption = {};
                 let acctUploadFileSealFlag = null;
@@ -1069,11 +1066,11 @@ export default {
 
                         // 若為可於核算時補件之附件則檢查是否已上傳，若無則新增欄位並開啟上傳按鈕
                         if(needScanFile.acctUploadFlag == "Y"){
-                            acctUploadFileCode = needScanFile.fileCode;
+                            this.acctUploadFileCode = needScanFile.fileCode;
                             acctUploadFileSealFlag = needScanFile.sealFlag;
 
                             for(let attachmentOption of this.attachmentOptions){
-                                if(attachmentOption.fileCode == acctUploadFileCode){
+                                if(attachmentOption.fileCode == this.acctUploadFileCode){
                                     acctUploadFileOption = attachmentOption;
                                     break;
                                 }
@@ -1083,7 +1080,7 @@ export default {
 
                     if(!ValidateUtil.isEmpty(this.attachmentList) && needScanFile != null){
                         for (let attachment of this.attachmentList) {
-                            if(!ValidateUtil.isEmpty(acctUploadFileCode) && acctUploadFileCode == attachment.fileCode && !ValidateUtil.isEmpty(attachment.fileNo)){
+                            if(!ValidateUtil.isEmpty(this.acctUploadFileCode) && this.acctUploadFileCode == attachment.fileCode && !ValidateUtil.isEmpty(attachment.fileNo)){
                                 isUploadedSpecificFile = true;
                             }
 
@@ -1102,7 +1099,7 @@ export default {
                 }
                 
                 // 若於核算時，規則有核算時可補件之附件則檢查是否已上傳，若無則新增欄位並開啟上傳按鈕
-                if(!onlyForCheck && this.formPageMode == "accounting" && !ValidateUtil.isEmpty(acctUploadFileCode) && !isUploadedSpecificFile){
+                if(!onlyForCheck && this.formPageMode == "accounting" && !ValidateUtil.isEmpty(this.acctUploadFileCode) && !isUploadedSpecificFile){
                     this.attachmentList.push({
                         id: this.attachmentNo,
                         fileName: acctUploadFileOption.fileName,
@@ -1195,5 +1192,14 @@ export default {
             MessageService.showSuccess('客戶已完成問卷填寫' + "✓")
           }
         },
+        clearAttachment(attachment){
+            attachment.originalFileName = null;
+            attachment.imgSrc = null;
+            attachment.file = null;
+            attachment.base64 = null;
+            attachment.needSeal = this.selectedAttachment.needSeal;
+            attachment.hasEdit = true;
+            attachment.canAcctUpload = this.acctUploadFileCode == attachment.fileCode;
+        }
     }
 }

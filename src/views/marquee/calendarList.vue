@@ -207,30 +207,25 @@ import MessageService from "@/assets/services/message.service";
             MessageService.showInfo(res.restData.message, "成功✓");
             const keyMap = { marqueeName: 'name', releaseStartDate:'start', releaseEndDate:'end'}
               reslut.map((item) => {
-              objs = Object.keys(item).reduce((newData, key) => {
-                const newKey = keyMap[key] || key
-                newData[newKey] = item[key]
-                return newData
-              }, {})
-              event.push(objs)
+                objs = Object.keys(item).reduce((newData, key) => {
+                  const newKey = keyMap[key] || key
+                  newData[newKey] = item[key]
+                  return newData
+                }, {})
+                event.push(objs)
               })
               
               let statusArray = status.split(':');
               let eventTemp =  event.filter(function (el) {
-                if(status == "請選擇")
-                  return el.status;
-                else if (status == "上架")
-                  return el.status == "ACTIVE"
-                else if (status == "下架")
-                  return el.status =="CLOSE"
-                else if (statusArray[0] == "未上架" && statusArray[1] == "退件")
-                  return (el.status == "WAIT" &&  el.signStatus == "REJECT");
-                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核中")
-                  return (el.status == "WAIT" &&  el.signStatus == "WAIT");
-                else if (statusArray[0] == "未上架" &&  statusArray[1] == "審核完成" )
-                  return (el.status == "WAIT" &&  el.signStatus == "PROGRESS" );
-                else if (statusArray[0] == "未上架" &&  statusArray[1] == "草稿")
-                  return (el.status == "WAIT" &&  el.signStatus == "DRAFT");              
+
+                if(status == "請選擇") return el.status
+                else if (status == "上架") return el.status == "ACTIVE"
+                else if (status == "下架") return el.status == "CLOSE"
+                else if (statusArray[0] == "未上架" && statusArray[1] == "退件") return (el.status == "WAIT" && el.signStatus == "REJECT")
+                else if (statusArray[0] == "未上架" && statusArray[1] == "審核中") return (el.status == "WAIT" && (el.signStatus == "WAIT" || el.signStatus == "PROGRESS"))
+                else if (statusArray[0] == "未上架" && statusArray[1] == "審核完成") return (el.status == "WAIT" && el.signStatus == "PASS")
+                else if (statusArray[0] == "未上架" && statusArray[1] == "草稿") return (el.status == "WAIT" && el.signStatus == "DRAFT")
+
               });
 
              for(let i=0; i< eventTemp.length; i++){

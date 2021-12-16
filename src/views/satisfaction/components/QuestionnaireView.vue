@@ -1,100 +1,113 @@
 <template>
-  <v-container>
-    <v-row class="justify-center">
-      <v-col>
-        <v-form ref="questionnaireForm" v-model="valid" lazy-validation>
-          <v-row align="center">
-            <v-col class="form-create-wrap font-weight-bold">
-              <v-col class="wrap">
-                <v-col class="content-wrap">
-                  <v-col class="item title" :class="{'title-focus': focusIndex === 'title'}">
-                    <v-subheader class="item title justify-center text-md-body-1 font-weight-bold">
-                      {{ questionnaire.questionnaireName }}
-                    </v-subheader>
-                  </v-col>
-                  <v-col class="q-wrap">
-                    <v-stepper v-model="step">
-                      <v-stepper-items>
-                        <div v-for="question, idx in questionnaire.questions" :key="idx">
-                          <div id="items" :data-step="idx+1" class="q-li" :class="{'q-li-focus': focusIndex === idx}" @click="focusItem($event, idx)">
-                            <v-stepper-content :step="idx+1">
-                              <v-col class="q-item q-title-wrap">
-                                <div class="q-title">
-                                  <v-col class="li">
-                                    第 {{ idx+1 }} 題 
-                                    <div class="q-area font-weight-bold">
-                                      {{ question.title }}
-                                    </div>
-                                  </v-col>
+  <div>
+    <div id="header">
+      <div id="nav">
+        <div id="logo">
+          <a class="circle">
+            <h1>LOGO</h1>
+          </a><a class="text">
+            <h1>台灣電力公司</h1>
+          </a>
+        </div>
+        <div class="clear" />
+      </div>
+      <div id="top_menu">
+        <ul id="menu" class="scrollbar" data-mcs-theme="minimal-dark" />
+      </div>
+    </div>
+    <v-container>
+      <v-row>
+        <v-col>
+          <v-form id="questionnaireForm" ref="questionnaireForm" v-model="valid" lazy-validation>
+            <v-row>
+              <v-col class="form-create-wrap font-weight-bold">
+                <v-col class="wrap">
+                  <v-col class="content-wrap">
+                    <v-col class="item title" :class="{'title-focus': focusIndex === 'title'}">
+                      <v-subheader class="title font-weight-bold">
+                        {{ "台灣電力公司營業櫃台服務滿意度調查" }}｜問卷主題:{{ questionnaire.questionnaireName }}
+                      </v-subheader>
+                    </v-col>
+                    <v-col class="q-wrap">
+                      <v-stepper v-model="step">
+                        <v-stepper-items>
+                          <div v-for="question, idx in questionnaire.questions" :key="idx">
+                            <div id="items" :data-step="idx+1" class="q-li" :class="{'q-li-focus': focusIndex === idx}" @click="focusItem($event, idx)">
+                              <v-stepper-content :step="idx+1">
+                                <v-col class="q-item q-title-wrap">
+                                  <div class="q-title">
+                                    <v-col class="li">
+                                      第 {{ idx+1 }} 題 
+                                      <div class="q-area font-weight-bold">
+                                        {{ question.title }}
+                                      </div>
+                                    </v-col>
+                                  </div>
+                                </v-col>
+                                <div class="q-item-wrap">
+                                  <div v-if="question.type === 'radio' || question.type === 'checkbox'" class="q-item">
+                                    <v-radio-group
+                                      v-model="userAnswers[idx]"
+                                      :rules="[rules.checkSelected(question.required)]"
+                                      :disabled="isView"
+                                      row
+                                    >
+                                      <v-radio
+                                        v-for="answer, idx1 in question.answers" 
+                                        :key="idx1"
+                                        :label="answer.label"
+                                        :value="answer.value"
+                                        @change="setAnswerValue(question.questionId , answer.answerId , answer.label ,answer.value)"
+                                      />
+                                    </v-radio-group>
+                                  </div>
                                 </div>
-                              </v-col>
-                              <div class="q-item-wrap">
-                                <div v-if="question.type === 'radio' || question.type === 'checkbox'" class="q-item">
-                                  <v-radio-group
-                                    v-model="userAnswers[idx]"
-                                    :rules="[rules.checkSelected(question.required)]"
-                                    :disabled="isView"
-                                    row
+                                <v-row class="crystalStyle" justify="space-around">
+                                  <v-btn 
+                                    v-if="idx > 0"
+                                    class="col-5 mr-1"
+                                    depressed
+                                    @click="prevStep($event,stepEl)"
                                   >
-                                    <v-radio
-                                      v-for="answer, idx1 in question.answers" 
-                                      :key="idx1"
-                                      :label="answer.label"
-                                      :value="answer.value"
-                                      @change="setAnswerValue(question.questionId , answer.answerId , answer.label ,answer.value)"
-                                    />
-                                  </v-radio-group>
-                                </div>
-                              </div>
-                              <v-btn 
-                                v-if="idx > 0"
-                                class="mr-1"
-                                depressed
-                                @click="prevStep($event,stepEl)"
-                              >
-                                <v-icon v-text="'mdi-chevron-left'" /> 前一題
-                              </v-btn>
-                              <v-btn
-                                v-if="idx < questionnaire.questions.length - 1 "
-                                class="mr-1"
-                                depressed
-                                @click="nextStep($event,stepEl)"
-                              >
-                                下一題 <v-icon v-text="'mdi-chevron-right'" />
-                              </v-btn>
-                              <!-- <v-btn
-                                v-if="idx === questionnaire.questions.length - 1 && !isView"
-                                class="mr-1"
-                                depressed
-                                color="success"
-                                @click="submit"
-                              >
-                                提交問卷 <v-icon v-text="'mdi-clipboard-text-multiple'" />
-                              </v-btn> -->
-                            </v-stepper-content>
+                                    <v-icon v-text="'mdi-chevron-left'" /> 前一題
+                                  </v-btn>
+                                  <v-btn
+                                    v-if="idx < questionnaire.questions.length - 1 "
+                                    class="col-5 mr-1"
+                                    depressed
+                                    @click="nextStep($event,stepEl)"
+                                  >
+                                    下一題 <v-icon v-text="'mdi-chevron-right'" />
+                                  </v-btn>
+                                </v-row>
+                              </v-stepper-content>
+                            </div>
                           </div>
-                        </div>
-                      </v-stepper-items>
-                    </v-stepper>
+                        </v-stepper-items>
+                      </v-stepper>
+                    </v-col>
+                    <v-col v-if="!isView" class="d-flex justify-center">
+                      <v-btn
+                        class="mr-1 text-h6"                        
+                        color="success"
+                        block
+                        elevation="1"
+                        fab
+                        rounded                        
+                        @click="submit"
+                      >
+                        提交問卷<v-icon v-text="'mdi-clipboard-text-multiple'" />
+                      </v-btn>
+                    </v-col>
                   </v-col>
                 </v-col>
               </v-col>
-              <v-col v-if="!isView" class="d-flex justify-center">
-                <v-btn
-                  class="mr-1"
-                  depressed
-                  color="success"
-                  @click="submit"
-                >
-                  提交問卷 <v-icon v-text="'mdi-clipboard-text-multiple'" />
-                </v-btn>
-              </v-col>
-            </v-col>
-          </v-row>
-        </v-form>
-      </v-col>
-    </v-row>
-  </v-container>
+            </v-row>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -568,5 +581,206 @@
     .el-tabs__item.is-active, .el-tabs__new-tab:hover {
       color: $green;
     }
+  }
+
+/*台電header */
+  #header {
+    width: 100%;
+    background: #FFF;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+  #nav {
+    width: 100%;
+    margin: 0 auto;
+    padding: 30px 0 10px 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 1250px;
+  }
+
+
+  #logo {
+      position: relative;
+      float: left;
+      width: 280px;
+      height: 30px;
+  }
+
+  #logo .circle {
+    position: absolute;
+    top: -20px;
+    left: 0px;
+    z-index: 9998;
+    margin: 0;
+    padding: 0;
+    width: 100px;
+    height: 100px;
+    background: url("~@/images/logo_tpc.svg") no-repeat center;
+    text-indent: -9999px;
+  }
+
+  #logo a {
+    display: block;
+  }
+
+  a:link,
+  a:visited {
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .clear {
+    zoom: 1;
+    clear: both;
+  }
+
+
+  #logo .text {
+    position: absolute;
+    top: 0px;
+    left: 100px;
+    z-index: 9998;
+    margin: 0;
+    padding: 0;
+    width: 164px;
+    height: 27px;
+    background: url("~@/images/logo.png") no-repeat left center;
+    text-indent: -9999px;
+  }
+
+  #top_menu {
+    position: relative;
+    width: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    background: #9dd127;
+    background: -webkit-radial-gradient(top, ellipse cover, #43c11c 0%, #54cb11 10%, #87d127 50%, #9dd127 100%);
+    background: -moz-radial-gradient(top, ellipse cover, #43c11c 0%, #54cb11 10%, #87d127 50%, #9dd127 100%);
+    background: radial-gradient(ellipse at top, #43c11c 0%, #54cb11 10%, #87d127 50%, #9dd127 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#43c11c', endColorstr='#9dd127',GradientType=1 );
+  }
+
+  #top_menu ul {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    height: 56px;
+    margin: 0 auto;
+    padding: 0 0 0 105px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+
+/*
+  .crystalContnet{
+    position: relative;
+  }
+  */
+  .crystalStyle{
+     margin-bottom: 10px !important;
+   //  flex-flow:column;
+   //  z-index: 8;
+  }
+</style>
+<style>
+/*問卷框架*/
+  #questionnaireForm .form-create-wrap .wrap {
+    width: auto;
+    min-height: 100px;
+    margin: 0 auto;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  #questionnaireForm .form-create-wrap .wrap .content-wrap{
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    background-color: #fff;
+    -webkit-box-shadow: 0;
+    box-shadow: 0 0 2px rgb(0 0 0 / 0%), 0 2px 4px rgb(0 0 0 / 0%);
+    margin-right: 10px;
+  }
+
+  #questionnaireForm .form-create-wrap .q-wrap .q-li-focus{
+    border-left-color: #ffffff !important;
+    -webkit-box-shadow: 0 -2px 2px 0 rgb(0 0 0 / 20%), 0 2px 6px 0 rgb(0 0 0 / 24%);
+    box-shadow: 0 -2px 2px 0 rgb(0 0 0 / 20%), 0 2px 6px 0 rgb(0 0 0 / 24%);
+  }
+
+  #questionnaireForm .form-create-wrap{
+    position: relative;
+    width: 80%;
+    min-width: 400px;
+    margin: 0px auto;
+  }
+
+  #questionnaireForm .form-create-wrap .q-wrap .q-item-wrap{
+    padding: 0px 24px 54px 42px;
+  }
+
+  #questionnaireForm .v-stepper__content {
+    top: 0;
+    padding: 24px 24px 56px 24px;
+    -webkit-box-flex: 1;
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto;
+    width: 100%;
+  }
+
+  #questionnaireForm .form-create-wrap .q-wrap .q-title-wrap{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 0px !important;
+  }
+
+  /**redio buttom */
+  .ckbutton_checkbox, .rdobutton_radio{
+    width: 60px;
+    height: 60px;
+  }
+  #questionnaireForm .v-label {
+        font-size: 25px;
+  }
+
+  #questionnaireForm .v-icon.v-icon.v-icon.v-icon {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    display: -webkit-inline-box;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -webkit-font-feature-settings: "liga";
+    font-feature-settings: "liga";
+    font-size: 34px;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    letter-spacing: normal;
+    line-height: 1;
+    position: relative;
+    text-indent: 0;
+    -webkit-transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), visibility 0s;
+    transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1), visibility 0s;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  #questionnaireForm .v-input--radio-group__input {
+    border: none;
+    cursor: default;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
   }
 </style>

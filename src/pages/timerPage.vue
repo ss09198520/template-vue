@@ -357,8 +357,8 @@
       </v-row>
       <hr style="margin-top: 30px;margin-bottom: 30px;">
       <v-row class="marginLeft">
-        <v-btn class="mr-3" @click="openPortal()">開啟問卷作答 (舊樣式)</v-btn>
-        <v-btn class="mr-3" @click="openNewPortal()">開啟問卷作答 (新樣式)</v-btn>
+        <v-btn class="mr-3" @click="openPortal()">開啟問卷作答 (新樣式)</v-btn>
+        <v-btn class="mr-3" @click="openOldPortal()">開啟問卷作答 (舊樣式)</v-btn>
       </v-row>
       <hr style="margin-top: 30px;margin-bottom: 30px;">
 
@@ -706,6 +706,7 @@ export default {
           let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
           this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + '12345678', '滿意度調查', config);
           this.windowRef.addEventListener("beforeunload", this.closePortal);
+          console.log('this.windowRef' , this.windowRef)
         },
         closePortal() {
           if (this.windowRef) {
@@ -714,15 +715,15 @@ export default {
             MessageService.showSuccess('客戶已完成問卷填寫' + "✓")
           }
         },
-        openNewPortal() {
+        openOldPortal() {
           let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-          this.windowNewRef = window.open("/tpes/#/satisfaction/answerTemp?acceptNum=" + '12345678', '滿意度調查', config);
-          this.windowNewRef.addEventListener("beforeunload", this.closeNewPortal);
+          this.windowOldRef = window.open("/tpes/#/satisfaction/answerTemp?acceptNum=" + '12345678', '滿意度調查', config);
+          this.windowOldRef.addEventListener("beforeunload", this.closeOldPortal);
         },
-        closeNewPortal() {
-          if (this.windowNewRef) {
-            this.windowNewRef.close();
-            this.windowNewRef = null;
+        closeOldPortal() {
+          if (this.windowOldRef) {
+            this.windowOldRef.close();
+            this.windowOldRef = null;
             MessageService.showSuccess('客戶已完成問卷填寫' + "✓")
           }
         },

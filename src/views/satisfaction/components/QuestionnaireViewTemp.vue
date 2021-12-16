@@ -96,7 +96,7 @@
                         rounded                        
                         @click="submit"
                       >
-                        提交問卷　　<v-icon v-text="'mdi-clipboard-text-multiple'" />
+                        提交問卷<v-icon v-text="'mdi-clipboard-text-multiple'" />
                       </v-btn>
                     </v-col>
                   </v-col>
@@ -584,31 +584,31 @@
   }
 
 /*台電header */
-#header {
-        width: 100%;
-        background: #FFF;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-    }
+  #header {
+    width: 100%;
+    background: #FFF;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+  }
 
-#nav {
+  #nav {
     width: 100%;
     margin: 0 auto;
     padding: 30px 0 10px 0;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     width: 1250px;
-}
+  }
 
 
-#logo {
-    position: relative;
-    float: left;
-    width: 280px;
-    height: 30px;
-}
+  #logo {
+      position: relative;
+      float: left;
+      width: 280px;
+      height: 30px;
+  }
 
-#logo .circle {
+  #logo .circle {
     position: absolute;
     top: -20px;
     left: 0px;
@@ -619,25 +619,25 @@
     height: 100px;
     background: url("~@/images/logo_tpc.svg") no-repeat center;
     text-indent: -9999px;
-}
+  }
 
-#logo a {
+  #logo a {
     display: block;
-}
+  }
 
-a:link,
-a:visited {
+  a:link,
+  a:visited {
     text-decoration: none;
     cursor: pointer;
-}
+  }
 
-.clear {
+  .clear {
     zoom: 1;
     clear: both;
-}
+  }
 
 
-#logo .text {
+  #logo .text {
     position: absolute;
     top: 0px;
     left: 100px;
@@ -648,9 +648,9 @@ a:visited {
     height: 27px;
     background: url("~@/images/logo.png") no-repeat left center;
     text-indent: -9999px;
-}
+  }
 
-#top_menu {
+  #top_menu {
     position: relative;
     width: 100%;
     -webkit-box-sizing: border-box;
@@ -660,9 +660,9 @@ a:visited {
     background: -moz-radial-gradient(top, ellipse cover, #43c11c 0%, #54cb11 10%, #87d127 50%, #9dd127 100%);
     background: radial-gradient(ellipse at top, #43c11c 0%, #54cb11 10%, #87d127 50%, #9dd127 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#43c11c', endColorstr='#9dd127',GradientType=1 );
-}
+  }
 
-#top_menu ul {
+  #top_menu ul {
     position: relative;
     width: 100%;
     max-width: 1200px;
@@ -671,7 +671,7 @@ a:visited {
     padding: 0 0 0 105px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-}
+  }
 
 /*
   .crystalContnet{
@@ -686,15 +686,15 @@ a:visited {
 </style>
 <style>
 /*問卷框架*/
-#questionnaireForm .form-create-wrap .wrap {
+  #questionnaireForm .form-create-wrap .wrap {
     width: auto;
     min-height: 100px;
     margin: 0 auto;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
-}
-#questionnaireForm .form-create-wrap .wrap .content-wrap{
+  }
+  #questionnaireForm .form-create-wrap .wrap .content-wrap{
     -webkit-box-flex: 1;
     -ms-flex: 1;
     flex: 1;
@@ -702,35 +702,35 @@ a:visited {
     -webkit-box-shadow: 0;
     box-shadow: 0 0 2px rgb(0 0 0 / 0%), 0 2px 4px rgb(0 0 0 / 0%);
     margin-right: 10px;
-}
+  }
 
-#questionnaireForm .form-create-wrap .q-wrap .q-li-focus{
+  #questionnaireForm .form-create-wrap .q-wrap .q-li-focus{
     border-left-color: #ffffff !important;
     -webkit-box-shadow: 0 -2px 2px 0 rgb(0 0 0 / 20%), 0 2px 6px 0 rgb(0 0 0 / 24%);
     box-shadow: 0 -2px 2px 0 rgb(0 0 0 / 20%), 0 2px 6px 0 rgb(0 0 0 / 24%);
-}
+  }
 
-#questionnaireForm .form-create-wrap{
+  #questionnaireForm .form-create-wrap{
     position: relative;
     width: 80%;
     min-width: 400px;
     margin: 0px auto;
-}
+  }
 
-#questionnaireForm .form-create-wrap .q-wrap .q-item-wrap{
-  padding: 0px 24px 54px 42px;
-}
+  #questionnaireForm .form-create-wrap .q-wrap .q-item-wrap{
+    padding: 0px 24px 54px 42px;
+  }
 
-#questionnaireForm .v-stepper__content {
+  #questionnaireForm .v-stepper__content {
     top: 0;
     padding: 24px 24px 56px 24px;
     -webkit-box-flex: 1;
     -ms-flex: 1 0 auto;
     flex: 1 0 auto;
     width: 100%;
-}
+  }
 
-#questionnaireForm .form-create-wrap .q-wrap .q-title-wrap{
+  #questionnaireForm .form-create-wrap .q-wrap .q-title-wrap{
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -740,16 +740,16 @@ a:visited {
     margin-bottom: 0px !important;
   }
 
-/**redio buttom */
-.ckbutton_checkbox, .rdobutton_radio{
-  width: 60px;
-  height: 60px;
-}
-#questionnaireForm .v-label {
-      font-size: 25px;
-}
+  /**redio buttom */
+  .ckbutton_checkbox, .rdobutton_radio{
+    width: 60px;
+    height: 60px;
+  }
+  #questionnaireForm .v-label {
+        font-size: 25px;
+  }
 
-#questionnaireForm .v-icon.v-icon.v-icon.v-icon {
+  #questionnaireForm .v-icon.v-icon.v-icon.v-icon {
     -webkit-box-align: center;
     -ms-flex-align: center;
     align-items: center;
@@ -773,8 +773,8 @@ a:visited {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-#questionnaireForm .v-input--radio-group__input {
+  }
+  #questionnaireForm .v-input--radio-group__input {
     border: none;
     cursor: default;
     display: -webkit-box;
@@ -782,5 +782,5 @@ a:visited {
     display: flex;
     width: 100%;
     justify-content: space-around;
-}
+  }
 </style>

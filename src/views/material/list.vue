@@ -372,14 +372,16 @@
       <v-img
         v-if="isImage(previewFileName)"
         :src="previewUrl"
-        max-width="700"
-        max-height="1024"
+        max-width="1280"
+        max-height="768"
         @load="imageLoaded = true"
         @click="closeOverlay"
       />
       <video 
         v-if="isVideo(previewFileName)" 
-        controls 
+        width="1280"
+        height="768"
+        controls
         controlsList="nodownload"
         @click="closeOverlay"
       >

@@ -51,7 +51,6 @@
       <v-row class="marginLeft">
         <v-btn class="mr-3" @click="openNewWindow()">OPEN CHROME</v-btn>
         <v-btn class="mr-3" @click="dualScreenExtend()">EXTEND</v-btn>
-        <v-btn class="mr-3" @click="openPortal()">openSatisfactionWindow</v-btn>
         <v-btn @click="dualScreenClone()">CLONE</v-btn>
       </v-row>
       <hr style="margin-top: 30px;margin-bottom: 30px;">
@@ -353,6 +352,16 @@
         <v-btn @click="generateRejectReport()">start</v-btn>
       </v-row>
 
+      <v-row>
+        <h1>Test 問卷作答</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-btn class="mr-3" @click="openPortal()">開啟問卷作答 (新樣式)</v-btn>
+        <v-btn class="mr-3" @click="openOldPortal()">開啟問卷作答 (舊樣式)</v-btn>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+
     </v-container>
     <v-dialog id="importWordModal" v-model="importWordModalShow" width="370">
       <v-card>
@@ -548,10 +557,6 @@ export default {
             
             this.importExcelModalShow = false;
         },
-        openNewSatisfactionWindow() {
-          let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
-          window.open("/tpes/#/satisfaction/answer?acceptNum=" + '12345678', '滿意度調查', config);
-        },
         openNewWindow() {
           PMCService.callBrowserAdapter('https://www.google.com');
         },
@@ -697,18 +702,28 @@ export default {
                 MessageService.showError("失敗");
             });
         },
-        // openNewSatisfactionWindow() {
-          
-        // },
         openPortal() {
           let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
           this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + '12345678', '滿意度調查', config);
           this.windowRef.addEventListener("beforeunload", this.closePortal);
+          console.log('this.windowRef' , this.windowRef)
         },
         closePortal() {
           if (this.windowRef) {
             this.windowRef.close();
             this.windowRef = null;
+            MessageService.showSuccess('客戶已完成問卷填寫' + "✓")
+          }
+        },
+        openOldPortal() {
+          let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
+          this.windowOldRef = window.open("/tpes/#/satisfaction/answerTemp?acceptNum=" + '12345678', '滿意度調查', config);
+          this.windowOldRef.addEventListener("beforeunload", this.closeOldPortal);
+        },
+        closeOldPortal() {
+          if (this.windowOldRef) {
+            this.windowOldRef.close();
+            this.windowOldRef = null;
             MessageService.showSuccess('客戶已完成問卷填寫' + "✓")
           }
         },

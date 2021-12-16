@@ -87,16 +87,16 @@ export const constantRoutes = [
       }
     ]
   },
-  {
+  { //新樣式 by Crystal
     path: '/satisfaction/answer',
     name: 'Satisfaction-Answer',
     component: () => import('@/views/satisfaction/answer'),
     hidden: true,
     meta: { title: 'TPES-問卷', icon: 'mdi-pencil-box-multiple-outline' },
   },
-  {
+  { //舊樣式 by John
     path: '/satisfaction/answerTemp',
-    name: 'Satisfaction-Answer',
+    name: 'Satisfaction-AnswerTmp',
     component: () => import('@/views/satisfaction/answerTemp'),
     hidden: true,
     meta: { title: 'TEMP-問卷', icon: 'mdi-pencil-box-multiple-outline' },

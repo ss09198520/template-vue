@@ -290,6 +290,9 @@ export default {
                 this.maxSignVersion = response.restData.maxSignVersion;
                 this.empName = response.restData.empName;
 
+                // 初始化一次後就將修正件 flag 壓為 N 避免每次都是修正件
+                this.isUpdate = "N";
+
                 // 若為加密參數進件，放入解密後才有的參數
                 this.setDescryptedParam(response.restData);
 

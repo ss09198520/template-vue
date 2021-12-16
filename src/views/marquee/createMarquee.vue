@@ -262,11 +262,11 @@
               <v-btn
                 class="ma-1"
                 depressed
-                color="success"
+                color="info"
                 :disabled="!valid"
-                @click="submit(true)"
+                @click="submit(false)"
               >
-                確認送出
+                確認
               </v-btn>
             </v-col>
           </v-row>

@@ -281,7 +281,7 @@
                   fab
                   x-small
                   color="success"
-                  :disabled="item.signStatus == 'WAIT' || item.signStatus == 'PROGRESS' || item.signStatus == 'PASS'"
+                  :disabled="(item.signStatus == 'WAIT' && item.marqueeType == 'GENERAL') || (item.signStatus == 'PROGRESS' && item.marqueeType == 'GENERAL')|| (item.signStatus == 'PASS' && item.marqueeType == 'GENERAL')"
                   @click="editItem(item)"
                   v-on="on"
                 >

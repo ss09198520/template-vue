@@ -281,7 +281,7 @@
                     >
                     <v-row v-if="(formPageMode == 'edit' && !attachment.canOnlyView)">
                       <v-col cols="6" class="t-center">
-                        <v-btn v-show="!attachment.canAcctUpload" depressed color="error" @click="deleteAttachment(index)">
+                        <v-btn depressed color="error" @click="deleteAttachment(index)">
                           刪除
                           <v-icon
                             right
@@ -305,7 +305,7 @@
                     </v-row>
                     <!-- 核算補件專用 -->
                     <v-row v-else-if="formPageMode == 'accounting' && attachment.canAcctUpload">
-                      <v-col v-if="attachment.base64 != null" cols="12" class="t-center">
+                      <v-col v-if="attachment.base64 || (attachment.filNo && attachment.originalFileName)" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="clearAttachment(attachment)">
                           清空
                           <v-icon

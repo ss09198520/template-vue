@@ -1083,6 +1083,7 @@ export default {
                             if(!ValidateUtil.isEmpty(this.acctUploadFileCode) && this.acctUploadFileCode == attachment.fileCode && !ValidateUtil.isEmpty(attachment.fileNo)){
                                 isUploadedSpecificFile = true;
                                 attachment.canAcctUpload = true;
+                                attachment.needSeal = (acctUploadFileSealFlag == "Y");
                             }
 
                             // 若已有掃描的附件，將 file 從 List 移除，最後剩下來的就是還沒掃描的

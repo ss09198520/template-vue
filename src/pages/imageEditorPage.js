@@ -19,8 +19,8 @@ export default {
             acceptNum: null,
             formSeq: null,
             options: {
-                cssMaxWidth: 2000,
-                cssMaxHeight: 2000,
+                cssMaxWidth: window.screen.width - 50,
+                cssMaxHeight: 99999,
                 includeUI: {
                     uiSize: {
                         width: "100%",

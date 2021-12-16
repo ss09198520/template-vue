@@ -148,6 +148,7 @@ export default {
             needScanFileList: [],
             needScanFileHint: null,
             needScanAttachHint: null,
+            oriNeedScanFileList: [],
             isNeedScanAttach: false,
             maxSignVersion: 0,
             isLoading: false,
@@ -286,6 +287,7 @@ export default {
                 this.editedFormFileNo = response.restData.editedFormFileNo;
                 this.accountingMemo = response.restData.accountingMemo;
                 this.needScanFileList = response.restData.needScanFileList;
+                this.oriNeedScanFileList = response.restData.needScanFileList;
                 this.isNeedScanAttach = response.restData.needScanAttach;
                 this.maxSignVersion = response.restData.maxSignVersion;
                 this.empName = response.restData.empName;
@@ -1012,6 +1014,8 @@ export default {
         checkNeedScanFile(onlyForCheck){
             this.needScanFileHint = "";
 
+            this.needScanFileList = Array.from(this.oriNeedScanFileList);
+
             // 證件
             if(!ValidateUtil.isEmpty(this.needScanFileList)){
                 for (let index = 0 ; index < this.needScanFileList.length ; index++) {
@@ -1083,7 +1087,7 @@ export default {
 
                     if(!ValidateUtil.isEmpty(this.attachmentList) && needScanFile != null){
                         for (let attachment of this.attachmentList) {
-                            if(!ValidateUtil.isEmpty(this.acctUploadFileCode) && this.acctUploadFileCode == attachment.fileCode && !ValidateUtil.isEmpty(attachment.fileNo)){
+                            if(!onlyForCheck && !ValidateUtil.isEmpty(this.acctUploadFileCode) && this.acctUploadFileCode == attachment.fileCode && !ValidateUtil.isEmpty(attachment.fileNo)){
                                 isUploadedSpecificFile = true;
                                 attachment.canAcctUpload = true;
                                 attachment.needSeal = (acctUploadFileSealFlag == "Y");
@@ -1138,8 +1142,6 @@ export default {
                     }
                 }
             }
-
-            console.log(this.attachmentList);
 
             return ValidateUtil.isEmpty(this.needScanFileList);
         },

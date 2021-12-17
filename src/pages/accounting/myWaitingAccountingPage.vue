@@ -276,7 +276,7 @@
                 </template>
                 <!-- 操作狀態 -->
                 <template v-slot:item.action="{ item }">              
-                  <v-tooltip v-if="auditor" top>
+                  <v-tooltip v-if="item.canAccounting" top>
                     <template v-slot:activator="{ on }">
                       <v-btn
                         v-if="item.action"                    
@@ -291,7 +291,7 @@
                     </template>
                     <span>進行核算</span>
                   </v-tooltip>
-                  <v-tooltip v-if="checker" top>
+                  <v-tooltip v-if="!item.canAccounting" top>
                     <template v-slot:activator="{ on }">
                       <v-btn
                         v-if="item.action"                    

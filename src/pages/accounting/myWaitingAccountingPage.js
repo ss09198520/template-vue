@@ -74,7 +74,7 @@ export default {
 
             ],
             agentCaseOption:[
-                {text:'顯示全部',value:'All'},
+                {text:'顯示全部',value:'QUERYALL'},
                 {text:'顯示代理件',value:'QUERYAGENT'},
                 {text:'不顯示代理件',value:'QUERYNOTAGENT'},
             ],
@@ -276,20 +276,20 @@ export default {
                         }          
                         if(element.isAgentForm){
                             element.isAgent = true;
-                        }                  
+                        }
+                                        
                     });                  
-                    this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                                                                   
+                    this.numOfAccounting = response.restData.initWaitAccountingListVo.length;  
+
                     if(!ValidateUtil.isEmpty(response.restData.authList)){
                         // 根據使用者角色決定頁面顯示
                         for(let i in response.restData.authList){
                             // 核算員
-                            if(response.restData.authList[i] == 'AUTH15'){
-                                this.auditor = true;
+                            if(response.restData.authList[i] == 'AUTH15'){                                
                                 this.hasAccountingAuth = true;
                             }
                             // 檢算員
-                            else if(response.restData.authList[i] == 'AUTH20'){
-                                this.checker = true;
+                            else if(response.restData.authList[i] == 'AUTH20'){                                
                                 this.hasAccountingAuth = true;
                             }
                             // 核算課長 or 核算部門主辦 可看到該課所有資料，但不能進行核算
@@ -385,7 +385,26 @@ export default {
                             element.isAgent = true;
                         }                  
                     });                        
-                    this.numOfAccounting = response.restData.queryWaitAccountingListVo.length;        
+                    this.numOfAccounting = response.restData.queryWaitAccountingListVo.length;      
+                    
+                    if(!ValidateUtil.isEmpty(response.restData.authList)){
+                        // 根據使用者角色決定頁面顯示
+                        for(let i in response.restData.authList){
+                            // 核算員
+                            if(response.restData.authList[i] == 'AUTH15'){                                
+                                this.hasAccountingAuth = true;
+                            }
+                            // 檢算員
+                            else if(response.restData.authList[i] == 'AUTH20'){                                
+                                this.hasAccountingAuth = true;
+                            }
+                            // 核算課長 or 核算部門主辦 可看到該課所有資料，但不能進行核算
+                            else if(response.restData.authList[i] == 'AUTH01' || response.restData.authList[i] == 'AUTH07'){
+                                this.checker = true;
+                                this.hasAccountingAuth = true;
+                            }
+                        }
+                    } 
                     MessageService.showSuccess('依條件查詢待核算資料成功');                                                           
                 } else {
                   //接後端候要放errorMsg

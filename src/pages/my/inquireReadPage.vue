@@ -333,7 +333,14 @@
                   return-object 
                   item-text="empName"
                   @change="checkReadAudience()"
-                />
+                >
+                  <template slot="item" slot-scope="data">
+                    {{ data.item.empName }} ({{ data.item.empNo }})
+                  </template>
+                  <template slot="selection" slot-scope="data">
+                    {{ data.item.empName }} ({{ data.item.empNo }})
+                  </template>
+                </v-select>
                 <!-- <v-text-field
                   v-model="setMember"                           
                   outlined

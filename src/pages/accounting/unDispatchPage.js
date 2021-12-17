@@ -143,7 +143,7 @@ export default {
                     this.classList = classList;                         
                     // 取得有設定班別的核算員清單
                     accountingList = response.restData.accountingDispatchVoList;                                       
-                    this.accountingList = accountingList;                     
+                    this.accountingList = accountingList;                                       
                } else {
                 MessageService.showError(response.restData.message);           
                }

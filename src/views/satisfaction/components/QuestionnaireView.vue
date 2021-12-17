@@ -19,15 +19,15 @@
               <div class="text-h4 mt-6 mb-10">
                 服務滿意度調查同意書
               </div>
-              <div class="text-h6 mt-4 mb-2" max-width="300">
+              <div class="text-h6 mt-4 mb-2">
                 感謝您長期對台灣電力公司的支持與愛護。              
                 想了解更多關於您的經驗和意見有助於我們建構更完善的服務流程。             
                 接下來需花費您3-5分鐘進行簡短的服務滿意度調查。
               </div>
-              <div v-show="false" class="text-h6 mt-4 mb-2 info--text" max-width="300">
+              <div v-show="false" class="text-h6 mt-4 mb-2 info--text">
                 我們不會將您對此調查的回答與您的個人資訊相關聯。
               </div>
-              <div class="text-h6 mt-4 mb-2 error--text" max-width="300">
+              <div class="text-h6 mt-4 mb-2 error--text">
                 我們將會保留您的調查回答以及個人資訊相關聯，以利後續優化或訪談。
               </div>
             </v-list-item-content>

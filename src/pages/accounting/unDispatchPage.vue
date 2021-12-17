@@ -135,7 +135,14 @@
                   class="my-auto"
                   color="#ADADAD"
                   @change="change('selectEmp');validVal()"
-                />
+                >
+                  <template slot="item" slot-scope="data">
+                    {{ data.item.accountingName }} ({{ data.item.accounting }})
+                  </template>
+                  <template slot="selection" slot-scope="data">
+                    {{ data.item.accountingName }} ({{ data.item.accounting }})
+                  </template>
+                </v-select>
               </v-col>
             </v-row>
           </v-card-text>

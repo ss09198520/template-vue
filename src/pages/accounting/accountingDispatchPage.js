@@ -527,7 +527,7 @@ export default {
                   accountingName :this.dispatchInfo.accountingName,
                   calculate : this.dispatchInfo.calculate,
                   calculateName : this.dispatchInfo.calculateName,
-                  type : 'P',
+                  type : 'F',
                   electricNumStart : this.dispatchInfo.packageNumList[i].start,
                   electricNumEnd : this.dispatchInfo.packageNumList[i].end,
                 })         
@@ -552,7 +552,7 @@ export default {
                   accountingName :this.dispatchInfo.accountingName,
                   calculate : this.dispatchInfo.calculate,
                   calculateName : this.dispatchInfo.calculateName,
-                  type : 'H',
+                  type : 'E',
                   electricNumStart : this.dispatchInfo.highVoltageNumList[i].start,
                   electricNumEnd : this.dispatchInfo.highVoltageNumList[i].end,
                 })       
@@ -578,7 +578,7 @@ export default {
                       accountingName :this.dispatchInfo.accountingName,
                       calculate : this.dispatchInfo.calculate,
                       calculateName : this.dispatchInfo.calculateName,
-                      type : 'F',
+                      type : 'C',
                       electricNumStart : this.dispatchInfo.meterElectricNumList[i].start,
                       electricNumEnd : this.dispatchInfo.meterElectricNumList[i].end,
                     })       
@@ -594,7 +594,7 @@ export default {
                     accountingName :this.dispatchInfo.accountingName,
                     calculate : this.dispatchInfo.calculate,
                     calculateName : this.dispatchInfo.calculateName,
-                    type : 'F',
+                    type : 'C',
                     computeDate: this.dispatchInfo.computeDateList[i]
                   })                
               }

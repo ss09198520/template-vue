@@ -1,5 +1,6 @@
 import MessageService from "@/assets/services/message.service";
 import ValidateUtil from "@/assets/services/validateUtil";
+import AjaxService from "@/assets/services/ajax.service";
 
 export default{
     beforeMount() {
@@ -8,15 +9,15 @@ export default{
     data(){
         return{
             leaveListHeaders: [
-                { text: '姓名代號', value: 'empNo', align: 'center' },
-                { text: '員工姓名', value: 'empName', align: 'center' },
+                { text: '姓名代號', value: 'applicant', align: 'center' },
+                { text: '員工姓名', value: 'applicantName', align: 'center' },
                 { text: '休假期間', value: 'leaveDate', align: 'center' },
                 { text: '代理人姓名代號', value: 'agent', align: 'center' },            
                 { text: '代理人姓名', value: 'agentName', align: 'center' },
                 { text: '資料來源', value: 'dataSource', align: 'center' },
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
-            leaveList: null,
+            leaveList: [],
             dataSource:null,
             dataSourceList:[
                 { text: '差假管理系統', value: 'A' },
@@ -55,7 +56,7 @@ export default{
     },
     methods:{
         init(){
-            this.queryLeaveInit();
+            this.queryLeaveList();
         },
         deleteLeave(item){
             this.selectIndex = this.leaveList.indexOf(item);
@@ -65,23 +66,22 @@ export default{
         },
         openEditModel(item){
             this.agentList = [];
-            console.log(item);
             this.selectItem = item;
+            this.queryAgentOptionList();
             this.selectAgent.empNo = item.agent;
             this.selectAgent.empName = item.agentName;
-            
-            for(let i in this.oriAgentList) {
-                if(item.isMgmn){
-                    if(this.oriAgentList[i].isMgmn){
-                        this.agentList.push(this.oriAgentList[i]);
-                    } 
-                } else {
-                    if(!this.oriAgentList[i].isMgmn){
-                        this.agentList.push(this.oriAgentList[i]);
-                    } 
-                }
+            // for(let i in this.oriAgentList) {
+            //     if(item.isMgmn){
+            //         if(this.oriAgentList[i].isMgmn){
+            //             this.agentList.push(this.oriAgentList[i]);
+            //         } 
+            //     } else {
+            //         if(!this.oriAgentList[i].isMgmn){
+            //             this.agentList.push(this.oriAgentList[i]);
+            //         } 
+            //     }
                
-            }
+            // }
             this.editModel = true;
         },
         submit(type){
@@ -125,72 +125,61 @@ export default{
          * 
          **/
 
-        // Action: 取得初始化資料
-        queryLeaveInit(){
-            // 模擬假資料
-            let agentList = [
-                {empNo:'015212-001', empName:'王大維',isMgmn:true,dept:'業務組'},
-                {empNo:'015213-001', empName:'林文琪',isMgmn:true,dept:'東山服務所'},
-                {empNo:'015214-001', empName:'張佑臻',isMgmn:true,dept:'大里服務中心'},
-                {empNo:'1050331-002', empName:'張芊芊',isMgmn:false,dept:'大里服務中心'},
-                {empNo:'1050331-003', empName:'吳文彥',isMgmn:false,dept:'大里服務中心'},
-                {empNo:'1050331-004', empName:'連雪晴',isMgmn:false,dept:'大里服務中心'},
-                
-            ];
+         queryAgentOptionList(){
+            AjaxService.post('/leaveListController/queryAgentOptionList', {}, 
+            (response) => {
+                if(response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                ){
+                    this.oriAgentList = response.restData.empInfoVoList;
+                }
+            },
+            (error) => {
 
-            this.oriAgentList = JSON.parse(JSON.stringify(agentList));
+            });
         },
 
         // Action: 依條件查詢請代理請假清單
         queryLeaveList(){
+            let dataSource = (this.dataSource != null && this.dataSource != undefined)? this.dataSource.value : null;
 
-        // Vin 參數
-        // empNo: this.empNo,
-        // empName: this.empName,
-        // agent: this.agent,
-        // agentName: this.agentName,
-        // dataSource: this.dataSource.value,
-        // AjaxService.post('//',
-        // {
-                   
-        // },
-        // (response) => {
-        //     if (response != null &&
-        //         response != undefined &&                    
-        //         response.restData.message != null &&
-        //         response.restData.message != undefined &&
-        //         response.restData.success
-        //         ) {
-        //         if (ValidateUtil.isEmpty(response.restData.returnReasonVoList)) {                        
-        //             MessageService.showInfo('查無資料');
-        //         } else {                                                                                                                                            
-        //             reasonList = response.restData.returnReasonVoList;
-        //             this.reasonList = reasonList;
-        //         }
-        //     } else {
-        //       //接後端候要放errorMsg
-        //       //MessageService.showError('查詢審核帳號申請清單 失敗');                  
-        //     }
-        // },
-        //     (response) => { // server 出錯才會進入
-        //         // server error                    
-        //         MessageService.showSystemError(response.restData.code);
-        //     }
-        // );
+            AjaxService.post('/leaveListController/queryLeaveAgentInfoList',
+            {
+                applicant: this.empNo,
+                applicantName: this.empName,
+                agent: this.agent,
+                agentName: this.agentName,
+                dataSource: dataSource,
+                startDate: this.leaveDate.start,
+                endDate: this.leaveDate.end
+            },
+            (response) => {
+                if (response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                    ) {
+                    if (ValidateUtil.isEmpty(response.restData.agentApplicationVoList)) {                        
+                        MessageService.showInfo('查無資料');
+                    } else {                                                                                                                                            
+                        this.leaveList = response.restData.agentApplicationVoList;
+                    }
+                } else {
+                //接後端候要放errorMsg
+                //MessageService.showError('查詢審核帳號申請清單 失敗');                  
+                }
+            },
+                (response) => { // server 出錯才會進入
+                    // server error                    
+                    MessageService.showSystemError(response.restData.code);
+                }
+            );
 
-         // 模擬資料
-         let leaveList = [
-                //台中區處
-                { seq:1, empNo: '1050330-001', empName: '梁朝偉', startDate:'2021-09-10 08:00',endDate:'2021-09-11 17:00', agent:'1050331-001', agentName:'蔡政揚',dept: '大里服務中心' ,isMgmn:true, dataSource:'差假管理系統'},
-                { seq:2, empNo: '1050330-002', empName: '王曉花', startDate:'2021-09-10 08:00',endDate:'2021-09-11 17:00', agent:'1050330-002', agentName:'王曉花',dept: '大里服務中心',isMgmn:false, dataSource:'差假管理系統'},
-                { seq:3, empNo: '1050330-003', empName: '林美美', startDate:'2021-09-11 08:00',endDate:'2021-09-12 17:00', agent:'1050330-001', agentName:'梁朝偉',dept: '大里服務中心',isMgmn:false, dataSource:'人工設定'},
-                { seq:4, empNo: '1050331-001', empName: '蔡政揚', startDate:'2021-09-14 08:00',endDate:'2021-09-14 17:00', agent:'1050330-001', agentName:'梁朝偉',dept: '東山服務所',isMgmn:true, dataSource:'差假管理系統'},
-                { seq:5, empNo: '1050331-002', empName: '張芊芊', startDate:'2021-09-12 08:00',endDate:'2021-09-12 17:00', agent:'1050331-003', agentName:'江舒語',dept: '東山服務所',isMgmn:false, dataSource:'人工設定'},
-                { seq:6, empNo: '1050331-003', empName: '江舒語', startDate:'2021-09-29 08:00',endDate:'2021-09-29 12:00', agent:'1050331-002', agentName:'張芊芊',dept: '東山服務所',isMgmn:false, dataSource:'差假管理系統'},
-                { seq:7, empNo: '1050331-003', empName: '江舒語', startDate:'2021-12-28 08:00',endDate:'2021-12-28 17:00', agent:'1050331-002', agentName:'張芊芊',dept: '東山服務所',isMgmn:false, dataSource:'差假管理系統'},
-            ];
-         this.leaveList = leaveList;
-         MessageService.showSuccess('查詢請假清單');
+            MessageService.showSuccess('查詢請假清單');
         },
 
         // Action: 修改代理申請

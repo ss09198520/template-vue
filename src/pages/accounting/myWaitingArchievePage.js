@@ -62,17 +62,19 @@ export default {
                        
             },
             (response) => {
-                if (response != null && response.restData && response.restData.success) {                                           
-                    this.archieveList = Object.assign(response.restData.initWaitArchiveListVo);  
-                    console.log(this.archieveList);                      
-                    this.numOfArchieve = this.archieveList.length;        
-                    response.restData.initWaitArchiveListVo.forEach((element) => {                             
-                        let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
-                        console.log(createHours);                                                                                                                              
-                        if(createHours <= 4 && new Date().getHours() < 17 && !element.hasAllViewAuth){
-                            element.action = true;
-                        }                                         
-                    });                        
+                if (response != null && response.restData && response.restData.success) {
+                    if(response.restData.initWaitArchiveListVo != null){
+                        this.archieveList = Object.assign(response.restData.initWaitArchiveListVo);  
+                        console.log(this.archieveList);                      
+                        this.numOfArchieve = this.archieveList.length;        
+                        response.restData.initWaitArchiveListVo.forEach((element) => {                             
+                            let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
+                            console.log(createHours);                                                                                                                              
+                            if(createHours <= 4 && new Date().getHours() < 17 && !element.hasAllViewAuth){
+                                element.action = true;
+                            }                                         
+                        });
+                    }                                                                                       
                 } else {                   
                    MessageService.showError(response.restData.message);                      
                 }
@@ -94,7 +96,8 @@ export default {
             console.log(this.acceptNum);
             AjaxService.post('/waitArchive/queryWaitArchive',QueryWaitArchiveReq,
             (response) => {
-                if (response && response.restData && response.restData.success) {                                                                                                               
+                if (response && response.restData && response.restData.success) {
+                    if(response.restData.initWaitArchiveListVo != null){                                                                                                               
                     this.archieveList = Object.assign(response.restData.queryWaitArchiveListVo);                        
                     response.restData.queryWaitArchiveListVo.forEach((element) => {
                         let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
@@ -102,7 +105,8 @@ export default {
                         if(createHours <= 4 && new Date().getHours() < 17 && !element.hasAllViewAuth){
                             element.action = true;
                         }  
-                    });                                                                                                           
+                    }); 
+                }                                                                                                          
                 } else {
                     MessageService.showError(response.restData.message);                    
                 }

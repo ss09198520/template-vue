@@ -529,6 +529,7 @@ export default {
     submit(isSign) {
       if(isSign && this.attachedFiles == null && !this.checkSubmit){
         this.checkSubmitFun(isSign);
+         this.checkSubmit = false;
       }else{
       var formData = new FormData();
       if (this.checkDate && this.onEditorChange) {

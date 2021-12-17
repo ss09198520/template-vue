@@ -98,7 +98,7 @@
           @page-count="dataListPageCount = $event"
         >
           <template v-slot:item.action="{ item }">
-            <v-tooltip top>
+            <v-tooltip v-if="item.action" top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   v-if="item.action"                    

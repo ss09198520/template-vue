@@ -197,7 +197,7 @@
                   v-for="(item,id) in mediaFiles"
                   :id="item.id"
                   :key="id"
-                  @click="(previewUrl = item.dataUrl),(previewFileName = item.originalFileName),(overlay = true)"
+                  @click="previewItem(item)"
                 >
                   <div class="imgBox">
                     <img v-if="!!item.dataUrl && isImage(item.originalFileName)" :src="item.dataUrl">
@@ -337,13 +337,13 @@
                 :style="`cursor: pointer`"
                 max-width="50"
                 max-height="50"
-                @dblclick="(previewUrl = item.dataUrl),(previewFileName = item.originalFileName),(overlay = true)"
+                @dblclick="previewItem(item)"
               />
               <video 
                 v-if="!!item.dataUrl && isVideo(item.originalFileName)" 
                 width="50" 
                 height="50"
-                @dblclick="(previewUrl = item.dataUrl),(previewFileName = item.originalFileName),(overlay = true)" 
+                @dblclick="previewItem(item)"
               >
                 <source
                   :src="item.dataUrl"
@@ -377,10 +377,11 @@
         @load="imageLoaded = true"
         @click="closeOverlay"
       />
-      <video 
-        v-if="isVideo(previewFileName)" 
-        width="1280"
-        height="768"
+      <video
+        v-show="isVideo(previewFileName)"
+        id="preViewVideo"
+        max-width="1280"
+        max-height="768"
         controls
         controlsList="nodownload"
         @click="closeOverlay"
@@ -472,12 +473,25 @@
         editedIndex: -1,
       }
     },
+    mounted() {
+      this.height = this.$el.getBoundingClientRect().height
+      window.addEventListener('resize', this.resize, false);
+    },
     methods: {
+      async previewItem(item) {
+        this.previewUrl = item.dataUrl
+        this.previewFileName = item.originalFileName 
+        await this.openOverlay()
+        this.resize()
+      },
       isImage(filename) {
         return (/\.(jpg|jpeg|tiff|png)$/i).test(filename)
       },
       isVideo(filename) {
         return (/\.(mp4)$/i).test(filename)
+      },
+      openOverlay() {
+        this.overlay = true
       },
       closeOverlay() {
         this.overlay = false
@@ -494,15 +508,30 @@
         this.$router.push({path:'/marquee/create'})
         this.dialog = true
       },
-      
       remove() {
         let itemId = this.mediaFiles[this.editedIndex].id
         this.deleteMediaFile(itemId , this.editedIndex)
         this.close()
       },
+      resize() {
+        const video = window.document.getElementById('preViewVideo')
+        if(video){
+          video.height = 100; /* to get an initial width to work with*/
+          let videoRatio = video.height / video.width;
+          let windowRatio = window.innerHeight / window.innerWidth; /* browser size */
+          if (windowRatio < videoRatio) {
+            if (window.innerHeight > 50) { /* smallest video height */
+              video.height = window.innerHeight;
+            } else {
+              video.height = 50;
+            }
+          } else {
+            video.width = '1280';
+          }
+        }
+      },
       preview(e) {
         console.log(e)
-        
         this.previewUrl = document.getElementById(e.currentTarget.id).getAttribute("url");
         // this.title = this.treeName.slice(0, 2);
         // if (this.url.indexOf('mp4') != '-1') {
@@ -535,7 +564,6 @@
         this.alertDialog = true
         this.editedIndex = this.mediaFiles.indexOf(item)
       },
-
       /**
        * @param {Object} questionnaire
        * @returns {Object}
@@ -548,7 +576,6 @@
         }
         return true
       },
-
 
       /**
        * 
@@ -639,6 +666,9 @@
 img {
   max-width: 120px;
   max-height: 120px;
+}
+video {
+  object-fit: cover;
 }
 
 .resourceList li img {

@@ -251,7 +251,7 @@
                 depressed
                 color="success"
                 :disabled="isAddButtonDisabled"
-                @click="submit(true)"
+                @click="checkSubmit = true"
               >
                 送出審核
               </v-btn>
@@ -286,14 +286,14 @@
             icon
             small
             text
-            @click="deleteMarqueeModel = false"
+            @click="checkSubmit = false"
           >
             <v-icon> mdi-close </v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text class="font-24px">
           <v-row class="mt-6 ml-1 font-bold">
-            是否仍要送出
+            無上傳審核附件，是否仍要送出?
           </v-row>
         </v-card-text>
         <v-card-actions class="d-end mt-6">
@@ -302,7 +302,7 @@
           </v-btn>
           <v-btn
             color="primary"
-            @click="submit(isSign)"
+            @click="submit(true)"
           >
             &emsp;確定&emsp;
           </v-btn>
@@ -340,6 +340,7 @@ export default {
         editorData: null
       },
       checkSubmit: false,
+      sumitOK: false,
       pageTitle: "跑馬燈製作",
       startDateMenu: false,
       endDateMenu: false,
@@ -522,15 +523,11 @@ export default {
           relatedSeq: this.location
       });
     },
-    checkSubmitFun(){
-      this.checkSubmit = true;
-      return true;
-    },
+  
     submit(isSign) {
-      if(isSign && this.attachedFiles == null && !this.checkSubmit){
-        this.checkSubmitFun(isSign);
-         this.checkSubmit = false;
-      }else{
+     
+           
+      //if (this.$refs.form.validate()) {
       var formData = new FormData();
       if (this.checkDate && this.onEditorChange) {
         console.log(this.marqueeText);
@@ -587,7 +584,8 @@ export default {
             this.isSubmited = false;
             console.error(error);
           });
-      }} 
+      }
+       this.checkSubmit =  false;
     },
     resetAttachedFiles(){
      

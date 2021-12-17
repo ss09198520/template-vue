@@ -1,113 +1,171 @@
 <template>
   <div>
-    <div id="header">
-      <div id="nav">
-        <div id="logo">
-          <a class="circle">
-            <h1>LOGO</h1>
-          </a><a class="text">
-            <h1>台灣電力公司</h1>
-          </a>
-        </div>
-        <div class="clear" />
-      </div>
-      <div id="top_menu">
-        <ul id="menu" class="scrollbar" data-mcs-theme="minimal-dark" />
-      </div>
-    </div>
-    <v-container>
+    <v-container
+      v-show="!initStatus"
+    >
       <v-row>
-        <v-col>
-          <v-form id="questionnaireForm" ref="questionnaireForm" v-model="valid" lazy-validation>
-            <v-row>
-              <v-col class="form-create-wrap font-weight-bold">
-                <v-col class="wrap">
-                  <v-col class="content-wrap">
-                    <v-col class="item title" :class="{'title-focus': focusIndex === 'title'}">
-                      <v-subheader class="title font-weight-bold">
-                        {{ "台灣電力公司營業櫃台服務滿意度調查" }}｜問卷主題:{{ questionnaire.questionnaireName }}
-                      </v-subheader>
-                    </v-col>
-                    <v-col class="q-wrap">
-                      <v-stepper v-model="step">
-                        <v-stepper-items>
-                          <div v-for="question, idx in questionnaire.questions" :key="idx">
-                            <div id="items" :data-step="idx+1" class="q-li" :class="{'q-li-focus': focusIndex === idx}" @click="focusItem($event, idx)">
-                              <v-stepper-content :step="idx+1">
-                                <v-col class="q-item q-title-wrap">
-                                  <div class="q-title">
-                                    <v-col class="li">
-                                      第 {{ idx+1 }} 題 
-                                      <div class="q-area font-weight-bold">
-                                        {{ question.title }}
-                                      </div>
-                                    </v-col>
+        <v-card
+          class="mx-auto"
+          max-width="900"
+          outlined
+        >
+          <v-list-item three-line>
+            <v-list-item-avatar
+              tile
+              size="80"
+            ><v-img src="~@/images/logo_tpc.svg" />
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <div class="text-h4 mt-6 mb-10">
+                服務滿意度調查同意書
+              </div>
+              <div class="text-h6 mt-4 mb-2" max-width="300">
+                感謝您長期對台灣電力公司的支持與愛護。              
+                想了解更多關於您的經驗和意見有助於我們建構更完善的服務流程。             
+                接下來需花費您3-5分鐘進行簡短的服務滿意度調查。
+              </div>
+              <div v-show="false" class="text-h6 mt-4 mb-2 info--text" max-width="300">
+                我們不會將您對此調查的回答與您的個人資訊相關聯。
+              </div>
+              <div class="text-h6 mt-4 mb-2 error--text" max-width="300">
+                我們將會保留您的調查回答以及個人資訊相關聯，以利後續優化或訪談。
+              </div>
+            </v-list-item-content>
+          </v-list-item>
+          <div class="crystalStyle text-center" justify="space-around">
+            <v-btn
+              class="col-5 mr-1"
+              rounded
+              depressed
+              @click="custom_close()"
+            >
+              不同意
+            </v-btn>
+            <v-btn
+              class="col-5 mr-1"
+              rounded
+              depressed
+              color="info"
+              @click="initStatus=true"
+            >
+              同意
+            </v-btn>
+            </row>
+          </div>
+        </v-card>
+      </v-row>
+    </v-container>
+    <div v-show="initStatus">
+      <div id="header">
+        <div id="nav">
+          <div id="logo">
+            <a class="circle">
+              <h1>LOGO</h1>
+            </a><a class="text">
+              <h1>台灣電力公司</h1>
+            </a>
+          </div>
+          <div class="clear" />
+        </div>
+        <div id="top_menu">
+          <ul id="menu" class="scrollbar" data-mcs-theme="minimal-dark" />
+        </div>
+      </div>
+      <v-container>
+        <v-row>
+          <v-col>
+            <v-form id="questionnaireForm" ref="questionnaireForm" v-model="valid" lazy-validation>
+              <v-row>
+                <v-col class="form-create-wrap font-weight-bold">
+                  <v-col class="wrap">
+                    <v-col class="content-wrap">
+                      <v-col class="item title" :class="{'title-focus': focusIndex === 'title'}">
+                        <v-subheader class="title font-weight-bold">
+                          {{ "台灣電力公司營業櫃台服務滿意度調查" }}｜問卷主題:{{ questionnaire.questionnaireName }}
+                        </v-subheader>
+                      </v-col>
+                      <v-col class="q-wrap">
+                        <v-stepper v-model="step">
+                          <v-stepper-items>
+                            <div v-for="question, idx in questionnaire.questions" :key="idx">
+                              <div id="items" :data-step="idx+1" class="q-li" :class="{'q-li-focus': focusIndex === idx}" @click="focusItem($event, idx)">
+                                <v-stepper-content :step="idx+1">
+                                  <v-col class="q-item q-title-wrap">
+                                    <div class="q-title">
+                                      <v-col class="li">
+                                        第 {{ idx+1 }} 題 
+                                        <div class="q-area font-weight-bold">
+                                          {{ question.title }}
+                                        </div>
+                                      </v-col>
+                                    </div>
+                                  </v-col>
+                                  <div class="q-item-wrap">
+                                    <div v-if="question.type === 'radio' || question.type === 'checkbox'" class="q-item">
+                                      <v-radio-group
+                                        v-model="userAnswers[idx]"
+                                        :rules="[rules.checkSelected(question.required)]"
+                                        :disabled="isView"
+                                        row
+                                      >
+                                        <v-radio
+                                          v-for="answer, idx1 in question.answers" 
+                                          :key="idx1"
+                                          :label="answer.label"
+                                          :value="answer.value"
+                                          @change="setAnswerValue(question.questionId , answer.answerId , answer.label ,answer.value)"
+                                        />
+                                      </v-radio-group>
+                                    </div>
                                   </div>
-                                </v-col>
-                                <div class="q-item-wrap">
-                                  <div v-if="question.type === 'radio' || question.type === 'checkbox'" class="q-item">
-                                    <v-radio-group
-                                      v-model="userAnswers[idx]"
-                                      :rules="[rules.checkSelected(question.required)]"
-                                      :disabled="isView"
-                                      row
+                                  <v-row class="crystalStyle" justify="space-around">
+                                    <v-btn 
+                                      v-if="idx > 0"
+                                      class="col-5 mr-1"
+                                      depressed
+                                      @click="prevStep($event,stepEl)"
                                     >
-                                      <v-radio
-                                        v-for="answer, idx1 in question.answers" 
-                                        :key="idx1"
-                                        :label="answer.label"
-                                        :value="answer.value"
-                                        @change="setAnswerValue(question.questionId , answer.answerId , answer.label ,answer.value)"
-                                      />
-                                    </v-radio-group>
-                                  </div>
-                                </div>
-                                <v-row class="crystalStyle" justify="space-around">
-                                  <v-btn 
-                                    v-if="idx > 0"
-                                    class="col-5 mr-1"
-                                    depressed
-                                    @click="prevStep($event,stepEl)"
-                                  >
-                                    <v-icon v-text="'mdi-chevron-left'" /> 前一題
-                                  </v-btn>
-                                  <v-btn
-                                    v-if="idx < questionnaire.questions.length - 1 "
-                                    class="col-5 mr-1"
-                                    depressed
-                                    @click="nextStep($event,stepEl)"
-                                  >
-                                    下一題 <v-icon v-text="'mdi-chevron-right'" />
-                                  </v-btn>
-                                </v-row>
-                              </v-stepper-content>
+                                      <v-icon v-text="'mdi-chevron-left'" /> 前一題
+                                    </v-btn>
+                                    <v-btn
+                                      v-if="idx < questionnaire.questions.length - 1 "
+                                      class="col-5 mr-1"
+                                      depressed
+                                      @click="nextStep($event,stepEl)"
+                                    >
+                                      下一題 <v-icon v-text="'mdi-chevron-right'" />
+                                    </v-btn>
+                                  </v-row>
+                                </v-stepper-content>
+                              </div>
                             </div>
-                          </div>
-                        </v-stepper-items>
-                      </v-stepper>
-                    </v-col>
-                    <v-col v-if="!isView" class="d-flex justify-center">
-                      <input id="answered" type="hidden" :value="answered">
-                      <v-btn
-                        class="mr-1 text-h6"                        
-                        color="success"
-                        block
-                        elevation="1"
-                        fab
-                        rounded                        
-                        @click="submit"
-                      >
-                        提交問卷<v-icon v-text="'mdi-clipboard-text-multiple'" />
-                      </v-btn>
+                          </v-stepper-items>
+                        </v-stepper>
+                      </v-col>
+                      <v-col v-if="!isView" class="d-flex justify-center">
+                        <input id="answered" type="hidden" :value="answered">
+                        <v-btn
+                          class="mr-1 text-h6"                        
+                          color="success"
+                          block
+                          elevation="1"
+                          fab
+                          rounded                        
+                          @click="submit"
+                        >
+                          提交問卷&emsp;<v-icon v-text="'mdi-clipboard-text-multiple'" />
+                        </v-btn>
+                      </v-col>
                     </v-col>
                   </v-col>
                 </v-col>
-              </v-col>
-            </v-row>
-          </v-form>
-        </v-col>
-      </v-row>
-    </v-container>
+              </v-row>
+            </v-form>
+          </v-col>
+        </v-row>
+      </v-container>
+    </div>
+
   </div>
 </template>
 
@@ -135,6 +193,7 @@
     },
     data () {
       return {
+        initStatus: false,
         userAnswers: [],
         postForm: Object.assign({}, defaultForm),
         stepEl: 0,
@@ -163,6 +222,14 @@
       }
     },
     methods: {
+      custom_close(){
+        
+        if(confirm("您確定要關閉本頁嗎？")){
+          window.opener=null;
+          window.open('','_self');
+          window.close();
+        }
+      },
       focusTitle (event) {
         let classList = event.target.classList
         if (classList.contains('add-list') || classList.contains('el-icon-plus')) return
@@ -679,15 +746,8 @@
     box-sizing: border-box;
   }
 
-/*
-  .crystalContnet{
-    position: relative;
-  }
-  */
   .crystalStyle{
-     margin-bottom: 10px !important;
-   //  flex-flow:column;
-   //  z-index: 8;
+     margin-bottom: 20px !important;
   }
 </style>
 <style>

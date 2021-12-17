@@ -5,14 +5,14 @@
       <v-col class="ml-10 font-18px" cols="12">
         <v-form ref="form" v-model="valid" class="font-weight-bold">
           <v-row class="d-flex justify-start" align="center">
-            <v-col cols="1" class="ml-2"> 跑馬燈內容 </v-col>
+            <v-col cols="1" class="ml-2"> 跑馬燈名稱 </v-col>
             <v-col cols="4" class="mt-5">
               <v-text-field
                 v-model="marqueeName"
                 class="font-weight-bold"
                 color="accent"
                 dense
-                placeholder="跑馬燈內容"
+                placeholder="請輸入跑馬燈名稱"
                 outlined
                 clearable
                 persistent-hint

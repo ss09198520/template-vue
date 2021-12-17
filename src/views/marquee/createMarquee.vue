@@ -153,7 +153,7 @@
             :dense="dense"
             :no-gutters="noGutters"
           >
-            <v-col cols="7" md="7" class="red--text ml-2"> *預設跑馬燈送出後將隨時生效，無審核流程。 </v-col>
+            <v-col cols="7" md="7" class="red--text ml-2"> *預設跑馬燈送出後將於隔日生效，無審核流程。 </v-col>
           </v-row>          
           <v-row
             v-if="location !== null && marqueeType !== 'DEFAULT'"
@@ -166,6 +166,23 @@
             </v-col>
             <v-col v-if="nullAattachedFiles=='無檔案上傳'" cols="6" md="6">
               {{ nullAattachedFiles }}
+            </v-col>
+          </v-row>
+          <v-row :dense="dense" :no-gutters="noGutters">
+            <v-col cols="2" md="2">
+              樣式預覽
+              <span class="red--text ml-2">*</span>
+            </v-col>
+            <v-col cols="6" md="6">
+              <marquee-text
+                :duration="animationDuration"
+                :repeat="1"
+                :background-color="backgroundColor"
+                :font-color="fontColor"
+                class="marquee"
+              >
+                {{ marqueeHTML }}
+              </marquee-text>
             </v-col>
           </v-row>
           <v-row :dense="dense" :no-gutters="noGutters">
@@ -184,23 +201,6 @@
                 @click:prepend="decrementDuration('minus')"
                 @click:append="incrementDuration('plus')"
               />
-            </v-col>
-          </v-row>
-          <v-row :dense="dense" :no-gutters="noGutters">
-            <v-col cols="2" md="2">
-              樣式預覽
-              <span class="red--text ml-2">*</span>
-            </v-col>
-            <v-col cols="6" md="6">
-              <marquee-text
-                :duration="animationDuration"
-                :repeat="1"
-                :background-color="backgroundColor"
-                :font-color="fontColor"
-                class="marquee"
-              >
-                {{ marqueeHTML }}
-              </marquee-text>
             </v-col>
           </v-row>
           <v-row>
@@ -273,6 +273,43 @@
         </v-form>
       </v-col>
     </v-row>
+    <v-dialog v-model="checkSubmit" max-width="500">
+      <v-card>
+        <v-card-title
+          class="text-h5 lighten-2"
+          style="background-color: #c62828; color: white"
+        >
+          無上傳審核附件
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="deleteMarqueeModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            是否仍要送出
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn color="normal" @click="checkSubmit = false">
+            &emsp;取消&emsp;
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="submit(isSign)"
+          >
+            &emsp;確定&emsp;
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
   </v-container>
 </template>
 <script>
@@ -302,6 +339,7 @@ export default {
         acceptDate: null,
         editorData: null
       },
+      checkSubmit: false,
       pageTitle: "跑馬燈製作",
       startDateMenu: false,
       endDateMenu: false,
@@ -314,7 +352,7 @@ export default {
       max: 60,
       fileNo:null,
       marqueeName: null,
-      marqueeHTML: `<p><span style="background-color: rgb(204, 224, 245);">請輸入跑馬燈內容</span></p>`,
+      marqueeHTML: `<p><span style="background-color: rgb(204, 224, 245);">請先輸入跑馬燈內容後，再進行播放速度調整。</span></p>`,
       marqueeText: "",
       marqueeDesc: "",
       marqueeType: "",
@@ -484,8 +522,14 @@ export default {
           relatedSeq: this.location
       });
     },
+    checkSubmitFun(){
+      this.checkSubmit = true;
+      return true;
+    },
     submit(isSign) {
-      //if (this.$refs.form.validate()) {
+      if(isSign && this.attachedFiles == null && !this.checkSubmit){
+        this.checkSubmitFun(isSign);
+      }else{
       var formData = new FormData();
       if (this.checkDate && this.onEditorChange) {
         console.log(this.marqueeText);
@@ -542,7 +586,7 @@ export default {
             this.isSubmited = false;
             console.error(error);
           });
-      }
+      }} 
     },
     resetAttachedFiles(){
      
@@ -585,7 +629,20 @@ export default {
       //取得編輯完成純文字
       this.marqueeText = this.filtersHTML(val);
       //判斷編輯器內容長度至少大於等於2 初始""\n"
-      if (this.marqueeText.length <= 2) {
+      let s = 0;
+        for(var i = 0; i < this.marqueeText.length; i++) {
+          if(this.marqueeText.charAt(i).match(/[u0391-uFFE5]/)) {
+            s += 2;
+          } else {
+            s++;
+          }
+        }
+      //console.log(s)
+      if(s > 255){
+        this.errMsg.editorData = "跑馬燈文字超過255長度";
+        this.isSubmited = true;
+      }
+      else if (this.marqueeText.length <= 2) {
         this.errMsg.editorData = "跑馬燈內容必填";
         this.isSubmited = true;
       } else {

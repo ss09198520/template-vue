@@ -48,7 +48,8 @@ export default {
             }
 
             if(!ValidateUtil.isEmpty(formParam)){
-                this.uploadNo = formParam.uploadNo;
+                console.log(formParam);
+                this.uploadNo = formParam.UPLOAD_NO;
             }
         },
         viewFileInit(){

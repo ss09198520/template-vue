@@ -251,7 +251,7 @@
                 depressed
                 color="success"
                 :disabled="isAddButtonDisabled"
-                @click="checkSubmitFun(true)"
+                @click="checkSubmitFun()"
               >
                 送出審核
               </v-btn>
@@ -523,11 +523,13 @@ export default {
           relatedSeq: this.location
       });
     },
-    checkSubmitFun(isSign){
+    checkSubmitFun(){
       
-      if(isSign && (this.attachedFiles == null || this.attachedFiles.size <= 0) ){
+      if(this.attachedFiles == null || this.attachedFiles.size <= 0) {
         this.checkSubmit = true;
-      }
+      }else{
+        this.submit(true);
+     }
 
     },
   

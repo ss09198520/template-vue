@@ -341,12 +341,36 @@ export default {
             }
         },
         async setCertificateList(certificateList){
-            this.certificateList = [];
             this.oriCertificateList = [];
+
+            // 若證件已有資料，為避免刷新時造成已上傳的檔案消失，移除尚未改動過的檔案
+            if(!ValidateUtil.isEmpty(this.certificateList)){
+                for(let index = 0 ; index < this.certificateList.length ; index ++){
+                    let certificate = this.certificateList[index];
+                    if(!certificate.isAdditional && !certificate.hasEdit){
+                        this.certificateList.splice(index, 1);
+                        index--;
+                    }
+                }
+            }
 
             if(!ValidateUtil.isEmpty(certificateList)){
                 for (let certificate of certificateList) {
+                    // 加入已上傳的證件
                     this.certificateList.push({
+                        id: this.certificateNo,
+                        fileName: certificate.fileName,
+                        originalFileName: certificate.originalFileName,
+                        fileCode: certificate.fileCode,
+                        fileNo: certificate.fileNo,
+                        filePath: certificate.filePath,
+                        imgSrc: certificate.imgSrc,
+                        isAdditional: false,
+                        hasEdit: false,
+                    });
+
+                    // 用來對照哪些證件要刪除
+                    this.oriCertificateList.push({
                         id: this.certificateNo,
                         fileName: certificate.fileName,
                         originalFileName: certificate.originalFileName,
@@ -359,16 +383,25 @@ export default {
                     });
                     this.certificateNo++;
                 }
-
-                this.oriCertificateList = Array.from(this.certificateList);
             }
         },
         async setAttachmentList(attachmentList){
-            this.attachmentList = [];
             this.oriAttachmentList = [];
+
+            // 若附件已有資料，為避免刷新時造成已上傳的檔案消失，移除尚未改動過的檔案
+            if(!ValidateUtil.isEmpty(this.attachmentList)){
+                for(let index = 0 ; index < this.attachmentList.length ; index ++){
+                    let attachment = this.attachmentList[index];
+                    if(!attachment.isAdditional && !attachment.hasEdit){
+                        this.attachmentList.splice(index, 1);
+                        index--;
+                    }
+                }
+            }
 
             if(!ValidateUtil.isEmpty(attachmentList)){
                 for (let attachment of attachmentList) {
+                    // 加入已上傳的附件
                     this.attachmentList.push({
                         id: this.attachmentNo,
                         fileName: attachment.fileName,
@@ -383,11 +416,28 @@ export default {
                         canOnlyView: attachment.canOnlyView,
                         isSelecting: false,
                         canAcctUpload: false,
+                        isAdditional: false,
+                    });
+
+                    // 用來對照哪些附件要刪除
+                    this.oriAttachmentList.push({
+                        id: this.attachmentNo,
+                        fileName: attachment.fileName,
+                        fileCode: attachment.fileCode,
+                        originalFileName: attachment.originalFileName,
+                        fileNo: attachment.fileNo,
+                        filePath: attachment.filePath,
+                        imgSrc: attachment.imgSrc,
+                        base64: attachment.base64,
+                        hasEdit: false,
+                        needSeal: attachment.needSeal,
+                        canOnlyView: attachment.canOnlyView,
+                        isSelecting: false,
+                        canAcctUpload: false,
+                        isAdditional: false,
                     });
                     this.attachmentNo++;
                 }
-
-                this.oriAttachmentList = Array.from(this.attachmentList);
             }
         },
         openFormSignPage(){
@@ -550,6 +600,7 @@ export default {
                 needSeal: (this.onlySealFileCode && this.onlySealFileCode == fileCode),
                 isSelecting: false,
                 canAcctUpload: false,
+                isAdditional: true,
             });
             this.attachmentNo++;
             this.newAttachmentModal = false;

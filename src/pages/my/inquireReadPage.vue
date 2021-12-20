@@ -569,7 +569,7 @@
       <!-- 彈出視窗 -->
       <v-dialog
         v-model="popOut"
-        max-width="600"
+        max-width="1200"
       >
         <v-card>
           <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">

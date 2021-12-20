@@ -131,8 +131,7 @@ export default {
         // 點擊打開核算視窗
         accounting(item) {   
             let seq = item.seq;
-            let accounting = item.accnting;
-            console.log(item);
+            let accounting = item.accnting;            
             if(item.status == "UNREAD"){
                 AjaxService.post('/waitAccounting/updateAccntStatus',
                 {
@@ -232,7 +231,7 @@ export default {
 
         // 查詢資料
         search(){
-            console.log(this.formatArray);
+            
             if(this.formatArray.length > 0) {
                 MessageService.showCheckInfo(this.requireArray,this.formatArray);
             } else {
@@ -270,7 +269,8 @@ export default {
                         this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
                         response.restData.initWaitAccountingListVo.forEach((element) => {
                             element.action = true;
-                        });                              
+                        });
+                        
                         response.restData.initWaitAccountingListVo.forEach((element) => {                            
                             if(element.status == 'READ'){
                                 element.hasView = true;
@@ -278,10 +278,11 @@ export default {
                             if(element.agentForm){
                                 element.isAgent = true;
                             }
+                            
                                             
-                        });                  
-                        this.numOfAccounting = response.restData.initWaitAccountingListVo.length;  
-                        console.log(response.restData.authList);
+                        });
+                        
+                        this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                          
                         
                         if(!ValidateUtil.isEmpty(response.restData.authList)){
                             // 根據使用者角色決定頁面顯示
@@ -359,7 +360,7 @@ export default {
             if(this.searchForm.caseType != null){
                 caseType = this.searchForm.caseType.value;
             }
-            console.log(caseType);
+            
             let QueryWaitAccountingReq ={
                 acceptNum: this.searchForm.acceptNum,
                 electricNum: this.searchForm.electricNum,
@@ -389,7 +390,7 @@ export default {
                         }                  
                     });                        
                     this.numOfAccounting = response.restData.queryWaitAccountingListVo.length;      
-                    console.log(response.restData.authList);
+                    
                     if(!ValidateUtil.isEmpty(response.restData.authList)){
                         // 根據使用者角色決定頁面顯示
                         for(let i in response.restData.authList){
@@ -427,8 +428,8 @@ export default {
         updateAccoutingStatus(seq,index){
             // vin參數
             // seq: seq
-            console.log(seq);
-            console.log(index);
+            // console.log(seq);
+            // console.log(index);
             this.accoutingList[index].hasView = true;
         },
 
@@ -500,7 +501,7 @@ export default {
         //Action: 更新案件審核狀態(退件)
         async returnAccounting(){
 
-            console.log(this.selectItem);
+            
             const AuditAccountingReq = {
                 seq: this.selectItem.seq,
                 formSeq: this.selectItem.formSeq,

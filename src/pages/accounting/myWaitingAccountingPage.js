@@ -270,18 +270,19 @@ export default {
                         this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
                         response.restData.initWaitAccountingListVo.forEach((element) => {
                             element.action = true;
-                        });       
-                        response.restData.initWaitAccountingListVo.forEach((element) => {
+                        });                              
+                        response.restData.initWaitAccountingListVo.forEach((element) => {                            
                             if(element.status == 'READ'){
                                 element.hasView = true;
                             }          
-                            if(element.isAgentForm){
+                            if(element.agentForm){
                                 element.isAgent = true;
                             }
                                             
                         });                  
                         this.numOfAccounting = response.restData.initWaitAccountingListVo.length;  
                         console.log(response.restData.authList);
+                        
                         if(!ValidateUtil.isEmpty(response.restData.authList)){
                             // 根據使用者角色決定頁面顯示
                             for(let i in response.restData.authList){
@@ -383,7 +384,7 @@ export default {
                         if(element.status == 'READ'){
                             element.hasView = true;
                         }          
-                        if(element.isAgentForm){
+                        if(element.agentForm){
                             element.isAgent = true;
                         }                  
                     });                        

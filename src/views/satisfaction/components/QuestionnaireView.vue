@@ -30,7 +30,7 @@
               </div>
             </v-list-item-content>
           </v-list-item>
-          <div class="crystalStyle text-center" justify="space-around">
+          <div class="customizedStyle text-center" justify="space-around">
             <v-btn
               class="col-5 mr-1"
               rounded
@@ -115,7 +115,7 @@
                                       </v-radio-group>
                                     </div>
                                   </div>
-                                  <v-row class="crystalStyle" justify="space-around">
+                                  <v-row class="customizedStyle" justify="space-around">
                                     <v-btn 
                                       v-if="idx > 0"
                                       class="col-5 mr-1"
@@ -743,7 +743,7 @@
     box-sizing: border-box;
   }
 
-  .crystalStyle{
+  .customizedStyle{
      margin-bottom: 20px !important;
   }
 </style>

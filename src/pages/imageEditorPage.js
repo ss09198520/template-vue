@@ -214,7 +214,7 @@ export default {
             AjaxService.post("/tpesForm/uploadFile", vin, 
             (response) => {
                 // 驗證是否成功
-                if (!response.restData.success) {              
+                if (!response.restData.success) {
                     MessageService.showError(response.restData.message,'上傳檔案');
                     return;
                 }

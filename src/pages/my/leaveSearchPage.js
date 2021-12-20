@@ -42,7 +42,7 @@ export default{
             agentList:[],
             isCancel: false, // 判斷是刪除or修改提醒
             alertMsg: null,  // 提醒訊息內容
-            alertOverTwoTiers: false,
+            agentLeave: false,
             formatArray:[],
             errMsg:null,
             empNo: null,
@@ -67,40 +67,31 @@ export default{
         openEditModel(item){
             this.agentList = [];
             this.selectItem = item;
-            this.queryAgentOptionList();
+            this.queryAgentOptionList(item);
             this.selectAgent.empNo = item.agent;
             this.selectAgent.empName = item.agentName;
-            // for(let i in this.oriAgentList) {
-            //     if(item.isMgmn){
-            //         if(this.oriAgentList[i].isMgmn){
-            //             this.agentList.push(this.oriAgentList[i]);
-            //         } 
-            //     } else {
-            //         if(!this.oriAgentList[i].isMgmn){
-            //             this.agentList.push(this.oriAgentList[i]);
-            //         } 
-            //     }
-               
-            // }
             this.editModel = true;
         },
-        submit(type){
-            if(type === 'edit') {
-                // 比對是否有修改代理人，若有則更新資料打後端
-                this.updateAgent();             
-
-            } else {
-                if (this.selectIndex > -1) {
-                    this.leaveList.splice(this.selectIndex, 1);
-                  }
-                MessageService.showSuccess("刪除代理申請紀錄");
-                this.deleteLeaveModel = false;
-                if(this.selectItem.dataSource == '差假管理系統'){
-                    this.alertModel = true;
-                    this.isCancel = true;
-                    this.alertMsg = '已成功刪除請假紀錄，請記得到差假管理系統辦理銷假，謝謝';
+        confirmDelete(){
+            AjaxService.post("/leaveListController/deleteDayOffAgent", {
+                seq: this.selectItem.seq
+            }, (response) => {
+                if(response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                ){
+                    MessageService.showSuccess("刪除代理申請紀錄");
+                    this.deleteLeaveModel = false;
+                    if(this.selectItem.dataSource == '差假管理系統'){
+                        this.alertModel = true;
+                        this.isCancel = true;
+                        this.alertMsg = '已成功刪除請假紀錄，請記得到差假管理系統辦理銷假，謝謝';
+                    }
+                    this.queryLeaveList();
                 }
-            }
+            });
         },
         search(){
             this.formatArray = [];
@@ -125,8 +116,12 @@ export default{
          * 
          **/
 
-         queryAgentOptionList(){
-            AjaxService.post('/leaveListController/queryAgentOptionList', {}, 
+         queryAgentOptionList(item){
+            this.agentList = [];
+            AjaxService.post('/leaveListController/queryAgentOptionList', {
+                empNo: item.applicant,
+                agent: item.agent
+            }, 
             (response) => {
                 if(response != null &&
                     response != undefined &&                    
@@ -134,7 +129,7 @@ export default{
                     response.restData.message != undefined &&
                     response.restData.success
                 ){
-                    this.oriAgentList = response.restData.empInfoVoList;
+                    this.agentList = response.restData.empInfoVoList;
                 }
             },
             (error) => {
@@ -144,6 +139,7 @@ export default{
 
         // Action: 依條件查詢請代理請假清單
         queryLeaveList(){
+            this.leaveList = [];
             let dataSource = (this.dataSource != null && this.dataSource != undefined)? this.dataSource.value : null;
 
             AjaxService.post('/leaveListController/queryLeaveAgentInfoList',
@@ -183,34 +179,40 @@ export default{
         },
 
         // Action: 修改代理申請
-        updateAgent(){
-            // Vin 參數
-            // seq: this.selectItem.seq,
-            // agent: this.selectAgent.empNo,
-            // agentName: this.selectAgent.empName,
-            // oriAgentList:this.oriAgentList,        
-            // 另需把原本的agentList回傳到後端比對
-        
-            MessageService.showSuccess('修改代理申請');   // ajax成功 
-            this.editModel = false; // 關閉修改視窗
-            
-            // 後端回傳值判斷該員工是否在同一個時間代理超過兩位員工的請假申請? 若為true 則跳提醒視窗
-            // 模擬後端資料
-            let isDuplicate = true;        // 是否代理超過兩位員工
-            let isOverTwoTiers = true;     // 該員工是否代理超過兩層
-         
-            
-            // 若同一個時間超過兩個人都給同一人代理
-            if(isDuplicate){
-                this.alertModel = true;
-                this.isCancel = false;
-                this.alertMsg = '該員工已代理超過兩位員工的請假申請';
-            }
-            // 若同一個時間員工代理超過兩層
-            if(isOverTwoTiers){
-                this.alertOverTwoTiers = true;
-            }         
-
+        updateAgent(item){
+            console.log(this.selectAgent);
+            AjaxService.post("/leaveListController/modifyAgent", 
+            {
+                seq: item.seq,
+                applicant: item.applicant,
+                agent: this.selectAgent.empNo,
+                startDate: item.startDate,
+                endDate: item.endDate
+            }, (response) => {
+                if(response != null &&
+                    response != undefined &&                    
+                    response.restData.message != null &&
+                    response.restData.message != undefined &&
+                    response.restData.success
+                ){
+                    if(response.restData.isAgentLeave){
+                        this.agentLeave = true;
+                    }
+                    if(response.restData.hasAgentOverTwice){
+                        this.alertModel = true;
+                        this.isCancel = false;
+                        this.alertMsg = '該員工已代理超過兩位員工的請假申請';
+                    }else if(response.restData.hasOverTwoTiersAgent){
+                        this.alertModel = true;
+                        this.isCancel = false;
+                        this.alertMsg = '該員工已代理超過兩層';
+                    }else{
+                        MessageService.showSuccess('修改代理申請');
+                        this.editModel = false; // 關閉修改視窗
+                        this.queryLeaveList();
+                    }
+                }
+            });
         },
 
 

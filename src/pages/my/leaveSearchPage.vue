@@ -163,7 +163,6 @@
           <v-row>
             <v-col cols="11" />
             <v-col>
-              <!-- <v-btn color="primary ml-3" @click="search()">&emsp;查詢&emsp;</v-btn> -->
               <v-tooltip top>
                 <template v-slot:activator="{ on }">
                   <v-btn
@@ -276,7 +275,7 @@
           </v-btn>
           <v-btn              
             color="error"            
-            @click="submit()"
+            @click="confirmDelete()"
           >
             確定
           </v-btn>
@@ -341,13 +340,13 @@
           <v-row class="mt-3">
             <v-col cols="2">姓名代號</v-col>
             <v-col>
-              {{ selectItem.empNo }}
+              {{ selectItem.applicant }}
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="2">員工姓名</v-col>
             <v-col>
-              {{ selectItem.empName }}
+              {{ selectItem.applicantName }}
             </v-col>
           </v-row>
           <v-row>
@@ -394,7 +393,7 @@
           </v-btn>
           <v-btn
             color="success"              
-            @click="submit('edit')"
+            @click="updateAgent(selectItem)"
           >
             &emsp;確定&emsp;
           </v-btn>
@@ -403,7 +402,7 @@
     </v-dialog>
     <!-- 提醒 -->
     <v-dialog
-      v-model="alertOverTwoTiers"
+      v-model="agentLeave"
       max-width="500"
     >
       <v-card>
@@ -415,7 +414,7 @@
             icon
             small
             text
-            @click="alertOverTwoTiers = false"
+            @click="agentLeave = false"
           >
             <v-icon> mdi-close </v-icon>
           </v-btn>
@@ -428,7 +427,7 @@
         <v-card-actions class="d-end mt-6">
           <v-btn              
             color="primary"            
-            @click="alertOverTwoTiers = false"
+            @click="agentLeave = false"
           >
             確定
           </v-btn>

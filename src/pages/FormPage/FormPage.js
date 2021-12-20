@@ -160,6 +160,8 @@ export default {
             acctUploadFileCode: null,
             isCreateForm: false,
             isHasSealedAttachment: false,
+            attachmentCategory: "ATTACHMENT",
+            certificateCategory: "CERTIFICATE",
         }
     },
     methods: {
@@ -549,7 +551,7 @@ export default {
                     fileName: null,
                     originalFileName: "certificate_" + this.certificateNo + " (" + moment(new Date).format('YYYY-MM-DD') + ")." + fileExt,
                     fileCode: null,
-                    category: "CERTIFICATE",
+                    category: this.certificateCategory,
                     fileNo: null,
                     filePath: null,
                     imgSrc: data,
@@ -601,7 +603,7 @@ export default {
                 // 其他佐證文件，須由使用者輸入附件類別
                 fileName: fileName,
                 fileCode: fileCode,
-                category: "ATTACHMENT",
+                category: this.attachmentCategory,
                 fileNo: null,
                 imgSrc: null,
                 file: null,
@@ -663,7 +665,7 @@ export default {
                             fileName: this.selectedAttachment.fileName,
                             originalFileName: this.selectedAttachment.originalFileName,
                             fileExt: this.getFileExt(this.selectedAttachment.originalFileName),
-                            category: "ATTACHMENT",
+                            category: this.attachmentCategory,
                             file: this.selectedAttachment.base64,
                             needSeal: this.selectedAttachment.needSeal,
                             empNo: this.empNo,
@@ -821,7 +823,7 @@ export default {
                     // 新增
                     if(ValidateUtil.isEmpty(certificate.fileNo) && !ValidateUtil.isEmpty(certificate.imgSrc)){
                         addFileList.push({
-                            category: "CERTIFICATE",
+                            category: this.certificateCategory,
                             fileCode: certificate.fileCode,
                             fileName: certificate.fileName,
                             originalFileName: certificate.originalFileName,
@@ -834,7 +836,7 @@ export default {
                     else if(certificate.hasEdit){
                         modifyFileList.push({
                             fileNo: certificate.fileNo,
-                            category: "CERTIFICATE",
+                            category: this.certificateCategory,
                             fileCode: certificate.fileCode,
                             fileName: certificate.fileName,
                             originalFileName: certificate.originalFileName,
@@ -874,7 +876,7 @@ export default {
                     // 新增
                     if(ValidateUtil.isEmpty(attachment.fileNo) && !ValidateUtil.isEmpty(attachment.base64)){
                         addFileList.push({
-                            category: "ATTACHMENT",
+                            category: this.attachmentCategory,
                             fileCode: attachment.fileCode,
                             fileName: attachment.fileName,
                             originalFileName: attachment.originalFileName,
@@ -888,7 +890,7 @@ export default {
                     else if(attachment.hasEdit){
                         modifyFileList.push({
                             fileNo: attachment.fileNo,
-                            category: "ATTACHMENT",
+                            category: this.attachmentCategory,
                             fileCode: attachment.fileCode,
                             fileName: attachment.fileName,
                             originalFileName: attachment.originalFileName,
@@ -1119,7 +1121,7 @@ export default {
                             // 若已有掃描的證件，將 file 從 List 移除，最後剩下來的就是還沒掃描的
                             if(!ValidateUtil.isEmpty(needScanFile.fileCode) 
                                 && certificate.fileCode == needScanFile .fileCode
-                                && needScanFile.category == "CERTIFICATE"
+                                && needScanFile.category == this.certificateCategory
                                 && !ValidateUtil.isEmpty(certificate.fileNo)){
 
                                 this.needScanFileList.splice(index, 1);
@@ -1137,7 +1139,7 @@ export default {
                     for(let certificateOption of this.certificateOptions){
                         // 放入缺少的證件
                         if(certificateOption.fileCode == needScanFile.fileCode 
-                            && needScanFile.category == "CERTIFICATE"){
+                            && needScanFile.category == this.certificateCategory){
                             this.needScanFileHint = this.needScanFileHint ? this.needScanFileHint + "、" + certificateOption.fileName : certificateOption.fileName;
                         }
                     }
@@ -1157,7 +1159,7 @@ export default {
 
                     let needScanFile = this.needScanFileList[index];
 
-                    if(needScanFile != null && needScanFile.category == "ATTACHMENT"){
+                    if(needScanFile != null && needScanFile.category == this.attachmentCategory){
                         // 若為指定套印專用章的附件則取出限制的 fileCode
                         if(needScanFile.sealFlag == "Y"){
                             this.onlySealFileCode = needScanFile.fileCode;
@@ -1189,7 +1191,7 @@ export default {
                             // 若已有掃描的附件，將 file 從 List 移除，最後剩下來的就是還沒掃描的
                             if(!ValidateUtil.isEmpty(needScanFile.fileCode) 
                                 && attachment.fileCode == needScanFile.fileCode
-                                && needScanFile.category == "ATTACHMENT"
+                                && needScanFile.category == this.attachmentCategory
                                 && !ValidateUtil.isEmpty(attachment.fileNo)
                                 && !ValidateUtil.isEmpty(attachment.originalFileName)){
         
@@ -1207,6 +1209,7 @@ export default {
                         id: this.attachmentNo,
                         fileName: acctUploadFileOption.fileName,
                         fileCode: acctUploadFileOption.fileCode,
+                        category: this.attachmentCategory,
                         originalFileName: null,
                         fileNo: null,
                         filePath: null,
@@ -1230,7 +1233,7 @@ export default {
                     for(let attachmentOption of this.attachmentOptions){
                         // 放入缺少的附件
                         if(attachmentOption.fileCode == needScanFile.fileCode 
-                            && needScanFile.category == "ATTACHMENT"){
+                            && needScanFile.category == this.attachmentCategory){
                             this.needScanAttachHint = this.needScanAttachHint ? this.needScanAttachHint + "、" + attachmentOption.fileName : attachmentOption.fileName;
                         }
                     }

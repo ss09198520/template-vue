@@ -549,6 +549,7 @@ export default {
                     fileName: null,
                     originalFileName: "certificate_" + this.certificateNo + " (" + moment(new Date).format('YYYY-MM-DD') + ")." + fileExt,
                     fileCode: null,
+                    category: "CERTIFICATE",
                     fileNo: null,
                     filePath: null,
                     imgSrc: data,
@@ -600,6 +601,7 @@ export default {
                 // 其他佐證文件，須由使用者輸入附件類別
                 fileName: fileName,
                 fileCode: fileCode,
+                category: "ATTACHMENT",
                 fileNo: null,
                 imgSrc: null,
                 file: null,

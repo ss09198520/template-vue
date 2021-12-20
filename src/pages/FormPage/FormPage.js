@@ -1269,6 +1269,9 @@ export default {
             attachment.needSeal = this.selectedAttachment.needSeal;
             attachment.hasEdit = true;
             attachment.canAcctUpload = (this.acctUploadFileCode == attachment.fileCode);
+
+            // 強制頁面刷新
+            this.$forceUpdate();
         }
     }
 }

@@ -731,6 +731,30 @@ export default {
                 }
             }
 
+            // 若有需套用專用章的附件，但核算時不可補件，需在儲存時驗證是否已有檔案或已上傳
+            if(!ValidateUtil.isEmpty(this.onlySealFileCode) && this.onlySealFileCode != this.acctUploadFileCode){
+                let isPass = false;
+
+                if(!ValidateUtil.isEmpty(this.attachmentList)){
+                    for(let attachment of this.attachmentList){
+                        if(attachment.fileCode == this.onlySealFileCode && (!ValidateUtil.isEmpty(attachment.fileNo) || !ValidateUtil.isEmpty(attachment.base64))){
+                            isPass = true;
+                        }
+                    }
+                }
+
+                if(!isPass){
+                    for(let attachmentOption of this.attachmentOptions){
+                        if(attachmentOption.fileCode == this.onlySealFileCode){
+                            MessageService.showInfo("尚需上傳 " + attachmentOption.fileName);
+                            break;
+                        }
+                    }
+                }
+
+                return isPass;
+            }
+
             return true;
         },
         async save(){
@@ -1141,6 +1165,7 @@ export default {
 
                     if(!ValidateUtil.isEmpty(this.attachmentList) && needScanFile != null){
                         for (let attachment of this.attachmentList) {
+                            // 若為核算可補件附件，檢查是否已上傳
                             if(!onlyForCheck && !ValidateUtil.isEmpty(this.acctUploadFileCode) && this.acctUploadFileCode == attachment.fileCode && !ValidateUtil.isEmpty(attachment.fileNo)){
                                 isUploadedSpecificFile = true;
                                 attachment.canAcctUpload = true;

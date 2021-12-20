@@ -58,4 +58,12 @@ export function queryMediaReturnList() {
   })
 }
 
+// 測試用下載多媒體檔案
+export function downloadActiveProgramZip() {
+  return request({
+    url: '/mediaFile/v1/download/ActiveProgramZip',
+    method: 'post',
+  })
+}
+
 

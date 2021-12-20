@@ -362,6 +362,15 @@
       </v-row>
       <hr style="margin-top: 30px;margin-bottom: 30px;">
 
+      <v-row>
+        <h1>Test PMC 下載多媒體檔案</h1>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+      <v-row class="marginLeft">
+        <v-btn class="mr-3" @click="downloadActiveProgram()">下載多媒體檔案</v-btn>
+      </v-row>
+      <hr style="margin-top: 30px;margin-bottom: 30px;">
+
     </v-container>
     <v-dialog id="importWordModal" v-model="importWordModalShow" width="370">
       <v-card>
@@ -426,6 +435,7 @@
 import AjaxService from '@/assets/services/ajax.service.js';
 import PMCService from '@/assets/services/pmc.service.js';
 import MessageService from '@/assets/services/message.service';
+import { downloadActiveProgramZip } from '@/api/media';
 
 export default {
     name: 'StylePromo',
@@ -730,6 +740,9 @@ export default {
             this.windowOldRef = null;
             MessageService.showSuccess('客戶已完成問卷填寫' + "✓")
           }
+        },
+        downloadActiveProgram() {
+          downloadActiveProgramZip()
         },
     }
 }

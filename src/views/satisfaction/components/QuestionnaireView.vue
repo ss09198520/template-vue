@@ -1,8 +1,6 @@
 <template>
   <div>
-    <v-container
-      v-show="!initStatus"
-    >
+    <v-container v-if="!initStatus">
       <v-row>
         <v-card
           class="mx-auto"
@@ -50,12 +48,11 @@
             >
               同意
             </v-btn>
-            </row>
           </div>
         </v-card>
       </v-row>
     </v-container>
-    <div v-show="initStatus">
+    <div v-if="initStatus">
       <div id="header">
         <div id="nav">
           <div id="logo">
@@ -344,8 +341,8 @@
         //作答成功後將隱藏欄位改為true ,可於parent window查詢判斷訊息
         this.answered = true
         this.$nextTick(() => {
-            window.close()
-          });
+          window.close()
+        });
       },
       
     }

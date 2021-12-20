@@ -158,6 +158,7 @@ export default {
             usePmc: false,
             onlySealFileCode: null,
             acctUploadFileCode: null,
+            isCreateForm: false,
         }
     },
     methods: {
@@ -221,6 +222,7 @@ export default {
                 this.formPageMode = "edit";
                 this.showModeSelect = false;
                 this.usePmc = true;
+                this.isCreateForm = true;
                 this.$emit("showOnlyContent");
             }
             else if(page == "cancelForm_cust"){
@@ -269,7 +271,8 @@ export default {
                 empNo: this.empNo,
                 region: this.region,
                 encryptedParam: this.encryptedParam,
-                canSkipValidateTime: canSkipValidateTime
+                canSkipValidateTime: canSkipValidateTime,
+                createForm: this.isCreateForm,
             }
 
             await AjaxService.post("/tpesForm/init", param, 

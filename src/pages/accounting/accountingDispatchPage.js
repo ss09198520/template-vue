@@ -93,7 +93,12 @@ export default {
       },
       requiredArray:[],  //必填欄位
       formatArray:[],  //格式錯誤欄位 
-     
+      formType: {
+        electricNum: "V",
+        highVoltage: "E",
+        package: "F",
+        form: "C"
+      }
     }
   },
   methods: {
@@ -381,8 +386,8 @@ export default {
       // 先將視窗資料給預設設定
       this.resetDialogData();
 
-      // 判斷為卡別還是無限定，V無限定/H高壓/P包制/F表制
-      if(dispatchList[0].type === 'V'){
+      // 判斷為卡別還是無限定，V無限定/E高壓/F包制/C表制
+      if(dispatchList[0].type === this.formType.electricNum){
         this.dispatchInfo.dispatchType = 0;  //不論卡別
       } else {
         this.dispatchInfo.dispatchType = 1;  //有卡別
@@ -391,27 +396,27 @@ export default {
       // 判斷是哪種電號及計算日
       for(let i in dispatchList){
         // 類型為無限定
-        if(dispatchList[i].type === 'V'){
+        if(dispatchList[i].type === this.formType.electricNum){
             electricNumList.push({
             start:dispatchList[i].electricNumStart,
             end:dispatchList[i].electricNumEnd,
           })
         // 類型為高壓
-        } else if(dispatchList[i].type === 'E'){    
+        } else if(dispatchList[i].type === this.formType.highVoltage){    
             hasHighVoltage = true;
             highVoltageNumList.push({
             start:dispatchList[i].electricNumStart,
             end:dispatchList[i].electricNumEnd,
           })
         // 類型為包制
-        } else if(dispatchList[i].type === 'F'){
+        } else if(dispatchList[i].type === this.formType.package){
             hasPackage = true;
             packageNumList.push({
             start:dispatchList[i].electricNumStart,
             end:dispatchList[i].electricNumEnd,
           })
         // 類型為表制
-        } else if(dispatchList[i].type === 'C'){
+        } else if(dispatchList[i].type === this.formType.form){
             hasMeter = true;
             // 類型為表制 > 計算日
             if(!ValidateUtil.isEmpty(dispatchList[i].computeDate)){
@@ -502,7 +507,7 @@ export default {
                   accountingName :this.dispatchInfo.accountingName,
                   calculate : this.dispatchInfo.calculate,
                   calculateName : this.dispatchInfo.calculateName,
-                  type : 'V',
+                  type : this.formType.electricNum,
                   electricNumStart : this.dispatchInfo.electricNumList[i].start,
                   electricNumEnd : this.dispatchInfo.electricNumList[i].end,
                 })            
@@ -527,7 +532,7 @@ export default {
                   accountingName :this.dispatchInfo.accountingName,
                   calculate : this.dispatchInfo.calculate,
                   calculateName : this.dispatchInfo.calculateName,
-                  type : 'F',
+                  type : this.formType.package,
                   electricNumStart : this.dispatchInfo.packageNumList[i].start,
                   electricNumEnd : this.dispatchInfo.packageNumList[i].end,
                 })         
@@ -552,7 +557,7 @@ export default {
                   accountingName :this.dispatchInfo.accountingName,
                   calculate : this.dispatchInfo.calculate,
                   calculateName : this.dispatchInfo.calculateName,
-                  type : 'E',
+                  type : this.formType.highVoltage,
                   electricNumStart : this.dispatchInfo.highVoltageNumList[i].start,
                   electricNumEnd : this.dispatchInfo.highVoltageNumList[i].end,
                 })       
@@ -578,7 +583,7 @@ export default {
                       accountingName :this.dispatchInfo.accountingName,
                       calculate : this.dispatchInfo.calculate,
                       calculateName : this.dispatchInfo.calculateName,
-                      type : 'C',
+                      type : this.formType.form,
                       electricNumStart : this.dispatchInfo.meterElectricNumList[i].start,
                       electricNumEnd : this.dispatchInfo.meterElectricNumList[i].end,
                     })       
@@ -594,7 +599,7 @@ export default {
                     accountingName :this.dispatchInfo.accountingName,
                     calculate : this.dispatchInfo.calculate,
                     calculateName : this.dispatchInfo.calculateName,
-                    type : 'C',
+                    type : this.formType.form,
                     computeDate: this.dispatchInfo.computeDateList[i]
                   })                
               }

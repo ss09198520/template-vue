@@ -262,7 +262,7 @@
                     <v-row>
                       <v-col cols="12" class="d-center">
                         <v-checkbox 
-                          v-if="onlySealFileCode && onlySealFileCode == attachment.fileCode"
+                          v-if="onlySealFileCode && onlySealFileCode == attachment.fileCode && attachment.category == 'ATTACHMENT'"
                           v-model="attachment.needSeal" 
                           :disabled="true"
                           class="mt-0" 

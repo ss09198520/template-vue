@@ -159,6 +159,7 @@ export default {
             onlySealFileCode: null,
             acctUploadFileCode: null,
             isCreateForm: false,
+            isHasSealedAttachment: false,
         }
     },
     methods: {
@@ -294,6 +295,7 @@ export default {
                 this.isNeedScanAttach = response.restData.needScanAttach;
                 this.maxSignVersion = response.restData.maxSignVersion;
                 this.empName = response.restData.empName;
+                this.isHasSealedAttachment = response.restData.hasSealedAttachment;
 
                 // 初始化一次後就將修正件 flag 壓為 N 避免每次都是修正件
                 this.isUpdate = "N";
@@ -965,10 +967,12 @@ export default {
             this.$emit("returnOrder", this.accountingMemo);
         },
         accountingSubmit(){
-            if(this.checkNeedScanFile(true)){
-                this.$emit("accountingSubmit", this.accountingMemo);
+            // 檢查若有專用章附件但尚未簽核則不可以核算通過
+            if(!ValidateUtil.isEmpty(this.onlySealFileCode) && !this.isHasSealedAttachment){
+                MessageService.showInfo("專用章尚未簽核通過");
             }
-            else{
+            // 檢查證件規範
+            else if(!this.checkNeedScanFile(true)){
                 let msg = "尚需掃描/上傳 ";
 
                 if(this.needScanFileHint){
@@ -984,6 +988,10 @@ export default {
                 }
 
                 MessageService.showInfo(msg);
+            }
+            // 通過
+            else{
+                this.$emit("accountingSubmit", this.accountingMemo);
             }
         },
         saveComments(){

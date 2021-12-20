@@ -397,21 +397,21 @@ export default {
             end:dispatchList[i].electricNumEnd,
           })
         // 類型為高壓
-        } else if(dispatchList[i].type === 'H'){    
+        } else if(dispatchList[i].type === 'E'){    
             hasHighVoltage = true;
             highVoltageNumList.push({
             start:dispatchList[i].electricNumStart,
             end:dispatchList[i].electricNumEnd,
           })
         // 類型為包制
-        } else if(dispatchList[i].type === 'P'){
+        } else if(dispatchList[i].type === 'F'){
             hasPackage = true;
             packageNumList.push({
             start:dispatchList[i].electricNumStart,
             end:dispatchList[i].electricNumEnd,
           })
         // 類型為表制
-        } else if(dispatchList[i].type === 'F'){
+        } else if(dispatchList[i].type === 'C'){
             hasMeter = true;
             // 類型為表制 > 計算日
             if(!ValidateUtil.isEmpty(dispatchList[i].computeDate)){

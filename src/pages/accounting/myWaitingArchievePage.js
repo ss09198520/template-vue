@@ -97,7 +97,7 @@ export default {
             AjaxService.post('/waitArchive/queryWaitArchive',QueryWaitArchiveReq,
             (response) => {
                 if (response && response.restData && response.restData.success) {
-                    if(response.restData.initWaitArchiveListVo != null){                                                                                                               
+                    if(response.restData.queryWaitArchiveListVo != null){                                                                                                                                     
                     this.archieveList = Object.assign(response.restData.queryWaitArchiveListVo);                        
                     response.restData.queryWaitArchiveListVo.forEach((element) => {
                         let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 

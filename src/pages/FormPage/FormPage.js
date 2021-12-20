@@ -398,7 +398,8 @@ export default {
             if(!ValidateUtil.isEmpty(this.attachmentList)){
                 for(let index = 0 ; index < this.attachmentList.length ; index ++){
                     let attachment = this.attachmentList[index];
-                    if(!attachment.isAdditional && !attachment.hasEdit){
+                    // 若為核算時可補件附件，會上傳就刷新
+                    if(!attachment.isAdditional && (!attachment.hasEdit || this.acctUploadFileCode == attachment.fileCode)){
                         this.attachmentList.splice(index, 1);
                         index--;
                     }

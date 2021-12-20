@@ -408,6 +408,7 @@ export default {
                         id: this.attachmentNo,
                         fileName: attachment.fileName,
                         fileCode: attachment.fileCode,
+                        category: attachment.category,
                         originalFileName: attachment.originalFileName,
                         fileNo: attachment.fileNo,
                         filePath: attachment.filePath,

@@ -24,6 +24,11 @@ export default {
         //     e.returnValue = '';
         // });
     },
+    computed: {
+        isCanEditFile() {
+            return (this.formPageMode == 'edit' || (this.formPageMode == 'cancel' && this.isAgent == 'Y'));
+        }
+    },
     data() {
         return {
             empNo: null,
@@ -298,6 +303,7 @@ export default {
                 this.maxSignVersion = response.restData.maxSignVersion;
                 this.empName = response.restData.empName;
                 this.isHasSealedAttachment = response.restData.hasSealedAttachment;
+                this.isAgent = response.restData.isAgent;
 
                 // 初始化一次後就將修正件 flag 壓為 N 避免每次都是修正件
                 this.isUpdate = "N";
@@ -779,7 +785,19 @@ export default {
                 return;
             }
 
-            let vin = this.setSaveFormVin();
+            let fileListObj = this.setFileList();
+
+            let vin = {
+                acceptNum: this.acceptNum,
+                formSeq: this.formSeq,
+                addFileList: fileListObj.addFileList,
+                modifyFileList: fileListObj.modifyFileList,
+                deleteFileList: fileListObj.deleteFileList,
+                isAddAttachment: this.isAddAttachment,
+                empNo: this.empNo,
+                region: this.region,
+                empName: this.empName,
+            };
 
             AjaxService.post("/tpesForm/save", vin, 
             async (response) => {
@@ -812,7 +830,7 @@ export default {
                 console.log(error);
             });
         },
-        setSaveFormVin(){
+        setFileList(){
             let addFileList = [];
             let modifyFileList = [];
             let deleteFileList = [];
@@ -926,19 +944,13 @@ export default {
                 }
             }
 
-            let vin = {
-                acceptNum: this.acceptNum,
-                formSeq: this.formSeq,
+            let result = {
                 addFileList: addFileList,
                 modifyFileList: modifyFileList,
                 deleteFileList: deleteFileList,
-                isAddAttachment: this.isAddAttachment,
-                empNo: this.empNo,
-                region: this.region,
-                empName: this.empName,
             };
 
-            return vin;
+            return result;
         },
         getFileExt(fileName){
             let fileExt = null;
@@ -1014,6 +1026,8 @@ export default {
                 return;
             }
 
+            let fileListObj = this.setFileList();
+
             let vin = {
                 formSeq: this.formSeq,
                 acceptNum: this.acceptNum,
@@ -1021,6 +1035,9 @@ export default {
                 cancelReason: this.cancelReason,
                 empNo: this.empNo,
                 region: this.region,
+                addFileList: fileListObj.addFileList,
+                modifyFileList: fileListObj.modifyFileList,
+                deleteFileList: fileListObj.deleteFileList,
             };
 
             AjaxService.post("/tpesForm/custCancelForm", vin, 

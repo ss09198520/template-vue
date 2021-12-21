@@ -151,7 +151,7 @@
                       </v-col>
                     </v-row>
                     <v-row>
-                      <v-col v-if="formPageMode == 'edit'" cols="6" class="t-center">
+                      <v-col v-if="isCanEditFile" cols="6" class="t-center">
                         <v-btn depressed color="error" @click="deleteCertificate(index)">
                           刪除
                           <v-icon
@@ -162,7 +162,7 @@
                           </v-icon>
                         </v-btn>
                       </v-col>
-                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode=='cancel' || formPageMode == 'edit'" :cols="(formPageMode == 'edit' ? 6 : 12)" class="t-center">
+                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode=='cancel' || isCanEditFile" :cols="(isCanEditFile ? 6 : 12)" class="t-center">
                         <v-btn depressed color="normal" :disabled="!certificate.imgSrc" @click="viewImage(certificate)">
                           檢視
                           <v-icon
@@ -175,7 +175,7 @@
                       </v-col>
                     </v-row>
                   </v-col>
-                  <v-col v-if="formPageMode == 'edit'" cols="3" class="add-attachment-area d-center">
+                  <v-col v-if="isCanEditFile" cols="3" class="add-attachment-area d-center">
                     <v-row>
                       <v-col cols="12" class="d-center">
                         <v-tooltip top>
@@ -279,7 +279,7 @@
                       type="file"
                       @change="onFileChanged"
                     >
-                    <v-row v-if="(formPageMode == 'edit' && !attachment.canOnlyView)">
+                    <v-row v-if="(isCanEditFile && !attachment.canOnlyView)">
                       <v-col cols="6" class="t-center">
                         <v-btn depressed color="error" @click="deleteAttachment(index)">
                           刪除
@@ -373,7 +373,7 @@
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
-                              v-if="formPageMode == 'edit'"
+                              v-if="isCanEditFile"
                               class="mx-2"
                               fab
                               dark

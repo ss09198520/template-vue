@@ -817,6 +817,10 @@ export default {
                 else{
                     // 開啟滿意度調查頁
                     await this.openPortal();
+
+                    // 清空證件及附件
+                    this.certificateList = [];
+                    this.attachmentList = [];
                     
                     // 重新查詢一次
                     this.formInit(true);

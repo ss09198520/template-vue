@@ -21,6 +21,7 @@
             placeholder="請輸入員工編號"
             prepend-icon="mdi-face"
             autocomplete="current-username"
+            @keydown.enter="handleLogin"
           />
           <v-text-field
             v-model="loginForm.password"
@@ -34,6 +35,7 @@
             autocomplete="current-password"
             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
             @click:append="showPassword = !showPassword"
+            @keydown.enter="handleLogin"
           />
           <!-- 按鈕 -->
           <v-col class="d-flex justify-end">

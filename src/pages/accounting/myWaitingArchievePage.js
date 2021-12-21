@@ -104,16 +104,15 @@ export default {
                         }  
                     }); 
                 }                                                                                                          
-                } else {
-                    MessageService.showError(response.restData.message);                    
-                }
-            },
-                (error) => {                  
-                    MessageService.showSystemError();
-                    console.log(error);
-                }
-            );
+            } else {
+                MessageService.showError(response.restData.message);                    
+            }
             this.numOfArchieve = this.archieveList.length;                     
+            },
+            (error) => {                  
+                MessageService.showSystemError();
+                console.log(error);
+            });
         },
 
         // Action:將案件返回核算

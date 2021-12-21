@@ -52,7 +52,7 @@
         </v-card>
       </v-row>
     </v-container>
-    <div v-if="initStatus">
+    <div v-show="initStatus">
       <div id="header">
         <div id="nav">
           <div id="logo">
@@ -220,7 +220,6 @@
     },
     methods: {
       custom_close(){
-        
         if(confirm("您確定要關閉本頁嗎？")){
           window.opener=null;
           window.open('','_self');
@@ -243,6 +242,7 @@
         question.userAnswerId = answerId
         question.userAnswerLabel = answerLabel
         question.userAnswerValue = answerValue
+        this.nextStep();
       },
 
       nextStep () {
@@ -251,12 +251,8 @@
       prevStep () {
         this.stepEl = this.stepEl - 1
       },
-      reset () {
-        this.$refs.form.reset()
-      },
       // 送出問卷作答
       submit() {
-        
         //API post data 
         this.postForm.acceptNum = this.$route.query.acceptNum
         const postData = { questionnaireAnswer : this.postForm}

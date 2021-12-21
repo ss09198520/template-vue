@@ -81,7 +81,7 @@
                       fab
                       small
                       color="success"
-                      @click="signOff(item.acceptNum)"
+                      @click="signOff(item)"
                       v-on="on"
                     >
                       <v-icon v-text="'mdi-account-check-outline'" />

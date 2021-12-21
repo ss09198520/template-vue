@@ -446,20 +446,26 @@
           </v-expansion-panel>
         </v-expansion-panels>
       </v-row>
-      <v-row v-if="formPageMode == 'edit'">
-        <v-col cols="12" class="t-right">
-          <v-btn depressed large color="success" @click="save()">
-            <span style="font-size: 18px">儲存</span>
-            <v-icon
-              right
-              dark
-              style="font-size: 24px"
-            >
+      <div v-if="formPageMode == 'edit'" class="d-end">
+        <v-btn 
+          fab
+          depressed 
+          large 
+          color="success" 
+          class="mx-2"
+          :class="{'fixed-save-btn': !restrictMode, 'fixed-save-btn-in-modal': restrictMode}"
+          width="100"
+          height="100"
+          @click="save()"
+        >
+          <div style="display:block;">
+            <v-icon size="40" class="cal-btn-icon"> 
               mdi-check
             </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+            <span style="display:block; padding-top:20%; font-size: 20px">儲存</span>             
+          </div>
+        </v-btn>
+      </div>
       <v-row v-if="formPageMode == 'accounting'">
         <v-col cols="12" class="t-right">
           <v-btn depressed large color="#E98B2A" @click="saveComments()">
@@ -494,20 +500,26 @@
           </v-btn>
         </v-col>
       </v-row>
-      <v-row v-if="formPageMode == 'cancel'">
-        <v-col cols="12" class="t-right">
-          <v-btn depressed large color="error" @click="cancel()">
-            <span style="font-size: 18px">確定取消</span>
-            <v-icon
-              right
-              dark
-              style="font-size: 24px"
-            >
+      <div v-if="formPageMode == 'cancel'" class="d-end">
+        <v-btn 
+          fab
+          depressed 
+          large 
+          color="error" 
+          class="mx-2"
+          :class="{'fixed-save-btn': !restrictMode, 'fixed-save-btn-in-modal': restrictMode}"
+          width="100"
+          height="100"
+          @click="cancel()"
+        >
+          <div style="display:block;">
+            <v-icon size="40" class="cal-btn-icon"> 
               mdi-close
             </v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
+            <span style="display:block; padding-top:20%; font-size: 20px">確定取消</span>             
+          </div>
+        </v-btn>
+      </div>
     </v-container>
 
     <!-- 檢視圖片 modal -->
@@ -697,6 +709,10 @@
       align-items: center;
       justify-content: center;
     }
+    .d-end {
+      display: flex;
+      justify-content: flex-end;
+    }
     .t-center{
       text-align: center;
     }
@@ -782,5 +798,48 @@
     .hint-text{
       color: red;
       font-size: 24px;
+    }
+
+    .fixed-save-btn {
+      position: fixed;
+      right: 20px;
+      z-index: 10;
+      bottom: 20px;
+    }
+
+    @media (min-width: 700px) {
+      .fixed-save-btn-in-modal {
+        position: fixed;
+        right: 10vw;
+        z-index: 10;
+        bottom: 7vh;
+      }
+    }
+
+    @media (min-width: 1500px) {
+      .fixed-save-btn-in-modal {
+        position: fixed;
+        right: 15vw;
+        z-index: 10;
+        bottom: 7vh;
+      }
+    }
+
+    @media (min-width: 1700px) {
+      .fixed-save-btn-in-modal {
+        position: fixed;
+        right: 18vw;
+        z-index: 10;
+        bottom: 7vh;
+      }
+    }
+
+    @media (min-width: 1900px) {
+      .fixed-save-btn-in-modal {
+        position: fixed;
+        right: 21vw;
+        z-index: 10;
+        bottom: 7vh;
+      }
     }
 </style>

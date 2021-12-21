@@ -188,7 +188,6 @@ export default{
         queryInquireReadInit(){
             AjaxService.post("/read/init", {}, (response) => {
                 if(response.restData.success){
-                    MessageService.showSuccess("初始化");
                     let reasonList = response.restData.reasonList;
                     if(reasonList){
                         for(let i in reasonList){
@@ -230,7 +229,6 @@ export default{
 
             AjaxService.post("/tpesForm/queryForm", param, (response) => {
                 if(response.restData.success) {
-                    MessageService.showSuccess('查詢案件清單');
                     this.readFormList = response.restData.formList;
                 }else{
                     MessageService.showError(response.restData.message, '查詢案件清單');

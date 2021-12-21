@@ -97,7 +97,6 @@ export default{
 
             AjaxService.post("/read/queryReadApply", param, (response) => {
                 if(response.restData.success) {
-                    MessageService.showSuccess('查詢調閱清單');
                     this.formList = response.restData.applyList;
                     this.numOfReadApply = response.restData.applyNum;
                     this.numOfRead = response.restData.readNum;

@@ -408,8 +408,7 @@ export default {
                                 this.hasAccountingAuth = true;
                             }
                         }
-                    } 
-                    MessageService.showSuccess('依條件查詢待核算資料成功');                                                           
+                    }                                                          
                 } else {
                   //接後端候要放errorMsg
                   MessageService.showError(response.restData.message);                  

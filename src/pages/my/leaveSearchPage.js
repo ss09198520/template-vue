@@ -174,8 +174,6 @@ export default{
                     MessageService.showSystemError(response.restData.code);
                 }
             );
-
-            MessageService.showSuccess('查詢請假清單');
         },
 
         // Action: 修改代理申請

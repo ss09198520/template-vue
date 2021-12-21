@@ -684,9 +684,6 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 for(let i in response.restData.unSettingEmpList){
                     this.allSettingEmpList.push(response.restData.unSettingEmpList[i]);
                 }
-
-
-                MessageService.showSuccess('查詢角色可設定的員工清單');
     
             },
             // eslint-disable-next-line no-unused-vars

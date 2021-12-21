@@ -25,7 +25,8 @@ export default {
                 { text: '受理日期', value: 'acceptDateStr', align: 'center' },
                 { text: '計算日', value: 'computeDate', align: 'center' },
                 { text: '案件狀態', value: 'sealStatus', align: 'center' },
-                { text: '受理項目', value: 'acceptItem', align: 'center' },                                                                            
+                { text: '受理項目', value: 'acceptItem', align: 'center' },
+                { text: '代理件', value: 'isAgent', align: 'center',width:'5%' },                                                                            
                 { text: '專用章檔案下載', value: 'download', align: 'center' },    
                 { text: '狀態操作', value: 'mani', align: 'center' }
              ],
@@ -47,10 +48,19 @@ export default {
         querySignOff() {
             AjaxService.post("/seal/querySealSignOff", {}, (response) => {
                 if(response.restData.success) {
-                    this.allSignOffList = response.restData.signOffList;
-                    this.waitSignOffList = response.restData.waitSignOffList;
+                    this.allSignOffList = Object.assign(response.restData.signOffList);
+                    this.waitSignOffList = Object.assign(response.restData.waitSignOffList);
                     this.sealSignList = this.displayAll? this.allSignOffList : this.waitSignOffList;
-                    // MessageService.showSuccess("取得專用章簽核列表");
+                    this.allSignOffList.forEach((element) => {
+                        if(element.agentForm){
+                            element.isAgent = true;
+                        }
+                    })
+                    this.waitSignOffList.forEach((element) => {
+                        if(element.agentForm){
+                            element.isAgent = true;
+                        }
+                    })
                 }else{
                     MessageService.showError(response.restData.message, "取得專用章簽核列表");
                 }

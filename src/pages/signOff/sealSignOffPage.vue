@@ -48,6 +48,18 @@
             :page.sync="sealSignListPage"
             @page-count="sealSignListPageCount = $event"
           >
+            <!-- 是否為代理件 -->
+            <template v-slot:item.isAgent="{ item }"> 
+              <div             
+                v-if="item.isAgent"
+                class="ma-2"
+                icon
+              >
+                <v-icon>
+                  mdi-check-bold
+                </v-icon>
+              </div>       
+            </template>
             <template v-slot:item.sealStatus="{ item }">   
               <div v-if="item.sealStatus === 'WAIT'">
                 待簽核

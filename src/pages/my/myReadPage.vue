@@ -31,7 +31,7 @@
           <v-col cols="1" />
           <v-col cols="1">
             電號
-          </v-col>                                             
+          </v-col>
           <v-col
             cols="3"
           >
@@ -124,10 +124,32 @@
               />
             </v-menu>
           </v-col>
-          <v-col cols="6" />
+          
           <v-col style="margin-top:-1%">   
             <span class="red--text font-14px">{{ errMsg }}</span>
           </v-col>
+        </v-row>
+        <v-row align="center">
+          <v-col cols="1">
+            代理件顯示       
+          </v-col>          
+          <v-col
+            cols="3"
+          >
+            <v-select
+              v-model="caseType"
+              :items="agentCaseOption"
+              item-text="text"
+              :return-object="true"
+              outlined
+              hide-details
+              single-line
+              dense              
+              :clearable="true"
+              class="my-auto"
+              color="#ADADAD"
+            />
+          </v-col>    
         </v-row>
         <v-row>
           <v-col cols="11" />
@@ -166,6 +188,18 @@
               :page.sync="formListPage"
               @page-count="formListPageCount = $event"
             >
+              <!-- 是否為代理件 -->
+              <template v-slot:item.isAgent="{ item }"> 
+                <div             
+                  v-if="item.isAgent"
+                  class="ma-2"
+                  icon
+                >
+                  <v-icon>
+                    mdi-check-bold
+                  </v-icon>
+                </div>       
+              </template>
               <!-- 調閱狀態欄位 -->
               <template v-slot:item.status="{ item }">                                                        
                 <div v-if="(item.status === 'PASS' || item.status === 'CLOSE') && new Date(item.validDateStr) >= sysDate">

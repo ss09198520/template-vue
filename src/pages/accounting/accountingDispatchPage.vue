@@ -412,7 +412,7 @@
                       </v-row>
                       <v-row v-for="(meterElectricNum, index) in dispatchInfo.meterElectricNumList" :key="index" class="ml-4" style="margin: 0 10px 10px 0;" align="center">
                         <div v-if="index == 0">
-                          <v-radio class="ml-5" :disabled="dispatchInfo.dispatchType!==1 || !dispatchInfo.useMeter" @click="test()" />
+                          <v-radio class="ml-5" :disabled="dispatchInfo.dispatchType!==1 || !dispatchInfo.useMeter" @click="checkRequired()" />
                         </div>
                         <div style="height: 10px;" />
                         <div v-if="index == 0">
@@ -470,33 +470,145 @@
                      
                       <v-row>
                         <div style="height: 10px;width: 50px;" />
-                        <v-radio style="margin-top: 10px;" :disabled="dispatchInfo.dispatchType !== 1 || !dispatchInfo.useMeter" @click="test()" />
+                        <v-radio style="margin-top: 10px;" :disabled="dispatchInfo.dispatchType !== 1 || !dispatchInfo.useMeter" @click="checkRequired()" />
                         <v-row align="center">
                           <span style="margin: 10px;" :class="dispatchInfo.dispatchType===1 && dispatchInfo.useMeter && dispatchInfo.meterType==1? '':'disable-text'">計算日</span>
                           <v-col>
                             <v-row>
-                              <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="01" value="01" class="meter-checkbox" />
-                              <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="02" value="02" class="meter-checkbox" />
-                              <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="03" value="03" class="meter-checkbox" />
-                              <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="04" value="04" class="meter-checkbox" />
-                              <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="05" value="05" class="meter-checkbox" />
-                              <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="06" value="06" class="meter-checkbox" />
-                              <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="07" value="07" class="meter-checkbox" />
-                              <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="08" value="08" class="meter-checkbox" />
+                              <v-checkbox
+                                v-model="dispatchInfo.computeDateList"
+                                :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                                label="01"
+                                value="01"
+                                class="meter-checkbox"
+                                @click="checkRequired()"
+                              />
+                              <v-checkbox
+                                v-model="dispatchInfo.computeDateList"
+                                :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                                label="02"
+                                value="02"
+                                class="meter-checkbox"
+                                @click="checkRequired()"
+                              />
+                              <v-checkbox
+                                v-model="dispatchInfo.computeDateList"
+                                :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                                label="03"
+                                value="03"
+                                class="meter-checkbox"
+                                @click="checkRequired()"
+                              />
+                              <v-checkbox
+                                v-model="dispatchInfo.computeDateList"
+                                :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                                label="04"
+                                value="04"
+                                class="meter-checkbox"
+                                @click="checkRequired()"
+                              />
+                              <v-checkbox
+                                v-model="dispatchInfo.computeDateList"
+                                :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                                label="05"
+                                value="05"
+                                class="meter-checkbox"
+                                @click="checkRequired()"
+                              />
+                              <v-checkbox
+                                v-model="dispatchInfo.computeDateList"
+                                :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                                label="06"
+                                value="06"
+                                class="meter-checkbox"
+                                @click="checkRequired()"
+                              />
+                              <v-checkbox
+                                v-model="dispatchInfo.computeDateList"
+                                :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                                label="07"
+                                value="07"
+                                class="meter-checkbox"
+                                @click="checkRequired()"
+                              />
+                              <v-checkbox
+                                v-model="dispatchInfo.computeDateList"
+                                :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                                label="08"
+                                value="08"
+                                class="meter-checkbox"
+                                @click="checkRequired()"
+                              />
                             </v-row>
                           </v-col>
                         </v-row>
                       </v-row>
                       <v-row style="margin-top: 0;">
                         <div style="height: 10px;width: 140px;" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="09" value="09" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="10" value="10" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="11" value="11" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="12" value="12" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="13" value="13" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="14" value="14" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="15" value="15" class="meter-checkbox" />
-                        <v-checkbox v-model="dispatchInfo.computeDateList" :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1" label="16" value="16" class="meter-checkbox" />
+                        <v-checkbox
+                          v-model="dispatchInfo.computeDateList"
+                          :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                          label="09"
+                          value="09"
+                          class="meter-checkbox"
+                          @click="checkRequired()"
+                        />
+                        <v-checkbox
+                          v-model="dispatchInfo.computeDateList"
+                          :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                          label="10"
+                          value="10"
+                          class="meter-checkbox"
+                          @click="checkRequired()"
+                        />
+                        <v-checkbox
+                          v-model="dispatchInfo.computeDateList"
+                          :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                          label="11"
+                          value="11"
+                          class="meter-checkbox"
+                          @click="checkRequired()"
+                        />
+                        <v-checkbox
+                          v-model="dispatchInfo.computeDateList"
+                          :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                          label="12"
+                          value="12"
+                          class="meter-checkbox"
+                          @click="checkRequired()"
+                        />
+                        <v-checkbox
+                          v-model="dispatchInfo.computeDateList"
+                          :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                          label="13"
+                          value="13"
+                          class="meter-checkbox"
+                          @click="checkRequired()"
+                        />
+                        <v-checkbox
+                          v-model="dispatchInfo.computeDateList"
+                          :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                          label="14"
+                          value="14"
+                          class="meter-checkbox"
+                          @click="checkRequired()"
+                        />
+                        <v-checkbox
+                          v-model="dispatchInfo.computeDateList"
+                          :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                          label="15"
+                          value="15"
+                          class="meter-checkbox"
+                          @click="checkRequired()"
+                        />
+                        <v-checkbox
+                          v-model="dispatchInfo.computeDateList"
+                          :disabled="dispatchInfo.dispatchType !== 1 || dispatchInfo.meterType!==1"
+                          label="16"
+                          value="16"
+                          class="meter-checkbox"
+                          @click="checkRequired()"
+                        />
                       </v-row>
                     </v-radio-group>
                   </v-col>

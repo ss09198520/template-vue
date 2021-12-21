@@ -931,19 +931,27 @@ export default {
 
      // 判斷電號範圍是否有輸入電號，有輸入才判斷是否加0
      paddingZero(str,lenght){
-      if(str.length >= lenght){
-        return str;
-      } else{
-        return this.paddingZero(str+"0",lenght);
+      if(!ValidateUtil.isEmpty(str)){
+        if(str.length >= lenght){
+          return str;
+        } else{
+          return this.paddingZero(str+"0",lenght);
+        }
+      } else {
+        return null;
       }
     },
 
     // 判斷電號範圍是否有輸入電號，有輸入才判斷是否加9
     paddingNine(str,lenght){
-      if(str.length >= lenght){
-        return str;
-      } else{
-        return this.paddingNine(str+"9",lenght);
+      if(!ValidateUtil.isEmpty(str)){
+        if(str.length >= lenght){
+          return str;
+        } else{
+          return this.paddingNine(str+"9",lenght);
+        }
+      } else {
+        return null;
       }
     },
 
@@ -999,8 +1007,8 @@ export default {
       }
     },    
     checkOptionValid(dispatchList){
-      let accounting = dispatchList[0].accounting;
-      let calculate  = dispatchList[0].calculate;
+      let accounting = (ValidateUtil.isEmpty(dispatchList)? null : dispatchList[0].accounting);
+      let calculate  = (ValidateUtil.isEmpty(dispatchList)? null : dispatchList[0].calculate);
       let isOptionValid = false;
 
       for(let i in this.oriAccoutingList){
@@ -1017,10 +1025,7 @@ export default {
         }
       }      
       return isOptionValid;      
-    },
-
-    
-
+    },    
     /**
      * 驗證 end
      * 

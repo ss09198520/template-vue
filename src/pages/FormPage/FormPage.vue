@@ -367,13 +367,12 @@
                       </v-col>
                     </v-row>
                   </v-col>
-                  <v-col cols="3" class="add-attachment-area d-center">
+                  <v-col v-if="isCanEditFile" cols="3" class="add-attachment-area d-center">
                     <v-row>
                       <v-col cols="12" class="d-center">
                         <v-tooltip top>
                           <template v-slot:activator="{ on, attrs }">
                             <v-btn
-                              v-if="isCanEditFile"
                               class="mx-2"
                               fab
                               dark

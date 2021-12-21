@@ -194,7 +194,7 @@
       <!-- 退件原因 -->
       <v-dialog
         v-model="rejectReasonModel"
-        max-width="600"
+        width="900"
       >
         <v-card>
           <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          

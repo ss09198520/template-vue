@@ -1,183 +1,142 @@
 <template>
   <v-container>
     <h2 class="font-bold">素 材 上 傳</h2>
-    <v-row class="d-flex justify-center">
-      <v-col
-        class="ml-10"
-        cols="12"
-      >
-        <fet-card
-          full-width
-          outlined
-          title="素 材 上 傳"
-        >
-          <v-form ref="form" v-model="valid" lazy-validation>
-            <v-row>
-              <v-col
-                cols="4"
-                md="3"
+    <v-row class="ml-10">
+      <v-col class="ml-10 font-18px" cols="12">
+        <v-form ref="form" v-model="valid" lazy-validation class="ml-10 font-weight-bold">
+          <v-row class="d-flex justify-start mt-3">
+            <v-col cols="2" md="2">
+              素 材 名 稱
+              <span class="red--text">*</span>
+            </v-col>
+            <v-col cols="7" md="6">
+              <v-text-field
+                v-model="postForm.materialName"
+                :rules="rules.requiredRule.concat(rules.lengthRules)"
+                :hide-details="hideDatails"
+                color="accent"
+                placeholder="請輸入素材名稱"
+                :counter="maxCharacter"
+                outlined
+                required
+                dense
+                clearable
+                persistent-hint
+              />
+            </v-col>
+          </v-row>
+          <v-row class="d-flex justify-start mt-3">
+            <v-col cols="2" md="2">
+              檔 案 描 述
+            </v-col>
+            <v-col cols="7" md="6">
+              <v-text-field
+                v-model="postForm.memo"
+                :rules="rules.requiredRule.concat(rules.lengthRules)"
+                :hide-details="hideDatails"
+                color="accent"
+                placeholder="請輸入檔案描述"
+                :counter="maxCharacter"
+                outlined
+                dense
+                persistent-hint
+              />
+            </v-col>
+          </v-row>
+          <v-row class="d-flex justify-start mt-3">
+            <v-col cols="2" md="2">
+              上 傳 格 式
+              <span class="red--text">*</span>
+            </v-col>
+            <v-col cols="7" md="6">
+              <v-radio-group
+                v-model="postForm.materialType"
+                class="mt-2"
+                dense
+                row
+                :rules="[v => !!v || '必須選擇一種上傳格式']"
+                @change="validate"
               >
-                <v-subheader class="justify-center">
-                  素 材 名 稱
-                  <span class="red--text">*</span>
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="7"
-                md="6"
-              >
-                <v-text-field
-                  v-model="postForm.materialName"
-                  :rules="rules.requiredRule.concat(rules.lengthRules)"
-                  :hide-details="hideDatails"
-                  color="accent"
-                  placeholder="請輸入素材名稱"
-                  :counter="maxCharacter"
-                  outlined
-                  required
-                  dense
-                  clearable
-                  persistent-hint
+                <v-radio
+                  label="純圖檔"
+                  value="image"
+                  color="red"
                 />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="3"
-                md="3"
-              >
-                <v-subheader class="justify-center">
-                  檔 案 描 述
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="7"
-                md="6"
-              >
-                <v-text-field
-                  v-model="postForm.memo"
-                  :rules="rules.requiredRule.concat(rules.lengthRules)"
-                  :hide-details="hideDatails"
-                  color="accent"
-                  placeholder="請輸入檔案描述"
-                  :counter="maxCharacter"
-                  outlined
-                  dense
-                  persistent-hint
+                <v-radio
+                  label="影片檔(mp4)"
+                  value="video"
+                  color="red"
                 />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="3"
-                md="3"
+                <!-- <v-radio
+                  label="圖檔+影片檔(mp4)"
+                  value="3"
+                /> -->
+              </v-radio-group>
+            </v-col>
+          </v-row>
+          <v-row class="d-flex justify-start mt-3">
+            <v-col cols="2" md="2">
+              上 傳 檔 案
+              <span class="red--text">*</span>
+            </v-col>
+            <v-col cols="7" md="6">
+              <v-file-input
+                v-model="uploadData"
+                :hide-details="hideDatails"
+                label="上傳圖片或影片"
+                show-size
+                color="accent"
+                accept="image/jpeg, image/png, image/jpg, video/*"
+                hint="(.jpg、.png、影音，最多不超過 30MB)"
+                persistent-hint
+                prepend-inner-icon="mdi-cloud-upload"
+                prepend-icon
+                :rules="rules.filesSizeRules.concat([checkFileExt])"
+                @change="getImagePreviews()"
+              />
+              <v-img 
+                v-if="!!imageURL && isImage(postForm.file.originalFileName)"
+                :src="imageURL"
+              />
+            </v-col>
+          </v-row>
+          <v-row class="d-flex justify-start mt-3">
+            <v-col>
+              <video 
+                v-if="!!imageURL && isVideo(postForm.file.originalFileName)"
+                width="1000" 
+                height="650"
+                :src="imageURL"
+                controls 
+                controlsList="nodownload"
               >
-                <v-subheader class="justify-center">
-                  上 傳 格 式
-                  <span class="red--text">*</span>
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="7"
-                md="6"
+                <source type="video/mp4">
+                Sorry, your browser doesn't support embedded videos.
+              </video>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col class="d-flex justify-end">
+              <v-btn
+                class="ma-1"
+                outlined
+                color="accent"
+                @click="reset"
               >
-                <v-radio-group
-                  v-model="postForm.materialType"
-                  class="mt-2"
-                  dense
-                  row
-                  :rules="[v => !!v || '必須選擇一種上傳格式']"
-                  @change="validate"
-                >
-                  <v-radio
-                    label="純圖檔"
-                    value="image"
-                    color="red"
-                  />
-                  <v-radio
-                    label="影片檔(mp4)"
-                    value="video"
-                    color="red"
-                  />
-                  <!-- <v-radio
-                    label="圖檔+影片檔(mp4)"
-                    value="3"
-                  /> -->
-                </v-radio-group>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col
-                cols="3"
-                md="3"
+                取消
+              </v-btn>
+              <v-btn
+                class="ma-1"
+                depressed
+                color="primary"
+                :disabled="!valid"
+                @click="submit"
               >
-                <v-subheader class="justify-center">
-                  上 傳 檔 案
-                  <span class="red--text">*</span>
-                </v-subheader>
-              </v-col>
-              <v-col
-                cols="7"
-                md="6"
-              >
-                <v-file-input
-                  v-model="uploadData"
-                  :hide-details="hideDatails"
-                  label="上傳圖片或影片"
-                  show-size
-                  color="accent"
-                  accept="image/jpeg, image/png, image/jpg, video/*"
-                  hint="(.jpg、.png、影音，最多不超過 30MB)"
-                  persistent-hint
-                  prepend-inner-icon="mdi-cloud-upload"
-                  prepend-icon
-                  :rules="rules.filesSizeRules.concat([checkFileExt])"
-                  @change="getImagePreviews()"
-                />
-                <v-img 
-                  v-if="!!imageURL && isImage(postForm.file.originalFileName)"
-                  :src="imageURL"
-                />
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <video 
-                  v-if="!!imageURL && isVideo(postForm.file.originalFileName)"
-                  width="1000" 
-                  height="650"
-                  :src="imageURL"
-                  controls 
-                  controlsList="nodownload"
-                >
-                  <source type="video/mp4">
-                  Sorry, your browser doesn't support embedded videos.
-                </video>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col class="d-flex justify-end">
-                <v-btn
-                  class="ma-1"
-                  outlined
-                  color="accent"
-                  @click="reset"
-                >
-                  取消
-                </v-btn>
-                <v-btn
-                  class="ma-1"
-                  depressed
-                  color="primary"
-                  :disabled="!valid"
-                  @click="submit"
-                >
-                  儲存
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-form>
-        </fet-card>
+                儲存
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
       </v-col>
     </v-row>
   </v-container>

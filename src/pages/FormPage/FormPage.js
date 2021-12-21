@@ -12,7 +12,7 @@ export default {
     props: {
         restrictMode: String,
         formParam: Object,
-        queryMemo: String,        
+        queryMemo: String,
     },
     mounted() {
         this.init();
@@ -39,6 +39,7 @@ export default {
                 {name: "檢視", value: "view"},
                 {name: "檢視 (可下載)", value: "viewDownload"},
                 {name: "取消", value: "cancel"},
+                {name: "取消檢視", value: "cancel_view"},
             ],
             formPageMode: "edit",
             panel: [0, 1, 2, 3],

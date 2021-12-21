@@ -49,7 +49,7 @@
                         mdi-file-document-outline
                       </v-icon>
                       <br>
-                      <div v-if="formPageMode==='accounting' || formPageMode=='view'" class="big-btn-text mt-2">檢視表單</div>
+                      <div v-if="formPageMode==='accounting' || formPageMode=='view' || formPageMode == 'cancel_view'" class="big-btn-text mt-2">檢視表單</div>
                       <div v-else-if="formPageMode==='cancel'" class="big-btn-text mt-2">取消表單簽名</div>
                       <div v-else class="big-btn-text mt-2">開啟表單及簽名</div>
                     </span>
@@ -59,7 +59,7 @@
                   <div class="sign-preview-area ma-auto">
                     <div class="h-10">簽名預覽</div>
                     <div class="h-90 d-center">
-                      <img v-if="formPageMode==='cancel' && cancelSign.imgSrc" style="width: 100%; max-height: 100%" :src="cancelSign.imgSrc">
+                      <img v-if="(formPageMode == 'cancel' || formPageMode == 'cancel_view') && cancelSign.imgSrc" style="width: 100%; max-height: 100%" :src="cancelSign.imgSrc">
                       <img v-else-if="formPageMode != 'cancel' && customerSign.imgSrc" style="width: 100%; max-height: 100%" :src="customerSign.imgSrc">
                       <div v-else class="not-scan-area">
                         <span>尚未簽名</span>
@@ -162,7 +162,7 @@
                           </v-icon>
                         </v-btn>
                       </v-col>
-                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode=='cancel' || isCanEditFile" :cols="(isCanEditFile ? 6 : 12)" class="t-center">
+                      <v-col v-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode=='cancel' || formPageMode == 'cancel_view' || isCanEditFile" :cols="(isCanEditFile ? 6 : 12)" class="t-center">
                         <v-btn depressed color="normal" :disabled="!certificate.imgSrc" @click="viewImage(certificate)">
                           檢視
                           <v-icon
@@ -249,7 +249,7 @@
                             </v-icon><br>
                             {{ attachment.originalFileName }}
                           </div>
-                          <div v-else-if="formPageMode == 'view'">
+                          <div v-else-if="formPageMode == 'view' || formPageMode == 'cancel_view'">
                             <span>附件檔名</span>
                           </div>
                           <div v-else class="not-scan-area">
@@ -342,7 +342,7 @@
                       </v-col>
                     </v-row>
                     <!-- 檢視及下載 -->
-                    <v-row v-else-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode=='cancel' || attachment.canOnlyView">
+                    <v-row v-else-if="formPageMode == 'accounting' || formPageMode=='view' || formPageMode == 'viewDownload' || formPageMode=='cancel' || formPageMode == 'cancel_view' || attachment.canOnlyView">
                       <v-col v-if="attachment.imgSrc" cols="12" class="t-center">
                         <v-btn depressed color="normal" @click="viewImage(attachment)">
                           檢視

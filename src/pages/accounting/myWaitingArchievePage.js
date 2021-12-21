@@ -86,20 +86,19 @@ export default {
 
         // Action:依條件查詢待歸檔清單
         queryArchieveList(){
+            this.archieveList = [];
             const QueryWaitArchiveReq = {
                 acceptNum: this.acceptNum,
                 electricNum: this.electricNum,
                 archiveNum: this.archieveNum
             };
-            console.log(this.acceptNum);
             AjaxService.post('/waitArchive/queryWaitArchive',QueryWaitArchiveReq,
             (response) => {
                 if (response && response.restData && response.restData.success) {
                     if(response.restData.queryWaitArchiveListVo != null){                                                                                                                                     
-                    this.archieveList = Object.assign(response.restData.queryWaitArchiveListVo);                        
+                    this.archieveList = Object.assign(response.restData.queryWaitArchiveListVo);   
                     response.restData.queryWaitArchiveListVo.forEach((element) => {
                         let createHours = parseInt(new Date().getTime() - Date.parse(element.updateDate)) / 1000 / 60 / 60; 
-                        //console.log(createHours);                                                                                                      
                         if(createHours <= 4 && new Date().getHours() < 17 && !element.hasAllViewAuth){
                             element.action = true;
                         }  
@@ -114,7 +113,7 @@ export default {
                     console.log(error);
                 }
             );
-
+            this.numOfArchieve = this.archieveList.length;                     
         },
 
         // Action:將案件返回核算

@@ -13,6 +13,13 @@ export default{
     },
     data(){
         return{
+            //代理人查詢清單選項
+            agentCaseOption:[
+                {text:'顯示全部',value:'QUERYALL'},
+                {text:'顯示代理件',value:'QUERYAGENT'},
+                {text:'不顯示代理件',value:'QUERYNOTAGENT'},
+            ],
+            caseType: null,
             //是否顯示下方清單
             displayList: false,
             //預設當前頁數
@@ -29,7 +36,8 @@ export default{
                 { text: '戶名', value: 'custName', align: 'center' },
                 { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '整理號碼', value: 'archiveNum', align: 'center' },
-                { text: '受理項目', value: 'acceptItem', align: 'center' },                
+                { text: '受理項目', value: 'acceptItem', align: 'center' },
+                { text: '代理件', value: 'isAgent', align: 'center',width:'5%' },              
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
             formList: [],
@@ -93,16 +101,25 @@ export default{
                 archiveNum: (ValidateUtil.isEmpty(this.archiveNum)? null : this.archiveNum),
                 applyStartDate: (ValidateUtil.isEmpty(this.applyStartDate)? null : this.applyStartDate),
                 applyEndDate: (ValidateUtil.isEmpty(this.applyEndDate)? null : this.applyEndDate),
-            };
-
+                caseType: (ValidateUtil.isEmpty(this.caseType)? null : this.caseType.value),
+            };            
             AjaxService.post("/read/queryReadApply", param, (response) => {
                 if(response.restData.success) {
-                    this.formList = response.restData.applyList;
+                    this.formList = Object.assign(response.restData.applyList);                    
+                    response.restData.applyList.forEach((element) => {
+                        if(element.agentForm){
+                            element.isAgent = true;
+                        }
+                    })
                     this.numOfReadApply = response.restData.applyNum;
                     this.numOfRead = response.restData.readNum;
+
                 }else{
                     MessageService.showError(response.restData.message, '查詢調閱申請紀錄');
                 }
+            },
+            (error) => {
+                MessageService.showSystemError();                
             });
         },
         // 驗證請調閱日期區間

@@ -222,7 +222,7 @@
     </v-row>
 
     <hr class="mt-6 mb-5">
-    <v-row v-show="true">
+    <v-row v-show="isShow">
       <v-col md="12">
         <v-data-table
           item-key="id"
@@ -663,6 +663,9 @@ export default {
     },
     // 查詢
     submitSearch() {
+      //查詢前清空資料
+      this.itemsCRUD = [];
+      this.isShow = false
       fetchListMarquee({
         marqueeName: this.marqueeName,
         marqueeType: this.marqueeType,
@@ -674,12 +677,8 @@ export default {
         signStatus: this.signStatus,
       })
         .then((res) => {
-          this.itemsCRUD = [];
-          this.isShow = !this.isShow;
-          if (
-            res.restData.marquee !== null ||
-            res.restData.marquee.length >= 1
-          ) {
+          
+          if ( res.restData.marquee !== null || res.restData.marquee.length >= 1 ) {
             let arrayObj = res.restData.marquee;
             arrayObj.forEach((item) => {
               if (item.signStatus === "REJECT") {
@@ -694,6 +693,7 @@ export default {
             });
 
             this.itemsCRUD = Object.assign([], arrayObj);
+            this.isShow = true
           } else {
             (this.itemsCRUD = []), MessageService.showSuccess("查無資料");
           }

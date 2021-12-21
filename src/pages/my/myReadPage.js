@@ -37,7 +37,8 @@ export default{
                 { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '整理號碼', value: 'archiveNum', align: 'center' },
                 { text: '受理項目', value: 'acceptItem', align: 'center' },
-                { text: '代理件', value: 'isAgent', align: 'center',width:'5%' },              
+                { text: '代理件', value: 'isAgent', align: 'center', width:'5%' },              
+                { text: '備註', value: 'memoIcon', align: 'center'},                
                 { text: '狀態操作', value: 'action', align: 'center' }
             ],
             formList: [],
@@ -65,6 +66,8 @@ export default{
             formParam: {},
             formKey: 0,
             archiveNum: null,
+            memo: '',
+            showMemo: false
         }
     },
     methods: {
@@ -153,6 +156,10 @@ export default{
             }
 
             return hasCheck;
+        },
+        openMemoDialog(item){
+            this.memo = item.memo;
+            this.showMemo = true;
         }
     }
 }

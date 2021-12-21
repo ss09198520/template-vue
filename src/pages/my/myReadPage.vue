@@ -225,6 +225,20 @@
                   {{ item.rejectReason }} {{ item.rejectDesc == null? null : '-'+item.rejectDesc }} 
                 </div>
               </template>
+              <template v-slot:item.memoIcon="{ item }">                                                        
+                <div>
+                  <v-btn
+                    class="ma-2"
+                    fab
+                    small
+                    color="primary"
+                    v-on="on"
+                    @click="openMemoDialog(item)"
+                  >
+                    <v-icon v-text="'mdi-file-document'" />
+                  </v-btn>
+                </div>
+              </template>
               <template v-slot:item.action="{ item }">   
                 <div v-if="(item.status === 'PASS' || item.status === 'CLOSE') && new Date(item.validDateStr) > sysDate">
                   <v-tooltip top>
@@ -256,6 +270,42 @@
           />
         </div>
       </div>
+      <!-- 備註視窗 -->
+      <v-dialog
+        v-model="showMemo"
+        width="700"
+      >
+        <v-card>
+          <v-card-title class="text-h5 lighten-2" style="background-color:#363636; color:white;">          
+            備註
+            <v-spacer />
+            <v-btn
+              color="white"
+              icon
+              small
+              text
+              @click="showMemo = false"
+            >
+              <v-icon> mdi-close </v-icon>
+            </v-btn>
+          </v-card-title>
+          <v-card-text class="mt-10 font-22px">
+            <div>
+              <v-row>
+                {{ memo }}
+              </v-row>
+            </div>
+          </v-card-text>
+          <v-card-actions class="d-end mt-5">
+            <v-btn              
+              color="primary"
+              @click="showMemo = false"
+            >
+              確認
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <!-- 瀏覽案件 -->
       <v-dialog
         v-model="browserModel"

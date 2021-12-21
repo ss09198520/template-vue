@@ -155,6 +155,14 @@
                 {{ selectedSign.readReason }}
               </v-col>
             </v-row>
+            <v-row>
+              <v-col cols="3">
+                備註:
+              </v-col>
+              <v-col>
+                {{ selectedSign.memo }}
+              </v-col>
+            </v-row>
           </v-card-text>
 
           <v-divider />

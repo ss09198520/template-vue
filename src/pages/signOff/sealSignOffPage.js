@@ -91,9 +91,10 @@ export default {
         checkSubmit(){
             this.browserModel = false;
         },
-        signOff(acceptNum){
+        signOff(item){
             let param = {
-                acceptNum: acceptNum
+                acceptNum: item.acceptNum,
+                signer: item.signer
             };
 
             AjaxService.post("/seal/sealSignOff", param, (response) => {

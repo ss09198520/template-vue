@@ -86,7 +86,7 @@
       <!--是否為代理案件 -->
       <template v-slot:item.isAgent="{ item }">                                                        
         <div             
-          v-if="item.isAgent === 'Y'"
+          v-if="item.isAgentForm === 'Y'"
           class="ma-2"
           icon
         >
@@ -99,7 +99,7 @@
       <!--代理件所有人 -->
       <template v-slot:item.agentAcceptUser="{ item }">                                                        
         <div             
-          v-if="item.isAgent === 'Y'"
+          v-if="item.isAgentForm === 'Y'"
           class="ma-2"
           icon
         >

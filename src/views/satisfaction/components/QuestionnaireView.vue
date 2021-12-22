@@ -242,7 +242,9 @@
         question.userAnswerId = answerId
         question.userAnswerLabel = answerLabel
         question.userAnswerValue = answerValue
-        this.nextStep();
+        if(this.stepEl <= this.questionnaire.questions.length - 1){
+          this.nextStep();
+        }
       },
 
       nextStep () {

@@ -28,6 +28,7 @@ export default {
             dataListPageCount: 1,
             hasShowList:false,
             acceptNum: null,
+            selectAcceptNum: null,
             electricNum: null,
             archieveNum: null,
             seq: null,
@@ -44,7 +45,7 @@ export default {
             this.formSeq = item.formSeq;
             this.seq = item.seq;
             this.accounting = item.accounting;
-            this.acceptNum = item.acceptNum;
+            this.selectAcceptNum = item.acceptNum;
             this.returnModel = true;            
         },
 
@@ -123,7 +124,7 @@ export default {
                 seq: this.seq,
                 formSeq: this.formSeq,
                 accounting: this.accounting,
-                acceptNum: this.acceptNum                
+                acceptNum: this.selectAcceptNum                
             };            
             AjaxService.post('/waitArchive/returnToWaitAccounting',ReturnToWaitAccountingReq,
             (response) => {

@@ -47,10 +47,15 @@ export default {
         },
         querySignOff() {
             AjaxService.post("/seal/querySealSignOff", {}, (response) => {
-                if(response.restData.success) {
-                    this.allSignOffList = Object.assign(response.restData.signOffList);
-                    this.waitSignOffList = Object.assign(response.restData.waitSignOffList);
-                    this.sealSignList = this.displayAll? this.allSignOffList : this.waitSignOffList;
+                if(response.restData.success) {                    
+                    if(response.restData.signOffList != null){
+                        this.allSignOffList = Object.assign(response.restData.signOffList);                        
+                    }
+                    if(response.restData.waitSignOffList != null){
+                        this.waitSignOffList = Object.assign(response.restData.waitSignOffList);                        
+                    }                                        
+                    this.sealSignList = this.displayAll? this.allSignOffList : this.waitSignOffList; 
+                                      
                     this.allSignOffList.forEach((element) => {
                         if(element.agentForm){
                             element.isAgent = true;
@@ -64,6 +69,9 @@ export default {
                 }else{
                     MessageService.showError(response.restData.message, "取得專用章簽核列表");
                 }
+            },
+            (error) =>{
+                MessageService.showSystemError();                
             });
         },
         display(){

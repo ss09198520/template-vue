@@ -258,7 +258,8 @@ export default {
          **/
 
         // Action:頁面初始化
-        queryAccoutingInit(){                                 
+        queryAccoutingInit(){
+            let numAccounting = 0;
             AjaxService.post('/waitAccounting/init',
             {
                        
@@ -269,7 +270,11 @@ export default {
                         this.accoutingList = Object.assign(response.restData.initWaitAccountingListVo);                        
                         response.restData.initWaitAccountingListVo.forEach((element) => {
                             element.action = true;
+                            if(element.canAccounting){
+                                numAccounting++;
+                            }
                         });
+                        this.numOfAccounting = numAccounting;
                         
                         response.restData.initWaitAccountingListVo.forEach((element) => {                            
                             if(element.status == 'READ'){
@@ -280,9 +285,7 @@ export default {
                             }
                             
                                             
-                        });
-                        
-                        this.numOfAccounting = response.restData.initWaitAccountingListVo.length;                          
+                        });                                                                                                                          
                         
                         if(!ValidateUtil.isEmpty(response.restData.authList)){
                             // 根據使用者角色決定頁面顯示
@@ -345,17 +348,7 @@ export default {
 
         // Action:依條件查詢待審核案件清單
         queryAccoutingList(){
-            // vin參數
-            // acceptNum: this.searchForm.acceptNum,
-            // electricNum: this.searchForm.electricNum,
-            // custName: this.searchForm.custName,
-            // cumulativeDay: this.searchForm.cumulativeDay,
-            // computeDate: this.searchForm.computeDate,
-            // archieveNum: this.searchForm.archieveNum,
-            // dispatchStartDate: this.searchForm.dispatchStartDate,
-            // dispatchEndDate: this.searchForm.dispatchEndDate,
-            // contractType: this.searchForm.contractType,
-            // caseType: this.searchForm.caseType,
+            let numAccounting = 0;
             let caseType = null;
             if(this.searchForm.caseType != null){
                 caseType = this.searchForm.caseType.value;
@@ -380,7 +373,11 @@ export default {
                     this.accoutingList = Object.assign(response.restData.queryWaitAccountingListVo);                        
                     response.restData.queryWaitAccountingListVo.forEach((element) => {
                         element.action = true;
-                    });       
+                        if(element.canAccounting){
+                            numAccounting++;
+                        }
+                    });     
+                    this.numOfAccounting = numAccounting;
                     response.restData.queryWaitAccountingListVo.forEach((element) => {
                         if(element.status == 'READ'){
                             element.hasView = true;

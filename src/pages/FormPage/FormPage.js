@@ -466,7 +466,7 @@ export default {
                 this.formSignPage.signFileNo = this.cancelSign.fileNo;
             }
             // 若為檢視表單則不需簽名
-            else if(this.formPageMode == "accounting" || this.formPageMode == "view" || this.formPageMode == "viewDownload"){
+            else if(this.formPageMode == "accounting" || this.formPageMode == "view" || this.formPageMode == "viewDownload" || this.formPageMode == "cancel_view"){
                 this.formSignPage.mode = "view";
             }
             else{

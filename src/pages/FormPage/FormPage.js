@@ -165,6 +165,7 @@ export default {
             onlySealFileCode: null,
             acctUploadFileCode: null,
             isCreateForm: false,
+            isCancelForm: false,
             isHasSealedAttachment: false,
             attachmentCategory: "ATTACHMENT",
             certificateCategory: "CERTIFICATE",
@@ -238,6 +239,7 @@ export default {
                 this.formPageMode = "cancel";
                 this.showModeSelect = false;
                 this.usePmc = true;
+                this.isCancelForm = true;
                 this.$emit("showOnlyContent");
             }
             else if(page == "viewForm"){
@@ -282,6 +284,7 @@ export default {
                 encryptedParam: this.encryptedParam,
                 canSkipValidateTime: canSkipValidateTime,
                 createForm: this.isCreateForm,
+                cancelForm: this.isCancelForm,
             }
 
             await AjaxService.post("/tpesForm/init", param, 

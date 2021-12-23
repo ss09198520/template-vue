@@ -7,7 +7,7 @@
           <v-col cols="1">       
             請假人
           </v-col>         
-          <v-col cols="3">
+          <v-col cols="4">
             <v-select
               v-model="selectEmp"
               outlined
@@ -34,7 +34,7 @@
           <v-col cols="1">       
             代理人
           </v-col>
-          <v-col cols="3">
+          <v-col cols="4">
             <v-select
               v-model="selectAgent"
               outlined
@@ -62,7 +62,7 @@
           <v-col cols="1">
             請假起日
           </v-col>
-          <v-col cols="3" class="d-flex">
+          <v-col cols="4" class="d-flex">
             <v-menu
               v-model="startDateMenu"
               :close-on-content-click="true"
@@ -124,7 +124,7 @@
           <v-col cols="1">
             請假迄日
           </v-col>
-          <v-col cols="3" class="d-flex">
+          <v-col cols="4" class="d-flex">
             <v-menu
               v-model="endDateMenu"
               :close-on-content-click="true"

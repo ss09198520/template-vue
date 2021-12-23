@@ -191,24 +191,10 @@ import ValidateUtil from "@/assets/services/validateUtil";
                         empName: this.selectEmp.empName,
                         roleCode:this.selectEmp.roleList[authIndex].roleCode,
                         roleName:this.selectEmp.roleList[authIndex].roleName,
+                        settingDeptNum: this.selectEmp.roleList[authIndex].settingDeptNum,
                     })
                 }
             }
-
-            // 在操作人權限範圍內更動的角色權限
-            for(let optionIndex in this.roleOption){
-                for(let authIndex in this.selectRole){
-                    if(this.roleOption[optionIndex].setRoleName == this.selectRole[authIndex].setRoleName){
-                        this.newAuthList.push({
-                            empNo: this.selectEmp.empNo,
-                            empName: this.selectEmp.empName,
-                            roleCode:this.selectRole[authIndex].setRoleCode,
-                            roleName:this.selectRole[authIndex].setRoleName,
-                        })
-                    }
-                }
-            }
-
             // 將選到的要設定的課別放進去
             let settingSection = [];
             for(let i in this.serviceOfficeList){
@@ -216,24 +202,34 @@ import ValidateUtil from "@/assets/services/validateUtil";
                     settingSection.push(this.serviceOfficeList[i].deptNum);
                 }
             }
-            
-            let authIndex = null;
 
-            for(let i in this.newAuthList){
-                if(this.newAuthList[i].roleCode == 'AUTH04' || this.newAuthList[i].roleCode == 'AUTH09'){
-                    authIndex = this.newAuthList.indexOf(this.newAuthList[i]);
-                    for(let y in settingSection){
-                        this.newAuthList.push({
-                            empNo: this.newAuthList[i].empNo,
-                            empName:this.newAuthList[i].empName,
-                            roleCode:this.newAuthList[i].roleCode,
-                            roleName:this.newAuthList[i].roleName,
-                            settingDeptNum: settingSection[y],
-                        })
+            // 在操作人權限範圍內更動的角色權限
+            for(let optionIndex in this.roleOption){
+                for(let authIndex in this.selectRole){
+                    // 判斷是否與下拉選項相符
+                    if(this.roleOption[optionIndex].setRoleName == this.selectRole[authIndex].setRoleName){ 
+                        // 比對若為設定受理部門主管or服務中心主任，須將設定的部門編號一起送到後端
+                        if(this.selectRole[authIndex].setRoleCode == 'AUTH04' || this.selectRole[authIndex].setRoleCode == 'AUTH09'){
+                            for(let y in settingSection){
+                                this.newAuthList.push({
+                                    empNo: this.selectEmp.empNo,
+                                    empName: this.selectEmp.empName,
+                                    roleCode:this.selectRole[authIndex].setRoleCode,
+                                    roleName:this.selectRole[authIndex].setRoleName,
+                                    settingDeptNum: settingSection[y],
+                                })
+                            }
+                        } else {
+                            this.newAuthList.push({
+                                empNo: this.selectEmp.empNo,
+                                empName: this.selectEmp.empName,
+                                roleCode:this.selectRole[authIndex].setRoleCode,
+                                roleName:this.selectRole[authIndex].setRoleName,
+                            })
+                        }
                     }
-                    this.newAuthList.splice(authIndex,1);
                 }
-            }
+            }            
 
             // 驗證是否沒有要更改的資料
             let requiredArray = [];

@@ -222,7 +222,7 @@
               <!-- 退件原因 -->
               <template v-slot:item.rejectReason="{ item }">                                                        
                 <div>
-                  {{ item.rejectReason }} {{ item.rejectDesc == null? null : '-'+item.rejectDesc }} 
+                  {{ item.rejectReason }} {{ item.rejectDesc == null || item.rejectDesc == "" ? null : '-'+item.rejectDesc }} 
                 </div>
               </template>
               <template v-slot:item.memoIcon="{ item }">                                                        

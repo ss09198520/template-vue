@@ -33,6 +33,7 @@ export default{
                 { text: '歸檔日期', value: 'archiveDateStr', align: 'center' },
                 { text: '調閱狀態', value: 'status', align: 'center' },            
                 { text: '調閱原因', value: 'readReason', align: 'center' },
+                { text: '退件原因', value: 'rejectReason', align: 'center' },
                 { text: '戶名', value: 'custName', align: 'center' },
                 { text: '卡別', value: 'contractType', align: 'center' },
                 { text: '整理號碼', value: 'archiveNum', align: 'center' },

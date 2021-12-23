@@ -62,9 +62,9 @@ export default{
             archiveEndDate: null,
             contractType:null,
             contractTypeList:[
-                {text:'表制', value:'1'},
-                {text:'高壓', value:'2'},
-                {text:'包制', value:'3'},
+                {text:'表制', value:'C'},
+                {text:'高壓', value:'E'},
+                {text:'包制', value:'F'},
             ],
             otherReason: null, //其他原因
             selectForm:{}, // 選擇要調閱的案件資料
@@ -225,6 +225,7 @@ export default{
                 acceptEndDate: (ValidateUtil.isEmpty(this.acceptEndDate)? null :this.acceptEndDate),
                 archiveStartDate: (ValidateUtil.isEmpty(this.archiveStartDate)? null :this.archiveStartDate),
                 archiveEndDate: (ValidateUtil.isEmpty(this.archiveEndDate)? null :this.archiveEndDate),
+                contractType: (ValidateUtil.isEmpty(this.contractType)? null :this.contractType.value),
             };
 
             AjaxService.post("/tpesForm/queryForm", param, (response) => {

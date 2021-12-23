@@ -175,8 +175,8 @@ export default {
         async init(){
             if(this.restrictMode){
                 this.formPageMode = this.restrictMode;
-                this.showModeSelect = false;       
-            }        
+                this.showModeSelect = false;
+            }
             if(this.queryMemo){
                 this.accountingMemo = this.queryMemo;
             }
@@ -246,6 +246,11 @@ export default {
                 this.formPageMode = "view";
                 this.showModeSelect = false;
                 this.$emit("showOnlyContent");
+            }
+
+            // 若為補件就可使用 PMC
+            if(this.formPageMode == "edit"){
+                this.usePmc = true;
             }
         },
         async formInit(canSkipValidateTime){

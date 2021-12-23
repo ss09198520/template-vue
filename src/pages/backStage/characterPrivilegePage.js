@@ -449,7 +449,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
             this.queryEmpInfoByRoleCode()
         },
 
-         // 判斷若依員工設定角色有選到受理部門主管或是服務中心主任，則跳出視窗讓使用者輸入他是要設定哪個服務中心or服務所的---Ellie待測
+         // 判斷若依員工設定角色有選到受理部門主管或是服務中心主任，則跳出視窗讓使用者輸入他是要設定哪個服務中心or服務所的
          openSelectSectionModel(selectRole,item){
                 // 將新選擇的角色清單加進Map
                 let newSelectRoleMap = new Map();
@@ -497,7 +497,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                         break;          
                     }
                 }
-    
+                
                 // 判斷若修改受理部門主管or服務中心主任
                 for(let i in this.serviceOfficeList){
                     this.serviceOfficeList[i].select = false;
@@ -507,7 +507,8 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 let settingSectionList = item.roleList;
                 for(let i in settingSectionList){
                     for(let y in this.serviceOfficeList){
-                        if(settingSectionList[i].roleCode == 'AUTH04' || settingSectionList[i].roleCode == 'AUTH09'){
+                        // 判斷要設定的角色及設定部門的角色代碼是否相同，再判斷是否為受理部門主管or服務中心主任
+                        if(settingSectionList[i].roleCode == this.serviceOfficeList[y].roleCode && (settingSectionList[i].roleCode == 'AUTH04' || settingSectionList[i].roleCode == 'AUTH09')){
                             if(settingSectionList[i].settingDeptNum == this.serviceOfficeList[y].deptNum){
                                 this.serviceOfficeList[y].select = true;
                             }

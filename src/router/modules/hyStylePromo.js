@@ -7,6 +7,7 @@ const hyStylePromoRouter = {
   redirect: "/hy/stylePromo",
   component: Layout,  
   name: "HY Pages",
+  privilegeCode: ['P099'],
   meta: { title: 'HY Prototype', icon: 'mdi-account-multiple' },
   children: [
     {

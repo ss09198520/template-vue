@@ -220,7 +220,7 @@
               </v-card>
             </v-col>       
           </v-row>         
-        </div></div></div></v-container>
+        </div> <hr class="mt-8 mb-5"></div></div></v-container>
 </template>
 
 <script src="./homePage.js"></script>

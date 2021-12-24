@@ -87,6 +87,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
         serviceOfficeList:[],
         selectEmpRole:null,
         selectSectionList: null,
+        searchEmpNo: null
 
     }
     },
@@ -118,6 +119,13 @@ import ValidateUtil from "@/assets/services/validateUtil";
                     }
                 }
             }
+
+            // 若組別只有一筆資料，直接帶入
+           if(this.groupOption.length == 1){
+                this.group = this.groupOption[0];
+                this.select.group = this.group[0];
+                this.chooseGroup(this.division,this.group);
+            }
         },
 
         chooseGroup(division,group){
@@ -134,6 +142,12 @@ import ValidateUtil from "@/assets/services/validateUtil";
                         }
                     }
                 }
+            }
+
+             // 若課別只有一筆資料，直接帶入
+           if(this.sectionOption.length == 1){
+                this.section = this.sectionOption[0];
+                this.select.section = this.section[0];
             }
 
         },      
@@ -585,6 +599,7 @@ import ValidateUtil from "@/assets/services/validateUtil";
                 group: (ValidateUtil.isEmpty(this.group)? null : this.group.group),
                 section: (ValidateUtil.isEmpty(this.section)? null : this.section.sectionCode),
                 roleCode:(ValidateUtil.isEmpty(this.role)? null : this.role.setRoleCode),
+                searchEmpNo: (ValidateUtil.isEmpty(this.searchEmpNo)? null : this.searchEmpNo),
             },
             (response) => {
                 // 驗證是否成功

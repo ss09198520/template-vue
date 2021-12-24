@@ -9,19 +9,23 @@
         <v-btn style="width:200px; margin: 5px;" depressed color="primary" @click="downloadFile()">DOWNLOAD</v-btn>
       </v-row> -->
       <div v-show="mode != 'view' && !isSign">
-        <hr style="margin-top: 30px;margin-bottom: 30px;">
-        <v-row justify="center">
-          <v-btn color="primary" class="mt-3 big-btn" @click="isSign = true">
-            <span class="big-btn-text">用戶簽名</span>
-            <v-icon
-              right
-              dark
-              size="3vh"
-            >
+        <v-btn 
+          fab
+          depressed 
+          large 
+          color="primary" 
+          class="mx-2 fixed-save-btn"
+          width="100"
+          height="100"
+          @click="isSign = true"
+        >
+          <div style="display:block;">
+            <v-icon size="40" class="cal-btn-icon"> 
               mdi-pencil
             </v-icon>
-          </v-btn>
-        </v-row>
+            <span style="display:block; padding-top:20%; font-size: 18px">用戶簽名</span>             
+          </div>
+        </v-btn>
       </div>
       <div v-if="isSign">
         <v-row justify="center">
@@ -98,5 +102,11 @@
     .hint-text{
       color: red;
       font-size: 32px;
+    }
+    .fixed-save-btn {
+      position: fixed;
+      right: 20px;
+      z-index: 10;
+      bottom: 20px;
     }
 </style>

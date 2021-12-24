@@ -24,6 +24,16 @@ export default {
         //     e.returnValue = '';
         // });
     },
+    beforeDestroy(){
+        if(this.usePmc){
+            try {
+                // 將畫面顯示改為同步
+                PMCService.callDualScreenAdapterClone();
+            } catch (error) {
+                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            }
+        }
+    },
     computed: {
         isCanEditFile() {
             return (this.formPageMode == 'edit' || (this.formPageMode == 'cancel' && this.isAgent == 'Y'));
@@ -515,11 +525,20 @@ export default {
             this.formInit(true);
         },
         closeFormSignPage(){
+            if(this.usePmc){
+                try {
+                    // 將畫面顯示改為延伸
+                    PMCService.callDualScreenAdapterExtend();
+                } catch (error) {
+                    MessageService.showError("PMC 未開啟或異常", "PMC ");
+                }
+            }
+
+            this.isFormSignPageOpened = false;
             if(!this.formSignPage) {
                 return;
             }
             this.formSignPage.close();
-            this.isFormSignPageOpened = false;
         },
         deleteCertificate(index){
             this.certificateList.splice(index, 1);
@@ -836,6 +855,15 @@ export default {
                     // 擋頁
                     this.isBlocking = true;
                     this.blockingMsg = "已儲存成功";
+
+                    if(this.usePmc){
+                        try {
+                            // 將畫面顯示改為延伸
+                            PMCService.callDualScreenAdapterExtend();
+                        } catch (error) {
+                            MessageService.showError("PMC 未開啟或異常", "PMC ");
+                        }
+                    }
                 }
             },
             (error) => {
@@ -1066,6 +1094,15 @@ export default {
                 // 擋頁
                 this.isBlocking = true;
                 this.blockingMsg = "已取消成功";
+
+                if(this.usePmc){
+                    try {
+                        // 將畫面顯示改為延伸
+                        PMCService.callDualScreenAdapterExtend();
+                    } catch (error) {
+                        MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    }
+                }
             },
             (error) => {
                 MessageService.showSystemError();

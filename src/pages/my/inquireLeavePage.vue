@@ -15,7 +15,7 @@
               dense
               hide-details
               placeholder="請選擇員工"
-              item-text="empName"
+              item-text="empNo"
               :return-object="true"
               @change="changeEmp()"
             >
@@ -42,7 +42,7 @@
               hide-details=""
               :return-object="true"
               dense
-              item-text="empName"
+              item-text="empNo"
               placeholder="請選擇代理人"
               @change="checkAgent()"
             >

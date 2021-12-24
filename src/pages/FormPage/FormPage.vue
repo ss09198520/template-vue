@@ -516,7 +516,7 @@
             <v-icon size="40" class="cal-btn-icon"> 
               mdi-close
             </v-icon>
-            <span style="display:block; padding-top:20%; font-size: 20px">確定取消</span>             
+            <span style="display:block; padding-top:20%; font-size: 18px">確定取消</span>             
           </div>
         </v-btn>
       </div>

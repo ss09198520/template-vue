@@ -37,3 +37,16 @@ export function fetchSearchPmcComputerList(data) {
         },
     })
 }
+export function addNewPmcComputer(data) {
+  return request({
+    url: '/PMC/addNewPmcComputer',
+    method: 'post',
+    data
+  })
+}
+export function getPmcComputerIP(data) {
+  return request({
+    url: '/PMC/getPmcComputerIp',
+    method: 'post',
+  })
+}

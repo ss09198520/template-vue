@@ -145,6 +145,13 @@ export const constantRoutes = [
     hidden: true,
     meta: { title: 'viewFile', icon: 'mdi-file-document' }
   },
+  //PMC 設定區處電腦IP頁面
+  {
+    path: '/pmcComputerMaintain',
+    name: 'pmcComputerMaintain',
+    component: () => import('@/pages/backStage/pmcComputerMaintain.vue'),
+    meta: { title: 'PMC 設備與電腦設定', icon: 'mdi-cog-outline' }
+  }
 ]
 
 /**

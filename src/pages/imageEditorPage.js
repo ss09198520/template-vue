@@ -24,7 +24,7 @@ export default {
                 includeUI: {
                     uiSize: {
                         width: "100%",
-                        height: "800px"
+                        height: "100vh"
                     },
                     menu: ['draw', 'text', 'shape'],
                     theme: {

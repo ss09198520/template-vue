@@ -24,6 +24,16 @@ export default {
         //     e.returnValue = '';
         // });
     },
+    beforeDestroy(){
+        if(this.usePmc){
+            try {
+                // 將畫面顯示改為同步
+                PMCService.callDualScreenAdapterClone();
+            } catch (error) {
+                MessageService.showError("PMC 未開啟或異常", "PMC ");
+            }
+        }
+    },
     computed: {
         isCanEditFile() {
             return (this.formPageMode == 'edit' || (this.formPageMode == 'cancel' && this.isAgent == 'Y'));
@@ -169,7 +179,6 @@ export default {
             isHasSealedAttachment: false,
             attachmentCategory: "ATTACHMENT",
             certificateCategory: "CERTIFICATE",
-            isScreenExtend: true,
         }
     },
     methods: {
@@ -495,7 +504,6 @@ export default {
                 try {
                     // 將畫面顯示改為同步
                     PMCService.callDualScreenAdapterClone();
-                    this.isScreenExtend = false;
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
                 }
@@ -504,11 +512,10 @@ export default {
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
-            if(this.usePmc && !this.isScreenExtend){
+            if(this.usePmc){
                 try {
                     // 將畫面顯示改為延伸
                     PMCService.callDualScreenAdapterExtend();
-                    this.isScreenExtend = true;
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
                 }
@@ -518,11 +525,10 @@ export default {
             this.formInit(true);
         },
         closeFormSignPage(){
-            if(this.usePmc && !this.isScreenExtend){
+            if(this.usePmc){
                 try {
                     // 將畫面顯示改為延伸
                     PMCService.callDualScreenAdapterExtend();
-                    this.isScreenExtend = true;
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
                 }
@@ -849,6 +855,15 @@ export default {
                     // 擋頁
                     this.isBlocking = true;
                     this.blockingMsg = "已儲存成功";
+
+                    if(this.usePmc){
+                        try {
+                            // 將畫面顯示改為延伸
+                            PMCService.callDualScreenAdapterExtend();
+                        } catch (error) {
+                            MessageService.showError("PMC 未開啟或異常", "PMC ");
+                        }
+                    }
                 }
             },
             (error) => {
@@ -1079,6 +1094,15 @@ export default {
                 // 擋頁
                 this.isBlocking = true;
                 this.blockingMsg = "已取消成功";
+
+                if(this.usePmc){
+                    try {
+                        // 將畫面顯示改為延伸
+                        PMCService.callDualScreenAdapterExtend();
+                    } catch (error) {
+                        MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    }
+                }
             },
             (error) => {
                 MessageService.showSystemError();

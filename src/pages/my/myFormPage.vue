@@ -181,7 +181,7 @@
           </v-btn>
         </v-card-title>
         <v-card-text>
-          <form-page :key="formKey" restrict-mode="edit" :form-param="formParam" @saveFile="saveFile()" />
+          <form-page v-if="supplementModel" :key="formKey" restrict-mode="edit" :form-param="formParam" @saveFile="saveFile()" />
         </v-card-text>
       </v-card>
     </v-dialog>

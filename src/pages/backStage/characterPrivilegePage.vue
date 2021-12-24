@@ -84,7 +84,7 @@
         <!-- <v-col cols="1" /> -->
       </v-row>
       <v-row align="center">
-        <v-col cols="1">員工編號</v-col>
+        <v-col cols="1">姓名代號</v-col>
         <v-col
           cols="3"
           class="font-bold"          

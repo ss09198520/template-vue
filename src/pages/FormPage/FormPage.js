@@ -169,6 +169,7 @@ export default {
             isHasSealedAttachment: false,
             attachmentCategory: "ATTACHMENT",
             certificateCategory: "CERTIFICATE",
+            isScreenExtend: true,
         }
     },
     methods: {
@@ -494,6 +495,7 @@ export default {
                 try {
                     // 將畫面顯示改為同步
                     PMCService.callDualScreenAdapterClone();
+                    this.isScreenExtend = false;
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
                 }
@@ -502,10 +504,11 @@ export default {
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
-            if(this.usePmc){
+            if(this.usePmc && !this.isScreenExtend){
                 try {
                     // 將畫面顯示改為延伸
                     PMCService.callDualScreenAdapterExtend();
+                    this.isScreenExtend = true;
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
                 }
@@ -515,11 +518,21 @@ export default {
             this.formInit(true);
         },
         closeFormSignPage(){
+            if(this.usePmc && !this.isScreenExtend){
+                try {
+                    // 將畫面顯示改為延伸
+                    PMCService.callDualScreenAdapterExtend();
+                    this.isScreenExtend = true;
+                } catch (error) {
+                    MessageService.showError("PMC 未開啟或異常", "PMC ");
+                }
+            }
+
+            this.isFormSignPageOpened = false;
             if(!this.formSignPage) {
                 return;
             }
             this.formSignPage.close();
-            this.isFormSignPageOpened = false;
         },
         deleteCertificate(index){
             this.certificateList.splice(index, 1);

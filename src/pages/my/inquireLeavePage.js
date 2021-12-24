@@ -311,6 +311,12 @@ export default {
     
                 // 將取得的資料放進前端參數中
                 this.empList = response.restData.empList;
+                console.log('============response.restData start============');
+                console.log(response.restData);
+                console.log('============response.restData end============')
+                console.log('============empList start============');
+                console.log(this.empList);
+                console.log('============empList end============')
                 this.empInfo = response.restData.empInfo;
                 this.hasMgmtAuth = response.restData.hasMgmtAuth;
                 this.oriEmpList = JSON.parse(JSON.stringify(this.empList));

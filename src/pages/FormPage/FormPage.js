@@ -27,8 +27,8 @@ export default {
     beforeDestroy(){
         if(this.usePmc){
             try {
-                // 將畫面顯示改為同步
-                PMCService.callDualScreenAdapterClone();
+                // 將畫面顯示改為延伸
+                PMCService.callDualScreenAdapterExtend();
             } catch (error) {
                 MessageService.showError("PMC 未開啟或異常", "PMC ");
             }

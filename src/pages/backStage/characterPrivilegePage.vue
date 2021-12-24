@@ -58,7 +58,7 @@
             item-text="sectionName"
             hide-details
             dense
-            :clearable="true"
+            :clearable="(sectionOption.length === 1? false : true)"
             placeholder="請選擇課別"
           />
         </v-col>
@@ -82,6 +82,20 @@
           />
         </v-col>
         <!-- <v-col cols="1" /> -->
+      </v-row>
+      <v-row align="center">
+        <v-col cols="1">員工編號</v-col>
+        <v-col
+          cols="3"
+          class="font-bold"          
+        >            
+          <v-text-field
+            v-model="searchEmpNo"
+            outlined
+            hide-details                                         
+            dense
+          />
+        </v-col>
       </v-row>
       <v-row class="mt-5">
         <v-col cols="10" />

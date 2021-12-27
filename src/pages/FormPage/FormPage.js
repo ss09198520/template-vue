@@ -264,6 +264,15 @@ export default {
             }
         },
         async formInit(canSkipValidateTime){
+            if(this.usePmc){
+                try {
+                    // 將畫面顯示改為延伸
+                    PMCService.callDualScreenAdapterExtend();
+                } catch (error) {
+                    MessageService.showError("PMC 未開啟或異常", "PMC ");
+                }
+            }
+            
             // 驗證是否有受理編號，若無直接擋件
             if(ValidateUtil.isEmpty(this.acceptNum) && ValidateUtil.isEmpty(this.encryptedParam)){
                 this.isBlocking = true;
@@ -499,6 +508,7 @@ export default {
             this.formSignPage.empNo = this.empNo;
             this.formSignPage.region = this.region;
             this.formSignPage.onbeforeunload = this.formSignPageClosed;
+            this.formSignPage.addEventListener("beforeunload", this.formSignPageClosed);
 
             if(this.usePmc){
                 try {

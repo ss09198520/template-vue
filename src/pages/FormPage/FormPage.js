@@ -542,21 +542,6 @@ export default {
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
-            // if(this.usePmc && !this.isExtendScreen){
-            //     try {
-            //         // 將畫面顯示改為延伸
-            //         PMCService.callDualScreenAdapterExtend();
-            //         this.isExtendScreen = true;
-            //     } catch (error) {
-            //         MessageService.showError("PMC 未開啟或異常", "PMC ");
-            //         console.log(error);
-            //     }
-            // }
-
-            this.isFormSignPageOpened = false;
-            this.formInit(true);
-        },
-        closeFormSignPage(){
             if(this.usePmc && !this.isExtendScreen){
                 try {
                     // 將畫面顯示改為延伸
@@ -567,6 +552,21 @@ export default {
                     console.log(error);
                 }
             }
+
+            this.isFormSignPageOpened = false;
+            this.formInit(true);
+        },
+        closeFormSignPage(){
+            // if(this.usePmc && !this.isExtendScreen){
+            //     try {
+            //         // 將畫面顯示改為延伸
+            //         PMCService.callDualScreenAdapterExtend();
+            //         this.isExtendScreen = true;
+            //     } catch (error) {
+            //         MessageService.showError("PMC 未開啟或異常", "PMC ");
+            //         console.log(error);
+            //     }
+            // }
 
             this.isFormSignPageOpened = false;
             if(!this.formSignPage) {

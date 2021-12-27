@@ -499,7 +499,8 @@ export default {
               region: null,
               acceptNum: null,
               fmbhNo: null,
-            }
+            },
+            windowRef: null
         }
     },
     methods: {
@@ -713,13 +714,17 @@ export default {
             });
         },
         openPortal() {
-          let config = 'scrollbars=yes';
-          this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + '12345678', '滿意度調查', config);
+          // 開啟滿意度調查頁
+          let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
+          this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '_blank', config);
+          this.windowRef.document.title = 'TPES-問卷';
           this.windowRef.addEventListener("beforeunload", this.closePortal);
         },
         closePortal() {
           if (this.windowRef) {
             let answered = this.windowRef.document.getElementById('answered')
+            console.log('問卷視窗關閉')
+            console.log('answered :' ,answered)
             this.windowRef.close();
             this.windowRef = null;
             if (answered.value == 'true'){

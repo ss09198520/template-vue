@@ -256,7 +256,7 @@
             fab
             small
             color="accent"
-            @click="postForm={};programs=[]"
+            @click="postForm={};programs=[];isShow=false"
             v-on="on"
           >
             <v-icon>mdi-refresh</v-icon>

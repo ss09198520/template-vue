@@ -172,7 +172,7 @@
             fab
             small
             color="accent"
-            @click="postForm={};mediaFiles=[]"
+            @click="postForm={};mediaFiles=[];isShow=false"
             v-on="on"
           >
             <v-icon>mdi-refresh</v-icon>

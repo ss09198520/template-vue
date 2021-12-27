@@ -644,6 +644,7 @@ export default {
         (this.status = null),
          (this.marqueeType = null),
         (this.signStatus = null),
+        (this.isShow=false),
         (this.itemsCRUD = []);
     },
     deleteMarquee(item) {

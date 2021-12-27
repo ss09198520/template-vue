@@ -150,6 +150,7 @@ export const constantRoutes = [
     path: '/pmcComputerMaintain',
     name: 'pmcComputerMaintain',
     component: () => import('@/pages/backStage/pmcComputerMaintain.vue'),
+    hidden: true,
     meta: { title: 'PMC 設備與電腦設定', icon: 'mdi-cog-outline' }
   }
 ]

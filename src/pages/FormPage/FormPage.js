@@ -31,6 +31,7 @@ export default {
                 PMCService.callDualScreenAdapterExtend();
             } catch (error) {
                 MessageService.showError("PMC 未開啟或異常", "PMC ");
+                console.log(error);
             }
         }
     },
@@ -270,9 +271,10 @@ export default {
                     PMCService.callDualScreenAdapterExtend();
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    console.log(error);
                 }
             }
-            
+
             // 驗證是否有受理編號，若無直接擋件
             if(ValidateUtil.isEmpty(this.acceptNum) && ValidateUtil.isEmpty(this.encryptedParam)){
                 this.isBlocking = true;
@@ -516,6 +518,7 @@ export default {
                     PMCService.callDualScreenAdapterClone();
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    console.log(error);
                 }
             }
             
@@ -528,6 +531,7 @@ export default {
                     PMCService.callDualScreenAdapterExtend();
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    console.log(error);
                 }
             }
 
@@ -541,6 +545,7 @@ export default {
                     PMCService.callDualScreenAdapterExtend();
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    console.log(error);
                 }
             }
 
@@ -571,6 +576,7 @@ export default {
 
             this.selectedCertificate.fileName = fileName;
             this.selectedCertificate.fileCode = fileCode;
+            this.selectedCertificate.hasEdit = true;
             this.setCertificateModal = false;
         },
         addCertificate(base64){
@@ -615,6 +621,7 @@ export default {
             } catch (error) {
                 this.isLoading = false;
                 MessageService.showError("PMC 未開啟或異常", "PMC ");
+                console.log(error);
             }
         },
         openNewAttachmentModal(){
@@ -872,6 +879,7 @@ export default {
                             PMCService.callDualScreenAdapterExtend();
                         } catch (error) {
                             MessageService.showError("PMC 未開啟或異常", "PMC ");
+                            console.log(error);
                         }
                     }
                 }
@@ -1111,6 +1119,7 @@ export default {
                         PMCService.callDualScreenAdapterExtend();
                     } catch (error) {
                         MessageService.showError("PMC 未開啟或異常", "PMC ");
+                        console.log(error);
                     }
                 }
             },

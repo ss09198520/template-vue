@@ -77,6 +77,9 @@ export default {
 
         this.$emit("showOnlyContent");
     },
+    beforeDestroy(){
+        window.close();
+    },
     methods: {
         queryFormImage(){
             let param = {

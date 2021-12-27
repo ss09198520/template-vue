@@ -1397,8 +1397,6 @@ export default {
           } else {
             MessageService.showInfo('客戶放棄問卷填寫','問卷調查')
           }
-          // 三秒後自動關閉頁面
-          setTimeout(() => window.close(), 3000);
         },
         closePortal() {
           if (this.windowRef) {

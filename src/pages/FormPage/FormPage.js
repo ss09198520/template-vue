@@ -25,7 +25,7 @@ export default {
         // });
     },
     beforeDestroy(){
-        if(this.usePmc){
+        if(this.usePmc && !this.isExtendScreen){
             try {
                 // 將畫面顯示改為延伸
                 PMCService.callDualScreenAdapterExtend();
@@ -180,6 +180,7 @@ export default {
             isHasSealedAttachment: false,
             attachmentCategory: "ATTACHMENT",
             certificateCategory: "CERTIFICATE",
+            isExtendScreen: false,
         }
     },
     methods: {
@@ -267,8 +268,9 @@ export default {
         async formInit(canSkipValidateTime){
             if(this.usePmc){
                 try {
-                    // 將畫面顯示改為延伸
-                    PMCService.callDualScreenAdapterExtend();
+                    // 等待 1.5 秒確定 PMC 連線後將畫面顯示改為延伸
+                    setTimeout(() => PMCService.callDualScreenAdapterExtend(), 1500);
+                    this.isExtendScreen = true;
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
                     console.log(error);
@@ -516,6 +518,9 @@ export default {
                 try {
                     // 將畫面顯示改為同步
                     PMCService.callDualScreenAdapterClone();
+                    this.isExtendScreen = false;
+                    // 等待兩秒後 focus 表單/簽名 window
+                    setTimeout(() => this.formSignPage.focus(), 2000);
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
                     console.log(error);
@@ -525,10 +530,11 @@ export default {
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
-            if(this.usePmc){
+            if(this.usePmc && !this.isExtendScreen){
                 try {
                     // 將畫面顯示改為延伸
                     PMCService.callDualScreenAdapterExtend();
+                    this.isExtendScreen = true;
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
                     console.log(error);
@@ -539,10 +545,11 @@ export default {
             this.formInit(true);
         },
         closeFormSignPage(){
-            if(this.usePmc){
+            if(this.usePmc && !this.isExtendScreen){
                 try {
                     // 將畫面顯示改為延伸
                     PMCService.callDualScreenAdapterExtend();
+                    this.isExtendScreen = true;
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
                     console.log(error);

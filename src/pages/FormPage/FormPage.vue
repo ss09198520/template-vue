@@ -121,7 +121,7 @@
                             mdi-lead-pencil
                           </v-icon>
                         </v-btn>
-                        <div v-else class="d-center">
+                        <div v-else-if="formPageMode == 'edit'" class="d-center">
                           <v-tooltip top>
                             <template v-slot:activator="{ on, attrs }">
                               <h3>
@@ -137,7 +137,7 @@
                             <span>修改證件類型</span>
                           </v-tooltip>
                         </div>
-                        <!-- <h3 v-else>{{ certificate.fileName }}</h3> -->
+                        <h3 v-else>{{ certificate.fileName }}</h3>
                       </v-col>
                     </v-row>
                     <v-row>

@@ -28,6 +28,7 @@
           <v-row class="d-flex justify-start mt-3">
             <v-col cols="2" md="2">
               檔 案 描 述
+              <span class="red--text">*</span>
             </v-col>
             <v-col cols="7" md="6">
               <v-text-field

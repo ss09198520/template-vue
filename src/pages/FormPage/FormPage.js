@@ -397,11 +397,11 @@ export default {
         async setCertificateList(certificateList){
             this.oriCertificateList = [];
 
-            // 若證件已有資料，為避免刷新時造成已上傳的檔案消失，移除尚未改動過的檔案
+            // 若證件已有資料，為避免刷新時造成已上傳的檔案消失，移除尚未改動過或已上傳的檔案
             if(!ValidateUtil.isEmpty(this.certificateList)){
                 for(let index = 0 ; index < this.certificateList.length ; index ++){
                     let certificate = this.certificateList[index];
-                    if(!certificate.isAdditional && !certificate.hasEdit){
+                    if(certificate.fileNo || (!certificate.isAdditional && !certificate.hasEdit)){
                         this.certificateList.splice(index, 1);
                         index--;
                     }
@@ -542,16 +542,16 @@ export default {
             this.isFormSignPageOpened = true;
         },
         formSignPageClosed(){
-            if(this.usePmc && !this.isExtendScreen){
-                try {
-                    // 將畫面顯示改為延伸
-                    PMCService.callDualScreenAdapterExtend();
-                    this.isExtendScreen = true;
-                } catch (error) {
-                    MessageService.showError("PMC 未開啟或異常", "PMC ");
-                    console.log(error);
-                }
-            }
+            // if(this.usePmc && !this.isExtendScreen){
+            //     try {
+            //         // 將畫面顯示改為延伸
+            //         PMCService.callDualScreenAdapterExtend();
+            //         this.isExtendScreen = true;
+            //     } catch (error) {
+            //         MessageService.showError("PMC 未開啟或異常", "PMC ");
+            //         console.log(error);
+            //     }
+            // }
 
             this.isFormSignPageOpened = false;
             this.formInit(true);

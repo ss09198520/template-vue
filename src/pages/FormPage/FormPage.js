@@ -25,13 +25,7 @@ export default {
         // });
 
       //檢測問卷視窗是否被關 參考QuestionnaireView.vue內的 created中呼叫opener
-      window.handleSurveyAnswerList = function(answered){
-        if (answered == 'true'){
-          MessageService.showSuccess('客戶問卷填寫')
-        } else {
-          MessageService.showInfo('客戶放棄問卷填寫','問卷調查')
-        }
-      }
+      window.handleSurveyAnswerClosed = this.closeSurveyPortal;
 
       // 檢測表單簽名頁是否被關
       window.handleFormSignPageClosed = this.formSignPageClosed;
@@ -1395,13 +1389,20 @@ export default {
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
             this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '_blank', config);
             this.windowRef.document.title = 'TPES-問卷';
-            this.windowRef.addEventListener("beforeunload", this.closePortal);
+            // this.windowRef.addEventListener("beforeunload", this.closePortal);
+        },
+        closeSurveyPortal(answered) {
+          if (answered == 'true'){
+            MessageService.showSuccess('客戶問卷填寫')
+          } else {
+            MessageService.showInfo('客戶放棄問卷填寫','問卷調查')
+          }
         },
         closePortal() {
           if (this.windowRef) {
             let answered = this.windowRef.document.getElementById('answered')
-            this.windowRef.close();
-            this.windowRef = null;
+            // this.windowRef.close();
+            // this.windowRef = null;
             if (answered.value == 'true'){
               MessageService.showSuccess('客戶問卷填寫')
             } else {

@@ -213,7 +213,7 @@
     created() {
       window.addEventListener("beforeunload",()=>{
         if(window.opener && !window.opener.closed) {
-          window.opener.handleSurveyAnswerList(this.answered);
+          window.opener.handleSurveyAnswerClosed(this.answered);
         }
       });
     },
@@ -228,7 +228,7 @@
     methods: {
       custom_close(){
         if(confirm("您確定要關閉本頁嗎？")){
-          window.opener.handleSurveyAnswerList(this.answered);
+          window.opener.handleSurveyAnswerClosed(this.answered);
           window.opener = null;
           window.open('','_self');
           window.close();

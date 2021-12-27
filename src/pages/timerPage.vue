@@ -503,6 +503,10 @@ export default {
             windowRef: null
         }
     },
+    created() {
+      //檢測問卷視窗是否被關
+      window.handleSurveyAnswerList = this.closeSurveyPortal;
+    },
     methods: {
         convertWordToPdf() {
             // 檢查有選擇檔案
@@ -718,18 +722,26 @@ export default {
           let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
           this.windowRef = window.open("/tpes/#/satisfaction/answer?acceptNum=" + this.acceptNum, '_blank', config);
           this.windowRef.document.title = 'TPES-問卷';
-          this.windowRef.addEventListener("beforeunload", this.closePortal);
+          // this.windowRef.addEventListener("beforeunload", this.closePortal);
+        },
+        closeSurveyPortal(answered) {
+          if (answered == 'true'){
+            MessageService.showSuccess('客戶問卷填寫')
+          } else {
+            MessageService.showInfo('客戶放棄問卷填寫','問卷調查')
+          }
         },
         closePortal() {
           if (this.windowRef) {
             let answered = this.windowRef.document.getElementById('answered')
-            console.log('問卷視窗關閉')
-            console.log('answered :' ,answered)
+            console.log('未作答問卷關閉視窗')
             this.windowRef.close();
             this.windowRef = null;
             if (answered.value == 'true'){
+              console.log('問卷作答完畢關閉視窗')
               MessageService.showSuccess('客戶問卷填寫')
             } else {
+              console.log('未作答問卷關閉視窗')
               MessageService.showInfo('客戶放棄問卷填寫','問卷調查')
             }
           }
@@ -749,7 +761,7 @@ export default {
         downloadActiveProgram() {
           downloadActiveProgramZip()
         },
-    }
+    },
 }
 </script>
 

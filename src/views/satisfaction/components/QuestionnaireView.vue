@@ -346,6 +346,7 @@
         //作答成功後將隱藏欄位改為true ,可於parent window查詢判斷訊息
         this.answered = true
         this.$nextTick(() => {
+          window.opener.handleSurveyAnswerClosed(this.answered);
           window.close()
         });
       },

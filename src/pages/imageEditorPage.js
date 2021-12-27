@@ -68,6 +68,12 @@ export default {
 
             this.queryFormImage();
         });
+
+        window.addEventListener("beforeunload",()=>{
+          if(window.opener && !window.opener.closed) {
+            window.opener.handleFormSignPageClosed();
+          }
+        });
     },
     mounted() {
         // 套件自帶的 click function 在讀取後端傳的 outputStream 的情況下會出錯，這邊自己綁一個 function 實現 reset 功能
@@ -76,9 +82,6 @@ export default {
         });
 
         this.$emit("showOnlyContent");
-    },
-    beforeDestroy(){
-        window.close();
     },
     methods: {
         queryFormImage(){

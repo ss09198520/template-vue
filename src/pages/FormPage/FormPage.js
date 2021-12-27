@@ -32,6 +32,9 @@ export default {
           MessageService.showInfo('客戶放棄問卷填寫','問卷調查')
         }
       }
+
+      // 檢測表單簽名頁是否被關
+      window.handleFormSignPageClosed = this.formSignPageClosed;
     },
     beforeDestroy(){
         if(this.usePmc && !this.isExtendScreen){
@@ -520,8 +523,8 @@ export default {
             this.formSignPage.maxSignVersion = this.maxSignVersion;
             this.formSignPage.empNo = this.empNo;
             this.formSignPage.region = this.region;
-            this.formSignPage.onbeforeunload = this.formSignPageClosed;
-            this.formSignPage.addEventListener("beforeunload", this.formSignPageClosed);
+            // this.formSignPage.onbeforeunload = this.formSignPageClosed;
+            // this.formSignPage.addEventListener("beforeunload", this.formSignPageClosed);
 
             if(this.usePmc){
                 try {

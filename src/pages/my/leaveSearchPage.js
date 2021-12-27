@@ -76,11 +76,7 @@ export default{
             AjaxService.post("/leaveListController/deleteDayOffAgent", {
                 seq: this.selectItem.seq
             }, (response) => {
-                if(response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
+                if(response != null && response.restData && response.restData.success
                 ){
                     MessageService.showSuccess("刪除代理申請紀錄");
                     this.deleteLeaveModel = false;
@@ -123,17 +119,13 @@ export default{
                 agent: item.agent
             }, 
             (response) => {
-                if(response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
+                if(response != null && response.restData && response.restData.success
                 ){
                     this.agentList = response.restData.empInfoVoList;
                 }
             },
             (error) => {
-
+                MessageService.showSystemError();
             });
         },
 
@@ -153,11 +145,7 @@ export default{
                 endDate: this.leaveDate.end
             },
             (response) => {
-                if (response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
+                if (response != null && response.restData && response.restData.success
                     ) {
                     if (ValidateUtil.isEmpty(response.restData.agentApplicationVoList)) {                        
                         MessageService.showInfo('查無資料');
@@ -169,9 +157,9 @@ export default{
                 //MessageService.showError('查詢審核帳號申請清單 失敗');                  
                 }
             },
-                (response) => { // server 出錯才會進入
+                (error) => { // server 出錯才會進入
                     // server error                    
-                    MessageService.showSystemError(response.restData.code);
+                    MessageService.showSystemError();
                 }
             );
         },
@@ -187,11 +175,7 @@ export default{
                 startDate: item.startDate,
                 endDate: item.endDate
             }, (response) => {
-                if(response != null &&
-                    response != undefined &&                    
-                    response.restData.message != null &&
-                    response.restData.message != undefined &&
-                    response.restData.success
+                if(response != null && response.restData && response.restData.success
                 ){
                     if(response.restData.isAgentLeave){
                         this.agentLeave = true;
@@ -210,7 +194,11 @@ export default{
                         this.queryLeaveList();
                     }
                 }
-            });
+            },
+                (error) => {
+                    MessageService.showSystemError();
+                }
+            );
         },
 
 

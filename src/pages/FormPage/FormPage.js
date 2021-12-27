@@ -31,6 +31,7 @@ export default {
                 PMCService.callDualScreenAdapterExtend();
             } catch (error) {
                 MessageService.showError("PMC 未開啟或異常", "PMC ");
+                console.log(error);
             }
         }
     },
@@ -270,6 +271,7 @@ export default {
                     PMCService.callDualScreenAdapterExtend();
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    console.log(error);
                 }
             }
 
@@ -516,6 +518,7 @@ export default {
                     PMCService.callDualScreenAdapterClone();
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    console.log(error);
                 }
             }
             
@@ -528,6 +531,7 @@ export default {
                     PMCService.callDualScreenAdapterExtend();
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    console.log(error);
                 }
             }
 
@@ -541,6 +545,7 @@ export default {
                     PMCService.callDualScreenAdapterExtend();
                 } catch (error) {
                     MessageService.showError("PMC 未開啟或異常", "PMC ");
+                    console.log(error);
                 }
             }
 
@@ -616,6 +621,7 @@ export default {
             } catch (error) {
                 this.isLoading = false;
                 MessageService.showError("PMC 未開啟或異常", "PMC ");
+                console.log(error);
             }
         },
         openNewAttachmentModal(){
@@ -873,6 +879,7 @@ export default {
                             PMCService.callDualScreenAdapterExtend();
                         } catch (error) {
                             MessageService.showError("PMC 未開啟或異常", "PMC ");
+                            console.log(error);
                         }
                     }
                 }
@@ -1112,6 +1119,7 @@ export default {
                         PMCService.callDualScreenAdapterExtend();
                     } catch (error) {
                         MessageService.showError("PMC 未開啟或異常", "PMC ");
+                        console.log(error);
                     }
                 }
             },

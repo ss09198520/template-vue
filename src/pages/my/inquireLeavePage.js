@@ -32,13 +32,7 @@ export default {
             sysDate: new Date().toISOString().slice(0, 10),
             // 員工請假資料
             empInfo:{
-                status:'請假中',
-                agent:'1050334015',
-                agentName:'王大明',
-                nextLeaveStartDate:'2021-10-12 08:00',
-                nextLeaveEndDate:'2021-10-12 18:00',
-                nextAgent:'1050334018',
-                nextAgentName:'趙元智',
+               
             },
             selectEmp:null,
             selectAgent: null,
@@ -317,7 +311,7 @@ export default {
     
             },
             // eslint-disable-next-line no-unused-vars
-            (response) => {                
+            (error) => {                
                 MessageService.showSystemError();
             });
 

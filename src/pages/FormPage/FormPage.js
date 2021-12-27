@@ -23,6 +23,15 @@ export default {
         //     e.preventDefault(); 
         //     e.returnValue = '';
         // });
+
+      //檢測問卷視窗是否被關 參考QuestionnaireView.vue內的 created中呼叫opener
+      window.handleSurveyAnswerList = function(answered){
+        if (answered == 'true'){
+          MessageService.showSuccess('客戶問卷填寫')
+        } else {
+          MessageService.showInfo('客戶放棄問卷填寫','問卷調查')
+        }
+      }
     },
     beforeDestroy(){
         if(this.usePmc){

@@ -210,6 +210,13 @@
         return this.stepEl
       }
     },
+    created() {
+      window.addEventListener("beforeunload",()=>{
+        if(window.opener && !window.opener.closed) {
+          window.opener.handleSurveyAnswerList(this.answered);
+        }
+      });
+    },
     mounted() { //initial data
       if (this.isView) {
         const id = this.$route.params && this.$route.params.id
@@ -221,7 +228,8 @@
     methods: {
       custom_close(){
         if(confirm("您確定要關閉本頁嗎？")){
-          window.opener=null;
+          window.opener.handleSurveyAnswerList(this.answered);
+          window.opener = null;
           window.open('','_self');
           window.close();
         }
@@ -246,7 +254,6 @@
           this.nextStep();
         }
       },
-
       nextStep () {
         this.stepEl = this.stepEl + 1
       },

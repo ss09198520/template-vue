@@ -572,7 +572,7 @@
               >
                 <span>{{ option.fileName }}</span>
               </v-chip>
-              <v-chip v-else label x-large class="ma-2" @click="selectCertificate(index)">
+              <v-chip v-else label x-large class="ma-2" @click="selectCertificate(index);setCertificate()">
                 <span>{{ option.fileName }}</span>
               </v-chip>
             </div>
@@ -634,7 +634,7 @@
               >
                 <span>{{ option.fileName }}</span>
               </v-chip>
-              <v-chip v-else label x-large class="ma-2" @click="selectAttachment(index)">
+              <v-chip v-else label x-large class="ma-2" @click="selectAttachment(index);addAttachment();">
                 <span>{{ option.fileName }}</span>
               </v-chip>
             </div>

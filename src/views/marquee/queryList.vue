@@ -274,32 +274,34 @@
               </template>
               <span>預覽</span>
             </v-tooltip>
-            <v-tooltip v-if="canView" top>
+            <v-tooltip v-if="allowEdit(item.signStatus ,item.marqueeType) && canView" top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="ma-2"
                   fab
                   x-small
                   color="success"
-                  :disabled="(item.signStatus == 'WAIT' && item.marqueeType == 'GENERAL') || (item.signStatus == 'PROGRESS' && item.marqueeType == 'GENERAL')|| (item.signStatus == 'PASS' && item.marqueeType == 'GENERAL')"
+                  :disabled="!allowEdit(item.signStatus ,item.marqueeType)"
                   @click="editItem(item)"
                   v-on="on"
                 >
+                  <!-- :disabled="(item.signStatus == 'WAIT' && item.marqueeType == 'GENERAL') || (item.signStatus == 'PROGRESS' && item.marqueeType == 'GENERAL')|| (item.signStatus == 'PASS' && item.marqueeType == 'GENERAL')" -->
                   <v-icon v-text="'mdi-pencil'" />
                 </v-btn>
               </template>
               <span>編輯</span>
             </v-tooltip>
-            <v-tooltip v-if="canView" top>
+            <v-tooltip v-if="allowDelete(item.signStatus ,item.marqueeType) && canView" top>
               <template v-slot:activator="{ on }">
                 <v-btn
                   class="ma-2 error"
                   fab
                   x-small
-                  :disabled="item.signStatus == 'WAIT' || item.signStatus == 'PROGRESS' || item.signStatus == 'PASS' || item.marqueeType == 'DEFAULT' "
+                  :disabled="!allowDelete(item.signStatus ,item.marqueeType)"
                   @click="remove(item ,'DELETE')"
                   v-on="on"
                 >
+                  <!-- :disabled="item.signStatus == 'WAIT' || item.signStatus == 'PROGRESS' || item.signStatus == 'PASS' || item.marqueeType == 'DEFAULT' " -->
                   <v-icon v-text="'mdi-delete'" />
                 </v-btn>
               </template>
@@ -433,13 +435,13 @@
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="sunsetModel" max-width="500">
+    <v-dialog v-if="sunsetModel" v-model="sunsetModel" max-width="500">
       <v-card>
         <v-card-title
           class="text-h5 lighten-2"
           style="background-color: #c62828; color: white"
         >
-          確認是否要下架節目單
+          確認是否要下架跑馬燈
           <v-spacer />
           <v-btn
             color="white"
@@ -453,7 +455,7 @@
         </v-card-title>
         <v-card-text class="font-24px">
           <v-row class="mt-6 ml-1 font-bold">
-            節目單名稱: {{ selectProgram.programName }} ,下架後將不會再播放此節目單
+            跑馬燈名稱: {{ selectMarquee.marqueeName }} ,下架後將不會再播放此節目單
           </v-row>
         </v-card-text>
         <v-card-actions class="d-end mt-6">
@@ -647,6 +649,12 @@ export default {
     },
   },
   methods: {
+    allowEdit(signStatus ,programType) {
+      return (/(DRAFT|REJECT)$/i).test(signStatus) || (/(DEFAULT)$/i).test(programType)
+    },
+    allowDelete(signStatus ,marqueeType) {
+      return (/(DRAFT|REJECT)$/i).test(signStatus) && !(/(DEFAULT)$/i).test(marqueeType)
+    },
     allowSunset(signStatus,status,marqueeType) {
       return (/(PASS)$/i).test(signStatus) && (/(ACTIVE)$/i).test(status) && !(/(DEFAULT)$/i).test(marqueeType)
     },

@@ -446,7 +446,11 @@ export default {
         }
         if(this.selectedSign.mediaSignType=='MEDIA_QUESTIONNAIRE'){
           let config = 'top=0,left=0,statusbar=no,scrollbars=yes,status=no,location=no';
-          this.formSignPage = window.open(`/tpes/#/media/preview/questionnaire/${this.selectedSign.id}`, "_blank", config);
+          let routeData = this.$router.resolve({
+            name: 'Satisfaction-preview',
+          });
+          this.formSignPage = window.open(routeData.href + "/" + this.selectedSign.id, '_blank', config);
+          // this.formSignPage = window.open(`/tpes/#/media/preview/questionnaire/${this.selectedSign.id}`, "_blank", config);
         }
       },
       isImage(filename) {

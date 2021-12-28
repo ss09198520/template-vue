@@ -14,16 +14,7 @@
             <v-col cols="1" class="ml-2">
               受 理 部 門
             </v-col>
-            <v-col cols="3" class="ml-2">
-              <!-- <v-select
-                :items="['核算課','大里服務中心','東山服務所']"
-                color="accent"
-                item-color="accent"
-                placeholder="受理部門"
-                dense
-                outlined
-                hide-details
-              /> -->
+            <v-col cols="3" class="mt-5">
               <v-text-field
                 v-model="postForm.applyDept"
                 color="accent"
@@ -49,7 +40,6 @@
                 persistent-hint
               />
             </v-col>
-            
           </v-row>
           <v-row
             class="d-flex justify-start"
@@ -73,7 +63,7 @@
             <v-col cols="1" class="ml-2">
               申 請 項 目
             </v-col>
-            <v-col cols="3" class="ml-5">
+            <v-col cols="3">
               <!-- <v-select
                 :items="['QA210 軍眷用電申請優待','I0510 故障換表','I0520 增加電表','F3030 表燈非時間電價停用廢止','I0510 故障換表',]"
                 color="accent"
@@ -83,7 +73,7 @@
                 outlined
                 hide-details
               /> -->
-              <v-text-field
+              <!-- <v-text-field
                 v-model="postForm.applyType"
                 color="accent"
                 item-color="accent"
@@ -91,6 +81,18 @@
                 outlined
                 clearable
                 persistent-hint
+              /> -->
+              <v-autocomplete
+                v-model="postForm.applyType"
+                :items="applyTypeOption"
+                item-text="acceptName"
+                item-value="acceptCode"
+                color="accent"
+                outlined
+                hide-details
+                dense
+                clearable
+                placeholder="請選擇安裝的服務區處"
               />
             </v-col>
           </v-row>
@@ -228,7 +230,7 @@
   import MessageService from "@/assets/services/message.service"
   import ValidateUtil from "@/assets/services/validateUtil";
   import moment from 'moment'
-  import { listSatisfactionRawData } from '@/api/questionnaireReport'
+  import { listSatisfactionRawData ,queryAcceptItem} from '@/api/questionnaireReport'
   import isEmpty from 'lodash/isEmpty'
 
   const defaultForm = {
@@ -253,6 +255,8 @@
         //日曆開關
         startDateMenu: false,
         endDateMenu: false,
+        //受理項目下拉選單
+        applyTypeOption: [],
 
         itemsPerPage: 10,
         // CRUD
@@ -265,7 +269,14 @@
         },
       }
     },
+    mounted () {
+      this.init()
+    },
     methods: {
+      init() {
+        //初始化受理項目下拉選單
+        this.queryAcceptItem();
+      },
       goWeek() {
         this.$router.push({path:`${this.$route.matched[0].path}/satisfyReport/month`})
       },
@@ -364,6 +375,31 @@
           MessageService.showSuccess('下載報表成功')
         }else{
           MessageService.showError('下載報表')
+        }
+      },
+
+      //Action: 查詢受理項目下拉
+      async queryAcceptItem() {
+        
+        const data = await queryAcceptItem()
+        // 驗證是否成功
+        if (!data.restData.success) {              
+          MessageService.showError(data.restData.message,'受理項目選單')
+          return
+        }
+        if(data.restData.success){
+          let itemMap = data.restData.acceptItemMap
+          this.applyTypeOption = Object.keys(data.restData.acceptItemMap).reduce((acceptitems, keyName) => {
+            // new {materialId , mediaFileName}
+            acceptitems.push(Object.assign({
+              acceptCode : keyName , 
+              acceptName : itemMap[keyName]}
+            ))
+            return acceptitems
+          }, [])
+          // MessageService.showSuccess('受理項目選單查詢成功')
+        }else{
+          MessageService.showError('受理項目選單')
         }
       },
     }

@@ -1203,7 +1203,7 @@ export default {
         },
         showScanErrorMsg(msg){
             this.isLoading = false;
-            MessageService.showError("PMC 回傳: " + msg);
+            MessageService.showInfo("PMC 回傳: " + msg);
         },
         checkNeedScanFile(onlyForCheck){
             this.needScanFileHint = "";

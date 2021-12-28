@@ -69,6 +69,8 @@ export default {
             this.queryFormImage();
         });
 
+        window.removeEventListener("beforeunload");
+
         window.addEventListener("beforeunload",()=>{
           if(window.opener && !window.opener.closed) {
             window.opener.handleFormSignPageClosed();

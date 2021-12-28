@@ -548,6 +548,7 @@ export default {
             }
 
             this.isFormSignPageOpened = false;
+            this.formSignPage = null;
             this.formInit(true);
         },
         closeFormSignPage(){

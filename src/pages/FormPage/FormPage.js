@@ -1389,7 +1389,7 @@ export default {
             // 開啟滿意度調查頁
             let config = 'statusbar=no,scrollbars=yes,status=no,location=no';
             let routeData = this.$router.resolve({
-              name: 'Satisfaction-Answer',
+              name: 'Satisfaction-Answer', // Router Name
             });
             this.windowRef = window.open(routeData.href + "?acceptNum=" + this.acceptNum, '_blank', config);
             this.windowRef.document.title = 'TPES-問卷';

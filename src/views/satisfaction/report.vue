@@ -64,24 +64,6 @@
               申 請 項 目
             </v-col>
             <v-col cols="3">
-              <!-- <v-select
-                :items="['QA210 軍眷用電申請優待','I0510 故障換表','I0520 增加電表','F3030 表燈非時間電價停用廢止','I0510 故障換表',]"
-                color="accent"
-                item-color="accent"
-                placeholder="申請項目"
-                dense
-                outlined
-                hide-details
-              /> -->
-              <!-- <v-text-field
-                v-model="postForm.applyType"
-                color="accent"
-                item-color="accent"
-                placeholder="申請項目"
-                outlined
-                clearable
-                persistent-hint
-              /> -->
               <v-autocomplete
                 v-model="postForm.applyType"
                 :items="applyTypeOption"
@@ -92,7 +74,7 @@
                 hide-details
                 dense
                 clearable
-                placeholder="請選擇安裝的服務區處"
+                placeholder="請選擇申請項目"
               />
             </v-col>
           </v-row>

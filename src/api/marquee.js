@@ -47,3 +47,10 @@ export function fetchActiveMarquee(data) {
   })
 }
 
+export function updateMarqueeStatus(data) {
+  return request({
+    url: '/marquee/v1/updateStatus',
+    method: 'post',
+    data
+  })
+}

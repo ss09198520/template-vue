@@ -297,13 +297,29 @@
                   fab
                   x-small
                   :disabled="item.signStatus == 'WAIT' || item.signStatus == 'PROGRESS' || item.signStatus == 'PASS' || item.marqueeType == 'DEFAULT' "
-                  @click="remove(item)"
+                  @click="remove(item ,'DELETE')"
                   v-on="on"
                 >
                   <v-icon v-text="'mdi-delete'" />
                 </v-btn>
               </template>
               <span>刪除</span>
+            </v-tooltip>
+            <v-tooltip v-if="allowSunset(item.signStatus,item.status , item.marqueeType) && canView" top>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  class="ma-2"
+                  fab
+                  x-small
+                  color="error"
+                  :disabled="!allowSunset(item.signStatus,item.status, item.marqueeType)"
+                  @click="remove(item,'CLOSE')"
+                  v-on="on"
+                >
+                  <v-icon v-text="'mdi-arrow-down-bold-outline'" />
+                </v-btn>
+              </template>
+              <span>下架</span>
             </v-tooltip>
           </template>
           <template v-slot:[`item.returnInfo`]="{ item }">
@@ -417,6 +433,43 @@
       </v-card>
     </v-dialog>
 
+    <v-dialog v-model="sunsetModel" max-width="500">
+      <v-card>
+        <v-card-title
+          class="text-h5 lighten-2"
+          style="background-color: #c62828; color: white"
+        >
+          確認是否要下架節目單
+          <v-spacer />
+          <v-btn
+            color="white"
+            icon
+            small
+            text
+            @click="sunsetModel = false"
+          >
+            <v-icon> mdi-close </v-icon>
+          </v-btn>
+        </v-card-title>
+        <v-card-text class="font-24px">
+          <v-row class="mt-6 ml-1 font-bold">
+            節目單名稱: {{ selectProgram.programName }} ,下架後將不會再播放此節目單
+          </v-row>
+        </v-card-text>
+        <v-card-actions class="d-end mt-6">
+          <v-btn color="normal" @click="sunsetModel = false">
+            &emsp;取消&emsp;
+          </v-btn>
+          <v-btn
+            color="primary"
+            @click="updateStatus()"
+          >
+            &emsp;確定&emsp;
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
     <v-dialog v-model="preViewMarqueeModel" max-width="12800">
       <v-card>
         <v-card-title
@@ -454,7 +507,7 @@
 
 <script>
 import enums from "@/utils/enums";
-import { fetchListMarquee, fetchDeleteMarquee } from "@/api/marquee";
+import { fetchListMarquee, fetchDeleteMarquee ,updateMarqueeStatus } from "@/api/marquee";
 import MessageService from "@/assets/services/message.service";
 export default {
   data() {
@@ -485,6 +538,7 @@ export default {
       preViewMarqueeModel: false,
       selectIndex: null,
       selectMarquee: {},
+      selectAction: null,
 
       //上架下拉選單
       statusOption: enums.mediaStatusOption,
@@ -593,6 +647,9 @@ export default {
     },
   },
   methods: {
+    allowSunset(signStatus,status,marqueeType) {
+      return (/(PASS)$/i).test(signStatus) && (/(ACTIVE)$/i).test(status) && !(/(DEFAULT)$/i).test(marqueeType)
+    },
     close() {
       this.dialog = false;
       this.editedItem = Object.assign({}, this.defaultItem);
@@ -629,11 +686,26 @@ export default {
       this.alertDialog = true;
       this.editedIndex = this.itemsCRUD.indexOf(item);
     },
-    remove(item) {
+    remove(item , action) {
       this.selectMarquee = item;
+      this.selectAction = action;
       //this.itemsCRUD.splice(this.editedIndex, 1)
       //this.close()
-      this.deleteMarqueeModel = true;
+      if(action =='DELETE'){
+        this.deleteMarqueeModel = true;
+      } else if (action =='CLOSE'){
+        this.sunsetModel = true;
+      }
+    },
+    // 送出狀態更新
+    updateStatus() {
+      let postData = {
+        id: this.selectMarquee.marqueeId ,
+        action: this.selectAction ,
+      }
+      console.log('updateMarqueeStatus',postData)
+      //API post 
+      this.updateMarqueeStatus(postData)
     },
     resetForm() {
       (this.marqueeName = null),
@@ -642,7 +714,7 @@ export default {
         (this.releaseEndDateFrom = null),
         (this.releaseEndDateTo = null),
         (this.status = null),
-         (this.marqueeType = null),
+        (this.marqueeType = null),
         (this.signStatus = null),
         (this.isShow=false),
         (this.itemsCRUD = []);
@@ -659,7 +731,7 @@ export default {
         } else {
           MessageService.showInfo(res.restData.message, res.restData.code);
         }
-         this.submitSearch();
+          this.submitSearch();
       });
     },
     // 查詢

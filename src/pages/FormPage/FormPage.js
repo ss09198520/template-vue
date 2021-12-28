@@ -1396,7 +1396,7 @@ export default {
             // this.windowRef.addEventListener("beforeunload", this.closePortal);
         },
         closeSurveyPortal(answered) {
-          if (answered == 'true'){
+          if (answered){
             MessageService.showSuccess('客戶問卷填寫')
           } else {
             MessageService.showInfo('客戶放棄問卷填寫','問卷調查')

@@ -211,22 +211,20 @@
       }
     },
     created() {
-      // window.addEventListener("beforeunload",()=>{
-      //   if(window.opener && !window.opener.closed) {
-      //     window.opener.handleSurveyAnswerClosed(this.answered);
-      //   }
-      // });
-    },
-    mounted() { //initial data
-      if (this.isView) {
-        const id = this.$route.params && this.$route.params.id
-        this.fetchQuestionnaire(id)
-      } else {
+      if (!this.isView) {
         window.addEventListener("beforeunload",()=>{
           if(window.opener && !window.opener.closed) {
             window.opener.handleSurveyAnswerClosed(this.answered);
           }
         });
+      }
+    },
+    mounted() { //initial data
+      // console.log(this.$route)
+      if (this.isView) {
+        const id = this.$route.params && this.$route.params.id
+        this.fetchQuestionnaire(id)
+      } else {
         this.fetchActiveQuestionnaire()
       }
     },
@@ -348,10 +346,9 @@
 
         MessageService.showSuccess('作答成功' + "✓")
         
-        //作答成功後將隱藏欄位改為true ,可於parent window查詢判斷訊息
-        this.answered = true
         this.$nextTick(() => {
-          window.opener.handleSurveyAnswerClosed(this.answered);
+          //作答成功後將隱藏欄位改為true ,可於parent window查詢判斷訊息
+          this.answered = true
           window.close()
         });
       },

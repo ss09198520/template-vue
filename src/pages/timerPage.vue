@@ -504,8 +504,8 @@ export default {
         }
     },
     created() {
-      //檢測問卷視窗是否被關
-      window.handleSurveyAnswerList = this.closeSurveyPortal;
+      //檢測問卷視窗是否被關 參考QuestionnaireView.vue內的 created中呼叫opener
+      window.handleSurveyAnswerClosed = this.closeSurveyPortal;
     },
     methods: {
         convertWordToPdf() {
@@ -728,7 +728,7 @@ export default {
           // this.windowRef.addEventListener("beforeunload", this.closePortal);
         },
         closeSurveyPortal(answered) {
-          if (answered == 'true'){
+          if (answered){
             MessageService.showSuccess('客戶問卷填寫')
           } else {
             MessageService.showInfo('客戶放棄問卷填寫','問卷調查')

@@ -211,17 +211,22 @@
       }
     },
     created() {
-      window.addEventListener("beforeunload",()=>{
-        if(window.opener && !window.opener.closed) {
-          window.opener.handleSurveyAnswerClosed(this.answered);
-        }
-      });
+      // window.addEventListener("beforeunload",()=>{
+      //   if(window.opener && !window.opener.closed) {
+      //     window.opener.handleSurveyAnswerClosed(this.answered);
+      //   }
+      // });
     },
     mounted() { //initial data
       if (this.isView) {
         const id = this.$route.params && this.$route.params.id
         this.fetchQuestionnaire(id)
       } else {
+        window.addEventListener("beforeunload",()=>{
+          if(window.opener && !window.opener.closed) {
+            window.opener.handleSurveyAnswerClosed(this.answered);
+          }
+        });
         this.fetchActiveQuestionnaire()
       }
     },

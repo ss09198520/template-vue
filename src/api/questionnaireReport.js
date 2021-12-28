@@ -25,6 +25,13 @@ export function listSatisfactionRawData(data) {
     data
   })
 }
+export function queryAcceptItem() {
+  return request({
+    url: '/report/queryAcceptItem',
+    method: 'post',
+  })
+}
+
 export function geneDynaSatisfactionReport(data) {
   return request({
     url: '/report/geneDynaSatisfactionReport',

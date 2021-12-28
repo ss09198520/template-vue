@@ -733,11 +733,21 @@ export default {
       // 確認檢算員
       if(ValidateUtil.isEmpty(this.dispatchInfo.calculate)){
         this.errorMsg.calculate = '請選擇檢算員';
-        this.requiredArray.push('減算員');
+        this.requiredArray.push('檢算員');
         checkEmpty = false;
       } else {
-        this.errorMsg.calculate = null;
+         // 確認核算員及檢算員不為同一人
+          if(this.dispatchInfo.calculate === this.dispatchInfo.accounting){
+            this.errorMsg.calculate = '核算員及檢算員不可設為同一人';
+            this.formatArray.push('檢算員');
+            checkEmpty = false;
+          } else {
+            this.errorMsg.calculate = null;
+          }
       }
+
+     
+
 
       let checkElectric = true;
 
